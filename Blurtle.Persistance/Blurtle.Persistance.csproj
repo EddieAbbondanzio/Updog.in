@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Blurtle.Domain\Blurtle.Domain.csproj" />
+    <ProjectReference Include="..\Blurtle.Application\Blurtle.Application.csproj" />
+    <PackageReference Include="MySqlConnector" Version="0.56.0" />
+  </ItemGroup>
+
+</Project>
