@@ -6,7 +6,7 @@ namespace Blurtle.Application {
     /// <summary>
     /// Service for managing user's in the database.
     /// </summary>
-    public sealed class UserService {
+    public sealed class UserService : IUserService {
         #region Fields
         /// <summary>
         /// CRUD interface of users in the database.
@@ -20,6 +20,20 @@ namespace Blurtle.Application {
         #endregion
 
         #region Publics
+        /// <summary>
+        /// Find a user by their unique numeric id.
+        /// </summary>
+        /// <param name="id">The id to look for.</param>
+        /// <returns>The user found (ifa any).</returns>
+        public async Task<User> FindUserById(int id) => await userRepo.FindById(id);
+
+        /// <summary>
+        /// Find a username via their unique username.
+        /// </summary>
+        /// <param name="username">The username to look for.</param>
+        /// <returns>The user found (if any).</returns>
+        public async Task<User> FindUserByUsername(string username) => await userRepo.FindByUsername(username);
+
         /// <summary>
         /// Register a new user with the website.
         /// </summary>
