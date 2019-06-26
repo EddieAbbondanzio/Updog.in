@@ -2,12 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using Blurtle.Application;
 using System.Threading.Tasks;
 using Blurtle.Domain;
+using System;
 
 namespace Blurtle.Api {
     /// <summary>
     /// End point for managing users of the site.
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("api/user")]
     [ApiController]
     public sealed class UserController : ControllerBase {
         #region Fields
@@ -25,22 +26,23 @@ namespace Blurtle.Api {
         #endregion
 
         #region Publics
-        public async Task FindUserByUsername() {
-
-            User user = await userService.FindUserByUsername("fuck");
+        [HttpGet("{username}")]
+        public async Task FindUserByUsername(string username) {
+            User user = await userService.FindUserByUsername(username);
+            Response.StatusCode = 404;
         }
 
-        public async Task RegisterUser() {
+        // public async Task RegisterUser() {
 
-        }
+        // }
 
-        public async Task LoginUser() {
+        // public async Task LoginUser() {
 
-        }
+        // }
 
-        public async Task IsUsernameAvailable() {
+        // public async Task IsUsernameAvailable() {
 
-        }
+        // }
         #endregion
     }
 }

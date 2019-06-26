@@ -4,9 +4,9 @@ using MySql.Data.MySqlClient;
 
 namespace Blurtle.Persistance {
     /// <summary>
-    /// A database for data persistance.
+    /// A database for data persistance that runs MySQL.
     /// </summary>
-    public sealed class MySqlDatabase {
+    public sealed class MySqlDatabase : IDatabase {
         #region Properties
         /// <summary>
         /// The connection string for initiating new connections.
@@ -29,7 +29,7 @@ namespace Blurtle.Persistance {
         /// Get a new connection with the database.
         /// </summary>
         /// <returns>A new pooled connection.</returns>
-        public MySqlConnection GetConnection() {
+        public DbConnection GetConnection() {
             return new MySqlConnection(Connection);
         }
         #endregion

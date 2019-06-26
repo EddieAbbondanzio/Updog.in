@@ -19,6 +19,16 @@ namespace Blurtle.Application {
         private IPasswordHasher passwordHasher;
         #endregion
 
+        #region Constructor(s)
+        /// <summary>
+        /// Create a new user service.
+        /// </summary>
+        /// <param name="userRepo">CRUD interface for users in the database.</param>
+        public UserService(IUserRepo userRepo) {
+            this.userRepo = userRepo;
+        }
+        #endregion
+
         #region Publics
         /// <summary>
         /// Find a user by their unique numeric id.

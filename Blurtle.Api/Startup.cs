@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blurtle.Application;
 using Blurtle.Infrastructure;
+using Blurtle.Persistance;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -24,6 +25,8 @@ namespace Blurtle.Api {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddTransient<IUserRepo, UserRepo>();
 
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
             services.AddSingleton<IAuthenticationTokenHandler, JsonWebTokenHandler>();
