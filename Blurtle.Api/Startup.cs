@@ -26,6 +26,7 @@ namespace Blurtle.Api {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
+            services.AddSingleton<IAuthenticationTokenHandler, JsonWebTokenHandler>();
 
             services.AddTransient<IUserService, UserService>();
         }

@@ -37,12 +37,10 @@ namespace Blurtle.Application {
         /// <summary>
         /// Register a new user with the website.
         /// </summary>
-        /// <param name="username">The username they want to use.</param>
-        /// <param name="password">The password they want to use.</param>
-        /// <param name="email">A contact email if one was provided.</param>
+        /// <param name="userReg">Registration info of the user.</param>
         /// <returns>The newly created user.</returns>
-        public async Task<User> RegisterUser(string username, string password, string email = null) {
-            bool isUsernameAvailable = await IsUsernameAvailable(username);
+        public async Task<User> RegisterUser(UserRegistration userReg) {
+            bool isUsernameAvailable = await IsUsernameAvailable(userReg.Username);
 
             if (!isUsernameAvailable) {
                 throw new InvalidOperationException("Username is not available.");
@@ -73,6 +71,14 @@ namespace Blurtle.Application {
             }
 
             return user;
+        }
+
+        /// <summary>
+        /// Update an existing user.
+        /// </summary>
+        /// <param name="user">The user to update.</param>
+        public async Task UpdateUser(User user) {
+            throw new NotImplementedException();
         }
 
         /// <summary>

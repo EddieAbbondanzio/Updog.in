@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Blurtle.Domain\Blurtle.Domain.csproj" />
     <ProjectReference Include="..\Blurtle.Application\Blurtle.Application.csproj" />
     <ProjectReference Include="..\Blurtle.Persistance\Blurtle.Persistance.csproj" />
     <ProjectReference Include="..\Blurtle.Infrastructure\Blurtle.Infrastructure.csproj" />

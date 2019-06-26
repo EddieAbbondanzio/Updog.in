@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Blurtle.Application;
 using System.Threading.Tasks;
+using Blurtle.Domain;
 
 namespace Blurtle.Api {
     /// <summary>
@@ -26,6 +27,7 @@ namespace Blurtle.Api {
         #region Publics
         public async Task FindUserByUsername() {
 
+            User user = await userService.FindUserByUsername("fuck");
         }
 
         public async Task RegisterUser() {
