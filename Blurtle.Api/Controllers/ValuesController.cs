@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Blurtle.Application;
+using Blurtle.Persistance;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blurtle.Api.Controllers {
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase {
-        private IPasswordHasher hasher;
-
-        public ValuesController(IPasswordHasher hasher) {
-            this.hasher = hasher;
-        }
-
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get() {

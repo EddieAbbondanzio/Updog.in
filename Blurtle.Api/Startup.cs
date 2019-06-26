@@ -24,8 +24,11 @@ namespace Blurtle.Api {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
+            services.ConfigurePoco<DatabaseConfig>(Configuration.GetSection("Database"));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddSingleton<IDatabase, MySqlDatabase>();
             services.AddTransient<IUserRepo, UserRepo>();
 
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();

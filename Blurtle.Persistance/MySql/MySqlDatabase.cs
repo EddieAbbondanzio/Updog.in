@@ -18,9 +18,16 @@ namespace Blurtle.Persistance {
         /// <summary>
         /// Create a new database.
         /// </summary>
-        /// <param name="connection">The connection string.</param>
-        public MySqlDatabase(string connection) {
-            Connection = connection;
+        /// <param name="connection">The connection config.</param>
+        public MySqlDatabase(DatabaseConfig config) {
+            MySqlConnectionStringBuilder connBuilder = new MySqlConnectionStringBuilder();
+            connBuilder.Server = config.Host;
+            connBuilder.Port = config.Port;
+            connBuilder.UserID = config.User;
+            connBuilder.Password = config.Password;
+            connBuilder.Database = config.Database;
+
+            Connection = connBuilder.ToString();
         }
         #endregion
 
