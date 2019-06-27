@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Blurtle.Api {
     public static class IServiceCollectionExts {
-        public static T ConfigurePoco<T>(this IServiceCollection services, IConfiguration config) where T : class, new() {
+        public static TImplementation ConfigurePoco<TInterface, TImplementation>(this IServiceCollection services, IConfiguration config) where TImplementation : class, TInterface, new() where TInterface : class {
             if (services == null) {
                 throw new ArgumentNullException("services");
             }
@@ -13,9 +13,9 @@ namespace Blurtle.Api {
                 throw new ArgumentNullException("config");
             }
 
-            var c = new T();
+            var c = new TImplementation();
             config.Bind(c);
-            services.AddSingleton(c);
+            services.AddSingleton<TInterface>(c);
             return c;
         }
     }

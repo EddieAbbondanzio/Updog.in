@@ -1,8 +1,10 @@
+using Blurtle.Persistance;
+
 namespace Blurtle.Api {
     /// <summary>
     /// Information used to connect to a database.
     /// </summary>
-    public sealed class DatabaseConfig {
+    public sealed class DatabaseConfig : IDatabaseConfig {
         #region Properties
         /// <summary>
         /// The IP address.
