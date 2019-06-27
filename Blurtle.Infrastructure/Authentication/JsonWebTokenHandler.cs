@@ -15,7 +15,7 @@ namespace Blurtle.Infrastructure {
         /// <summary>
         /// How long the tokens are valid for (in seconds)
         /// </summary>
-        private int lifeSpan;
+        private uint lifeSpan;
 
         /// <summary>
         /// The secret key used to sign tokens.
@@ -27,11 +27,10 @@ namespace Blurtle.Infrastructure {
         /// <summary>
         /// Create a new json web token handler.
         /// </summary>
-        /// <param name="lifeSpan">How long tokens are valid for.</param>
-        /// <param name="secret">The secret key to sign with.</param>
-        public JsonWebTokenHandler(int lifeSpan, string secret) {
-            this.lifeSpan = lifeSpan;
-            this.secret = secret;
+        /// <param name="config">Config file settings..</param>
+        public JsonWebTokenHandler(IAuthenticationTokenConfig config) {
+            this.lifeSpan = config.Lifespan;
+            this.secret = config.Secret;
         }
         #endregion
 

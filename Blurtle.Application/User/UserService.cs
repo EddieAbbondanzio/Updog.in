@@ -17,6 +17,11 @@ namespace Blurtle.Application {
         /// Hashes and verifies passwords.
         /// </summary>
         private IPasswordHasher passwordHasher;
+
+        /// <summary>
+        /// Handler for managing auth tokens.
+        /// </summary>
+        private IAuthenticationTokenHandler authTokenHandler;
         #endregion
 
         #region Constructor(s)
@@ -24,8 +29,12 @@ namespace Blurtle.Application {
         /// Create a new user service.
         /// </summary>
         /// <param name="userRepo">CRUD interface for users in the database.</param>
-        public UserService(IUserRepo userRepo) {
+        /// <param name="passHasher">Password hasher that can verify hashses..</param>
+        /// <param name="authTokenHandler">Handler for issuing auth tokens..</param>
+        public UserService(IUserRepo userRepo, IPasswordHasher passHasher, IAuthenticationTokenHandler authTokenHandler) {
             this.userRepo = userRepo;
+            this.passwordHasher = passHasher;
+            this.authTokenHandler = authTokenHandler;
         }
         #endregion
 
@@ -50,9 +59,7 @@ namespace Blurtle.Application {
         /// <param name="userReg">Registration info of the user.</param>
         /// <returns>The newly created user.</returns>
         public async Task<User> RegisterUser(UserRegistration userReg) {
-            bool isUsernameAvailable = await IsUsernameAvailable(userReg.Username);
-
-            if (!isUsernameAvailable) {
+            if (!(await IsUsernameAvailable(userReg.Username))) {
                 throw new InvalidOperationException("Username is not available.");
             }
 
@@ -64,17 +71,16 @@ namespace Blurtle.Application {
         /// <summary>
         /// Log in an existing user.
         /// </summary>
-        /// <param name="username">The username to authenticate under.</param>
-        /// <param name="password">The password to authenticate with.</param>
+        /// <param name="username">The credentials to auth with..</param>
         /// <returns>The logged in user.</returns>
-        public async Task<User> LoginUser(string username, string password) {
-            User user = await userRepo.FindByUsername(username);
+        public async Task<User> LoginUser(UserCredentials credentials) {
+            User user = await userRepo.FindByUsername(credentials.Username);
 
             if (user == null) {
                 return null;
             }
 
-            bool isPasswordValid = passwordHasher.Verify(password, user.PasswordHash);
+            bool isPasswordValid = passwordHasher.Verify(credentials.Password, user.PasswordHash);
 
             if (!isPasswordValid) {
                 return null;
@@ -84,12 +90,18 @@ namespace Blurtle.Application {
         }
 
         /// <summary>
+        /// Issue an auth token to a user.
+        /// </summary>
+        /// <param name="user">The user to issue it to.</param>
+        /// <returns>The newly issued token.</returns>
+        public string IssueAuthToken(User user) => authTokenHandler.IssueToken(user);
+
+        /// <summary>
         /// Update an existing user.
         /// </summary>
         /// <param name="user">The user to update.</param>
-        public async Task UpdateUser(User user) {
-            throw new NotImplementedException();
-        }
+        public async Task UpdateUser(User user) => await userRepo.Update(user);
+
 
         /// <summary>
         /// Check to see if a username has already been claimed, or it's banned from use.

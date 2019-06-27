@@ -1,34 +1,34 @@
-namespace Blurtle.Persistance {
+namespace Blurtle.Api {
     /// <summary>
     /// Information used to connect to a database.
     /// </summary>
-    public interface IDatabaseConfig {
+    public sealed class DatabaseConfig {
         #region Properties
         /// <summary>
         /// The IP address.
         /// </summary>
         /// <value></value>
-        string Host { get; set; }
+        public string Host { get; set; }
 
         /// <summary>
         /// The port number of the IP.
         /// </summary>
-        uint Port { get; set; }
+        public uint Port { get; set; }
 
         /// <summary>
         /// The username to authenticate under.
         /// </summary>
-        string User { get; set; }
+        public string User { get; set; }
 
         /// <summary>
         /// The secret password for authentication.
         /// </summary>
-        string Password { get; set; }
+        public string Password { get; set; }
 
         /// <summary>
         /// The name of the database.
         /// </summary>
-        string Database { get; set; }
+        public string Database { get; set; }
         #endregion
     }
 }

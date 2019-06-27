@@ -41,7 +41,7 @@ namespace Blurtle.Persistance {
         /// <returns>The user with the username.</returns>
         public async Task<User> FindByUsername(string username) {
             using (DbConnection connection = GetConnection()) {
-                return await connection.QueryFirstAsync(
+                return await connection.QueryFirstOrDefaultAsync<User>(
                     "SELECT * FROM User WHERE Username = @Username;",
                     new { Username = username }
                 );
@@ -54,7 +54,7 @@ namespace Blurtle.Persistance {
         /// <param name="user">The user to add.</param>
         public async Task Add(User user) {
             using (DbConnection connection = GetConnection()) {
-                user.Id = await connection.QueryFirstAsync<int>(
+                user.Id = await connection.QueryFirstOrDefaultAsync<int>(
                     "INSERT INTO User (Username, Email, PasswordHash) VALUES (@Username, @Email, @PasswordHash); SELECT CAST(SCOPE_IDENTITY() as int);",
                     user
                 );

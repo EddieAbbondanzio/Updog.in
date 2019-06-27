@@ -27,9 +27,21 @@ namespace Blurtle.Api {
 
         #region Publics
         [HttpGet("{username}")]
-        public async Task FindUserByUsername(string username) {
+        public async Task<ActionResult> FindUserByUsername(string username) {
             User user = await userService.FindUserByUsername(username);
-            Response.StatusCode = 404;
+            Console.WriteLine(user.Email);
+            return Ok(user);
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult> LoginUser([FromBody] UserCredentials credentials) {
+            User user = await userService.LoginUser(credentials);
+
+            if (user != null) {
+                return Ok(userService.IssueAuthToken(user));
+            } else {
+                return Unauthorized();
+            }
         }
 
         // public async Task RegisterUser() {

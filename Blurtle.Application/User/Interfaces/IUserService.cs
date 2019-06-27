@@ -32,10 +32,16 @@ namespace Blurtle.Application {
         /// <summary>
         /// Log in an existing user.
         /// </summary>
-        /// <param name="username">The username to authenticate under.</param>
-        /// <param name="password">The password to authenticate with.</param>
+        /// <param name="username">The credentials to authenticate with..</param>
         /// <returns>The logged in user.</returns>
-        Task<User> LoginUser(string username, string password);
+        Task<User> LoginUser(UserCredentials credentials);
+
+        /// <summary>
+        /// Issue a authentication token for a user.
+        /// </summary>
+        /// <param name="user">The user to issue it for.</param>
+        /// <returns>The auth token to provide.</returns>
+        string IssueAuthToken(User user);
 
         /// <summary>
         /// Update an existing user.
