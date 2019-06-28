@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Blurtle.Domain;
+using FluentValidation.Results;
+using FluentValidation;
 
 namespace Blurtle.Application {
     /// <summary>
@@ -54,22 +56,28 @@ namespace Blurtle.Application {
         public async Task<User> FindUserByUsername(string username) => await userRepo.FindByUsername(username);
 
         /// <summary>
+        /// Find a user via their contact email.
+        /// </summary>
+        /// <param name="email">The email to look for.</param>
+        /// <returns>The user found (if any).</returns>
+        public async Task<User> FindUserByEmail(string email) => await userRepo.FindByEmail(email);
+
+        /// <summary>
         /// Register a new user with the website.
         /// </summary>
         /// <param name="userReg">Registration info of the user.</param>
         /// <returns>The newly created user.</returns>
         public async Task<User> RegisterUser(UserRegistration userReg) {
-            User user = new User();
-            user.Email = userReg.Email;
-            user.PasswordHash = passwordHasher.Hash(userReg.Password);
-            user.Username = userReg.Username;
+            await new UserRegistrationValidator(userRepo).ValidateAndThrowAsync(userReg);
 
+            User user = new User() {
+                Username = userReg.Username,
+                PasswordHash = passwordHasher.Hash(userReg.Password),
+                Email = userReg.Email
+            };
 
-
-
-            //First check to see if all 3 things are legal
-
-            throw new NotImplementedException();
+            await userRepo.Add(user);
+            return user;
         }
 
         /// <summary>
@@ -84,13 +92,7 @@ namespace Blurtle.Application {
                 return null;
             }
 
-            bool isPasswordValid = passwordHasher.Verify(credentials.Password, user.PasswordHash);
-
-            if (!isPasswordValid) {
-                return null;
-            }
-
-            return user;
+            return passwordHasher.Verify(credentials.Password, user.PasswordHash) ? user : null;
         }
 
         /// <summary>

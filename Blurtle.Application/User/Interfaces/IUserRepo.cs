@@ -23,6 +23,13 @@ namespace Blurtle.Application {
         Task<User> FindByUsername(string username);
 
         /// <summary>
+        /// Find a user via their contact email.
+        /// </summary>
+        /// <param name="email">The email to look for.</param>
+        /// <returns>The user found (if any).</returns>
+        Task<User> FindByEmail(string email);
+
+        /// <summary>
         /// Add a new user to the database.
         /// </summary>
         /// <param name="user">The user to add.</param>

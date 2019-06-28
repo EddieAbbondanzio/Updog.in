@@ -32,6 +32,10 @@ namespace Blurtle.Application.Tests {
             }
         }
 
+        public Task<User> FindByEmail(string email) {
+            throw new System.NotImplementedException();
+        }
+
         public Task Update(User user) {
             throw new System.NotImplementedException();
         }

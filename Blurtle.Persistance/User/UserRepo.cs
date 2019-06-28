@@ -49,6 +49,20 @@ namespace Blurtle.Persistance {
         }
 
         /// <summary>
+        /// Find a user via their contact email.
+        /// </summary>
+        /// <param name="email">The email to look for.</param>
+        /// <returns>The user found (if any).</returns>
+        public async Task<User> FindByEmail(string email) {
+            using (DbConnection connection = GetConnection()) {
+                return await connection.QueryFirstOrDefaultAsync<User>(
+                    "SELECT * FROM User WHERE Email = @Email;",
+                    new { Email = email }
+                );
+            }
+        }
+
+        /// <summary>
         /// Add a new user to the database.
         /// </summary>
         /// <param name="user">The user to add.</param>
