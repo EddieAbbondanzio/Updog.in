@@ -29,7 +29,6 @@ namespace Blurtle.Api {
         [HttpGet("{username}")]
         public async Task<ActionResult> FindUserByUsername(string username) {
             User user = await userService.FindUserByUsername(username);
-            Console.WriteLine(user.Email);
             return Ok(user);
         }
 
