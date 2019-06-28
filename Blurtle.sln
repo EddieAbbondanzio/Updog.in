@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blurtle.Infrastructure", "B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blurtle.Infrastructure.Tests", "Blurtle.Infrastructure.Tests\Blurtle.Infrastructure.Tests.csproj", "{12C14BBD-0E42-4017-956F-8A8AC7D8D522}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blurtle.Application.Tests", "Blurtle.Application.Tests\Blurtle.Application.Tests.csproj", "{41274940-7A49-411A-9434-4FB96897FA1B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,5 +102,17 @@ Global
 		{12C14BBD-0E42-4017-956F-8A8AC7D8D522}.Release|x64.Build.0 = Release|Any CPU
 		{12C14BBD-0E42-4017-956F-8A8AC7D8D522}.Release|x86.ActiveCfg = Release|Any CPU
 		{12C14BBD-0E42-4017-956F-8A8AC7D8D522}.Release|x86.Build.0 = Release|Any CPU
+		{41274940-7A49-411A-9434-4FB96897FA1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41274940-7A49-411A-9434-4FB96897FA1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41274940-7A49-411A-9434-4FB96897FA1B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{41274940-7A49-411A-9434-4FB96897FA1B}.Debug|x64.Build.0 = Debug|Any CPU
+		{41274940-7A49-411A-9434-4FB96897FA1B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{41274940-7A49-411A-9434-4FB96897FA1B}.Debug|x86.Build.0 = Debug|Any CPU
+		{41274940-7A49-411A-9434-4FB96897FA1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41274940-7A49-411A-9434-4FB96897FA1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41274940-7A49-411A-9434-4FB96897FA1B}.Release|x64.ActiveCfg = Release|Any CPU
+		{41274940-7A49-411A-9434-4FB96897FA1B}.Release|x64.Build.0 = Release|Any CPU
+		{41274940-7A49-411A-9434-4FB96897FA1B}.Release|x86.ActiveCfg = Release|Any CPU
+		{41274940-7A49-411A-9434-4FB96897FA1B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

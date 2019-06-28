@@ -65,9 +65,7 @@ namespace Blurtle.Application {
             user.Username = userReg.Username;
 
 
-            UserValidator validator = new UserValidator(userRepo);
 
-            var validationResult = await validator.ValidateAsync(user);
 
             //First check to see if all 3 things are legal
 
