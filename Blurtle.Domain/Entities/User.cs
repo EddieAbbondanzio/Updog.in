@@ -1,9 +1,8 @@
 ﻿using System;
 
 namespace Blurtle.Domain {
-    public sealed class User {
+    public sealed class User : Entity {
         #region Properties
-        public int Id { get; set; }
 
         public string Username { get; set; }
 

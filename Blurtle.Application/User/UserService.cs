@@ -59,9 +59,15 @@ namespace Blurtle.Application {
         /// <param name="userReg">Registration info of the user.</param>
         /// <returns>The newly created user.</returns>
         public async Task<User> RegisterUser(UserRegistration userReg) {
-            if (!(await IsUsernameAvailable(userReg.Username))) {
-                throw new InvalidOperationException("Username is not available.");
-            }
+            User user = new User();
+            user.Email = userReg.Email;
+            user.PasswordHash = passwordHasher.Hash(userReg.Password);
+            user.Username = userReg.Username;
+
+
+            UserValidator validator = new UserValidator(userRepo);
+
+            var validationResult = await validator.ValidateAsync(user);
 
             //First check to see if all 3 things are legal
 
