@@ -32,8 +32,17 @@ namespace Blurtle.Application.Tests {
             }
         }
 
-        public Task<User> FindByEmail(string email) {
-            throw new System.NotImplementedException();
+        public async Task<User> FindByEmail(string email) {
+            if (email == "bert@fake.com") {
+                return new User() {
+                    Id = 100,
+                    Username = "bert",
+                    PasswordHash = "hash",
+                    Email = "bert@fake.com"
+                };
+            } else {
+                return null;
+            }
         }
 
         public Task Update(User user) {

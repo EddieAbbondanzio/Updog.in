@@ -15,7 +15,10 @@ namespace Blurtle.Application {
                 return existingUser == null;
             });
             RuleFor(reg => reg.Password).NotNull().NotEmpty().MinimumLength(8);
-            RuleFor(reg => reg.Email).EmailAddress().MaximumLength(64).When(reg => reg.Email != null);
+            RuleFor(reg => reg.Email).EmailAddress().MaximumLength(64).MustAsync(async (email, cancellationToken) => {
+                User existingUser = await userRepo.FindByEmail(email);
+                return existingUser == null;
+            }).When(reg => reg.Email != null);
         }
         #endregion
 

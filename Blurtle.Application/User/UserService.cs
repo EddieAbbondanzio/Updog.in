@@ -108,7 +108,6 @@ namespace Blurtle.Application {
         /// <param name="user">The user to update.</param>
         public async Task UpdateUser(User user) => await userRepo.Update(user);
 
-
         /// <summary>
         /// Check to see if a username has already been claimed, or it's banned from use.
         /// </summary>

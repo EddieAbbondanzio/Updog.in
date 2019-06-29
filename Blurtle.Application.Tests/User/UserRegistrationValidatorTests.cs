@@ -32,6 +32,7 @@ namespace Blurtle.Application.Tests {
             Assert.IsFalse(result.IsValid);
         }
 
+        [TestMethod]
         public async Task FailsUsernameIfInvalidCharacters() {
             UserRegistration reg = new UserRegistration("@bert", "password");
             var result = await validator.ValidateAsync(reg);
@@ -52,6 +53,7 @@ namespace Blurtle.Application.Tests {
             Assert.IsFalse(result.IsValid);
         }
 
+        [TestMethod]
         public async Task FailsPasswordWhenUnder8Characters() {
             UserRegistration reg = new UserRegistration("bert", "cat");
             var result = await validator.ValidateAsync(reg);
@@ -65,8 +67,16 @@ namespace Blurtle.Application.Tests {
             Assert.IsFalse(result.IsValid);
         }
 
+        [TestMethod]
         public async Task FailsEmailIfOver64Characters() {
             UserRegistration reg = new UserRegistration("bert2", "password", "1234567890123456789012345123456789012345678901234512345678901234@fake.com");
+            var result = await validator.ValidateAsync(reg);
+            Assert.IsFalse(result.IsValid);
+        }
+
+        [TestMethod]
+        public async Task FailsEmailIfAlreadyTaken() {
+            UserRegistration reg = new UserRegistration("bert2", "password", "bert@fake.com");
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }
