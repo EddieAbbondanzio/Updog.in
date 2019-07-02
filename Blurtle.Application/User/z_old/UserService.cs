@@ -8,7 +8,7 @@ namespace Blurtle.Application {
     /// <summary>
     /// Service for managing user's in the database.
     /// </summary>
-    public sealed class UserService : IUserService {
+    public sealed class UserService {
         #region Fields
         /// <summary>
         /// CRUD interface of users in the database.
@@ -42,58 +42,11 @@ namespace Blurtle.Application {
 
         #region Publics
         /// <summary>
-        /// Find a user by their unique numeric id.
-        /// </summary>
-        /// <param name="id">The id to look for.</param>
-        /// <returns>The user found (ifa any).</returns>
-        public async Task<User> FindUserById(int id) => await userRepo.FindById(id);
-
-        /// <summary>
         /// Find a username via their unique username.
         /// </summary>
         /// <param name="username">The username to look for.</param>
         /// <returns>The user found (if any).</returns>
         public async Task<User> FindUserByUsername(string username) => await userRepo.FindByUsername(username);
-
-        /// <summary>
-        /// Find a user via their contact email.
-        /// </summary>
-        /// <param name="email">The email to look for.</param>
-        /// <returns>The user found (if any).</returns>
-        public async Task<User> FindUserByEmail(string email) => await userRepo.FindByEmail(email);
-
-        /// <summary>
-        /// Register a new user with the website.
-        /// </summary>
-        /// <param name="userReg">Registration info of the user.</param>
-        /// <returns>The newly created user.</returns>
-        public async Task<User> RegisterUser(UserRegistration userReg) {
-            await new UserRegistrationValidator(userRepo).ValidateAndThrowAsync(userReg);
-
-            User user = new User() {
-                Username = userReg.Username,
-                PasswordHash = passwordHasher.Hash(userReg.Password),
-                Email = userReg.Email
-            };
-
-            await userRepo.Add(user);
-            return user;
-        }
-
-        /// <summary>
-        /// Log in an existing user.
-        /// </summary>
-        /// <param name="username">The credentials to auth with..</param>
-        /// <returns>The logged in user.</returns>
-        public async Task<User> LoginUser(UserCredentials credentials) {
-            User user = await userRepo.FindByUsername(credentials.Username);
-
-            if (user == null) {
-                return null;
-            }
-
-            return passwordHasher.Verify(credentials.Password, user.PasswordHash) ? user : null;
-        }
 
         /// <summary>
         /// Issue an auth token to a user.

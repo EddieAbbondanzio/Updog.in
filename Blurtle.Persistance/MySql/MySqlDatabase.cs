@@ -28,6 +28,9 @@ namespace Blurtle.Persistance {
             connBuilder.Database = config.Database;
 
             Connection = connBuilder.ToString();
+            Console.WriteLine(config.Host);
+            Console.WriteLine(config.Port);
+            Console.WriteLine(config.User);
         }
         #endregion
 

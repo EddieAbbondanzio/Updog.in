@@ -7,9 +7,9 @@ namespace Blurtle.Application {
     /// <summary>
     /// Validator to validate user registrations.
     /// </summary>
-    public sealed class UserRegistrationValidator : AbstractValidator<UserRegistration> {
+    public sealed class RegisterUserRequestValidator : AbstractValidator<RegisterUserRequest> {
         #region Constructor(s)
-        public UserRegistrationValidator(IUserRepo userRepo) {
+        public RegisterUserRequestValidator(IUserRepo userRepo) {
             RuleFor(reg => reg.Username).MinimumLength(4).MaximumLength(24).Matches(@"^[\w\s-]+$").MustAsync(async (username, cancellationToken) => {
                 User existingUser = await userRepo.FindByUsername(username);
                 return existingUser == null;
@@ -23,7 +23,7 @@ namespace Blurtle.Application {
         #endregion
 
         #region Publics
-        public override ValidationResult Validate(ValidationContext<UserRegistration> context) => throw new InvalidOperationException("This validator must be ran via ValidateAsync()");
+        public override ValidationResult Validate(ValidationContext<RegisterUserRequest> context) => throw new InvalidOperationException("This validator must be ran via ValidateAsync()");
         #endregion
     }
 }

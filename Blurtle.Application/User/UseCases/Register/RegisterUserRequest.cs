@@ -1,22 +1,22 @@
+
 namespace Blurtle.Application {
     /// <summary>
-    /// Registration info for a new user.
+    /// Request object to create a new user with the system.
     /// </summary>
-    public sealed class UserRegistration {
+    public sealed class RegisterUserRequest {
         #region Properties
         /// <summary>
-        /// The username they want to use.
+        /// The username they want.
         /// </summary>
-        /// <value></value>
         public string Username { get; }
 
         /// <summary>
-        /// The password the user wants to use.
+        /// The password they want to use.
         /// </summary>
         public string Password { get; }
 
         /// <summary>
-        /// The email of the user (if any).
+        /// The contact email (if any).
         /// </summary>
         public string Email { get; }
         #endregion
@@ -28,7 +28,7 @@ namespace Blurtle.Application {
         /// <param name="username">The username they want.</param>
         /// <param name="password">The password they want to use.</param>
         /// <param name="email">The contact email (if any).</param>
-        public UserRegistration(string username, string password, string email = null) {
+        public RegisterUserRequest(string username, string password, string email = null) {
             Username = username;
             Password = password;
             Email = email;
