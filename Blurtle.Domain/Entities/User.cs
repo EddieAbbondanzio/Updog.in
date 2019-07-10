@@ -9,6 +9,8 @@ namespace Blurtle.Domain {
         public string Email { get; set; }
 
         public string PasswordHash { get; set; }
+
+        public DateTime JoinedDate { get; set; }
         #endregion
     }
 }
