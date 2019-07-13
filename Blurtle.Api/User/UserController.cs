@@ -3,6 +3,7 @@ using Blurtle.Application;
 using System.Threading.Tasks;
 using Blurtle.Domain;
 using System;
+using FluentValidation;
 
 namespace Blurtle.Api {
     /// <summary>
@@ -61,15 +62,26 @@ namespace Blurtle.Api {
         [HttpPost("login")]
         public async Task<ActionResult> LoginUser([FromBody] LoginUserRequest credentials) {
             UserLogin login = await userLoginator.Handle(credentials);
-            return login != null ? Ok(login.AuthToken) : Unauthorized("Invalid username and/or password.") as ActionResult;
+            return login != null ? Ok(login) : Unauthorized("Invalid username and/or password.") as ActionResult;
         }
 
+        /// <summary>
+        /// Register a new user with the website.
+        /// </summary>
+        /// <param name="registration"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult> RegisterUser([FromBody] RegisterUserRequest registration) {
-            UserLogin login = await userRegistrar.Handle(registration);
-            return login != null ? Ok(login.AuthToken) : BadRequest("Registration failed.") as ActionResult;
+            try {
+                UserLogin login = await userRegistrar.Handle(registration);
+                return login != null ? Ok(login) : BadRequest("Registration failed.") as ActionResult;
+            } catch (ValidationException ex) {
+                return BadRequest(ex.Message);
+            } catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+                return BadRequest("Error, please try again later");
+            }
         }
-
 
         //[HttpPatch]
         // public async Task UpdateUser([FromBody] UpdateUserRequest update) {

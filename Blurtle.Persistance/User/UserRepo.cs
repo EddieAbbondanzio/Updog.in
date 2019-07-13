@@ -69,9 +69,11 @@ namespace Blurtle.Persistance {
         public async Task Add(User user) {
             using (DbConnection connection = GetConnection()) {
                 user.Id = await connection.QueryFirstOrDefaultAsync<int>(
-                    "INSERT INTO User (Username, Email, PasswordHash) VALUES (@Username, @Email, @PasswordHash); SELECT CAST(SCOPE_IDENTITY() as int);",
+                    "INSERT INTO User (Username, Email, PasswordHash, JoinedDate) VALUES (@Username, @Email, @PasswordHash, @JoinedDate); SELECT LAST_INSERT_ID();",
                     user
                 );
+
+                Console.WriteLine("REEEEEEEE: ", user.Id);
             }
         }
 

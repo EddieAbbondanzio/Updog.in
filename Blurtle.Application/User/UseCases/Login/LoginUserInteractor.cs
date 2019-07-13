@@ -30,8 +30,8 @@ namespace Blurtle.Application {
                 return null;
             }
 
-            if (passwordHasher.Verify(input.Password, input.Password)) {
-                return new UserLogin(user, tokenHandler.IssueToken(user));
+            if (passwordHasher.Verify(input.Password, user.PasswordHash)) {
+                return new UserLogin(new UserInfo(user.Username, user.JoinedDate), tokenHandler.IssueToken(user));
             } else {
                 return null;
             }

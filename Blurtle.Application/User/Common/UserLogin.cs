@@ -9,7 +9,7 @@ namespace Blurtle.Application {
         /// <summary>
         /// The user it belongs to.
         /// </summary>
-        public User User { get; }
+        public UserInfo User { get; }
 
         /// <summary>
         /// The auth token they were issued.
@@ -19,7 +19,7 @@ namespace Blurtle.Application {
         #endregion
 
         #region Constructor(s)
-        public UserLogin(User user, string authToken) {
+        public UserLogin(UserInfo user, string authToken) {
             User = user;
             AuthToken = authToken;
         }

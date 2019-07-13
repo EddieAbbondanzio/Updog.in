@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Blurtle.Domain;
 using FluentValidation;
@@ -34,13 +35,13 @@ namespace Blurtle.Application {
                 Username = input.Username,
                 PasswordHash = passwordHasher.Hash(input.Password),
                 Email = input.Email,
-                JoinedDate = new System.DateTime()
+                JoinedDate = System.DateTime.UtcNow
             };
 
             await userRepo.Add(user);
             string authToken = tokenHandler.IssueToken(user);
 
-            return new UserLogin(user, authToken);
+            return new UserLogin(new UserInfo(user.Username, user.JoinedDate), authToken);
         }
         #endregion
     }

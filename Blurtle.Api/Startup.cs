@@ -14,11 +14,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using FluentValidation;
+using Dapper;
 
 namespace Blurtle.Api {
     public class Startup {
         public Startup(IConfiguration configuration) {
             Configuration = configuration;
+            SqlMapper.AddTypeHandler(new DateTimeHandler());
         }
 
         public IConfiguration Configuration { get; }
