@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using FluentValidation;
 
 namespace Blurtle.Api {
     public class Startup {
@@ -34,6 +35,16 @@ namespace Blurtle.Api {
 
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
             services.AddSingleton<IAuthenticationTokenHandler, JsonWebTokenHandler>();
+
+            services.AddTransient<FindUserByUsernameInteractor>();
+            services.AddTransient<LoginUserInteractor>();
+            services.AddTransient<RegisterUserInteractor>();
+            services.AddTransient<UpdateUserInteractor>();
+            services.AddTransient<UserPasswordUpdater>();
+
+            services.AddTransient<AbstractValidator<RegisterUserRequest>, RegisterUserRequestValidator>();
+            services.AddTransient<AbstractValidator<UpdateUserRequest>, UserUpdateRequestValidator>();
+            services.AddTransient<AbstractValidator<UserPasswordUpdateRequest>, UserPasswordUpdateValidator>();
 
         }
 

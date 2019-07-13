@@ -33,7 +33,8 @@ namespace Blurtle.Application {
             User user = new User() {
                 Username = input.Username,
                 PasswordHash = passwordHasher.Hash(input.Password),
-                Email = input.Email
+                Email = input.Email,
+                JoinedDate = new System.DateTime()
             };
 
             await userRepo.Add(user);
