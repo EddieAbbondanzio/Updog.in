@@ -13,13 +13,6 @@ namespace Blurtle.Application {
         /// <param name="user">The user to issue it to.</param>
         /// <returns>The generated bearer token.</returns>
         string IssueToken(User user);
-
-        /// <summary>
-        /// Validate a token to check that it is legit.
-        /// </summary>
-        /// <param name="token">The bearer token to validate.</param>
-        /// <returns>If the token was valid or not.</returns>
-        AuthenticationTokenValidationResult ValidateToken(string token);
         #endregion
     }
 }

@@ -15,6 +15,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using FluentValidation;
 using Dapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Blurtle.Api {
     public class Startup {
@@ -27,16 +32,29 @@ namespace Blurtle.Api {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
+            // Set up the authentication
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opts => {
+                opts.TokenValidationParameters = new TokenValidationParameters() {
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = false,
+                    ValidIssuer = Configuration["AuthenticationToken:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AuthenticationToken:Secret"]))
+                };
+            });
+
+
             services.ConfigurePoco<IDatabaseConfig, DatabaseConfig>(Configuration.GetSection("Database"));
             services.ConfigurePoco<IAuthenticationTokenConfig, AuthenticationTokenConfig>(Configuration.GetSection("AuthenticationToken"));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddSingleton<IAuthenticationTokenHandler, JsonWebTokenHandler>();
             services.AddSingleton<IDatabase, MySqlDatabase>();
             services.AddTransient<IUserRepo, UserRepo>();
 
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
-            services.AddSingleton<IAuthenticationTokenHandler, JsonWebTokenHandler>();
 
             services.AddTransient<FindUserByUsernameInteractor>();
             services.AddTransient<LoginUserInteractor>();
@@ -44,14 +62,16 @@ namespace Blurtle.Api {
             services.AddTransient<UpdateUserInteractor>();
             services.AddTransient<UserPasswordUpdater>();
 
-            services.AddTransient<AbstractValidator<RegisterUserRequest>, RegisterUserRequestValidator>();
-            services.AddTransient<AbstractValidator<UpdateUserRequest>, UserUpdateRequestValidator>();
-            services.AddTransient<AbstractValidator<UserPasswordUpdateRequest>, UserPasswordUpdateValidator>();
+            services.AddTransient<AbstractValidator<RegisterUserParams>, RegisterUserValidator>();
+            services.AddTransient<AbstractValidator<UpdateUserParams>, UserUpdateValidator>();
+            services.AddTransient<AbstractValidator<UserPasswordUpdateParams>, UserPasswordValidator>();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
+            app.UseAuthentication();
+
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             } else {

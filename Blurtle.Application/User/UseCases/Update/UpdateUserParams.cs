@@ -1,7 +1,11 @@
 using Blurtle.Domain;
 
 namespace Blurtle.Application {
-    public sealed class UpdateUserRequest {
+    public sealed class UpdateUserParams {
+        /* This was done to prepare for later on when a user has more
+         * info that they can set. Violates YAGNI but whatever.
+         */
+
         #region Properties
         public User User { get; }
 
@@ -9,7 +13,7 @@ namespace Blurtle.Application {
         #endregion
 
         #region Constructor(s)
-        public UpdateUserRequest(User user, string email) {
+        public UpdateUserParams(User user, string email) {
             User = user;
             Email = email;
         }

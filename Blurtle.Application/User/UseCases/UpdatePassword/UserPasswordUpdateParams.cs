@@ -1,7 +1,7 @@
 using Blurtle.Domain;
 
 namespace Blurtle.Application {
-    public sealed class UserPasswordUpdateRequest {
+    public sealed class UserPasswordUpdateParams {
         #region Properties
         public User User { get; }
 
@@ -9,7 +9,7 @@ namespace Blurtle.Application {
         #endregion
 
         #region Constructor(s)
-        public UserPasswordUpdateRequest(User user, string password) {
+        public UserPasswordUpdateParams(User user, string password) {
             User = user;
             Password = password;
         }

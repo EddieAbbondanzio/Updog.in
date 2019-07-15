@@ -14,7 +14,9 @@ namespace Blurtle.Api {
         /// <summary>
         /// The number of seconds the token is valid for.
         /// </summary>
-        public uint Lifespan { get; set; }
+        public uint Expires { get; set; }
+
+        public string Issuer { get; set; }
         #endregion
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Blurtle.Domain;
 
@@ -5,7 +6,7 @@ namespace Blurtle.Application {
     /// <summary>
     /// Interactor to handler a login user use case.
     /// </summary>
-    public sealed class LoginUserInteractor : IRequestHandler<LoginUserRequest, UserLogin> {
+    public sealed class LoginUserInteractor : IRequestHandler<LoginUserParams, UserLogin> {
         #region Fields
         private IUserRepo userRepo;
 
@@ -23,7 +24,7 @@ namespace Blurtle.Application {
         #endregion
 
         #region Publics
-        public async Task<UserLogin> Handle(LoginUserRequest input) {
+        public async Task<UserLogin> Handle(LoginUserParams input) {
             User user = await userRepo.FindByUsername(input.Username);
 
             if (user == null) {

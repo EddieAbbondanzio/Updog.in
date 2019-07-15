@@ -7,7 +7,7 @@ namespace Blurtle.Application {
     /// <summary>
     /// Use case interactor for registering a new user with the site.
     /// </summary>
-    public sealed class RegisterUserInteractor : IRequestHandler<RegisterUserRequest, UserLogin> {
+    public sealed class RegisterUserInteractor : IRequestHandler<RegisterUserParams, UserLogin> {
         #region Fields
         private IUserRepo userRepo;
 
@@ -15,11 +15,11 @@ namespace Blurtle.Application {
 
         private IAuthenticationTokenHandler tokenHandler;
 
-        private AbstractValidator<RegisterUserRequest> validator;
+        private AbstractValidator<RegisterUserParams> validator;
         #endregion
 
         #region Constructor(s)
-        public RegisterUserInteractor(IUserRepo userRepo, IPasswordHasher passwordHasher, IAuthenticationTokenHandler tokenHandler, AbstractValidator<RegisterUserRequest> validator) {
+        public RegisterUserInteractor(IUserRepo userRepo, IPasswordHasher passwordHasher, IAuthenticationTokenHandler tokenHandler, AbstractValidator<RegisterUserParams> validator) {
             this.userRepo = userRepo;
             this.passwordHasher = passwordHasher;
             this.tokenHandler = tokenHandler;
@@ -28,7 +28,7 @@ namespace Blurtle.Application {
         #endregion
 
         #region Publics
-        public async Task<UserLogin> Handle(RegisterUserRequest input) {
+        public async Task<UserLogin> Handle(RegisterUserParams input) {
             await validator.ValidateAndThrowAsync(input);
 
             User user = new User() {

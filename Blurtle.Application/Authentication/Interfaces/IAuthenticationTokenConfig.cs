@@ -7,12 +7,18 @@ namespace Blurtle.Infrastructure {
         /// <summary>
         /// The secret key to sign tokens with.
         /// </summary>
-        string Secret { get; set; }
+        string Secret { get; }
 
         /// <summary>
         /// The number of seconds the token is valid for.
         /// </summary>
-        uint Lifespan { get; set; }
+        uint Expires { get; }
+
+        /// <summary>
+        /// The issuer who gives out the token.
+        /// </summary>
+        /// <value></value>
+        string Issuer { get; }
         #endregion
     }
 }

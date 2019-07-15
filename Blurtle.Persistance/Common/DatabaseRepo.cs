@@ -1,4 +1,5 @@
 using System.Data.Common;
+using System.Transactions;
 using Blurtle.Domain;
 
 namespace Blurtle.Persistance {
@@ -19,6 +20,14 @@ namespace Blurtle.Persistance {
         public DatabaseRepo(IDatabase database) {
             this.database = database;
         }
+        #endregion
+
+        #region Publics
+        /// <summary>
+        /// Start a scoped transaction with the database.
+        /// </summary>
+        /// <returns>The newly opened transaction.</returns>
+        public TransactionScope BeginTransaction() => new TransactionScope();
         #endregion
 
         #region Privates

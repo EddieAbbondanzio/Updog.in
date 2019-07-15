@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blurtle.Application;
 using Blurtle.Persistance;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blurtle.Api.Controllers {
@@ -12,7 +13,9 @@ namespace Blurtle.Api.Controllers {
     public class ValuesController : ControllerBase {
         // GET api/values
         [HttpGet]
+        [Authorize]
         public ActionResult<IEnumerable<string>> Get() {
+            HttpContext.Response.StatusCode = 300;
             return new string[] { "value1", "value2" };
         }
 

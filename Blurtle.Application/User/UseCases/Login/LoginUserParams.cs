@@ -1,5 +1,5 @@
 namespace Blurtle.Application {
-    public class LoginUserRequest {
+    public class LoginUserParams {
         #region Properties
         public string Username { get; }
 
@@ -7,7 +7,7 @@ namespace Blurtle.Application {
         #endregion
 
         #region Constructor(s)
-        public LoginUserRequest(string username, string password) {
+        public LoginUserParams(string username, string password) {
             Username = username;
             Password = password;
         }
