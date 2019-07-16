@@ -15,7 +15,8 @@ namespace Blurtle.Api.Controllers {
         [HttpGet]
         [Authorize]
         public ActionResult<IEnumerable<string>> Get() {
-            HttpContext.Response.StatusCode = 300;
+            Console.WriteLine("LREEEEE");
+            Console.WriteLine(User.Identity.Name);
             return new string[] { "value1", "value2" };
         }
 

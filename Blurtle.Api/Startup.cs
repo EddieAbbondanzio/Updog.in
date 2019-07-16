@@ -20,6 +20,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using Blurtle.Domain;
+using Microsoft.AspNetCore.Http;
 
 namespace Blurtle.Api {
     public class Startup {
@@ -41,6 +43,12 @@ namespace Blurtle.Api {
                     ValidateAudience = false,
                     ValidIssuer = Configuration["AuthenticationToken:Issuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AuthenticationToken:Secret"]))
+                };
+
+                opts.Events = new JwtBearerEvents();
+                opts.Events.OnTokenValidated = async (c) => {
+                    IUserRepo userRepo = c.HttpContext.RequestServices.GetService<IUserRepo>();
+                    c.HttpContext.User = await userRepo.FindById(1);
                 };
             });
 

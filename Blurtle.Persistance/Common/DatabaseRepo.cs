@@ -7,7 +7,7 @@ namespace Blurtle.Persistance {
     /// Base class for repos to inherit if they work off the database.
     /// </summary>
     /// <typeparam name="TEntity">The type of entity.</typeparam>
-    public abstract class DatabaseRepo<TEntity> where TEntity : Entity {
+    public abstract class DatabaseRepo<TEntity> where TEntity : IEntity {
         #region Fields
         private IDatabase database;
         #endregion
