@@ -27,7 +27,7 @@ namespace Blurtle.Api {
 
         public string IssueToken(User user) {
             Claim[] claims = new[] {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
             JwtSecurityToken token = new JwtSecurityToken(
