@@ -7,7 +7,7 @@ namespace Blurtle.Application {
     /// </summary>
     public sealed class UserUpdateValidator : AbstractValidator<UpdateUserParams> {
         public UserUpdateValidator() {
-            RuleFor(reg => reg.Email).EmailAddress().MaximumLength(64).When(reg => reg.Email != null);
+            RuleFor(reg => reg.Email).NotNull().EmailAddress().MaximumLength(64).When(reg => reg.Email != null);
         }
     }
 }

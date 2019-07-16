@@ -14,6 +14,5 @@ namespace Blurtle.Domain {
 
         public DateTime JoinedDate { get; set; }
         #endregion
-
     }
 }

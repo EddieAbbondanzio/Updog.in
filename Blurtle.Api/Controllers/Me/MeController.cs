@@ -1,12 +1,15 @@
 using Blurtle.Application;
+using Blurtle.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace Blurtle.Api {
     /// <summary>
     /// End point for managing the logged in user.
     /// </summary>
-    [Route("me")]
+    [Route("api/me")]
     [ApiController]
     public sealed class MeController : ApiController {
         #region Fields
@@ -23,14 +26,16 @@ namespace Blurtle.Api {
         #endregion
 
         #region Publics
-        // /// <summary>
-        // /// Update the info of a user.
-        // /// </summary>
-        // /// <param name="updateRequest">The new user info.</param>
-        // [HttpPut]
-        // public async Task<ActionResult> Update([FromBody] MeUpdateRequest updateRequest) {
-
-        // }
+        /// <summary>
+        /// Update the info of a user.
+        /// </summary>
+        /// <param name="updateRequest">The new user info.</param>
+        [HttpPut]
+        [Authorize]
+        public async Task<ActionResult> Update([FromBody] MeUpdateRequest updateRequest) {
+            await userUpdater.Handle(new UpdateUserParams(User, updateRequest.Email));
+            return Ok();
+        }
 
         // /// <summary>
         // /// Update the password of the logged in user.

@@ -22,6 +22,7 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Blurtle.Domain;
 using Microsoft.AspNetCore.Http;
+using System.Security.Principal;
 
 namespace Blurtle.Api {
     public class Startup {
@@ -51,9 +52,17 @@ namespace Blurtle.Api {
                         Claim subjectClaim = c.Principal.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier);
                         int userId = Convert.ToInt32(subjectClaim.Value);
 
-                        // Retrieve the user
+                        // Retrieve the user, and cache the identity.
                         IUserRepo userRepo = c.HttpContext.RequestServices.GetService<IUserRepo>();
-                        c.HttpContext.User = await userRepo.FindById(userId);
+                        IIdentity identity = c.Principal.Identity;
+
+                        User u = await userRepo.FindById(userId);
+                        u.AddIdentity(identity as ClaimsIdentity);
+
+                        /*
+                         * Don't attempt to set this via c.HttpContext.Principal, ASP.NET seems to overwrite this later on...
+                         */
+                        c.Principal = u;
                     }
                 };
             });

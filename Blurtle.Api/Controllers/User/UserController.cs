@@ -9,7 +9,7 @@ namespace Blurtle.Api {
     /// <summary>
     /// End point for managing users of the site.
     /// </summary>
-    [Route("user")]
+    [Route("api/user")]
     [ApiController]
     public sealed class UserController : ApiController {
         #region Fields
