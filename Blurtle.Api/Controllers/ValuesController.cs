@@ -10,13 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace Blurtle.Api.Controllers {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase {
+    public class ValuesController : ApiController {
         // GET api/values
         [HttpGet]
         [Authorize]
         public ActionResult<IEnumerable<string>> Get() {
-            Console.WriteLine("LREEEEE");
-            Console.WriteLine(User.Identity.Name);
             return new string[] { "value1", "value2" };
         }
 

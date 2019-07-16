@@ -9,7 +9,7 @@ namespace Blurtle.Api {
     /// </summary>
     [Route("session")]
     [ApiController]
-    public sealed class SessionController : ControllerBase {
+    public sealed class SessionController : ApiController {
         #region Fields
         private LoginUserInteractor loginUserInteractor;
         #endregion

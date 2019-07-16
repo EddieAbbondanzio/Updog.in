@@ -45,15 +45,16 @@ namespace Blurtle.Api {
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AuthenticationToken:Secret"]))
                 };
 
-                opts.Events = new JwtBearerEvents();
-                opts.Events.OnTokenValidated = async (c) => {
-                    // Figure out the user ID the token belongs to.
-                    Claim subjectClaim = c.Principal.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier);
-                    int userId = Convert.ToInt32(subjectClaim.Value);
+                opts.Events = new JwtBearerEvents() {
+                    OnTokenValidated = async (c) => {
+                        // Figure out the user ID the token belongs to.
+                        Claim subjectClaim = c.Principal.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier);
+                        int userId = Convert.ToInt32(subjectClaim.Value);
 
-                    // Retrieve the user
-                    IUserRepo userRepo = c.HttpContext.RequestServices.GetService<IUserRepo>();
-                    c.HttpContext.User = await userRepo.FindById(userId);
+                        // Retrieve the user
+                        IUserRepo userRepo = c.HttpContext.RequestServices.GetService<IUserRepo>();
+                        c.HttpContext.User = await userRepo.FindById(userId);
+                    }
                 };
             });
 

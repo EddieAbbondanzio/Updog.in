@@ -8,7 +8,7 @@ namespace Blurtle.Api {
     /// </summary>
     [Route("me")]
     [ApiController]
-    public sealed class MeController : ControllerBase {
+    public sealed class MeController : ApiController {
         #region Fields
         public UpdateUserInteractor userUpdater;
 

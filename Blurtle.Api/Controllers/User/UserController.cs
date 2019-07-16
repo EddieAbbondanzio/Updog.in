@@ -11,7 +11,7 @@ namespace Blurtle.Api {
     /// </summary>
     [Route("user")]
     [ApiController]
-    public sealed class UserController : ControllerBase {
+    public sealed class UserController : ApiController {
         #region Fields
         private FindUserByUsernameInteractor userFinder;
 
