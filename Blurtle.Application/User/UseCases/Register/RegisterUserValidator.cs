@@ -10,7 +10,7 @@ namespace Blurtle.Application {
     public sealed class RegisterUserValidator : AbstractValidator<RegisterUserParams> {
         #region Constructor(s)
         public RegisterUserValidator(IUserRepo userRepo) {
-            RuleFor(reg => reg.Username).MinimumLength(4).MaximumLength(24).Matches(@"^[\w\s-]+$").MustAsync(async (username, cancellationToken) => {
+            RuleFor(reg => reg.Username).NotNull().MinimumLength(4).MaximumLength(24).Matches(@"^[\w\s-]+$").MustAsync(async (username, cancellationToken) => {
                 User existingUser = await userRepo.FindByUsername(username);
                 return existingUser == null;
             });

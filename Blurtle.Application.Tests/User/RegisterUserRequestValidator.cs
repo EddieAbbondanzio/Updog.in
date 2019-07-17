@@ -12,6 +12,13 @@ namespace Blurtle.Application.Tests {
         Application.RegisterUserValidator validator = new Application.RegisterUserValidator(new MockUserRepo());
 
         [TestMethod]
+        public async Task FailsUsernameIfNull() {
+            RegisterUserParams reg = new RegisterUserParams(null, "password");
+            var result = await validator.ValidateAsync(reg);
+            Assert.IsFalse(result.IsValid);
+        }
+
+        [TestMethod]
         public async Task FailsUsernameUnder4Characters() {
             RegisterUserParams reg = new RegisterUserParams("cat", "password");
             var result = await validator.ValidateAsync(reg);
@@ -59,6 +66,8 @@ namespace Blurtle.Application.Tests {
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }
+
+
 
         [TestMethod]
         public async Task FailsEmailIfNotNullAndInvalid() {
