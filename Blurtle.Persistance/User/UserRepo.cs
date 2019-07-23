@@ -72,8 +72,6 @@ namespace Blurtle.Persistance {
                     "INSERT INTO User (Username, Email, PasswordHash, JoinedDate) VALUES (@Username, @Email, @PasswordHash, @JoinedDate); SELECT LAST_INSERT_ID();",
                     user
                 );
-
-                Console.WriteLine("REEEEEEEE: ", user.Id);
             }
         }
 
