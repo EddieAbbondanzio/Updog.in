@@ -37,14 +37,16 @@ namespace Blurtle.Api {
             return Ok();
         }
 
-        // /// <summary>
-        // /// Update the password of the logged in user.
-        // /// </summary>
-        // /// <param name="updatePasswordRequest">The new password.</param>
-        // [HttpPut("password")]
-        // public async Task<ActionResult> UpdatePassword([FromBody] MeUpdatePasswordReqest updatePasswordRequest) {
-
-        // }
+        /// <summary>
+        /// Update the password of the logged in user.
+        /// </summary>
+        /// <param name="updatePasswordRequest">The new password.</param>
+        [Authorize]
+        [HttpPut("password")]
+        public async Task<ActionResult> UpdatePassword([FromBody] MeUpdatePasswordReqest updatePasswordRequest) {
+            await passwordUpdater.Handle(new UserPasswordUpdateParams(User, updatePasswordRequest.Password));
+            return Ok();
+        }
         #endregion
     }
 }

@@ -67,7 +67,12 @@ namespace Blurtle.Application.Tests {
             Assert.IsFalse(result.IsValid);
         }
 
-
+        [TestMethod]
+        public async Task FailsEmailIfNull() {
+            RegisterUserParams reg = new RegisterUserParams("bert", "password", null);
+            var result = await validator.ValidateAsync(reg);
+            Assert.IsFalse(result.IsValid);
+        }
 
         [TestMethod]
         public async Task FailsEmailIfNotNullAndInvalid() {

@@ -6,15 +6,8 @@ namespace Blurtle.Application {
     /// <summary>
     /// CRUD interface for managing user's in the database.
     /// </summary>
-    public interface IUserRepo {
+    public interface IUserRepo : IRepo<User> {
         #region Publics
-        /// <summary>
-        /// Find a user by their id.
-        /// </summary>
-        /// <param name="id">The id to look for.</param>
-        /// <returns>The user with the id.</returns>
-        Task<User> FindById(int id);
-
         /// <summary>
         /// Find a user by their username.
         /// </summary>
@@ -28,24 +21,6 @@ namespace Blurtle.Application {
         /// <param name="email">The email to look for.</param>
         /// <returns>The user found (if any).</returns>
         Task<User> FindByEmail(string email);
-
-        /// <summary>
-        /// Add a new user to the database.
-        /// </summary>
-        /// <param name="user">The user to add.</param>
-        Task Add(User user);
-
-        /// <summary>
-        /// Update a user in the database.
-        /// </summary>
-        /// <param name="user">The user to update.</param>
-        Task Update(User user);
-
-        /// <summary>
-        /// Delete a user from the database.
-        /// </summary>
-        /// <param name="user">The user to delete.</param>
-        Task Delete(User user);
         #endregion
     }
 }
