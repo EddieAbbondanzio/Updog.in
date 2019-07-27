@@ -7,6 +7,8 @@ namespace Blurtle.Application {
     /// </summary>
     public sealed class PostUpdateValidator : AbstractValidator<PostUpdateParams> {
         public PostUpdateValidator() {
+            RuleFor(p => p.User).NotNull();
+            RuleFor(p => p.Post).NotNull();
             RuleFor(update => update.Post.Type).Equal(PostType.Text);
             RuleFor(update => update.Body).NotNull().NotEmpty().MaximumLength(Post.BodyMaxLength);
         }

@@ -53,7 +53,13 @@ namespace Blurtle.Domain {
         /// <summary>
         /// If the post was editted by a user.
         /// </summary>
-        public bool WasEditted { get; set; }
+        public bool WasUpdated { get; set; }
+
+        /// <summary>
+        /// If the post was deleted by a user.
+        /// </summary>
+        /// <value></value>
+        public bool WasDeleted { get; set; }
         #endregion
 
         #region Statics

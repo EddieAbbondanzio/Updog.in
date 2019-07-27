@@ -9,15 +9,15 @@ namespace Blurtle.Application {
     /// </summary>
     public sealed class PostUpdater : IInteractor<PostUpdateParams, Post> {
         #region Fields
-        private PostPermissionHandler postPermissionHandler;
+        private IPermissionHandler<Post> postPermissionHandler;
 
         private IPostRepo postRepo;
 
-        private PostUpdateValidator postValidator;
+        private AbstractValidator<PostUpdateParams> postValidator;
         #endregion
 
         #region Constructor(s)
-        public PostUpdater(PostPermissionHandler postPermissionHandler, IPostRepo postRepo, PostUpdateValidator postValidator) {
+        public PostUpdater(IPermissionHandler<Post> postPermissionHandler, IPostRepo postRepo, AbstractValidator<PostUpdateParams> postValidator) {
             this.postPermissionHandler = postPermissionHandler;
             this.postRepo = postRepo;
             this.postValidator = postValidator;
@@ -33,6 +33,7 @@ namespace Blurtle.Application {
             await postValidator.ValidateAndThrowAsync(input);
 
             input.Post.Body = input.Body;
+            input.Post.WasUpdated = true;
             await postRepo.Update(input.Post);
             return input.Post;
         }
