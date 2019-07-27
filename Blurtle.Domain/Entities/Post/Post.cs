@@ -58,32 +58,19 @@ namespace Blurtle.Domain {
 
         #region Statics
         /// <summary>
-        /// Create a new text post.
+        /// Create a new post.
         /// </summary>
+        /// <param name="type">The type of post it is.</param>
         /// <param name="title">The title of the post.</param>
         /// <param name="body">The text body of the post.</param>
         /// <param name="userId">The user that created it.</param>
-        public static Post Text(string title, string body, int userId) => new Post() {
-            Type = PostType.Text,
-            Title = title,
-            Body = body,
-            CreationDate = DateTime.UtcNow,
-            UserId = userId
-        };
-
-        /// <summary>
-        /// Create a new link post.
-        /// </summary>
-        /// <param name="title">The title of the post.</param>
-        /// <param name="body">The link body of the post.</param>
-        /// <param name="userId">The user that created it.</param>
-        public static Post Link(string title, string body, int userId) => new Post() {
-            Type = PostType.Link,
-            Title = title,
-            Body = body,
-            CreationDate = DateTime.UtcNow,
-            UserId = userId
-        };
+        public Post(PostType type, string title, string body, int userId) {
+            Type = type;
+            Title = title;
+            Body = body;
+            CreationDate = DateTime.UtcNow;
+            UserId = userId;
+        }
         #endregion
     }
 }

@@ -90,6 +90,10 @@ namespace Blurtle.Api {
             services.AddTransient<AbstractValidator<UpdateUserParams>, UserUpdateValidator>();
             services.AddTransient<AbstractValidator<UserPasswordUpdateParams>, UserPasswordValidator>();
 
+            services.AddTransient<IPostRepo, PostRepo>();
+            services.AddTransient<PostAdder>();
+            services.AddTransient<AbstractValidator<PostAddParams>, PostAddValidator>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
