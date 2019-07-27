@@ -76,6 +76,7 @@ namespace Blurtle.Api {
             services.AddSingleton<IAuthenticationTokenHandler, JsonWebTokenHandler>();
             services.AddSingleton<IDatabase, MySqlDatabase>();
             services.AddTransient<IUserRepo, UserRepo>();
+            services.AddTransient<IPostRepo, PostRepo>();
 
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
 

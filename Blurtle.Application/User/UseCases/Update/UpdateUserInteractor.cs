@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 
 namespace Blurtle.Application {
-    public sealed class UpdateUserInteractor : IRequestHandler<UpdateUserParams> {
+    public sealed class UpdateUserInteractor : IInteractor<UpdateUserParams> {
         #region Fields
         private IUserRepo userRepo;
 

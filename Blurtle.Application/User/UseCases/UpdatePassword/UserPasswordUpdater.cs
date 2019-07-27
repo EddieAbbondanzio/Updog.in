@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 
 namespace Blurtle.Application {
-    public sealed class UserPasswordUpdater : IRequestHandler<UserPasswordUpdateParams> {
+    public sealed class UserPasswordUpdater : IInteractor<UserPasswordUpdateParams> {
         #region Fields
         private IUserRepo userRepo;
 

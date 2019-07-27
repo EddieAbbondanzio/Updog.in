@@ -6,7 +6,7 @@ namespace Blurtle.Application {
     /// <summary>
     /// Interactor to handler a login user use case.
     /// </summary>
-    public sealed class LoginUserInteractor : IRequestHandler<LoginUserParams, UserLogin> {
+    public sealed class LoginUserInteractor : IInteractor<LoginUserParams, UserLogin> {
         #region Fields
         private IUserRepo userRepo;
 

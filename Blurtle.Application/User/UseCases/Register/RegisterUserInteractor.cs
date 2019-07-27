@@ -7,7 +7,7 @@ namespace Blurtle.Application {
     /// <summary>
     /// Use case interactor for registering a new user with the site.
     /// </summary>
-    public sealed class RegisterUserInteractor : IRequestHandler<RegisterUserParams, UserLogin> {
+    public sealed class RegisterUserInteractor : IInteractor<RegisterUserParams, UserLogin> {
         #region Fields
         private IUserRepo userRepo;
 

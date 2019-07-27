@@ -5,7 +5,7 @@ namespace Blurtle.Application {
     /// Interface for interactors to work with.
     /// </summary>
     /// <typeparam name="TInput">The input parameter type.</typeparam>
-    public interface IRequestHandler<TInput> {
+    public interface IInteractor<TInput> {
         /// <summary>
         /// Process the request.
         /// </summary>
@@ -18,7 +18,7 @@ namespace Blurtle.Application {
     /// </summary>
     /// <typeparam name="TInput">The input parameter type.</typeparam>
     /// <typeparam name="TOutput">The output return type.</typeparam>
-    public interface IRequestHandler<TInput, TOutput> {
+    public interface IInteractor<TInput, TOutput> {
         /// <summary>
         /// Process the request.
         /// </summary>

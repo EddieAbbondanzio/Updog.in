@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Blurtle.Domain;
 
 namespace Blurtle.Application {
-    public sealed class FindUserByUsernameInteractor : IRequestHandler<string, UserInfo> {
+    public sealed class FindUserByUsernameInteractor : IInteractor<string, UserInfo> {
         #region Fields
         private IUserRepo userRepo;
         #endregion
