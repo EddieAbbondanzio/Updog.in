@@ -1,4 +1,4 @@
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// Exception for failed or bad authorization.
     /// </summary>

@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using Blurtle.Domain;
+using Updog.Domain;
 using FluentValidation;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// Interactor to handle deleting posts.
     /// </summary>

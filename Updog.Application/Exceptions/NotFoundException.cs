@@ -1,6 +1,6 @@
 using System;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// Exception for when a resource or item was not found..
     /// </summary>

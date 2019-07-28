@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using Blurtle.Domain;
+using Updog.Domain;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// Interactor to handler a login user use case.
     /// </summary>

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using FluentValidation;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     public sealed class UserPasswordUpdater : IInteractor<UserPasswordUpdateParams> {
         #region Fields
         private IUserRepo userRepo;

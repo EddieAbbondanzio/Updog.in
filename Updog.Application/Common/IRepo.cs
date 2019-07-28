@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Blurtle.Domain;
+using Updog.Domain;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// CRUD interface for managing users.
     /// </summary>

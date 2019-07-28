@@ -1,6 +1,6 @@
-using Blurtle.Application;
+using Updog.Application;
 
-namespace Blurtle.Infrastructure {
+namespace Updog.Infrastructure {
     /// <summary>
     /// BCrypt based password hasher.
     /// </summary>

@@ -2,7 +2,7 @@ using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Blurtle.Api {
+namespace Updog.Api {
     public static class IServiceCollectionExts {
         public static TImplementation ConfigurePoco<TInterface, TImplementation>(this IServiceCollection services, IConfiguration config) where TImplementation : class, TInterface, new() where TInterface : class {
             if (services == null) {

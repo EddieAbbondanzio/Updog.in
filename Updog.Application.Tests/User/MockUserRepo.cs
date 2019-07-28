@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Blurtle.Domain;
+using Updog.Domain;
 
-namespace Blurtle.Application.Tests {
+namespace Updog.Application.Tests {
     /// <summary>
     /// Mock user repo for retrieving a fake user from the "database".
     /// </summary>

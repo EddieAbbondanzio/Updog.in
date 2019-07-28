@@ -1,6 +1,6 @@
-using Blurtle.Domain;
+using Updog.Domain;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     public interface IPostRepo : IRepo<Post> {
         //Marker interface for later use...
     }

@@ -1,4 +1,4 @@
-namespace Blurtle.Api {
+namespace Updog.Api {
     public sealed class SessionLoginRequest {
         #region Publics
         public string Username { get; set; }

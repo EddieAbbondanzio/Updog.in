@@ -1,10 +1,10 @@
 
 using System;
 using System.Threading.Tasks;
-using Blurtle.Domain;
+using Updog.Domain;
 using FluentValidation;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// Updater to handler updating posts.
     /// </summary>

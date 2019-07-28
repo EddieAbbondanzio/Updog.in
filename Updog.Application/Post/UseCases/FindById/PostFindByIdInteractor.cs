@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Blurtle.Domain;
+using Updog.Domain;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// Use case handler to find a post by it's unique ID.
     /// </summary>

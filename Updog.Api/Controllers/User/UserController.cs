@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using Blurtle.Application;
+using Updog.Application;
 using System.Threading.Tasks;
-using Blurtle.Domain;
+using Updog.Domain;
 using System;
 using FluentValidation;
 
-namespace Blurtle.Api {
+namespace Updog.Api {
     /// <summary>
     /// End point for managing users of the site.
     /// </summary>

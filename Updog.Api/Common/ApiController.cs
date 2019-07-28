@@ -1,7 +1,7 @@
-using Blurtle.Domain;
+using Updog.Domain;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Blurtle.Api {
+namespace Updog.Api {
     /// <summary>
     /// Base class for controllers to implement.
     /// </summary>

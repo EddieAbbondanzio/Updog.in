@@ -2,7 +2,7 @@
 using System.Data.Common;
 using MySql.Data.MySqlClient;
 
-namespace Blurtle.Persistance {
+namespace Updog.Persistance {
     /// <summary>
     /// A database for data persistance that runs MySQL.
     /// </summary>

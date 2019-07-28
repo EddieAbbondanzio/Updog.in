@@ -1,6 +1,6 @@
-using Blurtle.Domain;
+using Updog.Domain;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// User login record and the issued auth token.
     /// </summary>

@@ -1,6 +1,6 @@
-using Blurtle.Domain;
+using Updog.Domain;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// Parameters to add a new post.
     /// </summary>

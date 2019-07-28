@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Blurtle.Infrastructure;
+using Updog.Infrastructure;
 
-namespace Blurtle.Infrastructure.Tests {
+namespace Updog.Infrastructure.Tests {
     /// <summary>
     /// Unit tests for the BCryptPasswordHasher.
     /// </summary>

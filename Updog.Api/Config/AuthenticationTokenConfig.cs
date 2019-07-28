@@ -1,6 +1,6 @@
-using Blurtle.Infrastructure;
+using Updog.Infrastructure;
 
-namespace Blurtle.Api {
+namespace Updog.Api {
     /// <summary>
     /// Configuration settings for the auth token handler.
     /// </summary>

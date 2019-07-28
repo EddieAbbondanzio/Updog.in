@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using Blurtle.Domain;
+using Updog.Domain;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// Permissions checker to see if a user has permission to edit a post.
     /// </summary>

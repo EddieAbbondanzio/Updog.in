@@ -1,4 +1,4 @@
-namespace Blurtle.Persistance {
+namespace Updog.Persistance {
     /// <summary>
     /// Information used to connect to a database.
     /// </summary>

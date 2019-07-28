@@ -1,5 +1,5 @@
-using Blurtle.Application;
-using Blurtle.Domain;
+using Updog.Application;
+using Updog.Domain;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +7,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Blurtle.Api {
+namespace Updog.Api {
     /// <summary>
     /// End point for managing posts.
     /// </summary>

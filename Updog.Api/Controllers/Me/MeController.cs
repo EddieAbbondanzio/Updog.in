@@ -1,11 +1,11 @@
-using Blurtle.Application;
-using Blurtle.Domain;
+using Updog.Application;
+using Updog.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
-namespace Blurtle.Api {
+namespace Updog.Api {
     /// <summary>
     /// End point for managing the logged in user.
     /// </summary>

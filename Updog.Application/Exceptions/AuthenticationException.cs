@@ -1,6 +1,6 @@
 using System;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// Exception for when authentication of a user fails.
     /// </summary>

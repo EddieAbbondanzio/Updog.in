@@ -1,12 +1,12 @@
 using System;
 using System.Threading.Tasks;
-using Blurtle.Domain;
-using Blurtle.Application;
+using Updog.Domain;
+using Updog.Application;
 using MySql.Data.MySqlClient;
 using System.Data.Common;
 using Dapper;
 
-namespace Blurtle.Persistance {
+namespace Updog.Persistance {
     /// <summary>
     /// CRUD interface for managing user's in the database.
     /// </summary>

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// Interface for interactors to work with.
     /// </summary>

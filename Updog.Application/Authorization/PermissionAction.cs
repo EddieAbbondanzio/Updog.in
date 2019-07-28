@@ -1,4 +1,4 @@
-namespace Blurtle.Application {
+namespace Updog.Application {
     public enum PermissionAction {
         CreatePost,
         ReadPost,

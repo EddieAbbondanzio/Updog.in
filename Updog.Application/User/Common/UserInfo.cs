@@ -1,6 +1,6 @@
 using System;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     public sealed class UserInfo {
         #region Properties
         public string Username { get; }

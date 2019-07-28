@@ -1,4 +1,4 @@
-namespace Blurtle.Application {
+namespace Updog.Application {
     public class LoginUserParams {
         #region Properties
         public string Username { get; }

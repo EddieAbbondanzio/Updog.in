@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Blurtle.Application;
-using Blurtle.Infrastructure;
-using Blurtle.Persistance;
+using Updog.Application;
+using Updog.Infrastructure;
+using Updog.Persistance;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -20,11 +20,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using Blurtle.Domain;
+using Updog.Domain;
 using Microsoft.AspNetCore.Http;
 using System.Security.Principal;
 
-namespace Blurtle.Api {
+namespace Updog.Api {
     public class Startup {
         public Startup(IConfiguration configuration) {
             Configuration = configuration;

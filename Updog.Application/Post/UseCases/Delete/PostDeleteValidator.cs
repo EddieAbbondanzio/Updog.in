@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// Validator to check that a post can be deleted.
     /// </summary>

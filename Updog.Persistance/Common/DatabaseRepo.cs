@@ -1,8 +1,8 @@
 using System.Data.Common;
 using System.Transactions;
-using Blurtle.Domain;
+using Updog.Domain;
 
-namespace Blurtle.Persistance {
+namespace Updog.Persistance {
     /// <summary>
     /// Base class for repos to inherit if they work off the database.
     /// </summary>

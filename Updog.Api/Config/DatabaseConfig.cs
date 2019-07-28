@@ -1,6 +1,6 @@
-using Blurtle.Persistance;
+using Updog.Persistance;
 
-namespace Blurtle.Api {
+namespace Updog.Api {
     /// <summary>
     /// Information used to connect to a database.
     /// </summary>

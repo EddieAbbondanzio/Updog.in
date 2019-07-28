@@ -1,9 +1,9 @@
 using System;
-using Blurtle.Domain;
+using Updog.Domain;
 using FluentValidation;
 using FluentValidation.Results;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// Validator to validate user registrations.
     /// </summary>

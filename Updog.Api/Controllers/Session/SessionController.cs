@@ -1,9 +1,9 @@
-using Blurtle.Application;
+using Updog.Application;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
-namespace Blurtle.Api {
+namespace Updog.Api {
     /// <summary>
     /// End point for managing user sessions.
     /// </summary>

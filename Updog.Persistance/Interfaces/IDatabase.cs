@@ -1,6 +1,6 @@
 using System.Data.Common;
 
-namespace Blurtle.Persistance {
+namespace Updog.Persistance {
     /// <summary>
     /// Database for data persistance.
     /// </summary>

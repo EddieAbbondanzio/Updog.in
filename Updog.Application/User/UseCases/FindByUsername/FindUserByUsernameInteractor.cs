@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Blurtle.Domain;
+using Updog.Domain;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     public sealed class FindUserByUsernameInteractor : IInteractor<string, UserInfo> {
         #region Fields
         private IUserRepo userRepo;

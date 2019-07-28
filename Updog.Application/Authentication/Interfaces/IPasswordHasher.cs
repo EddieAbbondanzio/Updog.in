@@ -1,4 +1,4 @@
-namespace Blurtle.Application {
+namespace Updog.Application {
     public interface IPasswordHasher {
         /// <summary>
         /// Hash a password.

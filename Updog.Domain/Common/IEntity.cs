@@ -1,4 +1,4 @@
-namespace Blurtle.Domain {
+namespace Updog.Domain {
     /// <summary>
     /// Interface for domain entities to implement.
     /// </summary>

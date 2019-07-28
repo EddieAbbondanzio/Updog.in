@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Blurtle.Domain;
+using Updog.Domain;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// Handler for issuing and validating bearer tokens.
     /// </summary>

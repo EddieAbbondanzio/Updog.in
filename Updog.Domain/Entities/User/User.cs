@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Security.Principal;
 
-namespace Blurtle.Domain {
+namespace Updog.Domain {
     public sealed class User : ClaimsPrincipal, IEntity {
         #region Properties
         public int Id { get; set; }

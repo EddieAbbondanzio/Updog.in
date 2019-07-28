@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Blurtle.Domain;
+using Updog.Domain;
 using FluentValidation;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// Use case interactor for registering a new user with the site.
     /// </summary>

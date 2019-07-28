@@ -2,12 +2,12 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Blurtle.Application;
-using Blurtle.Domain;
-using Blurtle.Infrastructure;
+using Updog.Application;
+using Updog.Domain;
+using Updog.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Blurtle.Api {
+namespace Updog.Api {
     /// <summary>
     /// Authentication token handler that uses json web tokens.
     /// </summary>

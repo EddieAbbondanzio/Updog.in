@@ -1,10 +1,10 @@
 using System.Data.Common;
 using System.Threading.Tasks;
-using Blurtle.Application;
-using Blurtle.Domain;
+using Updog.Application;
+using Updog.Domain;
 using Dapper;
 
-namespace Blurtle.Persistance {
+namespace Updog.Persistance {
     /// <summary>
     /// CRUD interface for storing posts.
     /// </summary>

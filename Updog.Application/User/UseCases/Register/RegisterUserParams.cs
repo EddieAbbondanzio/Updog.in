@@ -1,5 +1,5 @@
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// Request object to create a new user with the system.
     /// </summary>

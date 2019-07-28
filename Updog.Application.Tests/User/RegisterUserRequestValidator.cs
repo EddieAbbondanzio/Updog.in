@@ -1,9 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using Blurtle.Application;
+using Updog.Application;
 using System.Threading.Tasks;
 
-namespace Blurtle.Application.Tests {
+namespace Updog.Application.Tests {
     /// <summary>
     /// Unit tests for the RegisterUserRequestValidator
     /// </summary>

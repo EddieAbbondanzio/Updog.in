@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Blurtle.Api {
+namespace Updog.Api {
     public class Program {
         public static void Main(string[] args) {
             var host = CreateWebHostBuilder(args);

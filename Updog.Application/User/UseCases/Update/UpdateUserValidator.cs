@@ -1,7 +1,7 @@
-using Blurtle.Domain;
+using Updog.Domain;
 using FluentValidation;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     /// <summary>
     /// Validator to validate when a user is updated.
     /// </summary>

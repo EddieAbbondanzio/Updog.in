@@ -1,4 +1,4 @@
-namespace Blurtle.Infrastructure {
+namespace Updog.Infrastructure {
     /// <summary>
     /// Configuration settings for the auth token handler.
     /// </summary>

@@ -1,6 +1,6 @@
 using System;
 
-namespace Blurtle.Domain {
+namespace Updog.Domain {
     /// <summary>
     /// A post of the website.
     /// </summary>

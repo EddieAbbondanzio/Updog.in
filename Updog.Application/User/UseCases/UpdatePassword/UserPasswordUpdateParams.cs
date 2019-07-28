@@ -1,6 +1,6 @@
-using Blurtle.Domain;
+using Updog.Domain;
 
-namespace Blurtle.Application {
+namespace Updog.Application {
     public sealed class UserPasswordUpdateParams {
         #region Properties
         public User User { get; }
