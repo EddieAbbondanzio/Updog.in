@@ -8,13 +8,13 @@ namespace Blurtle.Application {
         #region Properties
         public User User { get; }
 
-        public Post Post { get; }
+        public int PostId { get; }
         #endregion
 
         #region Constructor(s)
-        public PostDeleteParams(User user, Post post) {
+        public PostDeleteParams(User user, int post) {
             User = user;
-            Post = post;
+            PostId = post;
         }
         #endregion
     }

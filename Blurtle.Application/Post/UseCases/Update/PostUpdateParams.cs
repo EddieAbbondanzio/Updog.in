@@ -6,7 +6,7 @@ namespace Blurtle.Application {
     /// </summary>
     public sealed class PostUpdateParams {
         #region Properties
-        public Post Post { get; }
+        public int PostId { get; }
 
         public string Body { get; }
 
@@ -14,9 +14,9 @@ namespace Blurtle.Application {
         #endregion
 
         #region Constructor(s)
-        public PostUpdateParams(User user, Post post, string body) {
+        public PostUpdateParams(User user, int postId, string body) {
             User = user;
-            Post = post;
+            PostId = postId;
             Body = body;
         }
         #endregion

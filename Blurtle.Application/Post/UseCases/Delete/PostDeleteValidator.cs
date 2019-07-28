@@ -8,7 +8,7 @@ namespace Blurtle.Application {
         #region Constructor(s)
         public PostDeleteValidator() {
             RuleFor(p => p.User).NotNull();
-            RuleFor(p => p.Post).NotNull().When(p => !p.Post.WasDeleted);
+            RuleFor(p => p.PostId).NotEqual(0);
         }
         #endregion
     }

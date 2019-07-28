@@ -4,7 +4,7 @@ namespace Blurtle.Application {
     /// <summary>
     /// Parameters to add a new post.
     /// </summary>
-    public sealed class PostAddParams {
+    public sealed class PostCreateParams {
         #region Properties
         public PostType Type { get; }
 
@@ -16,7 +16,7 @@ namespace Blurtle.Application {
         #endregion
 
         #region Constructor(s)
-        public PostAddParams(PostType type, string title, string body, User user) {
+        public PostCreateParams(PostType type, string title, string body, User user) {
             Type = type;
             Title = title;
             Body = body;

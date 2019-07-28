@@ -25,15 +25,21 @@ namespace Blurtle.Application {
 
         #region Publics
         public async Task<Post> Handle(PostDeleteParams input) {
-            if (!(await this.permissionHandler.HasPermission(input.User, PermissionAction.DeletePost, input.Post))) {
+            Post p = await repo.FindById(input.PostId);
+
+            if (p == null) {
+                throw new NotFoundException();
+            }
+
+            if (!(await this.permissionHandler.HasPermission(input.User, PermissionAction.DeletePost, p))) {
                 throw new AuthorizationException();
             }
 
             await validator.ValidateAndThrowAsync(input);
 
-            input.Post.WasDeleted = true;
-            await repo.Update(input.Post);
-            return input.Post;
+            p.WasDeleted = true;
+            await repo.Update(p);
+            return p;
         }
         #endregion
     }

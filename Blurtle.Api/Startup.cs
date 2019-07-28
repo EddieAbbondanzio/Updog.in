@@ -44,6 +44,7 @@ namespace Blurtle.Api {
                     ValidateAudience = false,
                     ValidIssuer = Configuration["AuthenticationToken:Issuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AuthenticationToken:Secret"]))
+
                 };
 
                 opts.Events = new JwtBearerEvents() {
@@ -91,8 +92,8 @@ namespace Blurtle.Api {
             services.AddTransient<AbstractValidator<UserPasswordUpdateParams>, UserPasswordValidator>();
 
             services.AddTransient<IPostRepo, PostRepo>();
-            services.AddTransient<PostAdder>();
-            services.AddTransient<AbstractValidator<PostAddParams>, PostAddValidator>();
+            services.AddTransient<PostCreator>();
+            services.AddTransient<AbstractValidator<PostCreateParams>, PostCreateValidator>();
 
         }
 

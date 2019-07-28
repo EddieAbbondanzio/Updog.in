@@ -12,6 +12,8 @@ namespace Blurtle.Application {
             switch (action) {
                 case PermissionAction.UpdatePost:
                     return user.Id == post.UserId;
+                case PermissionAction.DeletePost:
+                    return user.Id == post.UserId;
                 default:
                     throw new NotSupportedException();
             }
