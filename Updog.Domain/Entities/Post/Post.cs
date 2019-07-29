@@ -62,7 +62,9 @@ namespace Updog.Domain {
         public bool WasDeleted { get; set; }
         #endregion
 
-        #region Statics
+        #region Constructor(s)
+        public Post() { }
+
         /// <summary>
         /// Create a new post.
         /// </summary>

@@ -8,7 +8,7 @@ namespace Updog.Application.Tests {
     /// Unit tests for the RegisterUserRequestValidator
     /// </summary>
     [TestClass]
-    public class RegisterUserRequestValidator {
+    public class RegisterUserRequestValidatorTests {
         Application.RegisterUserValidator validator = new Application.RegisterUserValidator(new MockUserRepo());
 
         [TestMethod]
