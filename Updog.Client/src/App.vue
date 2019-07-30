@@ -1,31 +1,33 @@
 <template>
     <div id="app">
-        <div id="nav">
-            <router-link to="/">Home</router-link>|
-            <router-link to="/about">About</router-link>
-        </div>
+        <b-navbar variant="primary" type="dark">
+            <b-navbar-brand href="#">
+                <img src="@/assets/logo_white.png" class="nav-icon" />
+            </b-navbar-brand>
+
+            <div class="nav-buttons ml-auto">
+                <b-button variant="outline-light">Log In</b-button>
+                <b-button variant="outline-light">Sign Up</b-button>
+            </div>
+        </b-navbar>
         <router-view />
     </div>
 </template>
 
 <style>
+.nav-icon {
+    height: 64px;
+}
+
+.nav-buttons button {
+    margin-left: 8px;
+    margin-right: 8px;
+}
 #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-}
-#nav {
-    padding: 30px;
-}
-
-#nav a {
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-    color: #42b983;
 }
 </style>

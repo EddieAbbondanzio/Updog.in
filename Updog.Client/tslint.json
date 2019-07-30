@@ -20,6 +20,7 @@
         "max-line-length": [true, 160],
         "one-line": [false],
         "object-literal-key-quotes": [true, "consistent"],
-        "object-literal-shorthand": [false]
+        "object-literal-shorthand": [false],
+        "arrow-parens": false
     }
 }
