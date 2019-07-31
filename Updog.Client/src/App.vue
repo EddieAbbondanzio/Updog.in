@@ -1,13 +1,13 @@
 <template>
     <div id="app">
-        <b-navbar variant="primary" type="dark">
+        <b-navbar variant="light" type="dark" class="border-bottom">
             <b-navbar-brand href="#">
-                <img src="@/assets/logo_white.png" class="nav-icon" />
+                <img src="@/assets/logo.png" class="nav-icon" />
             </b-navbar-brand>
 
             <div class="nav-buttons ml-auto">
-                <b-button variant="outline-light">Log In</b-button>
-                <b-button variant="outline-light">Sign Up</b-button>
+                <b-button variant="outline-dark" to="login">Log In</b-button>
+                <b-button variant="outline-dark" to="signup">Sign Up</b-button>
             </div>
         </b-navbar>
         <router-view />
@@ -19,7 +19,7 @@
     height: 64px;
 }
 
-.nav-buttons button {
+.nav-buttons a {
     margin-left: 8px;
     margin-right: 8px;
 }
