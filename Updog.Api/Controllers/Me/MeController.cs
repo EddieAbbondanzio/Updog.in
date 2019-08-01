@@ -27,6 +27,15 @@ namespace Updog.Api {
 
         #region Publics
         /// <summary>
+        /// Get the email of the user.
+        /// </summary>
+        [HttpGet("email")]
+        [Authorize]
+        public ActionResult GetEmail() {
+            return Ok(User.Email);
+        }
+
+        /// <summary>
         /// Update the info of a user.
         /// </summary>
         /// <param name="updateRequest">The new user info.</param>

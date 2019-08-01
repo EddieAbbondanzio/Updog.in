@@ -15,7 +15,7 @@ namespace Updog.Application {
         private IAuthenticationTokenHandler tokenHandler;
         #endregion
 
-        #region COnstructor(s)
+        #region Constructor(s)
         public LoginUserInteractor(IUserRepo userRepo, IPasswordHasher passwordHasher, IAuthenticationTokenHandler tokenHandler) {
             this.userRepo = userRepo;
             this.passwordHasher = passwordHasher;
