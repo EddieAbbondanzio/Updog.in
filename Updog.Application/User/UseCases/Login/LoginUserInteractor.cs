@@ -32,7 +32,7 @@ namespace Updog.Application {
             }
 
             if (passwordHasher.Verify(input.Password, user.PasswordHash)) {
-                return new UserLogin(new UserInfo(user.Username, user.JoinedDate), tokenHandler.IssueToken(user));
+                return new UserLogin(new UserInfo(user.Email, user.Username, user.JoinedDate), tokenHandler.IssueToken(user));
             } else {
                 return null;
             }
