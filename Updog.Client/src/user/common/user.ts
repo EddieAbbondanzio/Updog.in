@@ -3,9 +3,9 @@
  */
 export class User {
     /**
-     * The unique ID of the user.
+     * The auth token of the user.
      */
-    public id: number;
+    public authToken: string;
 
     /**
      * The public display name of the user.
@@ -24,13 +24,13 @@ export class User {
 
     /**
      * Create a new user.
-     * @param id The unique ID of the user.
+     * @param authToken The unique ID.
      * @param username Their display name.
      * @param joinedDate When they registered.
      * @param email The contact email (if any).
      */
-    constructor(id: number, username: string, joinedDate: Date, email?: string) {
-        this.id = id;
+    constructor(authToken: string, username: string, joinedDate: Date, email?: string) {
+        this.authToken = authToken;
         this.username = username;
         this.joinedDate = joinedDate;
         this.email = email;

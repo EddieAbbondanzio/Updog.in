@@ -16,7 +16,7 @@ import axios from 'axios';
 })
 export default class Home extends Vue {
     public async created() {
-        const r = await axios.get('cheese');
+        // const r = await axios.get('cheese');
     }
 }
 </script>
