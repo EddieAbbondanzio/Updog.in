@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Updog.Domain;
 using System;
 using FluentValidation;
+using System.Linq;
 
 namespace Updog.Api {
     /// <summary>
@@ -53,7 +54,7 @@ namespace Updog.Api {
                 UserLogin login = await userRegistrar.Handle(registration);
                 return login != null ? Ok(login) : BadRequest("Registration failed.") as ActionResult;
             } catch (ValidationException ex) {
-                return BadRequest(ex.Message);
+                return BadRequest(new ValidationError(ex.Errors.Select(e => new ValidationFailure(e.PropertyName, e.ErrorMessage)).ToArray()));
             } catch (Exception ex) {
                 Console.WriteLine(ex.Message);
                 return BadRequest("Error, please try again later");
