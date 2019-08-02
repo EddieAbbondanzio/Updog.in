@@ -10,11 +10,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import UserLoginForm from '@/user/components/user-register-form.vue';
+import UserRegisterForm from '@/user/components/user-register-form.vue';
 
 @Component({
     components: {
-        UserLoginForm
+        UserRegisterForm
     }
 })
 export default class SignUp extends Vue {}

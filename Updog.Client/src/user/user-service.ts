@@ -18,6 +18,9 @@ export class UserService extends ApiService {
      * @param reg The registration info.
      */
     public async register(reg: UserRegistration): Promise<UserLogin> {
+        console.log(reg);
+        const res = await this.http.post(`${this.backendUrl}/user/`, reg);
+        console.log(res);
         throw new Error();
     }
 

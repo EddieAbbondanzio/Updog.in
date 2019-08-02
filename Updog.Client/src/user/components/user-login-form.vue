@@ -4,7 +4,7 @@
         <b-form-group>
             <b-form-input
                 type="email"
-                placeholder="email@domain.com"
+                placeholder="Email"
                 v-model="loginEmail"
                 name="loginEmail"
                 v-validate="'required|email'"
@@ -17,7 +17,7 @@
         <b-form-group>
             <b-form-input
                 type="password"
-                placeholder="********"
+                placeholder="Password"
                 v-model="loginPassword"
                 name="loginPassword"
                 v-validate="'required'"

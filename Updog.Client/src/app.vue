@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <b-navbar variant="light" type="dark" class="border-bottom">
-            <b-navbar-brand href="#">
+            <b-navbar-brand href="#" to="home">
                 <img src="@/assets/logo.png" class="nav-icon" />
             </b-navbar-brand>
 
@@ -23,11 +23,11 @@
     margin-left: 8px;
     margin-right: 8px;
 }
-#app {
+/* #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-}
+} */
 </style>

@@ -3,33 +3,60 @@
         <h1 class="pb-3">Sign Up</h1>
         <b-form-group>
             <b-form-input
+                type="text"
+                placeholder="Username"
+                v-model="registerUsername"
+                name="registerUsername"
+                v-validate="'required|min:4'"
+            />
+            <b-form-invalid-feedback
+                class="d-block"
+                :state="false"
+            >{{ errors.first('registerUsername')}}</b-form-invalid-feedback>
+        </b-form-group>
+        <b-form-group>
+            <b-form-input
                 type="email"
-                placeholder="email@domain.com"
-                v-model="signUpEmail"
-                name="signUpEmail"
+                placeholder="Email"
+                v-model="registerEmail"
+                name="registerEmail"
                 v-validate="'email'"
             />
             <b-form-invalid-feedback
-                class="d-block text-left"
+                class="d-block"
                 :state="false"
-            >{{ errors.first('loginEmail')}}</b-form-invalid-feedback>
+            >{{ errors.first('registerEmail')}}</b-form-invalid-feedback>
         </b-form-group>
         <b-form-group>
             <b-form-input
                 type="password"
-                placeholder="********"
-                v-model="loginPassword"
-                name="loginPassword"
+                placeholder="Password"
+                v-model="registerPassword"
+                ref="registerPassword"
+                name="registerPassword"
                 v-validate="'required'"
             />
             <b-form-invalid-feedback
-                class="d-block text-left"
+                class="d-block"
                 :state="false"
-            >{{ errors.first('loginPassword')}}</b-form-invalid-feedback>
+            >{{ errors.first('registerPassword')}}</b-form-invalid-feedback>
+        </b-form-group>
+        <b-form-group>
+            <b-form-input
+                type="password"
+                placeholder="Confirm password"
+                v-model="registerConfirmPassword"
+                name="registerConfirmPassword"
+                v-validate="'required|confirmed:registerPassword'"
+            />
+            <b-form-invalid-feedback
+                class="d-block"
+                :state="false"
+            >{{ errors.first('registerConfirmPassword')}}</b-form-invalid-feedback>
         </b-form-group>
 
         <b-form-group class="form-buttons pt-3">
-            <b-button variant="primary" @click="onLogin">Login</b-button>
+            <b-button variant="primary" @click="onRegister">Sign Up</b-button>
             <b-button variant="outline-primary" @click="onReset">Reset</b-button>
         </b-form-group>
     </b-form>
@@ -42,9 +69,10 @@
 }
 </style>
 
-
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { UserRegistration } from '@/user/common/user-registration';
+import { UserService } from '@/user/user-service';
 
 /**
  * Login form for logging in users via username / password.
@@ -54,13 +82,28 @@ import { Component, Vue } from 'vue-property-decorator';
     components: {}
 })
 export default class UserRegisterForm extends Vue {
-    public signUpEmail: string = '';
+    public registerUsername: string = '';
+    public registerEmail: string = '';
+    public registerPassword: string = '';
+    public registerConfirmPassword: string = '';
 
     public created() {
         this.$validator.localize('en', {
             custom: {
-                signUpEmail: {
+                registerUsername: {
+                    required: 'Username is required.',
+                    min: 'Username must be at least 4 characters.'
+                },
+                registerEmail: {
                     email: 'Email must be a valid address.'
+                },
+                registerPassword: {
+                    required: 'Password is required',
+                    min: 'Password must be at least 8 characters.'
+                },
+                registerConfirmPassword: {
+                    required: 'Confirm password is required',
+                    confirmed: 'Passwords do not match.'
                 }
             }
         });
@@ -69,15 +112,27 @@ export default class UserRegisterForm extends Vue {
     /**
      * Attempt to log in the user.
      */
-    public async onLogin() {
+    public async onRegister() {
         // Validate first.
         if (!(await this.$validator.validate())) {
             return;
         }
+
+        const userReg: UserRegistration = new UserRegistration(
+            this.registerUsername,
+            this.registerPassword,
+            this.registerEmail
+        );
+
+        const service: UserService = new UserService();
+        await service.register(userReg);
     }
 
     public onReset() {
-        this.signUpEmail = '';
+        this.registerUsername = '';
+        this.registerEmail = '';
+        this.registerPassword = '';
+        this.registerConfirmPassword = '';
         this.$validator.reset();
     }
 }
