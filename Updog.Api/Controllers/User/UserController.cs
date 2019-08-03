@@ -49,12 +49,14 @@ namespace Updog.Api {
         /// </summary>
         /// <param name="registration">The new user registration</param>
         [HttpPost]
-        public async Task<ActionResult> Register([FromBody] RegisterUserParams registration) {
+        public async Task<ActionResult> Register([FromBody] UserRegisterRequest req) {
+            RegisterUserParams registration = new RegisterUserParams(req.Username, req.Password, req.Email);
+
             try {
                 UserLogin login = await userRegistrar.Handle(registration);
                 return login != null ? Ok(login) : BadRequest("Registration failed.") as ActionResult;
             } catch (ValidationException ex) {
-                return BadRequest(new ValidationError(ex.Errors.Select(e => new ValidationFailure(e.PropertyName, e.ErrorMessage)).ToArray()));
+                return BadRequest(new ValidationError(ex));
             } catch (Exception ex) {
                 Console.WriteLine(ex.Message);
                 return BadRequest("Error, please try again later");

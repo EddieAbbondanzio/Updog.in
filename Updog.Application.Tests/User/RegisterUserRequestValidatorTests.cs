@@ -68,7 +68,7 @@ namespace Updog.Application.Tests {
         }
 
         [TestMethod]
-        public async Task FailsEmailIfNull() {
+        public async Task PassesEmailIfNull() {
             RegisterUserParams reg = new RegisterUserParams("bert", "password", null);
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
