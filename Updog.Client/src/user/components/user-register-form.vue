@@ -72,7 +72,8 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { UserRegistration } from '@/user/common/user-registration';
-import { UserService } from '@/user/user-service';
+import { UserMixin } from '@/user/mixins/user-mixin';
+import { EventBus } from '../../common/event-bus';
 
 /**
  * Login form for logging in users via username / password.
@@ -81,7 +82,7 @@ import { UserService } from '@/user/user-service';
     name: 'user-login-form',
     components: {}
 })
-export default class UserRegisterForm extends Vue {
+export default class UserRegisterForm extends UserMixin {
     public registerUsername: string = '';
     public registerEmail: string = '';
     public registerPassword: string = '';
@@ -124,8 +125,8 @@ export default class UserRegisterForm extends Vue {
             this.registerEmail
         );
 
-        const service: UserService = new UserService();
-        await service.register(userReg);
+        const login = await this.$register(userReg);
+        EventBus.emit('login', login);
     }
 
     public onReset() {

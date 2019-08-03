@@ -7,7 +7,7 @@ namespace Updog.Api {
     /// <summary>
     /// End point for managing user sessions.
     /// </summary>
-    [Route("session")]
+    [Route("api/session")]
     [ApiController]
     public sealed class SessionController : ApiController {
         #region Fields

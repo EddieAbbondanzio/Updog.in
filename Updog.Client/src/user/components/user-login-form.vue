@@ -3,16 +3,16 @@
         <h1 class="pb-3">Welcome Back!</h1>
         <b-form-group>
             <b-form-input
-                type="email"
-                placeholder="Email"
-                v-model="loginEmail"
-                name="loginEmail"
-                v-validate="'required|email'"
+                type="text"
+                placeholder="Username"
+                v-model="loginUsername"
+                name="loginUsername"
+                v-validate="'required'"
             />
             <b-form-invalid-feedback
                 class="d-block text-left"
                 :state="false"
-            >{{ errors.first('loginEmail')}}</b-form-invalid-feedback>
+            >{{ errors.first('loginUsername')}}</b-form-invalid-feedback>
         </b-form-group>
         <b-form-group>
             <b-form-input
@@ -45,6 +45,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { UserMixin } from '@/user/mixins/user-mixin';
+import { UserCredentials } from '../common/user-credentials';
+import { EventBus } from '../../common/event-bus';
 
 /**
  * Login form for logging in users via username / password.
@@ -53,15 +56,15 @@ import { Component, Vue } from 'vue-property-decorator';
     name: 'user-login-form',
     components: {}
 })
-export default class UserLoginForm extends Vue {
-    public loginEmail: string = '';
+export default class UserLoginForm extends UserMixin {
+    public loginUsername: string = '';
 
     public loginPassword: string = '';
 
     public created() {
         this.$validator.localize('en', {
             custom: {
-                loginEmail: {
+                loginUsername: {
                     required: 'Email is required',
                     email: 'Email must be a valid address.'
                 },
@@ -80,10 +83,14 @@ export default class UserLoginForm extends Vue {
         if (!(await this.$validator.validate())) {
             return;
         }
+
+        const login = await this.$login(new UserCredentials(this.loginUsername, this.loginPassword));
+        EventBus.emit('login', login);
+        console.log(login);
     }
 
     public onReset() {
-        this.loginEmail = '';
+        this.loginUsername = '';
         this.loginPassword = '';
         this.$validator.reset();
     }
