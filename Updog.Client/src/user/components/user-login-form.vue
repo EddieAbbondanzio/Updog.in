@@ -86,7 +86,6 @@ export default class UserLoginForm extends UserMixin {
 
         const login = await this.$login(new UserCredentials(this.loginUsername, this.loginPassword));
         EventBus.emit('login', login);
-        console.log(login);
     }
 
     public onReset() {
