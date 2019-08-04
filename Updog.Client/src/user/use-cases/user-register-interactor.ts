@@ -1,4 +1,4 @@
-import { ApiInteractor } from '@/common/api-interactor';
+import { ApiInteractor } from '@/core/api-interactor';
 import { UserRegistration } from '../common/user-registration';
 import { UserLogin } from '../common/user-login';
 import { User } from '../common/user';

@@ -3,6 +3,11 @@
  */
 export class User {
     /**
+     * The current active user.
+     */
+    public static CURRENT?: User;
+
+    /**
      * The public display name of the user.
      */
     public username: string;

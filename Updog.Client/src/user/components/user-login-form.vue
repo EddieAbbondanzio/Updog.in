@@ -47,7 +47,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { UserMixin } from '@/user/mixins/user-mixin';
 import { UserCredentials } from '../common/user-credentials';
-import { EventBus } from '../../common/event-bus';
+import { EventBus } from '../../core/event-bus';
 
 /**
  * Login form for logging in users via username / password.

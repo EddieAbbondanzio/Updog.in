@@ -11,11 +11,21 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import UserLoginForm from '@/user/components/user-login-form.vue';
+import { EventBus } from '../core/event-bus';
+import { UserLogin } from '../user/common/user-login';
+import { User } from '../user/common/user';
 
 @Component({
     components: {
         UserLoginForm
     }
 })
-export default class Login extends Vue {}
+export default class Login extends Vue {
+    public created() {
+        EventBus.on('login', async (login: UserLogin) => {
+            User.CURRENT = login.user;
+            this.$router.push('home');
+        });
+    }
+}
 </script>
