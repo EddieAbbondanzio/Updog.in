@@ -14,6 +14,7 @@ import UserRegisterForm from '@/user/components/user-register-form.vue';
 import { EventBus } from '@/core/event-bus';
 import { User } from '@/user/common/user';
 import { UserLogin } from '@/user/common/user-login';
+import { Context } from '@/core/context';
 
 @Component({
     components: {
@@ -23,7 +24,7 @@ import { UserLogin } from '@/user/common/user-login';
 export default class SignUp extends Vue {
     public created() {
         EventBus.on('login', async (login: UserLogin) => {
-            User.CURRENT = login.user;
+            Context.login = login;
             this.$router.push('home');
         });
     }
