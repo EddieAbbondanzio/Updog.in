@@ -8,6 +8,7 @@
                 v-model="loginUsername"
                 name="loginUsername"
                 v-validate="'required'"
+                @keyup.enter="onLogin"
             />
             <b-form-invalid-feedback
                 class="d-block text-left"
@@ -21,6 +22,7 @@
                 v-model="loginPassword"
                 name="loginPassword"
                 v-validate="'required'"
+                @keyup.enter="onLogin"
             />
             <b-form-invalid-feedback
                 class="d-block text-left"

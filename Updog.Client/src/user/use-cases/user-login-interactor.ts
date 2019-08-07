@@ -15,7 +15,12 @@ export class UserLoginInteractor extends ApiInteractor<UserCredentials, UserLogi
         const response = await this.http.post<UserLogin>('/session/', creds);
 
         return new UserLogin(
-            new User(response.data.user.username, response.data.user.joinedDate, response.data.user.email),
+            new User(
+                response.data.user.id,
+                response.data.user.username,
+                response.data.user.joinedDate,
+                response.data.user.email
+            ),
             response.data.authToken
         );
     }

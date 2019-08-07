@@ -11,7 +11,12 @@ export class UserRegisterInteractor extends ApiInteractor<UserRegistration, User
         const response = await this.http.post<UserLogin>('/user/', input);
 
         return new UserLogin(
-            new User(response.data.user.username, response.data.user.joinedDate, response.data.user.email),
+            new User(
+                response.data.user.id,
+                response.data.user.username,
+                response.data.user.joinedDate,
+                response.data.user.email
+            ),
             response.data.authToken
         );
     }

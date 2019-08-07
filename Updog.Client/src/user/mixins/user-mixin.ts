@@ -15,7 +15,7 @@ export class UserMixin extends Vue {
      * Log in an existing user.
      * @param creds The user's username and password.
      */
-    public $login(creds: UserCredentials): Promise<UserLogin> {
+    public async $login(creds: UserCredentials): Promise<UserLogin> {
         return new UserLoginInteractor().handle(creds);
     }
 
@@ -23,7 +23,7 @@ export class UserMixin extends Vue {
      * Register a new user with the site.
      * @param reg The user's registration.
      */
-    public $register(reg: UserRegistration): Promise<UserLogin> {
+    public async $register(reg: UserRegistration): Promise<UserLogin> {
         return new UserRegisterInteractor().handle(reg);
     }
 }
