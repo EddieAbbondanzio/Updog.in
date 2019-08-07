@@ -19,14 +19,19 @@ namespace Updog.Domain {
 
         #region Properties
         /// <summary>
-        /// The content type of the post.
-        /// </summary>
-        public PostType Type { get; set; }
-
-        /// <summary>
         /// Unique numeric Id.
         /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// OP of the post.
+        /// </summary>
+        public int UserId { get; set; }
+
+        /// <summary>
+        /// The content type of the post.
+        /// </summary>
+        public PostType Type { get; set; }
 
         /// <summary>
         /// The title of the post.
@@ -44,11 +49,6 @@ namespace Updog.Domain {
         /// </summary>
         /// <value></value>
         public DateTime CreationDate { get; set; }
-
-        /// <summary>
-        /// OP of the post.
-        /// </summary>
-        public int UserId { get; set; }
 
         /// <summary>
         /// If the post was editted by a user.

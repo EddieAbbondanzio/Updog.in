@@ -1,7 +1,7 @@
 
 namespace Updog.Domain {
     public enum PostType : byte {
-        Link,
-        Text,
+        Link = 0,
+        Text = 1,
     }
 }

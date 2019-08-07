@@ -41,7 +41,7 @@ namespace Updog.Application {
             await userRepo.Add(user);
             string authToken = tokenHandler.IssueToken(user);
 
-            return new UserLogin(new UserInfo(user.Email, user.Username, user.JoinedDate), authToken);
+            return new UserLogin(new UserInfo(user.Id, user.Email, user.Username, user.JoinedDate), authToken);
         }
         #endregion
     }
