@@ -8,6 +8,12 @@
     </b-navbar>
 </template>
 
+<style>
+.nav-icon {
+    height: 64px;
+}
+</style>
+
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import UserWidget from '@/user/components/user-widget.vue';

@@ -1,27 +1,18 @@
 <template>
-    <div id="app">
-        <nav-bar />
-        <router-view />
-    </div>
+    <master-page />
 </template>
-
-<style>
-.nav-icon {
-    height: 64px;
-}
-</style>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { User } from './user/common/user';
 import { Context } from './core/context';
 import { EventBus } from './core/event-bus';
-import NavBar from '@/components/nav-bar.vue';
+import MasterPage from '@/components/master-page.vue';
 
 @Component({
     name: 'app',
     components: {
-        NavBar
+        MasterPage
     }
 })
 export default class App extends Vue {}
