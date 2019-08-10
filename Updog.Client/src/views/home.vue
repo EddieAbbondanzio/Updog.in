@@ -11,9 +11,5 @@ import axios from 'axios';
 @Component({
     components: {}
 })
-export default class Home extends Vue {
-    public async created() {
-        // const r = await axios.get('cheese');
-    }
-}
+export default class Home extends Vue {}
 </script>
