@@ -1,6 +1,6 @@
 <template>
     <b-navbar variant="light" type="dark" class="border-bottom">
-        <b-navbar-brand href="#" to="home">
+        <b-navbar-brand href="#" to="/">
             <img src="@/assets/logo.png" class="nav-icon" />
         </b-navbar-brand>
 

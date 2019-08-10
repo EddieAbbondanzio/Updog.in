@@ -1,11 +1,13 @@
 <template>
-    <b-container>
-        <b-row>
-            <b-col md="8" lg="6" offset-md="2" offset-lg="3">
-                <user-login-form />
-            </b-col>
-        </b-row>
-    </b-container>
+    <master-page>
+        <b-container>
+            <b-row>
+                <b-col md="8" lg="6" offset-md="2" offset-lg="3">
+                    <user-login-form />
+                </b-col>
+            </b-row>
+        </b-container>
+    </master-page>
 </template>
 
 <script lang="ts">
@@ -15,10 +17,12 @@ import { EventBus } from '../core/event-bus';
 import { UserLogin } from '../user/common/user-login';
 import { User } from '../user/common/user';
 import { Context } from '@/core/context';
+import MasterPage from '@/components/master-page.vue';
 
 @Component({
     components: {
-        UserLoginForm
+        UserLoginForm,
+        MasterPage
     }
 })
 export default class Login extends Vue {
