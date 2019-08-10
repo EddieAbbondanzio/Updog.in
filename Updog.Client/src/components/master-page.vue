@@ -1,24 +1,18 @@
 <template>
-    <b-container fluid>
-        <b-row>
-            <b-col>
-                <nav-bar />
-            </b-col>
-        </b-row>
-
-        <b-row>
-            <b-col>
-                <router-view />
-            </b-col>
-        </b-row>
-    </b-container>
+    <div>
+        <nav-bar />
+        <router-view class="page-content" />
+        <div class="footer" style="height: 100px;">THIS IS THE FOOTER</div>
+    </div>
 </template>
 
-<style scoped>
-.container-fluid {
-    padding: 0px !important;
+
+<style>
+.page-content {
+    height: calc(100vh - 91px - 100px);
 }
 </style>
+
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';

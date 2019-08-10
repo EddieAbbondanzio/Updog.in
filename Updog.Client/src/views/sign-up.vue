@@ -25,7 +25,7 @@ export default class SignUp extends Vue {
     public created() {
         EventBus.on('login', async (login: UserLogin) => {
             Context.login = login;
-            this.$router.push('home');
+            this.$router.push({ name: 'home' });
         });
     }
 }
