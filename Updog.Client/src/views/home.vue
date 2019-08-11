@@ -2,7 +2,7 @@
     <master-page>
         <template>CONTENT STUFF</template>
         <template slot="side-bar">
-            <post-widget />
+            <create-post-buttons />
         </template>
         <template slot="footer">FOOTER!</template>
     </master-page>
@@ -21,12 +21,12 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import PostWidget from '@/post/components/post-widget.vue';
+import CreatePostButtons from '@/post/components/create-post-buttons.vue';
 import MasterPage from '@/components/master-page.vue';
 
 @Component({
     components: {
-        PostWidget,
+        CreatePostButtons,
         MasterPage
     }
 })

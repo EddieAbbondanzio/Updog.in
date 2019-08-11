@@ -5,7 +5,7 @@
         </header>
 
         <b-container fluid>
-            <b-row>
+            <b-row class="py-3">
                 <!-- Main Content of the page -->
                 <b-col md="8" lg="10">
                     <slot></slot>

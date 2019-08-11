@@ -20,6 +20,11 @@ export default new Router({
             path: '/signup',
             name: 'signup',
             component: () => import('./views/sign-up.vue')
+        },
+        {
+            path: '/submit',
+            name: 'submit',
+            component: () => import('./views/submit.vue')
         }
     ]
 });
