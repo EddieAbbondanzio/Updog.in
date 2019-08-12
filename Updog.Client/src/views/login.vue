@@ -1,5 +1,5 @@
 <template>
-    <master-page>
+    <master-page noSideBar="true">
         <b-container>
             <b-row>
                 <b-col md="8" lg="6" offset-md="2" offset-lg="3">

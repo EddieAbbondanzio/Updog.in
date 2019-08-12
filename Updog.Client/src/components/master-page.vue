@@ -7,11 +7,11 @@
         <b-container fluid>
             <b-row class="py-3">
                 <!-- Main Content of the page -->
-                <b-col md="8" lg="10">
+                <b-col :md="noSideBar ? 12 : 8" :lg="noSideBar ? 12 : 10">
                     <slot></slot>
                 </b-col>
                 <!-- Side bar on the right -->
-                <b-col md="4" lg="2">
+                <b-col md="4" lg="2" v-if="!noSideBar">
                     <slot name="side-bar"></slot>
                 </b-col>
             </b-row>
@@ -36,5 +36,11 @@ import NavBar from '@/components/nav-bar.vue';
         NavBar
     }
 })
-export default class MasterPage extends Vue {}
+export default class MasterPage extends Vue {
+    /**
+     * If the sidebar should be hidden.
+     */
+    @Prop({ default: false })
+    public noSideBar!: boolean;
+}
 </script>

@@ -6,6 +6,7 @@
                 type="text"
                 placeholder="Username"
                 v-model="loginUsername"
+                ref="loginUsernameTextbox"
                 name="loginUsername"
                 v-validate="'required'"
                 @keyup.enter="onLogin"
@@ -59,6 +60,10 @@ import { EventBus } from '../../core/event-bus';
     components: {}
 })
 export default class UserLoginForm extends Vue {
+    public $refs!: {
+        loginUsernameTextbox: HTMLInputElement;
+    };
+
     public loginUsername: string = '';
 
     public loginPassword: string = '';
@@ -75,6 +80,13 @@ export default class UserLoginForm extends Vue {
                 }
             }
         });
+    }
+
+    /**
+     * When the form is rendered, auto focus the username textbox.
+     */
+    public mounted() {
+        this.$refs.loginUsernameTextbox.focus();
     }
 
     /**
