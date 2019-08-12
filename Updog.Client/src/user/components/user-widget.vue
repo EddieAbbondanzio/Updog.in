@@ -25,6 +25,7 @@ import { Context } from '@/core/context';
 import { EventBus } from '@/core/event-bus';
 import MaterialIcon from '@/components/material-icon.vue';
 import { User } from '../common/user';
+import { UserLogin } from '../common/user-login';
 
 /**
  * Component to handle logging in, and signing up new users.
@@ -39,11 +40,23 @@ export default class UserWidget extends Vue {
     /**
      * The logged in user.
      */
-    @Prop()
     public user: User | null = null;
 
+    public created(): void {
+        EventBus.on('login', this.onLogin);
+    }
+
+    public destroyed(): void {
+        EventBus.off('login', this.onLogin);
+    }
+
+    public async onLogin(login: UserLogin) {
+        this.user = login.user;
+    }
+
     public onLogout(): void {
-        this.$emit('logout');
+        Context.login = null;
+        EventBus.emit('logout');
     }
 }
 </script>

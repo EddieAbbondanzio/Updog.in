@@ -82,7 +82,7 @@ import { EventBus } from '../../core/event-bus';
     name: 'user-login-form',
     components: {}
 })
-export default class UserRegisterForm extends UserMixin {
+export default class UserRegisterForm extends Vue {
     public registerUsername: string = '';
     public registerEmail: string = '';
     public registerPassword: string = '';
@@ -119,14 +119,7 @@ export default class UserRegisterForm extends UserMixin {
             return;
         }
 
-        const userReg: UserRegistration = new UserRegistration(
-            this.registerUsername,
-            this.registerPassword,
-            this.registerEmail
-        );
-
-        const login = await this.$register(userReg);
-        EventBus.emit('login', login);
+        this.$emit('submit', new UserRegistration(this.registerUsername, this.registerPassword, this.registerEmail));
     }
 
     public onReset() {

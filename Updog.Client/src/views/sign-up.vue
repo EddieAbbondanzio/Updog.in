@@ -3,7 +3,7 @@
         <b-container>
             <b-row>
                 <b-col md="8" lg="6" offset-md="2" offset-lg="3">
-                    <user-register-form />
+                    <user-register-form @submit="onSubmit" />
                 </b-col>
             </b-row>
         </b-container>
@@ -18,6 +18,8 @@ import { User } from '@/user/common/user';
 import { UserLogin } from '@/user/common/user-login';
 import { Context } from '@/core/context';
 import MasterPage from '@/components/master-page.vue';
+import { UserMixin } from '../user/mixins/user-mixin';
+import { UserRegistration } from '../user/common/user-registration';
 
 @Component({
     components: {
@@ -25,12 +27,13 @@ import MasterPage from '@/components/master-page.vue';
         MasterPage
     }
 })
-export default class SignUp extends Vue {
-    public created() {
-        EventBus.on('login', async (login: UserLogin) => {
-            Context.login = login;
-            this.$router.push({ name: 'home' });
-        });
+export default class SignUp extends UserMixin {
+    public async onSubmit(userReg: UserRegistration) {
+        const login = await this.$register(userReg);
+        Context.login = login;
+        this.$router.push({ name: 'home' });
+
+        EventBus.emit('login', login);
     }
 }
 </script>

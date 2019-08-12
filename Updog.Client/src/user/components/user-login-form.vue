@@ -58,7 +58,7 @@ import { EventBus } from '../../core/event-bus';
     name: 'user-login-form',
     components: {}
 })
-export default class UserLoginForm extends UserMixin {
+export default class UserLoginForm extends Vue {
     public loginUsername: string = '';
 
     public loginPassword: string = '';
@@ -86,8 +86,7 @@ export default class UserLoginForm extends UserMixin {
             return;
         }
 
-        const login = await this.$login(new UserCredentials(this.loginUsername, this.loginPassword));
-        EventBus.emit('login', login);
+        this.$emit('submit', new UserCredentials(this.loginUsername, this.loginPassword));
     }
 
     public onReset() {

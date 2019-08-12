@@ -4,7 +4,7 @@
             <img src="@/assets/logo.png" class="nav-icon" />
         </b-navbar-brand>
 
-        <user-widget :user="user" @logout="onLogout()" />
+        <user-widget />
     </b-navbar>
 </template>
 
@@ -30,20 +30,5 @@ import { UserLogin } from '../user/common/user-login';
         UserWidget
     }
 })
-export default class NavBar extends Vue {
-    /**
-     * The active user.
-     */
-    public user: User | null = null;
-
-    public created(): void {
-        EventBus.on('login', async (login: UserLogin) => {
-            this.user = login.user;
-        });
-    }
-
-    public onLogout(): void {
-        this.user = null;
-    }
-}
+export default class NavBar extends Vue {}
 </script>
