@@ -44,6 +44,10 @@ export default class UserWidget extends Vue {
 
     public created(): void {
         EventBus.on('login', this.onLogin);
+
+        if (Context.login != null) {
+            this.user = Context.login.user;
+        }
     }
 
     public destroyed(): void {
@@ -55,6 +59,7 @@ export default class UserWidget extends Vue {
     }
 
     public onLogout(): void {
+        this.user = null;
         Context.login = null;
         EventBus.emit('logout');
     }
