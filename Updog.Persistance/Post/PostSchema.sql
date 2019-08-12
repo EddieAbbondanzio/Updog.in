@@ -5,6 +5,7 @@ CREATE TABLE Post (
     Title VARCHAR(300) NOT NULL,
     Body VARCHAR(10000) NOT NULL,
     CreationDate DateTime NOT NULL,
-    WasUpdated Boolean,
+    WasUpdated BOOLEAN,
+    WasDeleted BOOLEAN,
     FOREIGN KEY (UserId) REFERENCES User(Id)
 );

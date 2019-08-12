@@ -1,41 +1,37 @@
 <template>
     <master-page>
         <template>
-            <b-tabs v-model="activeTab">
-                <b-tab title="Link">REEE</b-tab>
-                <b-tab title="Text">FOOO</b-tab>
-            </b-tabs>
-
-            <b-form>
-                <b-input type="text" />
-                <b-textarea />
-                <b-button variant="primary">Submit</b-button>
-                <b-button variant="outline-primary">Reset</b-button>
-            </b-form>
+            <create-post-form @submit="onSubmit" />
         </template>
         <!-- <template slot="side-bar">SIDE BAR</template> -->
         <!-- <template slot="footer">FOOTER!</template> -->
     </master-page>
 </template>
 
+<style scoped>
+#text-body-textarea {
+    min-height: 200px;
+}
+</style>
+
+
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import CreatePostButtons from '@/post/components/create-post-buttons.vue';
 import MasterPage from '@/components/master-page.vue';
+import CreatePostForm from '@/post/components/create-post-form.vue';
+import { PostCreateParams } from '../post/common/post-create-params';
+import { PostMixin } from '@/post/mixins/post-mixin';
 
 @Component({
     components: {
-        CreatePostButtons,
-        MasterPage
+        MasterPage,
+        CreatePostForm
     }
 })
-export default class Home extends Vue {
-    public activeTab: number = 0;
-
-    public created(): void {
-        if (this.$route.query.isText) {
-            this.activeTab = 1;
-        }
+export default class Home extends PostMixin {
+    public async onSubmit(creationParams: PostCreateParams) {
+        const result = await this.$createPost(creationParams);
+        console.log(result);
     }
 }
 </script>

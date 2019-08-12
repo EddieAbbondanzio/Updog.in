@@ -3,7 +3,7 @@ import { PostType } from './post-type';
 /**
  * Request to create a new post.
  */
-export class PostCreateRequest {
+export class PostCreateParams {
     /**
      *
      * @param type The type of post it is.

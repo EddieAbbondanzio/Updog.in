@@ -92,9 +92,16 @@ namespace Updog.Api {
             services.AddTransient<AbstractValidator<UpdateUserParams>, UserUpdateValidator>();
             services.AddTransient<AbstractValidator<UserPasswordUpdateParams>, UserPasswordValidator>();
 
+            services.AddSingleton<IPermissionHandler<Post>, PostPermissionHandler>();
             services.AddTransient<IPostRepo, PostRepo>();
             services.AddTransient<PostCreator>();
+            services.AddTransient<PostFindByIdInteractor>();
+            services.AddTransient<PostDeleter>();
+            services.AddTransient<PostUpdater>();
+
             services.AddTransient<AbstractValidator<PostCreateParams>, PostCreateValidator>();
+            services.AddTransient<AbstractValidator<PostUpdateParams>, PostUpdateValidator>();
+            services.AddTransient<AbstractValidator<PostDeleteParams>, PostDeleteValidator>();
 
         }
 

@@ -39,7 +39,7 @@ namespace Updog.Persistance {
         public async Task Add(Post post) {
             using (DbConnection connection = GetConnection()) {
                 post.Id = await connection.QueryFirstOrDefaultAsync<int>(
-                    "INSERT INTO Post (Title, Body, Type, CreationDate, UserId, WasEditted) VALUES (@Title, @Body, @Type, @CreationDate, @UserId, @WasEditted); SELECT LAST_INSERT_ID();",
+                    "INSERT INTO Post (Title, Body, Type, CreationDate, UserId, WasUpdated) VALUES (@Title, @Body, @Type, @CreationDate, @UserId, @WasUpdated); SELECT LAST_INSERT_ID();",
                     post
                 );
             }
