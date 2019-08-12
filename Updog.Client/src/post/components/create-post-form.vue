@@ -62,7 +62,12 @@
                         name="textBody"
                         v-validate="'required|max:10000'"
                         data-vv-scope="createTextPost"
+                        v-on:keyup="onTextBodyKeyUp"
+                        v-on:blur="onTextBodyKeyUp"
                     />
+                    <div
+                        class="text-muted"
+                    >{{ textBodyCharactersRemaining == 1 ? '1 character remaining' : ` ${textBodyCharactersRemaining.toLocaleString()} characters remaining`}}</div>
                     <b-form-invalid-feedback
                         class="d-block"
                         :state="false"
@@ -87,6 +92,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { PostCreateParams } from '@/post/common/post-create-params';
 import { PostType } from '../common/post-type';
+import { Post } from '../common/post';
 
 /**
  * Form to create a new text or link post.
@@ -119,6 +125,8 @@ export default class CreatePostForm extends Vue {
      *  The body of a text post.
      */
     public textBody: string = '';
+
+    public textBodyCharactersRemaining = Post.BODY_MAX_LENGTH;
 
     public created(): void {
         if (this.$route.query.isText) {
@@ -170,6 +178,13 @@ export default class CreatePostForm extends Vue {
     }
 
     /**
+     * Update the remaining character count.
+     */
+    public async onTextBodyKeyUp() {
+        this.textBodyCharactersRemaining = Post.BODY_MAX_LENGTH - this.textBody.length;
+    }
+
+    /**
      * Reset the v-models of the form.
      */
     public async onReset() {
@@ -179,6 +194,7 @@ export default class CreatePostForm extends Vue {
         this.linkUrl = '';
         this.textTitle = '';
         this.textBody = '';
+        this.textBodyCharactersRemaining = Post.BODY_MAX_LENGTH;
     }
 }
 </script>

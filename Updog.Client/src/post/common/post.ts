@@ -4,6 +4,10 @@ import { PostType } from './post-type';
  * Post made by a user. Probably a repost...
  */
 export class Post {
+    public static TITLE_MAX_LENGTH: number = 300;
+
+    public static BODY_MAX_LENGTH: number = 10_000;
+
     /**
      * The unqiue ID of the post.
      */
