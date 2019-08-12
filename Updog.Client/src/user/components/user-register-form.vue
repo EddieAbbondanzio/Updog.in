@@ -1,11 +1,18 @@
 <template>
     <b-form class="bg-light border px-5 pt-5 pb-3 my-5">
-        <h1 class="pb-3">Sign Up</h1>
+        <div class="pb-3">
+            <h1 class="pb-0 mb-0">Sign Up</h1>
+            <h5 class="text-muted">
+                Already a member?
+                <router-link to="/login">Sign in.</router-link>
+            </h5>
+        </div>
         <b-form-group>
             <b-form-input
                 type="text"
                 placeholder="Username"
                 v-model="registerUsername"
+                ref="registerUsernameTextbox"
                 name="registerUsername"
                 v-validate="'required|min:4'"
             />
@@ -83,6 +90,10 @@ import { EventBus } from '../../core/event-bus';
     components: {}
 })
 export default class UserRegisterForm extends Vue {
+    public $refs!: {
+        registerUsernameTextbox: HTMLInputElement;
+    };
+
     public registerUsername: string = '';
     public registerEmail: string = '';
     public registerPassword: string = '';
@@ -108,6 +119,10 @@ export default class UserRegisterForm extends Vue {
                 }
             }
         });
+    }
+
+    public mounted() {
+        this.$refs.registerUsernameTextbox.focus();
     }
 
     /**

@@ -1,6 +1,13 @@
 <template>
     <b-form class="bg-light border px-5 pt-5 pb-3 my-5">
-        <h1 class="pb-3">Welcome Back!</h1>
+        <div class="pb-3">
+            <h1 class="pb-0 mb-0">Welcome Back!</h1>
+            <h5 class="text-muted">
+                Not a member?
+                <router-link to="/signup">Sign up.</router-link>
+            </h5>
+        </div>
+
         <b-form-group>
             <b-form-input
                 type="text"
