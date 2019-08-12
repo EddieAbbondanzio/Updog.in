@@ -3,12 +3,12 @@
         <b-button
             variant="outline-primary"
             class="w-100 mb-2"
-            :to="{ path: '/submit', query: { isText: false }}"
+            @click="onClick(false)"
         >Submit a new link post</b-button>
         <b-button
             variant="outline-primary"
             class="w-100 mt-2 mb-3"
-            :to="{ path: '/submit', query: { isText: true }}"
+            @click="onClick(true)"
         >Submit a new text post</b-button>
     </div>
 </template>
@@ -18,8 +18,17 @@
  * Widget to create a new post.
  */
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Context } from '../../core/context';
 @Component({
     name: 'post-widget'
 })
-export default class CreatePostButtons extends Vue {}
+export default class CreatePostButtons extends Vue {
+    public onClick(isText: boolean) {
+        if (Context.login == null) {
+            this.$router.push('login');
+        } else {
+            this.$router.push({ path: '/submit', query: { isText: isText ? 'true' : 'false' } });
+        }
+    }
+}
 </script>
