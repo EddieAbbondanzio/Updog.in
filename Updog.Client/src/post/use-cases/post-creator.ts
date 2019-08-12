@@ -8,7 +8,7 @@ import { Context } from '@/core/context';
  */
 export class PostCreator extends ApiInteractor<PostCreateParams, Post> {
     public async handle(input: PostCreateParams): Promise<Post> {
-        //Crash hard if not authed. The backend will catch this with a 401 response.
+        // Crash hard if not authed. The backend will catch this with a 401 response.
         if (Context.login == null) {
             throw new Error('Not logged in!');
         }

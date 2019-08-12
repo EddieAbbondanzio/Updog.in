@@ -8,13 +8,6 @@
     </master-page>
 </template>
 
-<style scoped>
-#text-body-textarea {
-    min-height: 200px;
-}
-</style>
-
-
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import MasterPage from '@/components/master-page.vue';
@@ -31,7 +24,6 @@ import { PostMixin } from '@/post/mixins/post-mixin';
 export default class Home extends PostMixin {
     public async onSubmit(creationParams: PostCreateParams) {
         const result = await this.$createPost(creationParams);
-        console.log(result);
     }
 }
 </script>
