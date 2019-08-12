@@ -12,7 +12,7 @@ namespace Updog.Api {
     /// End point for managing posts.
     /// </summary>
     [Authorize]
-    [Route("post")]
+    [Route("api/post")]
     [ApiController]
     public sealed class PostController : ApiController {
         #region Fields
