@@ -15,11 +15,12 @@
                         v-model.trim="linkTitle"
                         name="linkTitle"
                         v-validate="'required|max:300'"
+                        data-vv-scope="createLinkPost"
                     />
                     <b-form-invalid-feedback
                         class="d-block"
                         :state="false"
-                    >{{ errors.first('linkTitle')}}</b-form-invalid-feedback>
+                    >{{ errors.first('createLinkPost.linkTitle')}}</b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group>
                     <b-form-input
@@ -29,11 +30,12 @@
                         v-model.trim="linkUrl"
                         name="linkUrl"
                         v-validate="'required|url'"
+                        data-vv-scope="createLinkPost"
                     />
                     <b-form-invalid-feedback
                         class="d-block"
                         :state="false"
-                    >{{ errors.first('linkUrl')}}</b-form-invalid-feedback>
+                    >{{ errors.first('createLinkPost.linkUrl')}}</b-form-invalid-feedback>
                 </b-form-group>
             </b-tab>
             <b-tab title="Text">
@@ -43,22 +45,28 @@
                         id="text-title-textbox"
                         placeholder="Title"
                         v-model.trim="textTitle"
+                        name="textTitle"
+                        v-validate="'required|max:300'"
+                        data-vv-scope="createTextPost"
                     />
                     <b-form-invalid-feedback
                         class="d-block"
                         :state="false"
-                    >{{ errors.first('textTitle')}}</b-form-invalid-feedback>
+                    >{{ errors.first('createTextPost.textTitle')}}</b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group>
                     <b-form-textarea
                         id="text-body-textarea"
                         placeholder="Body"
                         v-model.trim="textBody"
+                        name="textBody"
+                        v-validate="'required|max:10000'"
+                        data-vv-scope="createTextPost"
                     />
                     <b-form-invalid-feedback
                         class="d-block"
                         :state="false"
-                    >{{ errors.first('textBody')}}</b-form-invalid-feedback>
+                    >{{ errors.first('createTextPost.textBody')}}</b-form-invalid-feedback>
                 </b-form-group>
             </b-tab>
         </b-tabs>
@@ -144,7 +152,7 @@ export default class CreatePostForm extends Vue {
      */
     public async onSubmit() {
         // Validate first.
-        if (!(await this.$validator.validate())) {
+        if (!(await this.$validator.validateAll(this.activeTab === 0 ? 'createLinkPost' : 'createTextPost'))) {
             return;
         }
 
