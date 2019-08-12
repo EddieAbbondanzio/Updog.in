@@ -126,6 +126,10 @@ export default class CreatePostForm extends Vue {
      */
     public textBody: string = '';
 
+    /**
+     * The number displayed on screen of how many characters are left
+     * on the text post body.
+     */
     public textBodyCharactersRemaining = Post.BODY_MAX_LENGTH;
 
     public created(): void {
@@ -172,6 +176,10 @@ export default class CreatePostForm extends Vue {
         this.$emit('submit', creationParams);
     }
 
+    /**
+     * On tab change update the query string param to reflect if it's a text
+     * post or not.
+     */
     public async onTabChange(index: number) {
         this.onReset();
         this.$router.push({ query: { isText: index === 1 ? 'true' : 'false' } });

@@ -24,11 +24,7 @@ import { Context } from '../../core/context';
 })
 export default class CreatePostButtons extends Vue {
     public onClick(isText: boolean) {
-        if (Context.login == null) {
-            this.$router.push('login');
-        } else {
-            this.$router.push({ path: '/submit', query: { isText: isText ? 'true' : 'false' } });
-        }
+        this.$router.push({ path: '/submit', query: { isText: isText ? 'true' : 'false' } });
     }
 }
 </script>
