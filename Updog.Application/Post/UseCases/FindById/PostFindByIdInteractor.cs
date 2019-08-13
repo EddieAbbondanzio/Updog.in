@@ -5,15 +5,35 @@ namespace Updog.Application {
     /// <summary>
     /// Use case handler to find a post by it's unique ID.
     /// </summary>
-    public sealed class PostFindByIdInteractor : IInteractor<int, Post> {
+    public sealed class PostFindByIdInteractor : IInteractor<int, PostInfo> {
         #region Fields
         private IPostRepo postRepo;
+
+        private IUserRepo userRepo;
         #endregion
 
         #region Constructor(s)
-        public PostFindByIdInteractor(IPostRepo postRepo) { this.postRepo = postRepo; }
+        /// <summary>
+        /// Create a new post find by ID interactor.
+        /// </summary>
+        /// <param name="postRepo">CRUD post repo.</param>
+        /// <param name="userRepo">CRUD user repo.</param>
+        public PostFindByIdInteractor(IPostRepo postRepo, IUserRepo userRepo) {
+            this.postRepo = postRepo;
+            this.userRepo = userRepo;
+        }
         #endregion
 
-        public async Task<Post> Handle(int input) => await postRepo.FindById(input);
+        /// <summary>
+        /// Find a post by it's unique ID.
+        /// </summary>
+        /// <param name="input">The ID to look for.</param>
+        /// <returns>The matching post found.</returns>
+        public async Task<PostInfo> Handle(int input) {
+            Post p = await postRepo.FindById(input);
+            User u = await userRepo.FindById(p.UserId);
+
+            return new PostInfo(p.Id, p.Type, p.Title, p.Body, u.Username);
+        }
     }
 }

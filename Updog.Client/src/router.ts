@@ -29,6 +29,10 @@ const r = new Router({
             meta: {
                 authenticate: true
             }
+        },
+        {
+            path: '/post/:id',
+            component: () => import('./views/post.vue')
         }
     ]
 });

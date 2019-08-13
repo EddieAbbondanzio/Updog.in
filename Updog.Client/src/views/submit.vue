@@ -24,6 +24,7 @@ import { PostMixin } from '@/post/mixins/post-mixin';
 export default class Home extends PostMixin {
     public async onSubmit(creationParams: PostCreateParams) {
         const result = await this.$createPost(creationParams);
+        this.$router.push(`/post/${result.id}`);
     }
 }
 </script>

@@ -43,7 +43,7 @@ namespace Updog.Api {
         [HttpGet("{id}")]
         [HttpHead("{id}")]
         public async Task<ActionResult> FindById(int id) {
-            Post p = await postFinder.Handle(id);
+            PostInfo p = await postFinder.Handle(id);
             return p != null ? Ok(p) : NotFound() as ActionResult;
         }
 
