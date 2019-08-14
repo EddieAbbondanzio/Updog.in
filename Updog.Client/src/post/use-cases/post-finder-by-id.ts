@@ -6,7 +6,7 @@ import { PostInfo } from '../common/post-info';
 /**
  * Interactor to find a post by it's ID.
  */
-export class PostFindByIdInteractor extends ApiInteractor<number, PostInfo> {
+export class PostFinderById extends ApiInteractor<number, PostInfo> {
     public async handle(input: number): Promise<PostInfo> {
         const response = await this.http.get<PostInfo>(`/post/${input}`);
         return new PostInfo(

@@ -95,7 +95,8 @@ namespace Updog.Api {
             services.AddSingleton<IPermissionHandler<Post>, PostPermissionHandler>();
             services.AddTransient<IPostRepo, PostRepo>();
             services.AddTransient<PostCreator>();
-            services.AddTransient<PostFindByIdInteractor>();
+            services.AddTransient<PostFinderById>();
+            services.AddTransient<PostFinderByNew>();
             services.AddTransient<PostDeleter>();
             services.AddTransient<PostUpdater>();
 

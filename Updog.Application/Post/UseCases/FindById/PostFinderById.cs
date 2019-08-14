@@ -5,7 +5,7 @@ namespace Updog.Application {
     /// <summary>
     /// Use case handler to find a post by it's unique ID.
     /// </summary>
-    public sealed class PostFindByIdInteractor : IInteractor<int, PostInfo> {
+    public sealed class PostFinderById : IInteractor<int, PostInfo> {
         #region Fields
         private IPostRepo postRepo;
 
@@ -18,7 +18,7 @@ namespace Updog.Application {
         /// </summary>
         /// <param name="postRepo">CRUD post repo.</param>
         /// <param name="userRepo">CRUD user repo.</param>
-        public PostFindByIdInteractor(IPostRepo postRepo, IUserRepo userRepo) {
+        public PostFinderById(IPostRepo postRepo, IUserRepo userRepo) {
             this.postRepo = postRepo;
             this.userRepo = userRepo;
         }
@@ -33,7 +33,7 @@ namespace Updog.Application {
             Post p = await postRepo.FindById(input);
             User u = await userRepo.FindById(p.UserId);
 
-            return new PostInfo(p.Id, p.Type, p.Title, p.Body, u.Username);
+            return new PostInfo(p.Id, p.Type, p.Title, p.Body, u.Username, p.CreationDate);
         }
     }
 }

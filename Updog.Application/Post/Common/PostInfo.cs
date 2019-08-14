@@ -1,3 +1,4 @@
+using System;
 using Updog.Domain;
 
 namespace Updog.Application {
@@ -33,6 +34,11 @@ namespace Updog.Application {
         /// The name of the user that created it.
         /// </summary>
         public string Author { get; }
+
+        /// <summary>
+        /// When the post was made.
+        /// </summary>
+        public DateTime Date { get; }
         #endregion
 
         #region Constructor(s)
@@ -44,12 +50,14 @@ namespace Updog.Application {
         /// <param name="title">The title of the post.</param>
         /// <param name="body">The body of the post.</param>
         /// <param name="author">The author of the post.</param>
-        public PostInfo(int id, PostType type, string title, string body, string author) {
+        /// <param name="date">The date of posting</param>
+        public PostInfo(int id, PostType type, string title, string body, string author, DateTime date) {
             Id = id;
             Type = type;
             Title = title;
             Body = body;
             Author = author;
+            Date = date;
         }
         #endregion
     }

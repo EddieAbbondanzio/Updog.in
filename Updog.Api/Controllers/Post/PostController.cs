@@ -16,7 +16,9 @@ namespace Updog.Api {
     [ApiController]
     public sealed class PostController : ApiController {
         #region Fields
-        private PostFindByIdInteractor postFinder;
+        private PostFinderById postFinderById;
+
+        private PostFinderByNew postFinderByNew;
 
         private PostCreator postCreator;
 
@@ -26,8 +28,9 @@ namespace Updog.Api {
         #endregion
 
         #region Constructor(s)
-        public PostController(PostFindByIdInteractor postFinder, PostCreator postAdder, PostUpdater postUpdater, PostDeleter postDeleter) {
-            this.postFinder = postFinder;
+        public PostController(PostFinderById postFinderById, PostFinderByNew postFinderByNew, PostCreator postAdder, PostUpdater postUpdater, PostDeleter postDeleter) {
+            this.postFinderById = postFinderById;
+            this.postFinderByNew = postFinderByNew;
             this.postCreator = postAdder;
             this.postUpdater = postUpdater;
             this.postDeleter = postDeleter;
@@ -43,8 +46,19 @@ namespace Updog.Api {
         [HttpGet("{id}")]
         [HttpHead("{id}")]
         public async Task<ActionResult> FindById(int id) {
-            PostInfo p = await postFinder.Handle(id);
+            PostInfo p = await postFinderById.Handle(id);
             return p != null ? Ok(p) : NotFound() as ActionResult;
+        }
+
+        /// <summary>
+        /// Get new posts based on when they were made.
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("new")]
+        public async Task<ActionResult> GetNewPosts() {
+            PostInfo[] posts = await postFinderByNew.Handle(new PaginationInfo(0, 10));
+            return Ok(posts);
         }
 
         /// <summary>

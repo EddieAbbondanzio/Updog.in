@@ -3,7 +3,7 @@ import Vue from 'vue';
 import { PostCreateParams } from '../common/post-create-params';
 import { Post } from '../common/post';
 import { PostCreator } from '../use-cases/post-creator';
-import { PostFindByIdInteractor } from '../use-cases/post-find-by-id-interactor';
+import { PostFinderById } from '../use-cases/post-finder-by-id';
 import { PostInfo } from '../common/post-info';
 
 export class PostMixin extends Vue {
@@ -20,6 +20,6 @@ export class PostMixin extends Vue {
      * @param request The ID of the post to retrieve.
      */
     public async $findPostById(request: number): Promise<PostInfo> {
-        return new PostFindByIdInteractor().handle(request);
+        return new PostFinderById().handle(request);
     }
 }
