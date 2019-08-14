@@ -28,12 +28,18 @@ namespace Updog.Persistance {
         public async Task<PostInfo[]> FindNewest(int pageNumber, int pageSize) {
             using (DbConnection connection = GetConnection()) {
                 return (await connection.QueryAsync<Post, User, PostInfo>(
-                    @"SELECT Post.Id, Post.Type, Post.Type, Post.Title, Post.Body, Post.UserId, User.Id as UId, User.Username 
+                    @"SELECT Post.Id, Post.Type, Post.Type, Post.Title, Post.Body, Post.UserId, Post.CreationDate, User.Id as UId, User.Username 
                         FROM Post 
                         LEFT JOIN User ON Post.UserId = User.Id 
-                        ORDER BY CreationDate DESC",
+                        ORDER BY CreationDate DESC
+                        LIMIT @PageSize
+                        OFFSET @Offset",
                     (p, u) => {
                         return new PostInfo(p.Id, p.Type, p.Title, p.Body, u.Username, p.CreationDate);
+                    },
+                    new {
+                        PageSize = pageSize,
+                        Offset = pageNumber * pageSize
                     },
                     splitOn: "UId")
                 ).ToArray();
@@ -52,7 +58,7 @@ namespace Updog.Persistance {
         public async Task Add(Post post) {
             using (DbConnection connection = GetConnection()) {
                 post.Id = await connection.QueryFirstOrDefaultAsync<int>(
-                    "INSERT INTO Post (Title, Body, Type, CreationDate, UserId, WasUpdated) VALUES (@Title, @Body, @Type, @CreationDate, @UserId, @WasUpdated, @WasDeleted); SELECT LAST_INSERT_ID();",
+                    "INSERT INTO Post (Title, Body, Type, CreationDate, UserId, WasUpdated, WasDeleted) VALUES (@Title, @Body, @Type, @CreationDate, @UserId, @WasUpdated, @WasDeleted); SELECT LAST_INSERT_ID();",
                     post
                 );
             }

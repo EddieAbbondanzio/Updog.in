@@ -90,9 +90,9 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { PostCreateParams } from '@/post/common/post-create-params';
 import { PostType } from '../common/post-type';
 import { Post } from '../common/post';
+import { PostCreateParams } from '../use-cases/create/post-create-params';
 
 /**
  * Form to create a new text or link post.

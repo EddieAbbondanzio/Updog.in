@@ -1,4 +1,5 @@
 import { PostType } from './post-type';
+import { DateUtils } from '@/core/utils/date-utils';
 
 /**
  * Information about a post.
@@ -21,4 +22,12 @@ export class PostInfo {
         public author: string,
         public date: Date
     ) {}
+
+    /**
+     * Get the time since it was posted in a user friendly
+     * readable string.
+     */
+    public getDifferenceDate() {
+        return DateUtils.getDifferenceFromToday(this.date);
+    }
 }

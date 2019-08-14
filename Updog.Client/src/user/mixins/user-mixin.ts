@@ -1,9 +1,9 @@
 import Vue from 'vue';
-import { UserRegistration } from '../common/user-registration';
+import { UserRegistration } from '../use-cases/register/user-registration';
 import { UserLogin } from '../common/user-login';
 import { UserCredentials } from '../common/user-credentials';
-import { UserLoginInteractor } from '../use-cases/user-login-interactor';
-import { UserRegisterInteractor } from '../use-cases/user-register-interactor';
+import { UserLoginInteractor } from '../use-cases/login/user-login-interactor';
+import { UserRegisterInteractor } from '../use-cases/register/user-register-interactor';
 import Component from 'vue-class-component';
 
 /**

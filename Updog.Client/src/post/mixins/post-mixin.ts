@@ -1,10 +1,12 @@
 import Component from 'vue-class-component';
 import Vue from 'vue';
-import { PostCreateParams } from '../common/post-create-params';
+import { PostCreateParams } from '../use-cases/create/post-create-params';
 import { Post } from '../common/post';
-import { PostCreator } from '../use-cases/post-creator';
-import { PostFinderById } from '../use-cases/post-finder-by-id';
+import { PostCreator } from '../use-cases/create/post-creator';
+import { PostFinderById } from '../use-cases/find-by-id/post-finder-by-id';
 import { PostInfo } from '../common/post-info';
+import { PaginationInfo } from '@/core/pagination-info';
+import { PostFinderByNew } from '../use-cases/find-by-new/post-finder-by-new';
 
 export class PostMixin extends Vue {
     /**
@@ -21,5 +23,13 @@ export class PostMixin extends Vue {
      */
     public async $findPostById(request: number): Promise<PostInfo> {
         return new PostFinderById().handle(request);
+    }
+
+    /**
+     * Find a collection of posts by new.
+     * @param paginationInfo The pagination info.
+     */
+    public async $findPostByNew(paginationInfo: PaginationInfo): Promise<PostInfo[]> {
+        return new PostFinderByNew().handle(paginationInfo);
     }
 }

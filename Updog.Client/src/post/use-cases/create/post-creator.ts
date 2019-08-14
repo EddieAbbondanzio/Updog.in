@@ -1,7 +1,7 @@
 import { ApiInteractor } from '@/core/api-interactor';
-import { PostCreateParams } from '../common/post-create-params';
-import { Post } from '../common/post';
+import { PostCreateParams } from './post-create-params';
 import { Context } from '@/core/context';
+import { Post } from '@/post/common/post';
 
 /**
  * Interactor to create a new post.

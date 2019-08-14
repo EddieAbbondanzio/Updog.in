@@ -1,7 +1,7 @@
 import { ApiInteractor } from '@/core/api-interactor';
-import { UserCredentials } from '../common/user-credentials';
-import { UserLogin } from '../common/user-login';
-import { User } from '../common/user';
+import { UserCredentials } from '../../common/user-credentials';
+import { UserLogin } from '../../common/user-login';
+import { User } from '../../common/user';
 
 /**
  * Interactor to handle logging in a user.

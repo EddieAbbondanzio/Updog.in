@@ -1,7 +1,7 @@
 import { ApiInteractor } from '@/core/api-interactor';
-import { UserRegistration } from '../common/user-registration';
-import { UserLogin } from '../common/user-login';
-import { User } from '../common/user';
+import { UserRegistration } from './user-registration';
+import { UserLogin } from '../../common/user-login';
+import { User } from '../../common/user';
 
 /**
  * Interactor to handle registering a user with the back end.

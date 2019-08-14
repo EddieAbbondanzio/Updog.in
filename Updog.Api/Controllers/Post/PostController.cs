@@ -56,8 +56,8 @@ namespace Updog.Api {
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("new")]
-        public async Task<ActionResult> GetNewPosts() {
-            PostInfo[] posts = await postFinderByNew.Handle(new PaginationInfo(0, 10));
+        public async Task<ActionResult> GetNewPosts([FromQuery]int pageNumber, [FromQuery] int pageSize) {
+            PostInfo[] posts = await postFinderByNew.Handle(new PaginationInfo(pageNumber, pageSize));
             return Ok(posts);
         }
 

@@ -1,7 +1,10 @@
 <template>
     <div class="bg-light border" v-if="post != null">
         <h1 class="mb-0">{{ post.title }}</h1>
-        <p class="text-muted" :title="post.date">Posted {{ readableDate}} ago by {{ post.author }}</p>
+        <p
+            class="text-muted"
+            :title="post.date"
+        >Posted {{ post.getDifferenceDate() }} ago by {{ post.author }}</p>
         <p>{{ post.body }}</p>
     </div>
 </template>
@@ -20,14 +23,5 @@ export default class PostTopicHeader extends Vue {
      */
     @Prop()
     public post!: PostInfo;
-
-    /**
-     * Fancy message for how long ago the post was made.
-     */
-    public readableDate: string = '';
-
-    public created() {
-        this.readableDate = DateUtils.getDifferenceFromToday(this.post.date);
-    }
 }
 </script>
