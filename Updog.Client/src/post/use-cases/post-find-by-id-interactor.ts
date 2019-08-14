@@ -14,7 +14,8 @@ export class PostFindByIdInteractor extends ApiInteractor<number, PostInfo> {
             response.data.type,
             response.data.title,
             response.data.body,
-            response.data.author
+            response.data.author,
+            response.data.date
         );
     }
 }
