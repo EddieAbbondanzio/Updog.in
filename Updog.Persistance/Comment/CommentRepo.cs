@@ -37,7 +37,7 @@ namespace Updog.Persistance {
         public async Task<CommentInfo[]> FindCommentsByPost(int postId) {
             using (DbConnection connection = GetConnection()) {
                 return (await connection.QueryAsync<Comment, User, CommentInfo>(
-                    @"SELECT Comment.Id, Comment.UserId, Comment.PostId, Comment.ParentId, Comment.Body, Comment.CreationDate, Comment.WasUpdated, Comment.WasDeleted, User.Id as UId, User.Username)
+                    @"SELECT Comment.Id, Comment.UserId, Comment.PostId, Comment.ParentId, Comment.Body, Comment.CreationDate, Comment.WasUpdated, Comment.WasDeleted, User.Id as UId, User.Username
                     FROM Comment
                     LEFT JOIN User ON Comment.UserId = User.Id",
                     (c, u) => { return new CommentInfo(c.Id, u.Username, c.Body); },
