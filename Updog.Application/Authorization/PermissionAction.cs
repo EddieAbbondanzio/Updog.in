@@ -4,5 +4,9 @@ namespace Updog.Application {
         ReadPost,
         UpdatePost,
         DeletePost,
+        CreateComment,
+        ReadComment,
+        UpdateComment,
+        DeleteComment
     }
 }

@@ -104,6 +104,17 @@ namespace Updog.Api {
             services.AddTransient<AbstractValidator<PostUpdateParams>, PostUpdateValidator>();
             services.AddTransient<AbstractValidator<PostDeleteParams>, PostDeleteValidator>();
 
+            services.AddSingleton<IPermissionHandler<Comment>, CommentPermissionHandler>();
+            services.AddTransient<ICommentRepo, CommentRepo>();
+            services.AddTransient<CommentCreator>();
+            services.AddTransient<CommentFinderById>();
+            services.AddTransient<CommentFinderByPost>();
+            services.AddTransient<CommentDeleter>();
+            services.AddTransient<CommentUpdater>();
+            services.AddTransient<AbstractValidator<CommentCreateParams>, CommentCreateValidator>();
+            services.AddTransient<AbstractValidator<CommentUpdateParams>, CommentUpdateValidator>();
+            services.AddTransient<AbstractValidator<CommentDeleteParams>, CommentDeleteValidator>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

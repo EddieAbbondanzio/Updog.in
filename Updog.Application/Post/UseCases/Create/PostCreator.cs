@@ -20,6 +20,7 @@ namespace Updog.Application {
         }
         #endregion
 
+        #region Publics
         public async Task<Post> Handle(PostCreateParams input) {
             await postValidator.ValidateAndThrowAsync(input);
 
@@ -28,5 +29,6 @@ namespace Updog.Application {
             await postRepo.Add(post);
             return post;
         }
+        #endregion
     }
 }

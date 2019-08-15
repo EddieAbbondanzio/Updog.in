@@ -1,15 +1,12 @@
 <template>
     <master-page>
         <template>
-            <div class="bg-light border mb-3 p-1" v-for="post in posts" v-bind:key="post.id">
-                <h4 class="mb-0">
-                    <router-link :to="`post/${post.id}`">{{ post.title }}</router-link>
-                </h4>
-                <p class="text-muted">Posted {{ post.getDifferenceDate() }} by {{ post.author }}</p>
-            </div>
+            <post-summary v-for="post in posts" v-bind:key="post.id" :post="post" />
         </template>
         <template slot="side-bar">
-            <create-post-buttons />
+            <div class="bg-light border p-3">
+                <create-post-buttons />
+            </div>
         </template>
     </master-page>
 </template>
@@ -21,11 +18,13 @@ import MasterPage from '@/components/master-page.vue';
 import { PostMixin } from '../post/mixins/post-mixin';
 import { PostInfo } from '../post/common/post-info';
 import { PaginationInfo } from '../core/pagination-info';
+import PostSummary from '@/post/components/post-summary.vue';
 
 @Component({
     components: {
         CreatePostButtons,
-        MasterPage
+        MasterPage,
+        PostSummary
     }
 })
 export default class Home extends PostMixin {
