@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using FluentValidation;
 using Updog.Domain;
@@ -28,7 +29,8 @@ namespace Updog.Application {
                 UserId = input.User.Id,
                 PostId = input.PostId,
                 ParentId = input.ParentId,
-                Body = input.Body
+                Body = input.Body,
+                CreationDate = DateTime.UtcNow
             };
 
             await commentRepo.Add(comment);

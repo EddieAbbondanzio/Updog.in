@@ -1,3 +1,5 @@
+using System;
+
 namespace Updog.Domain {
     /// <summary>
     /// A comment associated with a post.
@@ -36,8 +38,20 @@ namespace Updog.Domain {
         /// </summary>
         public string Body { get; set; }
 
+        /// <summary>
+        /// The date the comment was made.
+        /// </summary>
+        /// <value></value>
+        public DateTime CreationDate { get; set; }
+
+        /// <summary>
+        /// Flag to show if the comment was updated.
+        /// </summary>
         public bool WasUpdated { get; set; }
 
+        /// <summary>
+        /// Soft delete flag.
+        /// </summary>
         public bool WasDeleted { get; set; }
         #endregion
 
