@@ -8,6 +8,7 @@ import { PostInfo } from '../common/post-info';
 import { PaginationInfo } from '@/core/pagination-info';
 import { PostFinderByNew } from '../use-cases/find-by-new/post-finder-by-new';
 
+@Component
 export class PostMixin extends Vue {
     /**
      * Create a new post.

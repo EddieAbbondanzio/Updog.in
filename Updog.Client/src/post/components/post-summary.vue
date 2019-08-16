@@ -30,7 +30,7 @@ import { PostType } from '../common/post-type';
 import MaterialIcon from '@/components/material-icon.vue';
 
 /**
- * Summary of information about a post.
+ * Summary of information about a post. Used on post lists, and post topic page.
  */
 @Component({
     name: 'post-summary',

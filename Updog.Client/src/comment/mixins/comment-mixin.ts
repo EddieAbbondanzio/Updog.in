@@ -7,6 +7,7 @@ import { CommentFinderByPost } from '../use-cases/find-by-post/comment-finder-by
 /**
  * Mixin to handle comment related things.
  */
+@Component
 export class CommentMixin extends Vue {
     /**
      * Find a post by it's unique ID.

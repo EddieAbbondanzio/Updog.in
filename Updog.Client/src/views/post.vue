@@ -3,6 +3,7 @@
         <template>
             <div v-if="post != null">
                 <post-summary :post="post" expand="true" />
+                <comment-create-form @submit="onCommentCreate" />
             </div>
         </template>
         <template slot="side-bar">
@@ -13,12 +14,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Mixins } from 'vue-property-decorator';
 import CreatePostButtons from '@/post/components/create-post-buttons.vue';
 import MasterPage from '@/components/master-page.vue';
 import { PostMixin } from '../post/mixins/post-mixin';
 import { PostInfo } from '@/post/common/post-info';
 import PostSummary from '@/post/components/post-summary.vue';
+import CommentCreateForm from '@/comment/components/comment-create-form.vue';
+import { CommentMixin } from '@/comment/mixins/comment-mixin';
+import { mixins } from 'vue-class-component/lib/util';
 
 /**
  * View a post via it's ID.
@@ -27,10 +31,12 @@ import PostSummary from '@/post/components/post-summary.vue';
     components: {
         CreatePostButtons,
         MasterPage,
-        PostSummary
-    }
+        PostSummary,
+        CommentCreateForm
+    },
+    mixins: [PostMixin, CommentMixin]
 })
-export default class Post extends PostMixin {
+export default class Post extends Mixins(PostMixin, CommentMixin) {
     /**
      * The post being displayed.
      */
@@ -39,6 +45,10 @@ export default class Post extends PostMixin {
     public async created() {
         const postId = Number.parseInt(this.$route.params.id, 10);
         this.post = await this.$findPostById(postId);
+    }
+
+    public async onCommentCreate(comment: string) {
+        throw Error();
     }
 }
 </script>
