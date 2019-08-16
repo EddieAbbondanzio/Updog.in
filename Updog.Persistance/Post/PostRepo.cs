@@ -4,6 +4,7 @@ using Updog.Application;
 using Updog.Domain;
 using Dapper;
 using System.Linq;
+using System;
 
 namespace Updog.Persistance {
     /// <summary>
@@ -48,7 +49,7 @@ namespace Updog.Persistance {
 
         public async Task<Post> FindById(int id) {
             using (DbConnection connection = GetConnection()) {
-                return await connection.QueryFirstAsync<Post>(
+                return await connection.QuerySingleOrDefaultAsync<Post>(
                     "SELECT * FROM Post WHERE Id = @Id;",
                     new { Id = id }
                 );

@@ -22,7 +22,7 @@ namespace Updog.Persistance {
         /// <returns>The comment found.</returns>
         public async Task<Comment> FindById(int id) {
             using (DbConnection connection = GetConnection()) {
-                return await connection.QueryFirstAsync<Comment>(
+                return await connection.QuerySingleOrDefaultAsync<Comment>(
                     "SELECT * FROM Comment WHERE Id = @Id;",
                     new { Id = id }
                 );

@@ -27,7 +27,7 @@ namespace Updog.Persistance {
         /// <returns>The user with the id.</returns>
         public async Task<User> FindById(int id) {
             using (DbConnection connection = GetConnection()) {
-                return await connection.QueryFirstAsync<User>(
+                return await connection.QuerySingleOrDefaultAsync<User>(
                     "SELECT * FROM User WHERE Id = @Id;",
                     new { Id = id }
                 );
