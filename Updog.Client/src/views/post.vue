@@ -1,7 +1,9 @@
 <template>
     <master-page>
         <template>
-            <post-topic-header :post="post" v-if="post != null" />
+            <div v-if="post != null">
+                <post-summary :post="post" expand="true" />
+            </div>
         </template>
         <template slot="side-bar">
             <create-post-buttons />
@@ -16,7 +18,7 @@ import CreatePostButtons from '@/post/components/create-post-buttons.vue';
 import MasterPage from '@/components/master-page.vue';
 import { PostMixin } from '../post/mixins/post-mixin';
 import { PostInfo } from '@/post/common/post-info';
-import PostTopicHeader from '@/post/components/post-topic-header.vue';
+import PostSummary from '@/post/components/post-summary.vue';
 
 /**
  * View a post via it's ID.
@@ -25,7 +27,7 @@ import PostTopicHeader from '@/post/components/post-topic-header.vue';
     components: {
         CreatePostButtons,
         MasterPage,
-        PostTopicHeader
+        PostSummary
     }
 })
 export default class Post extends PostMixin {
