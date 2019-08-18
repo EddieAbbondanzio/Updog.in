@@ -1,15 +1,27 @@
+using System.Linq;
 using System.Threading.Tasks;
+using Updog.Domain;
 
 namespace Updog.Application {
     /// <summary>
     /// Interactor to find comments on a post.
     /// </summary>
-    public sealed class CommentFinderByPost : IInteractor<int, CommentInfo[]> {
+    public sealed class CommentFinderByPost : IInteractor<int, CommentView[]> {
         #region Fields
         /// <summary>
         /// The underlying repo for finding comments in the database.
         /// </summary>
         private ICommentRepo commentRepo;
+
+        /// <summary>
+        /// Mapper to convert a comment into it's DTO.
+        /// </summary>
+        private IMapper<Comment, CommentView> commentMapper;
+
+        /// <summary>
+        /// CRUD interface for posts in the DB.
+        /// </summary>
+        private IPostRepo postRepo;
         #endregion
 
         #region Constructor(s)
@@ -17,13 +29,21 @@ namespace Updog.Application {
         /// Create a new comment finder by post.
         /// </summary>
         /// <param name="commentRepo">The CRUD interface for comments.</param>
-        public CommentFinderByPost(ICommentRepo commentRepo) {
+        /// <param name="commentMapper">DTO mapper.</param>
+        /// <param name="postRepo">CRUD interface for posts</param>
+        public CommentFinderByPost(ICommentRepo commentRepo, IMapper<Comment, CommentView> commentMapper, IPostRepo postRepo) {
             this.commentRepo = commentRepo;
+            this.commentMapper = commentMapper;
+            this.postRepo = postRepo;
         }
         #endregion
 
         #region Publics
-        public async Task<CommentInfo[]> Handle(int input) => await commentRepo.FindCommentsByPost(input);
+        public async Task<CommentView[]> Handle(int postId) {
+            Post post = await postRepo.FindById(postId);
+            Comment[] comments = await commentRepo.FindByPost(post.Id);
+            return comments.Select((c) => commentMapper.Map(c)).ToArray();
+        }
         #endregion
     }
 }

@@ -7,20 +7,23 @@ namespace Updog.Application {
     /// <summary>
     /// Use case interactor for registering a new user with the site.
     /// </summary>
-    public sealed class RegisterUserInteractor : IInteractor<RegisterUserParams, UserLogin> {
+    public sealed class UserRegisterInteractor : IInteractor<UserRegisterParams, UserLogin> {
         #region Fields
         private IUserRepo userRepo;
+
+        private IMapper<User, UserView> userMapper;
 
         private IPasswordHasher passwordHasher;
 
         private IAuthenticationTokenHandler tokenHandler;
 
-        private AbstractValidator<RegisterUserParams> validator;
+        private AbstractValidator<UserRegisterParams> validator;
         #endregion
 
         #region Constructor(s)
-        public RegisterUserInteractor(IUserRepo userRepo, IPasswordHasher passwordHasher, IAuthenticationTokenHandler tokenHandler, AbstractValidator<RegisterUserParams> validator) {
+        public UserRegisterInteractor(IUserRepo userRepo, IMapper<User, UserView> userMapper, IPasswordHasher passwordHasher, IAuthenticationTokenHandler tokenHandler, AbstractValidator<UserRegisterParams> validator) {
             this.userRepo = userRepo;
+            this.userMapper = userMapper;
             this.passwordHasher = passwordHasher;
             this.tokenHandler = tokenHandler;
             this.validator = validator;
@@ -28,7 +31,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<UserLogin> Handle(RegisterUserParams input) {
+        public async Task<UserLogin> Handle(UserRegisterParams input) {
             await validator.ValidateAndThrowAsync(input);
 
             User user = new User() {
@@ -39,9 +42,11 @@ namespace Updog.Application {
             };
 
             await userRepo.Add(user);
+            UserView userView = userMapper.Map(user);
             string authToken = tokenHandler.IssueToken(user);
 
-            return new UserLogin(new UserInfo(user.Id, user.Email, user.Username, user.JoinedDate), authToken);
+            return new UserLogin(userView, authToken);
+
         }
         #endregion
     }

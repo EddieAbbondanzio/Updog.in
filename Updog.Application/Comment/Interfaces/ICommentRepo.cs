@@ -10,9 +10,9 @@ namespace Updog.Application {
         /// <summary>
         /// Find the comments of a post.
         /// </summary>
-        /// <param name="postId">The post ID.</param>
+        /// <param name="post">The post ID.</param>
         /// <returns>The comments associated with it.</returns>
-        Task<CommentInfo[]> FindCommentsByPost(int postId);
+        Task<Comment[]> FindByPost(int postId);
         #endregion
     }
 }

@@ -26,7 +26,7 @@ namespace Updog.Domain {
         /// <summary>
         /// OP of the post.
         /// </summary>
-        public int UserId { get; set; }
+        public User User { get; set; }
 
         /// <summary>
         /// The content type of the post.
@@ -60,25 +60,11 @@ namespace Updog.Domain {
         /// </summary>
         /// <value></value>
         public bool WasDeleted { get; set; }
-        #endregion
-
-        #region Constructor(s)
-        public Post() { }
 
         /// <summary>
-        /// Create a new post.
+        /// The comments of the post.
         /// </summary>
-        /// <param name="type">The type of post it is.</param>
-        /// <param name="title">The title of the post.</param>
-        /// <param name="body">The text body of the post.</param>
-        /// <param name="userId">The user that created it.</param>
-        public Post(PostType type, string title, string body, int userId) {
-            Type = type;
-            Title = title;
-            Body = body;
-            CreationDate = DateTime.UtcNow;
-            UserId = userId;
-        }
+        public Comment[] Comments { get; set; }
         #endregion
     }
 }

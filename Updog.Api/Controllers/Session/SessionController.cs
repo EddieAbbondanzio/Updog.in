@@ -11,11 +11,11 @@ namespace Updog.Api {
     [ApiController]
     public sealed class SessionController : ApiController {
         #region Fields
-        private LoginUserInteractor loginUserInteractor;
+        private UserLoginInteractor loginUserInteractor;
         #endregion
 
         #region Constructor(s)
-        public SessionController(LoginUserInteractor loginUserInteractor) {
+        public SessionController(UserLoginInteractor loginUserInteractor) {
             this.loginUserInteractor = loginUserInteractor;
         }
         #endregion
@@ -27,7 +27,7 @@ namespace Updog.Api {
         /// <param name="loginRequest">The credentials to authenticate under.</param>
         [HttpPost]
         public async Task<ActionResult> Login([FromBody]SessionLoginRequest loginRequest) {
-            UserLogin login = await loginUserInteractor.Handle(new LoginUserParams(loginRequest.Username, loginRequest.Password));
+            UserLogin login = await loginUserInteractor.Handle(new UserLoginParams(loginRequest.Username, loginRequest.Password));
             return login != null ? Ok(login) : Unauthorized("Invalid username and/or password.") as ActionResult;
         }
         #endregion

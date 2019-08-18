@@ -7,9 +7,9 @@ namespace Updog.Application {
     /// <summary>
     /// Validator to validate user registrations.
     /// </summary>
-    public sealed class RegisterUserValidator : AbstractValidator<RegisterUserParams> {
+    public sealed class UserRegisterValidator : AbstractValidator<UserRegisterParams> {
         #region Constructor(s)
-        public RegisterUserValidator(IUserRepo userRepo) {
+        public UserRegisterValidator(IUserRepo userRepo) {
             RuleFor(reg => reg.Username).NotNull().MinimumLength(4).MaximumLength(24).Matches(@"^[\w\s-]+$").MustAsync(async (username, cancellationToken) => {
                 User existingUser = await userRepo.FindByUsername(username);
                 return existingUser == null;
@@ -23,7 +23,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public override ValidationResult Validate(ValidationContext<RegisterUserParams> context) => throw new InvalidOperationException("This validator must be ran via ValidateAsync()");
+        public override ValidationResult Validate(ValidationContext<UserRegisterParams> context) => throw new InvalidOperationException("This validator must be ran via ValidateAsync()");
         #endregion
     }
 }

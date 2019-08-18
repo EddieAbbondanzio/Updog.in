@@ -14,9 +14,9 @@ namespace Updog.Api {
     [ApiController]
     public sealed class UserController : ApiController {
         #region Fields
-        private FindUserByUsernameInteractor userFinder;
+        private UserFinderByUsername userFinder;
 
-        private RegisterUserInteractor userRegistrar;
+        private UserRegisterInteractor userRegistrar;
         #endregion
 
         #region Constructor(s)
@@ -24,8 +24,8 @@ namespace Updog.Api {
         /// Create a new user controller.
         /// </summary>
         public UserController(
-                FindUserByUsernameInteractor userFinder,
-                RegisterUserInteractor userRegistrar
+                UserFinderByUsername userFinder,
+                UserRegisterInteractor userRegistrar
             ) {
             this.userFinder = userFinder;
             this.userRegistrar = userRegistrar;
@@ -40,7 +40,7 @@ namespace Updog.Api {
         [HttpGet("{username}")]
         [HttpHead("{username}")]
         public async Task<ActionResult> FindByUsername(string username) {
-            UserInfo user = await userFinder.Handle(username);
+            UserView user = await userFinder.Handle(username);
             return user != null ? Ok(user) : NotFound() as ActionResult;
         }
 
@@ -50,7 +50,7 @@ namespace Updog.Api {
         /// <param name="registration">The new user registration</param>
         [HttpPost]
         public async Task<ActionResult> Register([FromBody] UserRegisterRequest req) {
-            RegisterUserParams registration = new RegisterUserParams(req.Username, req.Password, req.Email);
+            UserRegisterParams registration = new UserRegisterParams(req.Username, req.Password, req.Email);
 
             try {
                 UserLogin login = await userRegistrar.Handle(registration);

@@ -9,7 +9,7 @@ namespace Updog.Application {
         /// <summary>
         /// The user it belongs to.
         /// </summary>
-        public UserInfo User { get; }
+        public UserView User { get; }
 
         /// <summary>
         /// The auth token they were issued.
@@ -19,7 +19,12 @@ namespace Updog.Application {
         #endregion
 
         #region Constructor(s)
-        public UserLogin(UserInfo user, string authToken) {
+        /// <summary>
+        /// Create  new user login.
+        /// </summary>
+        /// <param name="user">The user of the login.</param>
+        /// <param name="authToken">Their JWT.</param>
+        public UserLogin(UserView user, string authToken) {
             User = user;
             AuthToken = authToken;
         }

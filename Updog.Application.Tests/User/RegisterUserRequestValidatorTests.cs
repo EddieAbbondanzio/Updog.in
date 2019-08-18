@@ -9,95 +9,95 @@ namespace Updog.Application.Tests {
     /// </summary>
     [TestClass]
     public class RegisterUserRequestValidatorTests {
-        Application.RegisterUserValidator validator = new Application.RegisterUserValidator(new MockUserRepo());
+        Application.UserRegisterValidator validator = new Application.UserRegisterValidator(new MockUserRepo());
 
         [TestMethod]
         public async Task FailsUsernameIfNull() {
-            RegisterUserParams reg = new RegisterUserParams(null, "password");
+            UserRegisterParams reg = new UserRegisterParams(null, "password");
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }
 
         [TestMethod]
         public async Task FailsUsernameUnder4Characters() {
-            RegisterUserParams reg = new RegisterUserParams("cat", "password");
+            UserRegisterParams reg = new UserRegisterParams("cat", "password");
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }
 
         [TestMethod]
         public async Task FailsUsernameOver24Characters() {
-            RegisterUserParams reg = new RegisterUserParams("1234567890123456789012345", "password");
+            UserRegisterParams reg = new UserRegisterParams("1234567890123456789012345", "password");
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }
 
         [TestMethod]
         public async Task FailsUsernameIfTaken() {
-            RegisterUserParams reg = new RegisterUserParams("bert", "password");
+            UserRegisterParams reg = new UserRegisterParams("bert", "password");
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }
 
         [TestMethod]
         public async Task FailsUsernameIfInvalidCharacters() {
-            RegisterUserParams reg = new RegisterUserParams("@bert", "password");
+            UserRegisterParams reg = new UserRegisterParams("@bert", "password");
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }
 
         [TestMethod]
         public async Task FailsPasswordWhenNull() {
-            RegisterUserParams reg = new RegisterUserParams("bert", null);
+            UserRegisterParams reg = new UserRegisterParams("bert", null);
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }
 
         [TestMethod]
         public async Task FailsPasswordWhenEmpty() {
-            RegisterUserParams reg = new RegisterUserParams("bert", "         ");
+            UserRegisterParams reg = new UserRegisterParams("bert", "         ");
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }
 
         [TestMethod]
         public async Task FailsPasswordWhenUnder8Characters() {
-            RegisterUserParams reg = new RegisterUserParams("bert", "cat");
+            UserRegisterParams reg = new UserRegisterParams("bert", "cat");
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }
 
         [TestMethod]
         public async Task PassesEmailIfNull() {
-            RegisterUserParams reg = new RegisterUserParams("bert", "password", null);
+            UserRegisterParams reg = new UserRegisterParams("bert", "password", null);
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }
 
         [TestMethod]
         public async Task FailsEmailIfNotNullAndInvalid() {
-            RegisterUserParams reg = new RegisterUserParams("bert", "password", "fake");
+            UserRegisterParams reg = new UserRegisterParams("bert", "password", "fake");
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }
 
         [TestMethod]
         public async Task FailsEmailIfOver64Characters() {
-            RegisterUserParams reg = new RegisterUserParams("bert2", "password", "1234567890123456789012345123456789012345678901234512345678901234@fake.com");
+            UserRegisterParams reg = new UserRegisterParams("bert2", "password", "1234567890123456789012345123456789012345678901234512345678901234@fake.com");
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }
 
         [TestMethod]
         public async Task FailsEmailIfAlreadyTaken() {
-            RegisterUserParams reg = new RegisterUserParams("bert2", "password", "bert@fake.com");
+            UserRegisterParams reg = new UserRegisterParams("bert2", "password", "bert@fake.com");
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }
 
         [TestMethod]
         public async Task AcceptsValidUser() {
-            RegisterUserParams reg = new RegisterUserParams("bert2", "password", "fake@mail.com");
+            UserRegisterParams reg = new UserRegisterParams("bert2", "password", "fake@mail.com");
             var result = await validator.ValidateAsync(reg);
             Assert.IsTrue(result.IsValid);
         }

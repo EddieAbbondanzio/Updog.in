@@ -23,6 +23,7 @@ import PostSummary from '@/post/components/post-summary.vue';
 import CommentCreateForm from '@/comment/components/comment-create-form.vue';
 import { CommentMixin } from '@/comment/mixins/comment-mixin';
 import { mixins } from 'vue-class-component/lib/util';
+import { CommentCreateParams } from '../comment/use-cases/create/comment-create-params';
 
 /**
  * View a post via it's ID.
@@ -48,7 +49,11 @@ export default class Post extends Mixins(PostMixin, CommentMixin) {
     }
 
     public async onCommentCreate(comment: string) {
-        throw Error();
+        if (this.post == null) {
+            throw new Error();
+        }
+
+        const c = await this.$createComment(new CommentCreateParams(comment, this.post!.id, 0));
     }
 }
 </script>

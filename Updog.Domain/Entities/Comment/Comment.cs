@@ -21,17 +21,12 @@ namespace Updog.Domain {
         /// <summary>
         /// The ID of the user that made the comment.
         /// </summary>
-        public int UserId { get; set; }
-
-        /// <summary>
-        /// The parent post the comment belongs to.
-        /// </summary>
-        public int PostId { get; set; }
+        public User User { get; set; }
 
         /// <summary>
         /// The parent comment ID (if any).
         /// </summary>
-        public int ParentId { get; set; }
+        public Comment Parent { get; set; }
 
         /// <summary>
         /// The text of the comment.

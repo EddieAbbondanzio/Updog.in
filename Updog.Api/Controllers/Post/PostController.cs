@@ -46,7 +46,7 @@ namespace Updog.Api {
         [HttpGet("{id}")]
         [HttpHead("{id}")]
         public async Task<ActionResult> FindById(int id) {
-            PostInfo p = await postFinderById.Handle(id);
+            PostView p = await postFinderById.Handle(id);
             return p != null ? Ok(p) : NotFound() as ActionResult;
         }
 
@@ -56,8 +56,8 @@ namespace Updog.Api {
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("new")]
-        public async Task<ActionResult> GetNewPosts([FromQuery]int pageNumber, [FromQuery] int pageSize) {
-            PostInfo[] posts = await postFinderByNew.Handle(new PaginationInfo(pageNumber, pageSize));
+        public async Task<ActionResult> FindByNew([FromQuery]int pageNumber, [FromQuery] int pageSize) {
+            PostView[] posts = await postFinderByNew.Handle(new PaginationInfo(pageNumber, pageSize));
             return Ok(posts);
         }
 
@@ -82,7 +82,7 @@ namespace Updog.Api {
         [HttpPatch("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody]string body) {
             try {
-                Post p = await postUpdater.Handle(new PostUpdateParams(User, id, body));
+                PostView p = await postUpdater.Handle(new PostUpdateParams(User, id, body));
                 return Ok(p);
             } catch (ValidationException ex) {
                 return BadRequest(ex.Message);
@@ -97,7 +97,7 @@ namespace Updog.Api {
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id) {
             try {
-                Post p = await postDeleter.Handle(new PostDeleteParams(User, id));
+                PostView p = await postDeleter.Handle(new PostDeleteParams(User, id));
                 return Ok(p);
             } catch (ValidationException ex) {
                 return BadRequest(ex.Message);

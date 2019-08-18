@@ -82,16 +82,18 @@ namespace Updog.Api {
 
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
 
-            services.AddTransient<FindUserByUsernameInteractor>();
-            services.AddTransient<LoginUserInteractor>();
-            services.AddTransient<RegisterUserInteractor>();
+            services.AddSingleton<IMapper<User, UserView>, UserViewMapper>();
+            services.AddTransient<UserFinderByUsername>();
+            services.AddTransient<UserLoginInteractor>();
+            services.AddTransient<UserRegisterInteractor>();
             services.AddTransient<UpdateUserInteractor>();
             services.AddTransient<UserPasswordUpdater>();
 
-            services.AddTransient<AbstractValidator<RegisterUserParams>, RegisterUserValidator>();
+            services.AddTransient<AbstractValidator<UserRegisterParams>, UserRegisterValidator>();
             services.AddTransient<AbstractValidator<UpdateUserParams>, UserUpdateValidator>();
             services.AddTransient<AbstractValidator<UserPasswordUpdateParams>, UserPasswordValidator>();
 
+            services.AddSingleton<IMapper<Post, PostView>, PostViewMapper>();
             services.AddSingleton<IPermissionHandler<Post>, PostPermissionHandler>();
             services.AddTransient<IPostRepo, PostRepo>();
             services.AddTransient<PostCreator>();
@@ -105,6 +107,7 @@ namespace Updog.Api {
             services.AddTransient<AbstractValidator<PostDeleteParams>, PostDeleteValidator>();
 
             services.AddSingleton<IPermissionHandler<Comment>, CommentPermissionHandler>();
+            services.AddSingleton<IMapper<Comment, CommentView>, CommentViewMapper>();
             services.AddTransient<ICommentRepo, CommentRepo>();
             services.AddTransient<CommentCreator>();
             services.AddTransient<CommentFinderById>();

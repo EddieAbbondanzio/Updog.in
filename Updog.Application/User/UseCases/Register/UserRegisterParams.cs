@@ -3,7 +3,7 @@ namespace Updog.Application {
     /// <summary>
     /// Request object to create a new user with the system.
     /// </summary>
-    public sealed class RegisterUserParams {
+    public sealed class UserRegisterParams {
         #region Properties
         /// <summary>
         /// The username they want.
@@ -28,7 +28,7 @@ namespace Updog.Application {
         /// <param name="username">The username they want.</param>
         /// <param name="password">The password they want to use.</param>
         /// <param name="email">The contact email (if any).</param>
-        public RegisterUserParams(string username, string password, string email = null) {
+        public UserRegisterParams(string username, string password, string email = null) {
             Username = username;
             Password = password;
             Email = email;

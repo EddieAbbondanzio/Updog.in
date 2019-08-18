@@ -14,7 +14,7 @@ export class Comment {
         public id: number,
         public userId: number,
         public postId: number,
-        public parentId: number,
-        public body: string
+        public body: string,
+        public parentId: number = 0
     ) {}
 }

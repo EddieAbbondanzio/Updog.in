@@ -5,11 +5,11 @@ namespace Updog.Application {
     /// <summary>
     /// Use case handler to find a post by it's unique ID.
     /// </summary>
-    public sealed class PostFinderById : IInteractor<int, PostInfo> {
+    public sealed class PostFinderById : IInteractor<int, PostView> {
         #region Fields
         private IPostRepo postRepo;
 
-        private IUserRepo userRepo;
+        private IMapper<Post, PostView> postMapper;
         #endregion
 
         #region Constructor(s)
@@ -17,10 +17,10 @@ namespace Updog.Application {
         /// Create a new post find by ID interactor.
         /// </summary>
         /// <param name="postRepo">CRUD post repo.</param>
-        /// <param name="userRepo">CRUD user repo.</param>
-        public PostFinderById(IPostRepo postRepo, IUserRepo userRepo) {
+        /// <param name="postMapper">Mapper to convert posts to view</param>
+        public PostFinderById(IPostRepo postRepo, IMapper<Post, PostView> postMapper) {
             this.postRepo = postRepo;
-            this.userRepo = userRepo;
+            this.postMapper = postMapper;
         }
         #endregion
 
@@ -29,11 +29,9 @@ namespace Updog.Application {
         /// </summary>
         /// <param name="input">The ID to look for.</param>
         /// <returns>The matching post found.</returns>
-        public async Task<PostInfo> Handle(int input) {
+        public async Task<PostView> Handle(int input) {
             Post p = await postRepo.FindById(input);
-            User u = await userRepo.FindById(p.UserId);
-
-            return new PostInfo(p.Id, p.Type, p.Title, p.Body, u.Username, p.CreationDate);
+            return postMapper.Map(p);
         }
     }
 }

@@ -1,5 +1,5 @@
 namespace Updog.Application {
-    public class LoginUserParams {
+    public class UserLoginParams {
         #region Properties
         public string Username { get; }
 
@@ -7,7 +7,7 @@ namespace Updog.Application {
         #endregion
 
         #region Constructor(s)
-        public LoginUserParams(string username, string password) {
+        public UserLoginParams(string username, string password) {
             Username = username;
             Password = password;
         }

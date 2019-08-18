@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Updog.Domain;
 
@@ -6,11 +7,11 @@ namespace Updog.Application {
     /// <summary>
     /// Use case handler to find a number of posts based on their creation date.
     /// </summary>
-    public sealed class PostFinderByNew : IInteractor<PaginationInfo, PostInfo[]> {
+    public sealed class PostFinderByNew : IInteractor<PaginationInfo, PostView[]> {
         #region Fields
         private IPostRepo postRepo;
 
-        private IUserRepo userRepo;
+        private IMapper<Post, PostView> postMapper;
         #endregion
 
         #region Constructor(s)
@@ -18,16 +19,19 @@ namespace Updog.Application {
         /// Create a new post find by new interactor.
         /// </summary>
         /// <param name="postRepo">CRUD post repo.</param>
-        /// <param name="userRepo">CRUD user repo.</param>
-        public PostFinderByNew(IPostRepo postRepo, IUserRepo userRepo) {
+        /// <param name="postMapper">Mapper to convert post to DTO..</param>
+        public PostFinderByNew(IPostRepo postRepo, IMapper<Post, PostView> postMapper) {
             this.postRepo = postRepo;
-            this.userRepo = userRepo;
+            this.postMapper = postMapper;
         }
         #endregion
 
 
         #region Publics
-        public async Task<PostInfo[]> Handle(PaginationInfo input) => await postRepo.FindNewest(input.PageNumber, input.PageSize);
+        public async Task<PostView[]> Handle(PaginationInfo input) {
+            Post[] posts = await postRepo.FindNewest(input);
+            return posts.Select((p) => postMapper.Map(p)).ToArray();
+        }
     }
     #endregion
 }

@@ -24,7 +24,12 @@ namespace Updog.Application {
         public async Task<Post> Handle(PostCreateParams input) {
             await postValidator.ValidateAndThrowAsync(input);
 
-            Post post = new Post(input.Type, input.Title, input.Body, input.User.Id);
+            Post post = new Post() {
+                Type = input.Type,
+                Title = input.Title,
+                Body = input.Body,
+                User = input.User
+            };
 
             await postRepo.Add(post);
             return post;

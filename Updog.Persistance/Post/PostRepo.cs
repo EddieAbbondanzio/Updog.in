@@ -5,54 +5,67 @@ using Updog.Domain;
 using Dapper;
 using System.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace Updog.Persistance {
     /// <summary>
     /// CRUD interface for storing posts.
     /// </summary>
     public sealed class PostRepo : DatabaseRepo<Post>, IPostRepo {
+        #region Fields
+        private IUserRepo userRepo;
+        private ICommentRepo commentRepo;
+        #endregion
+
         #region Constructor(s)
         /// <summary>
-        /// Create a new user repo.
+        /// Create a new post repo.
         /// </summary>
-        /// <param name="database">The database to query off.</param>
-        public PostRepo(IDatabase database) : base(database) { }
+        /// <param name="database">The active database.</param>
+        /// <param name="userRepo">The user repo.</param>
+        /// <param name="commentRepo">The comment repo.</param>
+        public PostRepo(IDatabase database, IUserRepo userRepo, ICommentRepo commentRepo) : base(database) {
+            this.userRepo = userRepo;
+            this.commentRepo = commentRepo;
+        }
         #endregion
 
         #region Publics
         /// <summary>
         /// Find the newest posts by their creation date.
         /// </summary>
-        /// <param name="pageNumber">The page number.</param>
-        /// <param name="pageSize">The size of the page.</param>
-        /// /// <returns></returns>
-        public async Task<PostInfo[]> FindNewest(int pageNumber, int pageSize) {
+        /// <param name="pagination">The paging info.</param>
+        /// <returns></returns>
+        public async Task<Post[]> FindNewest(PaginationInfo pagination) {
             using (DbConnection connection = GetConnection()) {
-                return (await connection.QueryAsync<Post, User, PostInfo>(
-                    @"SELECT Post.Id, Post.Type, Post.Type, Post.Title, Post.Body, Post.UserId, Post.CreationDate, User.Id as UId, User.Username 
-                        FROM Post 
-                        LEFT JOIN User ON Post.UserId = User.Id 
-                        ORDER BY CreationDate DESC
-                        LIMIT @PageSize
-                        OFFSET @Offset",
-                    (p, u) => {
-                        return new PostInfo(p.Id, p.Type, p.Title, p.Body, u.Username, p.CreationDate);
-                    },
-                    new {
-                        PageSize = pageSize,
-                        Offset = pageNumber * pageSize
-                    },
-                    splitOn: "UId")
-                ).ToArray();
+                PostRecord[] records = (await connection.QueryAsync<PostRecord>(
+                    @"SELECT * FROM Post 
+                    ORDER BY CreationDate DESC
+                    LIMIT @PageSize
+                    OFFSET @Offset",
+                new {
+                    PageSize = pagination.PageSize,
+                    Offset = pagination.GetOffset()
+                })).ToArray();
+
+                List<Post> posts = new List<Post>();
+
+                for (int i = 0; i < records.Length; i++) {
+                    posts.Add(await MapRecordToPost(records[i]));
+                }
+
+                return posts.ToArray();
             }
         }
 
         public async Task<Post> FindById(int id) {
             using (DbConnection connection = GetConnection()) {
-                return await connection.QuerySingleOrDefaultAsync<Post>(
+                PostRecord record = await connection.QuerySingleOrDefaultAsync<PostRecord>(
                     "SELECT * FROM Post WHERE Id = @Id;",
                     new { Id = id }
                 );
+
+                return await MapRecordToPost(record);
             }
         }
 
@@ -75,6 +88,30 @@ namespace Updog.Persistance {
             using (DbConnection connection = GetConnection()) {
                 await connection.ExecuteAsync("UPDATE Post SET WasDeleted = TRUE WHERE Id = @Id", post);
             }
+        }
+        #endregion
+
+        #region Helpers
+        /// <summary>
+        /// Helper to convert a record to a post.
+        /// </summary>
+        /// <param name="record">The post record to convert.</param>
+        /// <returns>The rebuilt post entity.</returns>
+        private async Task<Post> MapRecordToPost(PostRecord record) {
+            User user = await userRepo.FindById(record.UserId);
+            Comment[] comments = await commentRepo.FindByPost(record.Id);
+
+            return new Post() {
+                Id = record.Id,
+                User = user,
+                Type = record.Type,
+                Title = record.Title,
+                Body = record.Body,
+                CreationDate = record.CreationDate,
+                WasUpdated = record.WasUpdated,
+                WasDeleted = record.WasDeleted,
+                Comments = comments
+            };
         }
         #endregion
     }

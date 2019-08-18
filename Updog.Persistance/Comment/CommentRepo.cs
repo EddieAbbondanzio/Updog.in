@@ -4,14 +4,30 @@ using Updog.Application;
 using Updog.Domain;
 using Dapper;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Updog.Persistance {
     /// <summary>
     /// CRUD interface for comments in the database.
     /// </summary>
     public sealed class CommentRepo : DatabaseRepo<Comment>, ICommentRepo {
+        #region Fields
+        /// <summary>
+        /// The user repo.
+        /// </summary>
+        private IUserRepo userRepo;
+        #endregion
+
         #region Constructor(s)
-        public CommentRepo(IDatabase database) : base(database) { }
+        /// <summary>
+        /// Create a new comment repo.
+        /// </summary>
+        /// <param name="database">The active database.</param>
+        /// <param name="userRepo">CRUD interface for users.</param>
+        /// <returns></returns>
+        public CommentRepo(IDatabase database, IUserRepo userRepo) : base(database) {
+            this.userRepo = userRepo;
+        }
         #endregion
 
         #region Publics
@@ -22,10 +38,12 @@ namespace Updog.Persistance {
         /// <returns>The comment found.</returns>
         public async Task<Comment> FindById(int id) {
             using (DbConnection connection = GetConnection()) {
-                return await connection.QuerySingleOrDefaultAsync<Comment>(
+                CommentRecord record = await connection.QuerySingleOrDefaultAsync<CommentRecord>(
                     "SELECT * FROM Comment WHERE Id = @Id;",
                     new { Id = id }
                 );
+
+                return await MapRecordToEntity(record);
             }
         }
 
@@ -34,15 +52,16 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="postId">The ID of the post.</param>
         /// <returns>It's children comments.</returns>
-        public async Task<CommentInfo[]> FindCommentsByPost(int postId) {
+        public async Task<Comment[]> FindByPost(int postId) {
             using (DbConnection connection = GetConnection()) {
-                return (await connection.QueryAsync<Comment, User, CommentInfo>(
-                    @"SELECT Comment.Id, Comment.UserId, Comment.PostId, Comment.ParentId, Comment.Body, Comment.CreationDate, Comment.WasUpdated, Comment.WasDeleted, User.Id as UId, User.Username
-                    FROM Comment
-                    LEFT JOIN User ON Comment.UserId = User.Id",
-                    (c, u) => { return new CommentInfo(c.Id, u.Username, c.Body); },
-                    splitOn: "UId")
-                ).ToArray();
+                CommentRecord[] records = (await connection.QueryAsync<CommentRecord>("SELECT * FROM Comment")).ToArray();
+                List<Comment> comments = new List<Comment>();
+
+                for (int i = 0; i < records.Length; i++) {
+                    comments.Add(await MapRecordToEntity(records[i]));
+                }
+
+                return comments.ToArray();
             }
         }
 
@@ -77,6 +96,27 @@ namespace Updog.Persistance {
             using (DbConnection connection = GetConnection()) {
                 await connection.ExecuteAsync("UPDATE Comment SET WasDeleted = TRUE Where Id = @Id", entity);
             }
+        }
+        #endregion
+
+        #region Helpers
+        private async Task<Comment> MapRecordToEntity(CommentRecord record) {
+            User user = await userRepo.FindById(record.UserId);
+
+            Comment c = new Comment() {
+                Id = record.Id,
+                User = user,
+                Body = record.Body,
+                CreationDate = record.CreationDate,
+                WasUpdated = record.WasUpdated,
+                WasDeleted = record.WasDeleted
+            };
+
+            if (record.ParentId != 0) {
+                c.Parent = await FindById(record.ParentId);
+            }
+
+            return c;
         }
         #endregion
     }

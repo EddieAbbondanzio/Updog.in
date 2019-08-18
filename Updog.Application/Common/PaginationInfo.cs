@@ -27,5 +27,15 @@ namespace Updog.Application {
             PageSize = pageSize;
         }
         #endregion
+
+        #region Publics
+        /// <summary>
+        /// Get the row offset of the pagination.
+        /// </summary>
+        /// <returns>The raw offset of the page result.</returns>
+        public int GetOffset() {
+            return PageNumber * PageSize;
+        }
+        #endregion
     }
 }

@@ -6,9 +6,8 @@ namespace Updog.Application {
         /// <summary>
         /// Find the newest posts by their creation date.
         /// </summary>
-        /// <param name="pageNumber">The page number.</param>
-        /// <param name="pageSize">The size of the page.</param>
-        /// <returns></returns>
-        Task<PostInfo[]> FindNewest(int pageNumber, int pageSize);
+        /// <param name="pagination">Paging info</param>
+        /// <returns>The newest new posts.</returns>
+        Task<Post[]> FindNewest(PaginationInfo pagination);
     }
 }

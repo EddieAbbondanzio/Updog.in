@@ -6,25 +6,28 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to handler a login user use case.
     /// </summary>
-    public sealed class LoginUserInteractor : IInteractor<LoginUserParams, UserLogin> {
+    public sealed class UserLoginInteractor : IInteractor<UserLoginParams, UserLogin> {
         #region Fields
         private IUserRepo userRepo;
 
         private IPasswordHasher passwordHasher;
 
         private IAuthenticationTokenHandler tokenHandler;
+
+        private IMapper<User, UserView> userMapper;
         #endregion
 
         #region Constructor(s)
-        public LoginUserInteractor(IUserRepo userRepo, IPasswordHasher passwordHasher, IAuthenticationTokenHandler tokenHandler) {
+        public UserLoginInteractor(IUserRepo userRepo, IMapper<User, UserView> userMapper, IPasswordHasher passwordHasher, IAuthenticationTokenHandler tokenHandler) {
             this.userRepo = userRepo;
+            this.userMapper = userMapper;
             this.passwordHasher = passwordHasher;
             this.tokenHandler = tokenHandler;
         }
         #endregion
 
         #region Publics
-        public async Task<UserLogin> Handle(LoginUserParams input) {
+        public async Task<UserLogin> Handle(UserLoginParams input) {
             User user = await userRepo.FindByUsername(input.Username);
 
             if (user == null) {
@@ -32,7 +35,10 @@ namespace Updog.Application {
             }
 
             if (passwordHasher.Verify(input.Password, user.PasswordHash)) {
-                return new UserLogin(new UserInfo(user.Id, user.Email, user.Username, user.JoinedDate), tokenHandler.IssueToken(user));
+                UserView userView = userMapper.Map(user);
+                string authToken = tokenHandler.IssueToken(user);
+
+                return new UserLogin(userView, authToken);
             } else {
                 return null;
             }

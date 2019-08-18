@@ -44,7 +44,7 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{commentId}")]
         public async Task<ActionResult> GetComment(int commentId) {
-            CommentInfo c = await commentFinderById.Handle(commentId);
+            CommentView c = await commentFinderById.Handle(commentId);
             return c != null ? Ok(c) : NotFound() as ActionResult;
         }
 
@@ -55,7 +55,7 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult> GetComments([FromQuery]int postId) {
-            CommentInfo[] comments = await commentFinderByPost.Handle(postId);
+            CommentView[] comments = await commentFinderByPost.Handle(postId);
             return Ok(comments);
         }
 
@@ -65,7 +65,7 @@ namespace Updog.Api {
         [HttpPost]
         public async Task<ActionResult> CreateComment(int postId, [FromBody]CommentCreateRequest body) {
             try {
-                Comment comment = await commentCreator.Handle(new CommentCreateParams(body.PostId, User, body.Body, body.ParentId));
+                CommentView comment = await commentCreator.Handle(new CommentCreateParams(body.PostId, User, body.Body, body.ParentId));
                 return Ok(comment);
             } catch (ValidationException ex) {
                 return BadRequest(ex.Message);
