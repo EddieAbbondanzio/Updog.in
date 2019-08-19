@@ -33,5 +33,35 @@ namespace Updog.Domain {
         /// </summary>
         public DateTime JoinedDate { get; set; }
         #endregion
+
+        #region Publics
+        /// <summary>
+        /// Check to see if another object matches the current user.
+        /// </summary>
+        /// <param name="obj">The other object to check.</param>
+        /// <returns>True if the user matches the object.</returns>
+        public override bool Equals(object obj) {
+            User u = obj as User;
+
+            if (u == null) {
+                return false;
+            }
+
+            return Equals(u);
+        }
+
+        /// <summary>
+        /// Check to see if the user matches another user.
+        /// </summary>
+        /// <param name="user">The other user to check.</param>
+        /// <returns>True if the user match.</returns>
+        public bool Equals(User user) => Id == user.Id;
+
+        /// <summary>
+        /// Get a unique hashcode of the object.
+        /// </summary>
+        /// <returns>The unique hashcode.</returns>
+        public override int GetHashCode() => Id;
+        #endregion
     }
 }

@@ -37,6 +37,7 @@ namespace Updog.Persistance {
         /// <param name="commentId">The ID of the comment.</param>
         /// <returns>The comment found.</returns>
         public async Task<Comment> FindById(int commentId) {
+            // This doesn't pull in comment children and it should.
             using (DbConnection connection = GetConnection()) {
                 Comment comment = (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
                     "SELECT * FROM Comment LEFT JOIN User ON User.Id = Comment.UserId WHERE Comment.Id = @Id;",
@@ -46,7 +47,8 @@ namespace Updog.Persistance {
                     new { Id = commentId }
                 )).FirstOrDefault();
 
-                return BuildCommentTree(comments).ToArray();
+                return comment;
+                // return BuildCommentTree(comments).ToArray();
             }
         }
 

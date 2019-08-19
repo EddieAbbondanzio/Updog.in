@@ -66,5 +66,35 @@ namespace Updog.Domain {
         /// </summary>
         public Comment[] Comments { get; set; }
         #endregion
+
+        #region Publics
+        /// <summary>
+        /// Check t osee if the post matches another object.
+        /// </summary>
+        /// <param name="obj">The other object to check.</param>
+        /// <returns>True if the post matches</returns>
+        public override bool Equals(object obj) {
+            Post p = obj as Post;
+
+            if (p == null) {
+                return false;
+            }
+
+            return Equals(p);
+        }
+
+        /// <summary>
+        /// Check to see if the post matches another post.
+        /// </summary>
+        /// <param name="post">The other post to check.</param>
+        /// <returns>True if the post match.</returns>
+        public bool Equals(Post post) => Id == post.Id;
+
+        /// <summary>
+        /// Get a unique hashcode of the object.
+        /// </summary>
+        /// <returns>The unique hashcode.</returns>
+        public override int GetHashCode() => Id;
+        #endregion
     }
 }
