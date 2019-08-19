@@ -33,6 +33,11 @@ namespace Updog.Application {
         #region Publics
         public async Task<CommentView> Handle(int input) {
             Comment comment = await commentRepo.FindById(input);
+
+            if (comment == null) {
+                return null;
+            }
+
             return commentMapper.Map(comment);
         }
         #endregion

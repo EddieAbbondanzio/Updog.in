@@ -16,11 +16,6 @@ namespace Updog.Application {
         /// The text of the comment.
         /// </summary>
         public string Body { get; }
-
-        /// <summary>
-        /// The parent comment (if any).
-        /// </summary>
-        public CommentView Parent { get; }
         #endregion
 
         #region Constructor(s)
@@ -30,12 +25,10 @@ namespace Updog.Application {
         /// <param name="id">The ID of the comment.</param>
         /// <param name="user">The user that made the comment.</param>
         /// <param name="body">The text of the comment.</param>
-        /// <param name="parent">The parent comment (if any).</param>
-        public CommentView(int id, UserView user, string body, CommentView parent = null) {
+        public CommentView(int id, UserView user, string body) {
             Id = id;
             User = user;
             Body = body;
-            Parent = parent;
         }
         #endregion
     }

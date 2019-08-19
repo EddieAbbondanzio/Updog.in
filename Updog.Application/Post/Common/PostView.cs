@@ -56,7 +56,7 @@ namespace Updog.Application {
         /// <param name="user">The OP.</param>
         /// <param name="creationDate">The date the post was created on.</param>
         /// <param name="comments">The comments of the post</param>
-        public PostView(int id, PostType type, string title, string body, UserView user, DateTime creationDate, CommentView[] comments) {
+        public PostView(int id, PostType type, string title, string body, UserView user, DateTime creationDate, CommentView[] comments = null) {
             Id = id;
             Type = type;
             Title = title;

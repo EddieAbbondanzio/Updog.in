@@ -31,6 +31,11 @@ namespace Updog.Application {
         /// <returns>The matching post found.</returns>
         public async Task<PostView> Handle(int input) {
             Post p = await postRepo.FindById(input);
+
+            if (p == null) {
+                return null;
+            }
+
             return postMapper.Map(p);
         }
     }

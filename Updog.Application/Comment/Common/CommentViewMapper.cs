@@ -25,7 +25,7 @@ namespace Updog.Application {
         #region Publics
         public CommentView Map(Comment comment) {
             UserView u = userMapper.Map(comment.User);
-            return new CommentView(comment.Id, u, comment.Body, comment.Parent != null ? Map(comment) : null);
+            return new CommentView(comment.Id, u, comment.Body);
         }
         #endregion
     }

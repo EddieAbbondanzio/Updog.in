@@ -1,7 +1,7 @@
 using System;
 
 namespace Updog.Persistance {
-    internal sealed class CommentRecord {
+    public sealed class CommentRecord {
         #region Properties
         public int Id { get; set; }
 

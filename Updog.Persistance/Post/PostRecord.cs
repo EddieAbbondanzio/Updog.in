@@ -5,11 +5,11 @@ namespace Updog.Persistance {
     /// <summary>
     /// A database entity for the post table.
     /// </summary>
-    internal sealed class PostRecord {
+    public sealed class PostRecord {
         #region Properties
         public int Id { get; set; }
 
-        public int UserId { get; set; }
+        public UserRecord User { get; set; }
 
         public PostType Type { get; set; }
 

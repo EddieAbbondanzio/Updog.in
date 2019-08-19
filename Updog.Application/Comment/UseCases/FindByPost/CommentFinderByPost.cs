@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Updog.Domain;
@@ -42,7 +43,13 @@ namespace Updog.Application {
         public async Task<CommentView[]> Handle(int postId) {
             Post post = await postRepo.FindById(postId);
             Comment[] comments = await commentRepo.FindByPost(post.Id);
-            return comments.Select((c) => commentMapper.Map(c)).ToArray();
+            CommentView[] views = new CommentView[comments.Length];
+
+            for (int i = 0; i < comments.Length; i++) {
+                views[i] = commentMapper.Map(comments[i]);
+            }
+
+            return views;
         }
         #endregion
     }

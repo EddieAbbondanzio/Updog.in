@@ -83,6 +83,7 @@ namespace Updog.Api {
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
 
             services.AddSingleton<IMapper<User, UserView>, UserViewMapper>();
+            services.AddSingleton<IUserRecordMapper, UserRecordMapper>();
             services.AddTransient<UserFinderByUsername>();
             services.AddTransient<UserLoginInteractor>();
             services.AddTransient<UserRegisterInteractor>();
@@ -95,6 +96,7 @@ namespace Updog.Api {
 
             services.AddSingleton<IMapper<Post, PostView>, PostViewMapper>();
             services.AddSingleton<IPermissionHandler<Post>, PostPermissionHandler>();
+            services.AddSingleton<IPostRecordMapper, PostRecordMapper>();
             services.AddTransient<IPostRepo, PostRepo>();
             services.AddTransient<PostCreator>();
             services.AddTransient<PostFinderById>();
@@ -108,6 +110,7 @@ namespace Updog.Api {
 
             services.AddSingleton<IPermissionHandler<Comment>, CommentPermissionHandler>();
             services.AddSingleton<IMapper<Comment, CommentView>, CommentViewMapper>();
+            services.AddSingleton<ICommentRecordMapper, CommentRecordMapper>();
             services.AddTransient<ICommentRepo, CommentRepo>();
             services.AddTransient<CommentCreator>();
             services.AddTransient<CommentFinderById>();

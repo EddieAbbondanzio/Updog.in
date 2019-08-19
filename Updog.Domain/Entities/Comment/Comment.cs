@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Updog.Domain {
     /// <summary>
@@ -29,6 +30,11 @@ namespace Updog.Domain {
         public Comment Parent { get; set; }
 
         /// <summary>
+        /// The comment children.
+        /// </summary>
+        public List<Comment> Children { get; set; }
+
+        /// <summary>
         /// The text of the comment.
         /// </summary>
         public string Body { get; set; }
@@ -48,6 +54,12 @@ namespace Updog.Domain {
         /// Soft delete flag.
         /// </summary>
         public bool WasDeleted { get; set; }
+        #endregion
+
+        #region Constructor(s)
+        public Comment() {
+            Children = new List<Comment>();
+        }
         #endregion
 
     }

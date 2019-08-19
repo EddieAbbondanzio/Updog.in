@@ -55,15 +55,20 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult> GetComments([FromQuery]int postId) {
-            CommentView[] comments = await commentFinderByPost.Handle(postId);
-            return Ok(comments);
+            try {
+                CommentView[] comments = await commentFinderByPost.Handle(postId);
+                return Ok(comments);
+            } catch (Exception e) {
+                Console.Write(e);
+                throw e;
+            }
         }
 
         /// <summary>
         /// Create a new comment on a post.
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult> CreateComment(int postId, [FromBody]CommentCreateRequest body) {
+        public async Task<ActionResult> CreateComment([FromBody]CommentCreateRequest body) {
             try {
                 CommentView comment = await commentCreator.Handle(new CommentCreateParams(body.PostId, User, body.Body, body.ParentId));
                 return Ok(comment);

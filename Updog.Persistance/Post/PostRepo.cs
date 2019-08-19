@@ -15,6 +15,11 @@ namespace Updog.Persistance {
         #region Fields
         private IUserRepo userRepo;
         private ICommentRepo commentRepo;
+
+        /// <summary>
+        /// Mapper to convert the post record into its entity.
+        /// </summary>
+        private IPostRecordMapper postMapper;
         #endregion
 
         #region Constructor(s)
@@ -24,9 +29,11 @@ namespace Updog.Persistance {
         /// <param name="database">The active database.</param>
         /// <param name="userRepo">The user repo.</param>
         /// <param name="commentRepo">The comment repo.</param>
-        public PostRepo(IDatabase database, IUserRepo userRepo, ICommentRepo commentRepo) : base(database) {
+        /// <param name="postMapper">The post entity mapper</param>
+        public PostRepo(IDatabase database, IUserRepo userRepo, ICommentRepo commentRepo, IPostRecordMapper postMapper) : base(database) {
             this.userRepo = userRepo;
             this.commentRepo = commentRepo;
+            this.postMapper = postMapper;
         }
         #endregion
 
@@ -37,35 +44,42 @@ namespace Updog.Persistance {
         /// <param name="pagination">The paging info.</param>
         /// <returns></returns>
         public async Task<Post[]> FindNewest(PaginationInfo pagination) {
-            using (DbConnection connection = GetConnection()) {
-                PostRecord[] records = (await connection.QueryAsync<PostRecord>(
-                    @"SELECT * FROM Post 
-                    ORDER BY CreationDate DESC
-                    LIMIT @PageSize
-                    OFFSET @Offset",
-                new {
-                    PageSize = pagination.PageSize,
-                    Offset = pagination.GetOffset()
-                })).ToArray();
+            User u = await userRepo.FindByEmail("FAKE");
+            throw new Exception("FIX THIS DUMMY");
+            // using (DbConnection connection = GetConnection()) {
+            //     PostRecord[] records = (await connection.QueryAsync<PostRecord>(
+            //         @"SELECT * FROM Post 
+            //         ORDER BY CreationDate DESC
+            //         LIMIT @PageSize
+            //         OFFSET @Offset",
+            //     new {
+            //         PageSize = pagination.PageSize,
+            //         Offset = pagination.GetOffset()
+            //     })).ToArray();
 
-                List<Post> posts = new List<Post>();
+            //     List<Post> posts = new List<Post>();
 
-                for (int i = 0; i < records.Length; i++) {
-                    posts.Add(await MapRecordToPost(records[i]));
-                }
+            //     for (int i = 0; i < records.Length; i++) {
+            //         posts.Add(await MapRecordToPost(records[i]));
+            //     }
 
-                return posts.ToArray();
-            }
+            //     return posts.ToArray();
+            // }
         }
 
         public async Task<Post> FindById(int id) {
             using (DbConnection connection = GetConnection()) {
-                PostRecord record = await connection.QuerySingleOrDefaultAsync<PostRecord>(
-                    "SELECT * FROM Post WHERE Id = @Id;",
+                return (await connection.QueryAsync<PostRecord, UserRecord, Post>(
+                    @"SELECT * FROM Post 
+                    LEFT JOIN User ON Post.UserId = User.Id 
+                    WHERE Post.Id = @Id;",
+                    (PostRecord p, UserRecord u) => {
+                        p.User = u;
+                        return new PostRecordMapper(new UserRecordMapper()).Map(p);
+                    },
                     new { Id = id }
-                );
+                )).FirstOrDefault();
 
-                return await MapRecordToPost(record);
             }
         }
 
@@ -73,45 +87,21 @@ namespace Updog.Persistance {
             using (DbConnection connection = GetConnection()) {
                 post.Id = await connection.QueryFirstOrDefaultAsync<int>(
                     "INSERT INTO Post (Title, Body, Type, CreationDate, UserId, WasUpdated, WasDeleted) VALUES (@Title, @Body, @Type, @CreationDate, @UserId, @WasUpdated, @WasDeleted); SELECT LAST_INSERT_ID();",
-                    post
+                    postMapper.Reverse(post)
                 );
             }
         }
 
         public async Task Update(Post post) {
             using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync("UPDATE Post SET Body = @Body WHERE Id = @Id", post);
+                await connection.ExecuteAsync("UPDATE Post SET Body = @Body WHERE Id = @Id", postMapper.Reverse(post));
             }
         }
 
         public async Task Delete(Post post) {
             using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync("UPDATE Post SET WasDeleted = TRUE WHERE Id = @Id", post);
+                await connection.ExecuteAsync("UPDATE Post SET WasDeleted = TRUE WHERE Id = @Id", postMapper.Reverse(post));
             }
-        }
-        #endregion
-
-        #region Helpers
-        /// <summary>
-        /// Helper to convert a record to a post.
-        /// </summary>
-        /// <param name="record">The post record to convert.</param>
-        /// <returns>The rebuilt post entity.</returns>
-        private async Task<Post> MapRecordToPost(PostRecord record) {
-            User user = await userRepo.FindById(record.UserId);
-            Comment[] comments = await commentRepo.FindByPost(record.Id);
-
-            return new Post() {
-                Id = record.Id,
-                User = user,
-                Type = record.Type,
-                Title = record.Title,
-                Body = record.Body,
-                CreationDate = record.CreationDate,
-                WasUpdated = record.WasUpdated,
-                WasDeleted = record.WasDeleted,
-                Comments = comments
-            };
         }
         #endregion
     }

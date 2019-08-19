@@ -5,6 +5,7 @@ using Updog.Domain;
 using Dapper;
 using System.Linq;
 using System.Collections.Generic;
+using System;
 
 namespace Updog.Persistance {
     /// <summary>
@@ -13,9 +14,9 @@ namespace Updog.Persistance {
     public sealed class CommentRepo : DatabaseRepo<Comment>, ICommentRepo {
         #region Fields
         /// <summary>
-        /// The user repo.
+        /// Mapper to convert comments into their record and back to entity.
         /// </summary>
-        private IUserRepo userRepo;
+        private ICommentRecordMapper commentMapper;
         #endregion
 
         #region Constructor(s)
@@ -23,10 +24,9 @@ namespace Updog.Persistance {
         /// Create a new comment repo.
         /// </summary>
         /// <param name="database">The active database.</param>
-        /// <param name="userRepo">CRUD interface for users.</param>
-        /// <returns></returns>
-        public CommentRepo(IDatabase database, IUserRepo userRepo) : base(database) {
-            this.userRepo = userRepo;
+        /// <param name="commentMaper">Mapper to build comment entities.</param>
+        public CommentRepo(IDatabase database, ICommentRecordMapper commentMapper) : base(database) {
+            this.commentMapper = commentMapper;
         }
         #endregion
 
@@ -34,16 +34,19 @@ namespace Updog.Persistance {
         /// <summary>
         /// Find a comment by ID.
         /// </summary>
-        /// <param name="id">The ID of the comment.</param>
+        /// <param name="commentId">The ID of the comment.</param>
         /// <returns>The comment found.</returns>
-        public async Task<Comment> FindById(int id) {
+        public async Task<Comment> FindById(int commentId) {
             using (DbConnection connection = GetConnection()) {
-                CommentRecord record = await connection.QuerySingleOrDefaultAsync<CommentRecord>(
-                    "SELECT * FROM Comment WHERE Id = @Id;",
-                    new { Id = id }
-                );
+                Comment comment = (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
+                    "SELECT * FROM Comment LEFT JOIN User ON User.Id = Comment.UserId WHERE Comment.Id = @Id;",
+                    (CommentRecord rec, UserRecord u) => {
+                        return this.commentMapper.Map(Tuple.Create(rec, u));
+                    },
+                    new { Id = commentId }
+                )).FirstOrDefault();
 
-                return await MapRecordToEntity(record);
+                return BuildCommentTree(comments).ToArray();
             }
         }
 
@@ -54,14 +57,17 @@ namespace Updog.Persistance {
         /// <returns>It's children comments.</returns>
         public async Task<Comment[]> FindByPost(int postId) {
             using (DbConnection connection = GetConnection()) {
-                CommentRecord[] records = (await connection.QueryAsync<CommentRecord>("SELECT * FROM Comment")).ToArray();
-                List<Comment> comments = new List<Comment>();
+                // Pull in every relevant comment first. This will be flat so we'll have to do some work.
+                Comment[] comments = (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
+                    "SELECT * FROM Comment LEFT JOIN User ON Comment.UserId = User.Id WHERE PostId = @PostId;",
+                    (CommentRecord commentRec, UserRecord userRec) => {
+                        return this.commentMapper.Map(Tuple.Create(commentRec, userRec));
+                    },
+                    new {
+                        PostId = postId
+                    })).ToArray();
 
-                for (int i = 0; i < records.Length; i++) {
-                    comments.Add(await MapRecordToEntity(records[i]));
-                }
-
-                return comments.ToArray();
+                return BuildCommentTree(comments).ToArray();
             }
         }
 
@@ -70,10 +76,12 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="entity">The comment to add.</param>
         public async Task Add(Comment entity) {
+            CommentRecord commentRec = this.commentMapper.Reverse(entity).Item1;
+
             using (DbConnection connection = GetConnection()) {
                 entity.Id = await connection.QueryFirstOrDefaultAsync<int>(
                     "INSERT INTO Comment (UserId, PostId, ParentId, Body, CreationDate, WasUpdated, WasDeleted) VALUES (@UserId, @PostId, @ParentId, @Body, @CreationDate, @WasUpdated, @WasDeleted); SELECT LAST_INSERT_ID();",
-                    entity
+                    commentRec
                 );
             }
         }
@@ -83,8 +91,10 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="entity">The comment to update.</param>
         public async Task Update(Comment entity) {
+            CommentRecord commentRec = this.commentMapper.Reverse(entity).Item1;
+
             using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync("UPDATE Comment SET Body = @Body WHERE Id = @Id", entity);
+                await connection.ExecuteAsync("UPDATE Comment SET Body = @Body WHERE Id = @Id", commentRec);
             }
         }
 
@@ -93,30 +103,26 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="entity">The comment to delete.</param>
         public async Task Delete(Comment entity) {
+            CommentRecord commentRec = this.commentMapper.Reverse(entity).Item1;
+
             using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync("UPDATE Comment SET WasDeleted = TRUE Where Id = @Id", entity);
+                await connection.ExecuteAsync("UPDATE Comment SET WasDeleted = TRUE Where Id = @Id", commentRec);
             }
         }
         #endregion
 
         #region Helpers
-        private async Task<Comment> MapRecordToEntity(CommentRecord record) {
-            User user = await userRepo.FindById(record.UserId);
+        /// <summary>
+        /// Build the comment tree(not really) from the flat array.
+        /// </summary>
+        /// <param name="flatComments">The comments before de-flattening.</param>
+        /// <returns>The comments in hierarcheal order.</returns>
+        private List<Comment> BuildCommentTree(Comment[] flatComments) {
+            List<Comment> comments = new List<Comment>();
 
-            Comment c = new Comment() {
-                Id = record.Id,
-                User = user,
-                Body = record.Body,
-                CreationDate = record.CreationDate,
-                WasUpdated = record.WasUpdated,
-                WasDeleted = record.WasDeleted
-            };
 
-            if (record.ParentId != 0) {
-                c.Parent = await FindById(record.ParentId);
-            }
 
-            return c;
+            return comments;
         }
         #endregion
     }

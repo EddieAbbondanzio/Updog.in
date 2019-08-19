@@ -11,12 +11,22 @@ namespace Updog.Persistance {
     /// CRUD interface for managing user's in the database.
     /// </summary>
     public sealed class UserRepo : DatabaseRepo<User>, IUserRepo {
+        #region Fields
+        /// <summary>
+        /// Mapper to convert the user to it's record.
+        /// </summary>
+        private IUserRecordMapper userMapper;
+        #endregion
+
         #region Constructor(s)
         /// <summary>
         /// Create a new user repo.
         /// </summary>
         /// <param name="database">The database to query off.</param>
-        public UserRepo(IDatabase database) : base(database) { }
+        /// <param name="userMapper">Mapper to convert user entities<</param>
+        public UserRepo(IDatabase database, IUserRecordMapper userMapper) : base(database) {
+            this.userMapper = userMapper;
+        }
         #endregion
 
         #region Publics
@@ -70,7 +80,7 @@ namespace Updog.Persistance {
             using (DbConnection connection = GetConnection()) {
                 user.Id = await connection.QueryFirstOrDefaultAsync<int>(
                     "INSERT INTO User (Username, Email, PasswordHash, JoinedDate) VALUES (@Username, @Email, @PasswordHash, @JoinedDate); SELECT LAST_INSERT_ID();",
-                    user
+                    userMapper.Reverse(user)
                 );
             }
         }
@@ -81,7 +91,7 @@ namespace Updog.Persistance {
         /// <param name="user">The user to update.</param>
         public async Task Update(User user) {
             using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync("UPDATE User SET Email = @Email, PasswordHash = @PasswordHash WHERE Id = @Id", user);
+                await connection.ExecuteAsync("UPDATE User SET Email = @Email, PasswordHash = @PasswordHash WHERE Id = @Id", userMapper.Reverse(user));
             }
         }
 
@@ -91,7 +101,7 @@ namespace Updog.Persistance {
         /// <param name="user">The user to delete.</param>
         public async Task Delete(User user) {
             using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync("DELETE FROM User WHERE Id = @Id", user);
+                await connection.ExecuteAsync("DELETE FROM User WHERE Id = @Id", userMapper.Reverse(user));
             }
         }
         #endregion

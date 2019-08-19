@@ -27,6 +27,11 @@ namespace Updog.Application {
         #region Publics
         public async Task<UserView> Handle(string username) {
             User user = await userRepo.FindByUsername(username);
+
+            if (user == null) {
+                return null;
+            }
+
             return userMapper.Map(user);
         }
         #endregion
