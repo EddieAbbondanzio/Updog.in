@@ -22,10 +22,18 @@ namespace Updog.Application {
         }
         #endregion
 
-        #region Publics
+        #region Publics2
         public CommentView Map(Comment comment) {
             UserView u = userMapper.Map(comment.User);
-            return new CommentView(comment.Id, u, comment.Body);
+            CommentView cv = new CommentView(comment.Id, u, comment.Body);
+
+            if (comment.Children.Count > 0) {
+                foreach (Comment c in comment.Children) {
+                    cv.Children.Add(Map(c));
+                }
+            }
+
+            return cv;
         }
         #endregion
     }

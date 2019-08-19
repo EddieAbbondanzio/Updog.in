@@ -120,11 +120,23 @@ namespace Updog.Persistance {
         /// <param name="flatComments">The comments before de-flattening.</param>
         /// <returns>The comments in hierarcheal order.</returns>
         private List<Comment> BuildCommentTree(Comment[] flatComments) {
-            List<Comment> comments = new List<Comment>();
+            Dictionary<int, Comment> lookup = new Dictionary<int, Comment>();
 
+            //Populate the lookup table
+            for (int i = 0; i < flatComments.Length; i++) {
+                lookup.Add(flatComments[i].Id, flatComments[i]);
+            }
 
+            //Now iterate through the list and build the tree
+            foreach (Comment c in lookup.Values) {
+                if (c.Parent != null) {
+                    Comment parent = lookup[c.Parent.Id];
+                    parent.Children.Add(c);
+                }
+            }
 
-            return comments;
+            //Pull out the top level list.
+            return lookup.Values.Where(c => c.Parent == null).ToList();
         }
         #endregion
     }

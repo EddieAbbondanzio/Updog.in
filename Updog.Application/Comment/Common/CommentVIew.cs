@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Updog.Application {
     public sealed class CommentView : IView {
         #region Properties
@@ -16,6 +18,8 @@ namespace Updog.Application {
         /// The text of the comment.
         /// </summary>
         public string Body { get; }
+
+        public List<CommentView> Children { get; }
         #endregion
 
         #region Constructor(s)
@@ -25,10 +29,12 @@ namespace Updog.Application {
         /// <param name="id">The ID of the comment.</param>
         /// <param name="user">The user that made the comment.</param>
         /// <param name="body">The text of the comment.</param>
-        public CommentView(int id, UserView user, string body) {
+        /// <param name="children">The children comments</param>
+        public CommentView(int id, UserView user, string body, List<CommentView> children = null) {
             Id = id;
             User = user;
             Body = body;
+            Children = children ?? new List<CommentView>();
         }
         #endregion
     }
