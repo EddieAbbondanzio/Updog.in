@@ -56,7 +56,7 @@ namespace Updog.Api {
         /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("new")]
-        public async Task<ActionResult> FindByNew([FromQuery]int pageNumber, [FromQuery] int pageSize) {
+        public async Task<ActionResult> FindByNew([FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
             PostView[] posts = await postFinderByNew.Handle(new PaginationInfo(pageNumber, pageSize));
             return Ok(posts);
         }

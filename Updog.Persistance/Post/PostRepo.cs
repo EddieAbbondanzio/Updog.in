@@ -44,10 +44,10 @@ namespace Updog.Persistance {
             using (DbConnection connection = GetConnection()) {
                 return (await connection.QueryAsync<PostRecord, UserRecord, Post>(
                     @"SELECT * FROM Post
-                    LEFT JOIN User ON Post.UserId = User.Id
+                    LEFT JOIN User ON User.Id = Post.UserId
                     ORDER BY CreationDate ASC
-                    LIMIT = @Limit
-                    OFFSET = @Offset",
+                    LIMIT @Limit
+                    OFFSET @Offset",
                     (PostRecord postRec, UserRecord userRec) => {
                         return postMapper.Map(Tuple.Create(postRec, userRec));
                     }

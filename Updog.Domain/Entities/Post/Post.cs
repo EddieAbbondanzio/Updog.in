@@ -15,6 +15,11 @@ namespace Updog.Domain {
         /// The max # of characters allowed in a post body.
         /// </summary>
         public const int BodyMaxLength = 10_000;
+
+        /// <summary>
+        /// The default page size of a page of posts.
+        /// </summary>
+        public const int PageSize = 25;
         #endregion
 
         #region Properties
