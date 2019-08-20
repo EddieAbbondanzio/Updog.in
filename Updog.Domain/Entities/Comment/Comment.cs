@@ -25,7 +25,12 @@ namespace Updog.Domain {
         public User User { get; set; }
 
         /// <summary>
-        /// The parent comment ID (if any).
+        /// The parent post.
+        /// </summary>
+        public Post Post { get; set; }
+
+        /// <summary>
+        /// The parent comment (if null it is a top level comment).
         /// </summary>
         public Comment Parent { get; set; }
 

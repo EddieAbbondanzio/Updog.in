@@ -9,7 +9,7 @@ namespace Updog.Persistance {
         #region Properties
         public int Id { get; set; }
 
-        public UserRecord User { get; set; }
+        public int UserId { get; set; }
 
         public PostType Type { get; set; }
 
@@ -22,6 +22,8 @@ namespace Updog.Persistance {
         public bool WasUpdated { get; set; }
 
         public bool WasDeleted { get; set; }
+
+        public int CommentCount { get; set; }
         #endregion
     }
 }

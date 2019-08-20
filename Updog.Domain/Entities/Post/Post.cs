@@ -62,9 +62,10 @@ namespace Updog.Domain {
         public bool WasDeleted { get; set; }
 
         /// <summary>
-        /// The comments of the post.
+        /// The number of comments on the post.
         /// </summary>
-        public Comment[] Comments { get; set; }
+        /// <value></value>
+        public int CommentCount { get; set; }
         #endregion
 
         #region Publics

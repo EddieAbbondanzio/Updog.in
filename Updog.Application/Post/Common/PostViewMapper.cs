@@ -33,13 +33,7 @@ namespace Updog.Application {
         #region Publics
         public PostView Map(Post post) {
             UserView userView = userMapper.Map(post.User);
-
-            if (post.Comments != null) {
-                CommentView[] commentViews = post.Comments.Select((c) => commentMapper.Map(c)).ToArray();
-                return new PostView(post.Id, post.Type, post.Title, post.Body, userView, post.CreationDate, commentViews);
-            } else {
-                return new PostView(post.Id, post.Type, post.Title, post.Body, userView, post.CreationDate);
-            }
+            return new PostView(post.Id, post.Type, post.Title, post.Body, userView, post.CreationDate, post.CommentCount);
         }
         #endregion
     }

@@ -14,6 +14,11 @@ namespace Updog.Persistance {
     public sealed class CommentRepo : DatabaseRepo<Comment>, ICommentRepo {
         #region Fields
         /// <summary>
+        /// The post repo.
+        /// </summary>
+        private IPostRepo postRepo;
+
+        /// <summary>
         /// Mapper to convert comments into their record and back to entity.
         /// </summary>
         private ICommentRecordMapper commentMapper;
@@ -24,8 +29,10 @@ namespace Updog.Persistance {
         /// Create a new comment repo.
         /// </summary>
         /// <param name="database">The active database.</param>
+        /// <param name="postRepo">The post repo</param>
         /// <param name="commentMaper">Mapper to build comment entities.</param>
-        public CommentRepo(IDatabase database, ICommentRecordMapper commentMapper) : base(database) {
+        public CommentRepo(IDatabase database, IPostRepo postRepo, ICommentRecordMapper commentMapper) : base(database) {
+            this.postRepo = postRepo;
             this.commentMapper = commentMapper;
         }
         #endregion
@@ -58,12 +65,23 @@ namespace Updog.Persistance {
         /// <param name="postId">The ID of the post.</param>
         /// <returns>It's children comments.</returns>
         public async Task<Comment[]> FindByPost(int postId) {
+            Post p = await postRepo.FindById(postId);
+
+            if (p == null) {
+                return null;
+            }
+
             using (DbConnection connection = GetConnection()) {
                 // Pull in every relevant comment first. This will be flat so we'll have to do some work.
                 Comment[] comments = (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
                     "SELECT * FROM Comment LEFT JOIN User ON Comment.UserId = User.Id WHERE PostId = @PostId;",
                     (CommentRecord commentRec, UserRecord userRec) => {
-                        return this.commentMapper.Map(Tuple.Create(commentRec, userRec));
+                        Comment c = this.commentMapper.Map(Tuple.Create(commentRec, userRec));
+
+                        //Set the parent post ref
+                        c.Post = p;
+
+                        return c;
                     },
                     new {
                         PostId = postId
@@ -81,10 +99,19 @@ namespace Updog.Persistance {
             CommentRecord commentRec = this.commentMapper.Reverse(entity).Item1;
 
             using (DbConnection connection = GetConnection()) {
-                entity.Id = await connection.QueryFirstOrDefaultAsync<int>(
-                    "INSERT INTO Comment (UserId, PostId, ParentId, Body, CreationDate, WasUpdated, WasDeleted) VALUES (@UserId, @PostId, @ParentId, @Body, @CreationDate, @WasUpdated, @WasDeleted); SELECT LAST_INSERT_ID();",
-                    commentRec
-                );
+                await connection.OpenAsync();
+
+                using (DbTransaction transaction = connection.BeginTransaction()) {
+                    entity.Id = await connection.QueryFirstOrDefaultAsync<int>(
+                        "INSERT INTO Comment (UserId, PostId, ParentId, Body, CreationDate, WasUpdated, WasDeleted) VALUES (@UserId, @PostId, @ParentId, @Body, @CreationDate, @WasUpdated, @WasDeleted); SELECT LAST_INSERT_ID();",
+                        commentRec, transaction
+                    );
+
+                    //Update post comment count.
+                    await connection.ExecuteAsync("UPDATE Post Set CommentCount = CommentCount + 1 WHERE Id = @Id", new { Id = entity.Post.Id }, transaction);
+
+                    transaction.Commit();
+                }
             }
         }
 

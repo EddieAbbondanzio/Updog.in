@@ -7,5 +7,6 @@ CREATE TABLE Post (
     CreationDate DateTime NOT NULL,
     WasUpdated BOOLEAN,
     WasDeleted BOOLEAN,
+    CommentCount INT NOT NULL,
     FOREIGN KEY (UserId) REFERENCES User(Id)
 );

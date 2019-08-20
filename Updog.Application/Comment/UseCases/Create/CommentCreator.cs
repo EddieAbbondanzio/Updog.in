@@ -46,6 +46,7 @@ namespace Updog.Application {
 
             Comment comment = new Comment() {
                 User = input.User,
+                Post = new Post() { Id = input.PostId },
                 Parent = parent,
                 Body = input.Body,
                 CreationDate = DateTime.UtcNow

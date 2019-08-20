@@ -39,10 +39,10 @@ namespace Updog.Application {
         public DateTime CreationDate { get; }
 
         /// <summary>
-        /// The comments of the post.
+        /// How many comments are on the post.
         /// </summary>
         /// <value></value>
-        public CommentView[] Comments { get; }
+        public int CommentCount { get; }
         #endregion
 
         #region Constructor(s)
@@ -55,15 +55,15 @@ namespace Updog.Application {
         /// <param name="body">The body of the post.</param>
         /// <param name="user">The OP.</param>
         /// <param name="creationDate">The date the post was created on.</param>
-        /// <param name="comments">The comments of the post</param>
-        public PostView(int id, PostType type, string title, string body, UserView user, DateTime creationDate, CommentView[] comments = null) {
+        /// <param name="commentCount">The comment countof the post</param>
+        public PostView(int id, PostType type, string title, string body, UserView user, DateTime creationDate, int commentCount) {
             Id = id;
             Type = type;
             Title = title;
             Body = body;
             User = user;
             CreationDate = creationDate;
-            Comments = comments;
+            CommentCount = commentCount;
         }
         #endregion
     }
