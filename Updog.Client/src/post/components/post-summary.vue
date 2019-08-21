@@ -15,7 +15,14 @@
                         <router-link :to="`post/${post.id}`" v-if="isTextPost()">{{ post.title }}</router-link>
                         <a :href="`//${this.post.body}`" v-else>{{ post.title }}</a>
                     </h4>
-                    <p class="text-muted">Posted x days ago by {{ post.author }}</p>
+                    <p class="text-muted">
+                        Posted
+                        <date-time-stamp :date="post.creationDate" />
+                        by {{ post.user.username }}
+                    </p>
+                    <router-link
+                        :to="`post/${post.id}`"
+                    >{{ post.commentCount == 1 ? `1 comment` : `${post.commentCount} comments` }}</router-link>
                 </div>
                 <div v-if="isExpanded">{{ post.body}}</div>
             </div>
@@ -28,6 +35,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { PostType } from '../common/post-type';
 import MaterialIcon from '@/components/material-icon.vue';
 import { Post } from '../common/post';
+import DateTimeStamp from '@/components/date-time-stamp.vue';
 
 /**
  * Summary of information about a post. Used on post lists, and post topic page.
@@ -35,7 +43,8 @@ import { Post } from '../common/post';
 @Component({
     name: 'post-summary',
     components: {
-        MaterialIcon
+        MaterialIcon,
+        DateTimeStamp
     }
 })
 export default class PostSummary extends Vue {
