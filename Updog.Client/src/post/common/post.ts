@@ -1,32 +1,19 @@
 import { PostType } from './post-type';
+import { User } from '@/user/common/user';
 
 /**
  * Post made by a user. Probably a repost...
  */
 export class Post {
+    /**
+     * Max char count for the title.
+     */
     public static TITLE_MAX_LENGTH: number = 300;
 
+    /**
+     * Max char count for the body.
+     */
     public static BODY_MAX_LENGTH: number = 10_000;
-
-    /**
-     * The unqiue ID of the post.
-     */
-    public id: number;
-
-    /**
-     * If the post is a link or text.
-     */
-    public type: PostType;
-
-    /**
-     * The eye catchy title of the post.
-     */
-    public title: string;
-
-    /**
-     * The body of the post. Either a link or text.
-     */
-    public body: string;
 
     /**
      * Create a new post.
@@ -34,11 +21,17 @@ export class Post {
      * @param type THe type of post it is.
      * @param title The title of the post.
      * @param body The body of the post.
+     * @param user The user that posted the post.
+     * @param creationDate Date and time of posting.
+     * @param commentCount The number of comments on it.
      */
-    constructor(id: number, type: PostType, title: string, body: string) {
-        this.id = id;
-        this.type = type;
-        this.title = title;
-        this.body = body;
-    }
+    constructor(
+        public id: number,
+        public type: PostType,
+        public title: string,
+        public body: string,
+        public user: User,
+        public creationDate: Date,
+        public commentCount: number
+    ) {}
 }

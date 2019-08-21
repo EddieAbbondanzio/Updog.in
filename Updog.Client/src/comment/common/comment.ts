@@ -1,20 +1,15 @@
+import { User } from '@/user/common/user';
+
 /**
  * A text comment attached to a post.
  */
 export class Comment {
     /**
-     * Create a new comment.
-     * @param id The unique ID of the comment.
-     * @param userId The user that created the comment.
-     * @param postId The post the comment belongs to.
-     * @param parentId The parent comment ID (if any).
-     * @param body The text of the comment.
+     *
+     * @param id The ID of the comment.
+     * @param user The user who posted it.
+     * @param body The body (text) of the comment.
+     * @param children The children (nested) comments.
      */
-    constructor(
-        public id: number,
-        public userId: number,
-        public postId: number,
-        public body: string,
-        public parentId: number = 0
-    ) {}
+    constructor(public id: number, public user: User, public body: string, public children: Comment[]) {}
 }
