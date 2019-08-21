@@ -1,22 +1,14 @@
 import { ApiInteractor } from '@/core/api-interactor';
 import { Post } from '../../common/post';
 import { Context } from '@/core/context';
-import { PostInfo } from '@/post/common/post-info';
+import { PostApiInteractor } from '@/post/common/post-api-interactor';
 
 /**
  * Interactor to find a post by it's ID.
  */
-export class PostFinderById extends ApiInteractor<number, PostInfo> {
-    public async handle(input: number): Promise<PostInfo> {
-        const response = await this.http.get<PostInfo>(`/post/${input}`);
-
-        return new PostInfo(
-            response.data.id,
-            response.data.type,
-            response.data.title,
-            response.data.body,
-            response.data.author,
-            response.data.date
-        );
+export class PostFinderById extends PostApiInteractor<number, Post> {
+    public async handle(input: number): Promise<Post> {
+        const response = await this.http.get<Post>(`/post/${input}`);
+        return this.postMapper.map(response.data);
     }
 }

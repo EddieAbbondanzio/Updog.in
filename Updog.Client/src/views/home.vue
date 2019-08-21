@@ -16,9 +16,9 @@ import { Component, Vue } from 'vue-property-decorator';
 import CreatePostButtons from '@/post/components/create-post-buttons.vue';
 import MasterPage from '@/components/master-page.vue';
 import { PostMixin } from '../post/mixins/post-mixin';
-import { PostInfo } from '../post/common/post-info';
 import { PaginationInfo } from '../core/pagination-info';
 import PostSummary from '@/post/components/post-summary.vue';
+import { Post } from '../post/common/post';
 
 @Component({
     components: {
@@ -28,7 +28,7 @@ import PostSummary from '@/post/components/post-summary.vue';
     }
 })
 export default class Home extends PostMixin {
-    public posts: PostInfo[] = [];
+    public posts: Post[] = [];
 
     public async created() {
         this.posts = await this.$findPostByNew(new PaginationInfo(0, 10));

@@ -1,16 +1,16 @@
 import { ApiInteractor } from '@/core/api-interactor';
-import { PostInfo } from '@/post/common/post-info';
-import { CommentInfo } from '@/comment/common/comment-info';
+import { Comment } from '@/comment/common/comment';
+import { CommentApiInteractor } from '@/comment/common/comment-api-interactor';
 
 /**
  * Interactor to find a post by it's ID.
  */
-export class CommentFinderByPost extends ApiInteractor<number, CommentInfo[]> {
-    public async handle(input: number): Promise<CommentInfo[]> {
-        const response = await this.http.get<CommentInfo[]>(`/comment/`, { params: { postId: input } });
+export class CommentFinderByPost extends CommentApiInteractor<number, Comment[]> {
+    public async handle(input: number): Promise<Comment[]> {
+        const response = await this.http.get<Comment[]>(`/comment/`, { params: { postId: input } });
 
         return response.data.map(ci => {
-            return new CommentInfo(ci.id, ci.author, ci.body, ci.date);
+            return this.commentMapper.map(ci);
         });
     }
 }

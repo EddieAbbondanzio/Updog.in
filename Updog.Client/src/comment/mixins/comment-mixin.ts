@@ -1,7 +1,6 @@
 import Component from 'vue-class-component';
 import Vue from 'vue';
 import { CommentFinderById } from '../use-cases/find-by-id/comment-finder-by-id';
-import { CommentInfo } from '../common/comment-info';
 import { CommentFinderByPost } from '../use-cases/find-by-post/comment-finder-by-post';
 import { CommentCreateParams } from '../use-cases/create/comment-create-params';
 import { CommentCreator } from '../use-cases/create/comment-creator';
@@ -16,7 +15,7 @@ export class CommentMixin extends Vue {
      * Find a post by it's unique ID.
      * @param request The ID of the post to retrieve.
      */
-    public async $findCommentById(request: number): Promise<CommentInfo> {
+    public async $findCommentById(request: number): Promise<Comment> {
         return new CommentFinderById().handle(request);
     }
 
@@ -24,7 +23,7 @@ export class CommentMixin extends Vue {
      * Find all of the comments for a post.
      * @param postId The ID of the post to get comments for.
      */
-    public async $findCommentsByPost(postId: number): Promise<CommentInfo[]> {
+    public async $findCommentsByPost(postId: number): Promise<Comment[]> {
         return new CommentFinderByPost().handle(postId);
     }
 

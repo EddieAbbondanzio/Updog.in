@@ -1,23 +1,18 @@
 import { ApiInteractor } from '@/core/api-interactor';
 import { PaginationInfo } from '@/core/pagination-info';
-import { PostInfo } from '@/post/common/post-info';
+import { Post } from '@/post/common/post';
+import { PostMapper } from '@/post/common/post-mapper';
+import { PostApiInteractor } from '@/post/common/post-api-interactor';
 
 /**
  * API interactor to find new posts.
  */
-export class PostFinderByNew extends ApiInteractor<PaginationInfo, PostInfo[]> {
-    public async handle(input: PaginationInfo): Promise<PostInfo[]> {
-        const response = await this.http.get<PostInfo[]>(`/post/new/`, { params: input });
+export class PostFinderByNew extends PostApiInteractor<PaginationInfo, Post[]> {
+    public async handle(input: PaginationInfo): Promise<Post[]> {
+        const response = await this.http.get<Post[]>(`/post/new/`, { params: input });
 
         return response.data.map(postInfo => {
-            return new PostInfo(
-                postInfo.id,
-                postInfo.type,
-                postInfo.title,
-                postInfo.body,
-                postInfo.author,
-                postInfo.date
-            );
+            return this.postMapper.map(postInfo);
         });
     }
 }

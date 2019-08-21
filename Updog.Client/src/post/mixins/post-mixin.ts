@@ -4,7 +4,6 @@ import { PostCreateParams } from '../use-cases/create/post-create-params';
 import { Post } from '../common/post';
 import { PostCreator } from '../use-cases/create/post-creator';
 import { PostFinderById } from '../use-cases/find-by-id/post-finder-by-id';
-import { PostInfo } from '../common/post-info';
 import { PaginationInfo } from '@/core/pagination-info';
 import { PostFinderByNew } from '../use-cases/find-by-new/post-finder-by-new';
 
@@ -22,7 +21,7 @@ export class PostMixin extends Vue {
      * Find a post by it's unique ID.
      * @param request The ID of the post to retrieve.
      */
-    public async $findPostById(request: number): Promise<PostInfo> {
+    public async $findPostById(request: number): Promise<Post> {
         return new PostFinderById().handle(request);
     }
 
@@ -30,7 +29,7 @@ export class PostMixin extends Vue {
      * Find a collection of posts by new.
      * @param paginationInfo The pagination info.
      */
-    public async $findPostByNew(paginationInfo: PaginationInfo): Promise<PostInfo[]> {
+    public async $findPostByNew(paginationInfo: PaginationInfo): Promise<Post[]> {
         return new PostFinderByNew().handle(paginationInfo);
     }
 }

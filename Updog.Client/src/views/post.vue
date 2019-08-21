@@ -18,12 +18,12 @@ import { Component, Vue, Mixins } from 'vue-property-decorator';
 import CreatePostButtons from '@/post/components/create-post-buttons.vue';
 import MasterPage from '@/components/master-page.vue';
 import { PostMixin } from '../post/mixins/post-mixin';
-import { PostInfo } from '@/post/common/post-info';
 import PostSummary from '@/post/components/post-summary.vue';
 import CommentCreateForm from '@/comment/components/comment-create-form.vue';
 import { CommentMixin } from '@/comment/mixins/comment-mixin';
 import { mixins } from 'vue-class-component/lib/util';
 import { CommentCreateParams } from '../comment/use-cases/create/comment-create-params';
+import { Post as PostEntity } from '@/post/common/post';
 
 /**
  * View a post via it's ID.
@@ -41,7 +41,7 @@ export default class Post extends Mixins(PostMixin, CommentMixin) {
     /**
      * The post being displayed.
      */
-    public post: PostInfo | null = null;
+    public post: PostEntity | null = null;
 
     public async created() {
         const postId = Number.parseInt(this.$route.params.id, 10);

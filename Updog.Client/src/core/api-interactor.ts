@@ -14,8 +14,14 @@ export abstract class ApiInteractor<TInput, TOutput> {
      */
     protected http: AxiosInstance;
 
-    constructor() {
-        this.http = axios.create({ baseURL: ApiInteractor.BACKEND_URL });
+    /**
+     * Create a new API interactor.
+     * @param baseUrl The base URL of the interactor.
+     */
+    constructor(baseUrl: string = '') {
+        this.http = axios.create({
+            baseURL: baseUrl === '' ? ApiInteractor.BACKEND_URL : `${ApiInteractor.BACKEND_URL}/${baseUrl}`
+        });
     }
 
     /**

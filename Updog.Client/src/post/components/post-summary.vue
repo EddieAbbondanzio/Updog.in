@@ -15,7 +15,7 @@
                         <router-link :to="`post/${post.id}`" v-if="isTextPost()">{{ post.title }}</router-link>
                         <a :href="`//${this.post.body}`" v-else>{{ post.title }}</a>
                     </h4>
-                    <p class="text-muted">Posted {{ post.getDifferenceDate() }} by {{ post.author }}</p>
+                    <p class="text-muted">Posted x days ago by {{ post.author }}</p>
                 </div>
                 <div v-if="isExpanded">{{ post.body}}</div>
             </div>
@@ -25,9 +25,9 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { PostInfo } from '../common/post-info';
 import { PostType } from '../common/post-type';
 import MaterialIcon from '@/components/material-icon.vue';
+import { Post } from '../common/post';
 
 /**
  * Summary of information about a post. Used on post lists, and post topic page.
@@ -38,12 +38,12 @@ import MaterialIcon from '@/components/material-icon.vue';
         MaterialIcon
     }
 })
-export default class NewComponent extends Vue {
+export default class PostSummary extends Vue {
     /**
      * The post to display.
      */
     @Prop({ default: null })
-    public post!: PostInfo | null;
+    public post!: Post | null;
 
     /**
      * If the component should expand by default.
