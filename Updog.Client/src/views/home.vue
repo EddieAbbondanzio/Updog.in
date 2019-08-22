@@ -31,7 +31,7 @@ export default class Home extends PostMixin {
     public posts: Post[] = [];
 
     public async created() {
-        this.posts = await this.$findPostByNew(new PaginationInfo(0, 10));
+        this.posts = await this.$findPostsByNew(new PaginationInfo(0, Post.DEFAULT_PAGE_SIZE));
     }
 }
 </script>

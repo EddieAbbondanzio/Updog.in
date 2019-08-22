@@ -11,7 +11,9 @@
                 class="border border-dark rounded mr-2"
                 size="md"
             />
-            <h5 class="d-inline-block my-0">{{ user.username }}</h5>
+            <h5 class="d-inline-block my-0">
+                <user-link :user="user" />
+            </h5>
             <span class="mx-1">|</span>
 
             <b-button variant="link" class="pl-0" @click="onLogout">Logout</b-button>
@@ -26,6 +28,7 @@ import { EventBus } from '@/core/event-bus';
 import MaterialIcon from '@/core/components/material-icon.vue';
 import { User } from '../common/user';
 import { UserLogin } from '../common/user-login';
+import UserLink from '@/user/components/user-link.vue';
 
 /**
  * Component to handle logging in, and signing up new users.
@@ -33,7 +36,8 @@ import { UserLogin } from '../common/user-login';
 @Component({
     name: 'new-component',
     components: {
-        MaterialIcon
+        MaterialIcon,
+        UserLink
     }
 })
 export default class UserWidget extends Vue {

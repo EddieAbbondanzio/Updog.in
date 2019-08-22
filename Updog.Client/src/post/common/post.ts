@@ -1,10 +1,16 @@
 import { PostType } from './post-type';
 import { User } from '@/user/common/user';
+import { PaginationInfo } from '@/core/pagination-info';
 
 /**
  * Post made by a user. Probably a repost...
  */
 export class Post {
+    /**
+     * Default number of posts in a page.
+     */
+    public static DEFAULT_PAGE_SIZE: number = 20;
+
     /**
      * Max char count for the title.
      */
