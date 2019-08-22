@@ -17,20 +17,19 @@ namespace Updog.Api {
     public sealed class PostController : ApiController {
         #region Fields
         private PostFinderById postFinderById;
-
         private PostFinderByNew postFinderByNew;
-
+        private PostFinderByUser postFinderByUser;
         private PostCreator postCreator;
-
         private PostUpdater postUpdater;
 
         private PostDeleter postDeleter;
         #endregion
 
         #region Constructor(s)
-        public PostController(PostFinderById postFinderById, PostFinderByNew postFinderByNew, PostCreator postAdder, PostUpdater postUpdater, PostDeleter postDeleter) {
+        public PostController(PostFinderById postFinderById, PostFinderByNew postFinderByNew, PostFinderByUser postFinderByUser, PostCreator postAdder, PostUpdater postUpdater, PostDeleter postDeleter) {
             this.postFinderById = postFinderById;
             this.postFinderByNew = postFinderByNew;
+            this.postFinderByUser = postFinderByUser;
             this.postCreator = postAdder;
             this.postUpdater = postUpdater;
             this.postDeleter = postDeleter;
@@ -58,6 +57,13 @@ namespace Updog.Api {
         [HttpGet("new")]
         public async Task<ActionResult> FindByNew([FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
             PostView[] posts = await postFinderByNew.Handle(new PaginationInfo(pageNumber, pageSize));
+            return Ok(posts);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult> FindByUser([FromRoute]int userId, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
+            PostView[] posts = await postFinderByUser.Handle(new PostFinderByUserParam(userId, new PaginationInfo(pageNumber, pageSize)));
             return Ok(posts);
         }
 

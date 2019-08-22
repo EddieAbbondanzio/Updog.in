@@ -59,6 +59,37 @@ namespace Updog.Persistance {
             }
         }
 
+        /// <summary>
+        /// Find posts for a specific user.
+        /// </summary>
+        /// <param name="userId">THe user ID to look for.</param>
+        /// <param name="pagination">Paging info</param>
+        /// <returns>The collection of their posts (if any).</returns>
+
+        public async Task<Post[]> FindByUser(int userId, PaginationInfo pagination) {
+            using (DbConnection connection = GetConnection()) {
+                return (await connection.QueryAsync<PostRecord, UserRecord, Post>(
+                    @"SELECT * FROM Post
+                    LEFT JOIN User ON User.Id = Post.UserId
+                    ORDER BY CreationDate ASC
+                    LIMIT @Limit
+                    OFFSET @Offset",
+                    (PostRecord postRec, UserRecord userRec) => {
+                        return postMapper.Map(Tuple.Create(postRec, userRec));
+                    },
+                    new {
+                        Limit = pagination.PageSize,
+                        Offset = pagination.GetOffset()
+                    }
+                )).ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Find a post via it's unique ID.
+        /// </summary>
+        /// <param name="id">The ID of the post.</param>
+        /// <returns>The post (if found).</returns>
         public async Task<Post> FindById(int id) {
             using (DbConnection connection = GetConnection()) {
                 return (await connection.QueryAsync<PostRecord, UserRecord, Post>(
@@ -74,6 +105,10 @@ namespace Updog.Persistance {
             }
         }
 
+        /// <summary>
+        /// Add a post to the database.
+        /// </summary>
+        /// <param name="post">The post to add.</param>
         public async Task Add(Post post) {
             using (DbConnection connection = GetConnection()) {
                 post.Id = await connection.QueryFirstOrDefaultAsync<int>(
@@ -83,12 +118,20 @@ namespace Updog.Persistance {
             }
         }
 
+        /// <summary>
+        /// Update a post in the database.
+        /// </summary>
+        /// <param name="post">The post to update.</param>
         public async Task Update(Post post) {
             using (DbConnection connection = GetConnection()) {
                 await connection.ExecuteAsync("UPDATE Post SET Body = @Body WHERE Id = @Id", postMapper.Reverse(post).Item1);
             }
         }
 
+        /// <summary>
+        /// Delete a post from the database.
+        /// </summary>
+        /// <param name="post">The post to delete.</param>
         public async Task Delete(Post post) {
             using (DbConnection connection = GetConnection()) {
                 await connection.ExecuteAsync("UPDATE Post SET WasDeleted = TRUE WHERE Id = @Id", postMapper.Reverse(post).Item1);

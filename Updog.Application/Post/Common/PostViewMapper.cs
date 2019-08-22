@@ -11,11 +11,6 @@ namespace Updog.Application {
         /// Mapper to convert a user to its DTO.
         /// </summary>
         private IMapper<User, UserView> userMapper;
-
-        /// <summary>
-        /// Mapper to convert a comment into it's DTO.
-        /// </summary>
-        private IMapper<Comment, CommentView> commentMapper;
         #endregion
 
         #region Constructor(s)
@@ -23,10 +18,8 @@ namespace Updog.Application {
         /// Create a new post view mapper.
         /// </summary>
         /// <param name="userMapper">The mapper to convert users to user views.</param>
-        /// <param name="commentMapper">The mapper to convert comments to their view.</param>
-        public PostViewMapper(IMapper<User, UserView> userMapper, IMapper<Comment, CommentView> commentMapper) {
+        public PostViewMapper(IMapper<User, UserView> userMapper) {
             this.userMapper = userMapper;
-            this.commentMapper = commentMapper;
         }
         #endregion
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Updog.Application {
@@ -19,6 +20,14 @@ namespace Updog.Application {
         /// </summary>
         public string Body { get; }
 
+        /// <summary>
+        /// When the comment was made.
+        /// </summary>
+        public DateTime CreationDate { get; }
+
+        /// <summary>
+        /// The nested comments of this comment.
+        /// </summary>
         public List<CommentView> Children { get; }
         #endregion
 
@@ -29,11 +38,13 @@ namespace Updog.Application {
         /// <param name="id">The ID of the comment.</param>
         /// <param name="user">The user that made the comment.</param>
         /// <param name="body">The text of the comment.</param>
+        /// <param name="creationDate">The time of commenting</param>
         /// <param name="children">The children comments</param>
-        public CommentView(int id, UserView user, string body, List<CommentView> children = null) {
+        public CommentView(int id, UserView user, string body, DateTime creationDate, List<CommentView> children = null) {
             Id = id;
             User = user;
             Body = body;
+            CreationDate = creationDate;
             Children = children ?? new List<CommentView>();
         }
         #endregion

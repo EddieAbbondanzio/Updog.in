@@ -2,6 +2,9 @@ using System.Threading.Tasks;
 using Updog.Domain;
 
 namespace Updog.Application {
+    /// <summary>
+    /// CRUD interface for managing pots in the database.
+    /// </summary>
     public interface IPostRepo : IRepo<Post> {
         /// <summary>
         /// Find the newest posts by their creation date.
@@ -9,5 +12,13 @@ namespace Updog.Application {
         /// <param name="pagination">Paging info</param>
         /// <returns>The newest new posts.</returns>
         Task<Post[]> FindNewest(PaginationInfo pagination);
+
+        /// <summary>
+        /// Find posts for a specific user.
+        /// </summary>
+        /// <param name="userId">THe user ID to look for.</param>
+        /// <param name="pagination">Paging info</param>
+        /// <returns>The collection of their posts (if any).</returns>
+        Task<Post[]> FindByUser(int userId, PaginationInfo pagination);
     }
 }
