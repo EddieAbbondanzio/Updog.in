@@ -33,6 +33,10 @@ const r = new Router({
         {
             path: '/post/:id',
             component: () => import('./views/post.vue')
+        },
+        {
+            path: '/user/:username',
+            component: () => import('./views/user.vue')
         }
     ]
 });

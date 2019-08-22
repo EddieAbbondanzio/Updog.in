@@ -1,5 +1,5 @@
 <template>
-    <time :title="date">{{ humanReadableDifference }}</time>
+    <time :title="date">{{ humanReadableDifference }} ago&nbsp;</time>
 </template>
 
 <script lang="ts">

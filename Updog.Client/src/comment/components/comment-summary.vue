@@ -2,7 +2,7 @@
     <div class="py-1">
         <div>
             <div>
-                {{ comment.user.username }}
+                <user-link :user="comment.user" />
                 <date-time-stamp :date="comment.creationDate" class="text-muted" />
             </div>
             <div>{{ comment.body}}</div>
@@ -22,6 +22,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Comment } from '../common/comment';
 import DateTimeStamp from '@/core/components/date-time-stamp.vue';
+import UserLink from '@/user/components/user-link.vue';
 
 /**
  * Comment to show a comment on screen.
@@ -29,6 +30,7 @@ import DateTimeStamp from '@/core/components/date-time-stamp.vue';
 @Component({
     name: 'comment-summary',
     components: {
+        UserLink,
         DateTimeStamp
     }
 })

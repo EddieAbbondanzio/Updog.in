@@ -17,8 +17,8 @@
                     </h4>
                     <p class="text-muted">
                         Posted
-                        <date-time-stamp :date="post.creationDate" />
-                        by {{ post.user.username }}
+                        <date-time-stamp :date="post.creationDate" />by
+                        <user-link :user="post.user" />
                     </p>
                     <router-link
                         :to="`post/${post.id}`"
@@ -36,6 +36,7 @@ import { PostType } from '../common/post-type';
 import MaterialIcon from '@/core/components/material-icon.vue';
 import { Post } from '../common/post';
 import DateTimeStamp from '@/core/components/date-time-stamp.vue';
+import UserLink from '@/user/components/user-link.vue';
 
 /**
  * Summary of information about a post. Used on post lists, and post topic page.
@@ -44,7 +45,8 @@ import DateTimeStamp from '@/core/components/date-time-stamp.vue';
     name: 'post-summary',
     components: {
         MaterialIcon,
-        DateTimeStamp
+        DateTimeStamp,
+        UserLink
     }
 })
 export default class PostSummary extends Vue {

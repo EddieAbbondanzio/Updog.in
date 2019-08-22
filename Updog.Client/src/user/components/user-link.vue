@@ -1,0 +1,22 @@
+<template>
+    <router-link :to="`/user/${user.username}`">{{ user.username }}&nbsp;</router-link>
+</template>
+
+<script lang="ts">
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import { User } from '../common/user';
+
+/**
+ * Link to a user's profile page.
+ */
+@Component({
+    name: 'user-link'
+})
+export default class UserLink extends Vue {
+    /**
+     * The user it links to.
+     */
+    @Prop()
+    public user!: User;
+}
+</script>
