@@ -23,7 +23,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Context } from '@/core/context';
 import { EventBus } from '@/core/event-bus';
-import MaterialIcon from '@/components/material-icon.vue';
+import MaterialIcon from '@/core/components/material-icon.vue';
 import { User } from '../common/user';
 import { UserLogin } from '../common/user-login';
 

@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import NavBar from '@/components/nav-bar.vue';
+import NavBar from '@/core/components/nav-bar.vue';
 
 /**
  * Master page for the site.

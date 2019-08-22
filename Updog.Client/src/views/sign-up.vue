@@ -17,7 +17,7 @@ import { EventBus } from '@/core/event-bus';
 import { User } from '@/user/common/user';
 import { UserLogin } from '@/user/common/user-login';
 import { Context } from '@/core/context';
-import MasterPage from '@/components/master-page.vue';
+import MasterPage from '@/core/components/master-page.vue';
 import { UserMixin } from '../user/mixins/user-mixin';
 import { UserRegistration } from '../user/use-cases/register/user-registration';
 

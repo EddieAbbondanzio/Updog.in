@@ -33,9 +33,9 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { PostType } from '../common/post-type';
-import MaterialIcon from '@/components/material-icon.vue';
+import MaterialIcon from '@/core/components/material-icon.vue';
 import { Post } from '../common/post';
-import DateTimeStamp from '@/components/date-time-stamp.vue';
+import DateTimeStamp from '@/core/components/date-time-stamp.vue';
 
 /**
  * Summary of information about a post. Used on post lists, and post topic page.

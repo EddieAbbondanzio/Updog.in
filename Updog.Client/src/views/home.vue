@@ -14,7 +14,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import CreatePostButtons from '@/post/components/create-post-buttons.vue';
-import MasterPage from '@/components/master-page.vue';
+import MasterPage from '@/core/components/master-page.vue';
 import { PostMixin } from '../post/mixins/post-mixin';
 import { PaginationInfo } from '../core/pagination-info';
 import PostSummary from '@/post/components/post-summary.vue';

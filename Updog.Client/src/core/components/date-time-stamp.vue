@@ -1,10 +1,10 @@
 <template>
-    <time>{{ humanReadableDifference }}</time>
+    <time :title="date">{{ humanReadableDifference }}</time>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { DateUtils } from '../core/utils/date-utils';
+import { DateUtils } from '@/core/utils/date-utils';
 
 /**
  * Timestamp that displays a difference between two dates in a human

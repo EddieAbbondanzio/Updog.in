@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import MasterPage from '@/components/master-page.vue';
+import MasterPage from '@/core/components/master-page.vue';
 import CreatePostForm from '@/post/components/create-post-form.vue';
 import { PostMixin } from '@/post/mixins/post-mixin';
 import { PostCreateParams } from '@/post/use-cases/create/post-create-params';
