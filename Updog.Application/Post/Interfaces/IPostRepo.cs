@@ -16,9 +16,9 @@ namespace Updog.Application {
         /// <summary>
         /// Find posts for a specific user.
         /// </summary>
-        /// <param name="userId">THe user ID to look for.</param>
+        /// <param name="username">THe username to look for.</param>
         /// <param name="pagination">Paging info</param>
         /// <returns>The collection of their posts (if any).</returns>
-        Task<Post[]> FindByUser(int userId, PaginationInfo pagination);
+        Task<Post[]> FindByUser(string username, PaginationInfo pagination);
     }
 }

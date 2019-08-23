@@ -1,8 +1,8 @@
 namespace Updog.Application {
     /// <summary>
-    /// Parameters for the pot finder by user interactor.
+    /// Parameters for the comment finder by user interactor.
     /// </summary>
-    public sealed class PostFinderByUserParam {
+    public sealed class CommentFinderByUserParams {
         #region Properties
         /// <summary>
         /// The username of the user to look for.
@@ -17,11 +17,11 @@ namespace Updog.Application {
 
         #region Constructor(s)
         /// <summary>
-        /// Create a new set of post finder by user params.
+        /// Create a new set of comment finder by user params.
         /// </summary>
         /// <param name="userId">The user ID to look for.</param>
         /// <param name="paginationInfo">Paging info.</param>
-        public PostFinderByUserParam(string username, PaginationInfo paginationInfo) {
+        public CommentFinderByUserParams(string username, PaginationInfo paginationInfo) {
             Username = username;
             PaginationInfo = paginationInfo;
         }

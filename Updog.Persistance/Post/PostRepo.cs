@@ -62,15 +62,16 @@ namespace Updog.Persistance {
         /// <summary>
         /// Find posts for a specific user.
         /// </summary>
-        /// <param name="userId">THe user ID to look for.</param>
+        /// <param name="username">The username to look for.</param>
         /// <param name="pagination">Paging info</param>
         /// <returns>The collection of their posts (if any).</returns>
 
-        public async Task<Post[]> FindByUser(int userId, PaginationInfo pagination) {
+        public async Task<Post[]> FindByUser(string username, PaginationInfo pagination) {
             using (DbConnection connection = GetConnection()) {
                 return (await connection.QueryAsync<PostRecord, UserRecord, Post>(
                     @"SELECT * FROM Post
                     LEFT JOIN User ON User.Id = Post.UserId
+                    WHERE User.Username = @Username
                     ORDER BY CreationDate ASC
                     LIMIT @Limit
                     OFFSET @Offset",
@@ -78,6 +79,7 @@ namespace Updog.Persistance {
                         return postMapper.Map(Tuple.Create(postRec, userRec));
                     },
                     new {
+                        Username = username,
                         Limit = pagination.PageSize,
                         Offset = pagination.GetOffset()
                     }

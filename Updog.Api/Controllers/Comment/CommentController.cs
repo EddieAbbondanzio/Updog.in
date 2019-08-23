@@ -19,6 +19,8 @@ namespace Updog.Api {
 
         private CommentFinderByPost commentFinderByPost;
 
+        private CommentFinderByUser commentFinderByUser;
+
         private CommentCreator commentCreator;
 
         private CommentUpdater commentUpdater;
@@ -27,9 +29,10 @@ namespace Updog.Api {
         #endregion
 
         #region Constructor(s)
-        public CommentController(CommentFinderById commentFinderById, CommentFinderByPost commentFinderByPost, CommentCreator commentCreator, CommentUpdater commentUpdater, CommentDeleter commentDeleter) {
+        public CommentController(CommentFinderById commentFinderById, CommentFinderByPost commentFinderByPost, CommentFinderByUser commentFinderByUser, CommentCreator commentCreator, CommentUpdater commentUpdater, CommentDeleter commentDeleter) {
             this.commentFinderById = commentFinderById;
             this.commentFinderByPost = commentFinderByPost;
+            this.commentFinderByUser = commentFinderByUser;
             this.commentCreator = commentCreator;
             this.commentUpdater = commentUpdater;
             this.commentDeleter = commentDeleter;
@@ -58,10 +61,20 @@ namespace Updog.Api {
             try {
                 CommentView[] comments = await commentFinderByPost.Handle(postId);
                 return Ok(comments);
-            } catch (Exception e) {
-                Console.Write(e);
-                throw e;
+            } catch {
+                return InternalServerError();
             }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("user/{username}")]
+        public async Task<ActionResult> GetCommentsByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery]int pageSize = Post.PageSize) {
+            // try {
+            CommentView[] comments = await commentFinderByUser.Handle(new CommentFinderByUserParams(username, new PaginationInfo(pageNumber, pageSize)));
+            return Ok(comments);
+            // } catch {
+            // return InternalServerError();
+            // }
         }
 
         /// <summary>

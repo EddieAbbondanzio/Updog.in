@@ -116,6 +116,7 @@ namespace Updog.Api {
             services.AddTransient<CommentCreator>();
             services.AddTransient<CommentFinderById>();
             services.AddTransient<CommentFinderByPost>();
+            services.AddTransient<CommentFinderByUser>();
             services.AddTransient<CommentDeleter>();
             services.AddTransient<CommentUpdater>();
             services.AddTransient<AbstractValidator<CommentCreateParams>, CommentCreateValidator>();

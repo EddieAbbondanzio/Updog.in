@@ -29,7 +29,7 @@ namespace Updog.Application {
 
         #region Publics
         public async Task<PostView[]> Handle(PostFinderByUserParam input) {
-            Post[] posts = await postRepo.FindByUser(input.UserId, input.PaginationInfo);
+            Post[] posts = await postRepo.FindByUser(input.Username, input.PaginationInfo);
             return posts.Select((p) => postMapper.Map(p)).ToArray();
         }
     }

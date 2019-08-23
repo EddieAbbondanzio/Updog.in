@@ -13,6 +13,14 @@ namespace Updog.Application {
         /// <param name="post">The post ID.</param>
         /// <returns>The comments associated with it.</returns>
         Task<Comment[]> FindByPost(int postId);
+
+        /// <summary>
+        /// Find a page of comments made by a specific user.
+        /// </summary>
+        /// <param name="username">The user to look for.</param>
+        /// <param name="paginationInfo">Paging info.</param>
+        /// <returns>The comments found.</returns>
+        Task<Comment[]> FindByUser(string username, PaginationInfo paginationInfo);
         #endregion
     }
 }

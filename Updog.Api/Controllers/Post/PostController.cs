@@ -61,9 +61,9 @@ namespace Updog.Api {
         }
 
         [AllowAnonymous]
-        [HttpGet("user/{userId}")]
-        public async Task<ActionResult> FindByUser([FromRoute]int userId, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            PostView[] posts = await postFinderByUser.Handle(new PostFinderByUserParam(userId, new PaginationInfo(pageNumber, pageSize)));
+        [HttpGet("user/{username}")]
+        public async Task<ActionResult> FindByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
+            PostView[] posts = await postFinderByUser.Handle(new PostFinderByUserParam(username, new PaginationInfo(pageNumber, pageSize)));
             return Ok(posts);
         }
 

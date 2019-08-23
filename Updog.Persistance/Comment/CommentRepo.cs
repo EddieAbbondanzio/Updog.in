@@ -92,6 +92,28 @@ namespace Updog.Persistance {
         }
 
         /// <summary>
+        /// Find a page of comments made by a specific user.
+        /// </summary>
+        /// <param name="username">The user to look for.</param>
+        /// <param name="paginationInfo">Paging info.</param>
+        /// <returns>The comments found.</returns>
+        public async Task<Comment[]> FindByUser(string username, PaginationInfo paginationInfo) {
+            using (DbConnection connection = GetConnection()) {
+                return (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
+                    "SELECT * FROM Comment LEFT JOIN User ON Comment.UserId = User.Id WHERE User.Username = @Username LIMIT @Limit OFFSET @Offset ",
+                    (commentRec, userRec) => {
+                        return commentMapper.Map(Tuple.Create(commentRec, userRec));
+                    },
+                    new {
+                        Username = username,
+                        Offset = paginationInfo.GetOffset(),
+                        Limit = paginationInfo.PageSize
+                    }
+                )).ToArray();
+            }
+        }
+
+        /// <summary>
         /// Add a new comment.
         /// </summary>
         /// <param name="entity">The comment to add.</param>

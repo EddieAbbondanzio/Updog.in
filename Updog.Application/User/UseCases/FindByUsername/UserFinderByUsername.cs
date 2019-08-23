@@ -9,7 +9,7 @@ namespace Updog.Application {
         #region Fields
         private IUserRepo userRepo;
 
-        private UserViewMapper userMapper;
+        private IMapper<User, UserView> userMapper;
         #endregion
 
         #region Constructor(s)
@@ -18,7 +18,7 @@ namespace Updog.Application {
         /// </summary>
         /// <param name="userRepo">The user repo.</param>
         /// <param name="userMapper">The DTO mapper.</param>
-        public UserFinderByUsername(IUserRepo userRepo, UserViewMapper userMapper) {
+        public UserFinderByUsername(IUserRepo userRepo, IMapper<User, UserView> userMapper) {
             this.userRepo = userRepo;
             this.userMapper = userMapper;
         }
