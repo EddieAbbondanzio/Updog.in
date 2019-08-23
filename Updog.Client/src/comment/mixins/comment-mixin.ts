@@ -5,6 +5,9 @@ import { CommentFinderByPost } from '../use-cases/find-by-post/comment-finder-by
 import { CommentCreateParams } from '../use-cases/create/comment-create-params';
 import { CommentCreator } from '../use-cases/create/comment-creator';
 import { Comment } from '@/comment/common/comment';
+import { PaginationInfo } from '@/core/pagination-info';
+import { CommentFinderByUser } from '../use-cases/find-by-user/comment-finder-by-user';
+import { CommentFinderByUserParams } from '../use-cases/find-by-user/comment-finder-by-user-param';
 
 /**
  * Mixin to handle comment related things.
@@ -25,6 +28,15 @@ export class CommentMixin extends Vue {
      */
     public async $findCommentsByPost(postId: number): Promise<Comment[]> {
         return new CommentFinderByPost().handle(postId);
+    }
+
+    /**
+     * Find a list of comments made by a user.
+     * @param username The username of the user.
+     * @param paginationInfo Pagination info.
+     */
+    public async $findCommentsByUser(username: string, paginationInfo: PaginationInfo): Promise<Comment[]> {
+        return new CommentFinderByUser().handle(new CommentFinderByUserParams(username, paginationInfo));
     }
 
     /**

@@ -77,6 +77,7 @@ export default class User extends Mixins(UserMixin, PostMixin, CommentMixin) {
         this.user = await this.$findUserByUsername(username);
 
         this.posts = await this.$findPostsByUser(username, new PaginationInfo(0, User.DEFAULT_POST_PAGE_SIZE));
+        this.comments = await this.$findCommentsByUser(username, new PaginationInfo(0, User.DEFAULT_COMMENT_PAGE_SIZE));
     }
 
     public memberLength() {
