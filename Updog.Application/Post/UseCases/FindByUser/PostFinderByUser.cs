@@ -7,7 +7,7 @@ namespace Updog.Application {
     /// <summary>
     /// Use case handler to find a number of posts via the user who created them..
     /// </summary>
-    public sealed class PostFinderByUser : IInteractor<PostFinderByUserParam, PostView[]> {
+    public sealed class PostFinderByUser : IInteractor<PostFinderByUserParam, IEnumerable<PostView>> {
         #region Fields
         private IPostRepo postRepo;
 
@@ -28,9 +28,15 @@ namespace Updog.Application {
 
 
         #region Publics
-        public async Task<PostView[]> Handle(PostFinderByUserParam input) {
-            Post[] posts = await postRepo.FindByUser(input.Username, input.PaginationInfo);
-            return posts.Select((p) => postMapper.Map(p)).ToArray();
+        public async Task<IEnumerable<PostView>> Handle(PostFinderByUserParam input) {
+            IEnumerable<Post> posts = await postRepo.FindByUser(input.Username, input.PaginationInfo);
+            List<PostView> views = new List<PostView>();
+
+            foreach (Post p in posts) {
+                views.Add(postMapper.Map(p));
+            }
+
+            return views;
         }
     }
     #endregion

@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -59,7 +61,7 @@ namespace Updog.Api {
         [HttpGet]
         public async Task<ActionResult> GetComments([FromQuery]int postId) {
             try {
-                CommentView[] comments = await commentFinderByPost.Handle(postId);
+                IEnumerable<CommentView> comments = await commentFinderByPost.Handle(postId);
                 return Ok(comments);
             } catch {
                 return InternalServerError();
@@ -70,7 +72,7 @@ namespace Updog.Api {
         [HttpGet("user/{username}")]
         public async Task<ActionResult> GetCommentsByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery]int pageSize = Post.PageSize) {
             // try {
-            CommentView[] comments = await commentFinderByUser.Handle(new CommentFinderByUserParams(username, new PaginationInfo(pageNumber, pageSize)));
+            IEnumerable<CommentView> comments = await commentFinderByUser.Handle(new CommentFinderByUserParams(username, new PaginationInfo(pageNumber, pageSize)));
             return Ok(comments);
             // } catch {
             // return InternalServerError();

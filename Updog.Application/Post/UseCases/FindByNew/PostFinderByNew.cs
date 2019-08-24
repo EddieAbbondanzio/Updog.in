@@ -7,7 +7,7 @@ namespace Updog.Application {
     /// <summary>
     /// Use case handler to find a number of posts based on their creation date.
     /// </summary>
-    public sealed class PostFinderByNew : IInteractor<PaginationInfo, PostView[]> {
+    public sealed class PostFinderByNew : IInteractor<PaginationInfo, IEnumerable<PostView>> {
         #region Fields
         private IPostRepo postRepo;
 
@@ -28,9 +28,15 @@ namespace Updog.Application {
 
 
         #region Publics
-        public async Task<PostView[]> Handle(PaginationInfo input) {
-            Post[] posts = await postRepo.FindNewest(input);
-            return posts.Select((p) => postMapper.Map(p)).ToArray();
+        public async Task<IEnumerable<PostView>> Handle(PaginationInfo input) {
+            IEnumerable<Post> posts = await postRepo.FindNewest(input);
+            List<PostView> views = new List<PostView>();
+
+            foreach (Post p in posts) {
+                views.Add(postMapper.Map(p));
+            }
+
+            return views;
         }
     }
     #endregion

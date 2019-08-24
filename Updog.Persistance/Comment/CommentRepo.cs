@@ -64,7 +64,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="postId">The ID of the post.</param>
         /// <returns>It's children comments.</returns>
-        public async Task<Comment[]> FindByPost(int postId) {
+        public async Task<IEnumerable<Comment>> FindByPost(int postId) {
             Post p = await postRepo.FindById(postId);
 
             if (p == null) {
@@ -73,7 +73,7 @@ namespace Updog.Persistance {
 
             using (DbConnection connection = GetConnection()) {
                 // Pull in every relevant comment first. This will be flat so we'll have to do some work.
-                Comment[] comments = (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
+                IEnumerable<Comment> comments = (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
                     "SELECT * FROM Comment LEFT JOIN User ON Comment.UserId = User.Id WHERE PostId = @PostId;",
                     (CommentRecord commentRec, UserRecord userRec) => {
                         Comment c = this.commentMapper.Map(Tuple.Create(commentRec, userRec));
@@ -85,9 +85,9 @@ namespace Updog.Persistance {
                     },
                     new {
                         PostId = postId
-                    })).ToArray();
+                    }));
 
-                return BuildCommentTree(comments).ToArray();
+                return BuildCommentTree(comments);
             }
         }
 
@@ -97,7 +97,7 @@ namespace Updog.Persistance {
         /// <param name="username">The user to look for.</param>
         /// <param name="paginationInfo">Paging info.</param>
         /// <returns>The comments found.</returns>
-        public async Task<Comment[]> FindByUser(string username, PaginationInfo paginationInfo) {
+        public async Task<IEnumerable<Comment>> FindByUser(string username, PaginationInfo paginationInfo) {
             using (DbConnection connection = GetConnection()) {
                 return (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
                     "SELECT * FROM Comment LEFT JOIN User ON Comment.UserId = User.Id WHERE User.Username = @Username LIMIT @Limit OFFSET @Offset ",
@@ -109,7 +109,7 @@ namespace Updog.Persistance {
                         Offset = paginationInfo.GetOffset(),
                         Limit = paginationInfo.PageSize
                     }
-                )).ToArray();
+                ));
             }
         }
 
@@ -168,12 +168,12 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="flatComments">The comments before de-flattening.</param>
         /// <returns>The comments in hierarcheal order.</returns>
-        private List<Comment> BuildCommentTree(Comment[] flatComments) {
+        private List<Comment> BuildCommentTree(IEnumerable<Comment> flatComments) {
             Dictionary<int, Comment> lookup = new Dictionary<int, Comment>();
 
             //Populate the lookup table
-            for (int i = 0; i < flatComments.Length; i++) {
-                lookup.Add(flatComments[i].Id, flatComments[i]);
+            foreach (Comment c in flatComments) {
+                lookup.Add(c.Id, c);
             }
 
             //Now iterate through the list and build the tree

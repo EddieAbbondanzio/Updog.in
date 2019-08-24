@@ -40,7 +40,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="pagination">The paging info.</param>
         /// <returns></returns>
-        public async Task<Post[]> FindNewest(PaginationInfo pagination) {
+        public async Task<IEnumerable<Post>> FindNewest(PaginationInfo pagination) {
             using (DbConnection connection = GetConnection()) {
                 return (await connection.QueryAsync<PostRecord, UserRecord, Post>(
                     @"SELECT * FROM Post
@@ -55,7 +55,7 @@ namespace Updog.Persistance {
                         Limit = pagination.PageSize,
                         Offset = pagination.GetOffset()
                     }
-                )).ToArray();
+                ));
             }
         }
 
@@ -66,7 +66,7 @@ namespace Updog.Persistance {
         /// <param name="pagination">Paging info</param>
         /// <returns>The collection of their posts (if any).</returns>
 
-        public async Task<Post[]> FindByUser(string username, PaginationInfo pagination) {
+        public async Task<IEnumerable<Post>> FindByUser(string username, PaginationInfo pagination) {
             using (DbConnection connection = GetConnection()) {
                 return (await connection.QueryAsync<PostRecord, UserRecord, Post>(
                     @"SELECT * FROM Post
@@ -83,7 +83,7 @@ namespace Updog.Persistance {
                         Limit = pagination.PageSize,
                         Offset = pagination.GetOffset()
                     }
-                )).ToArray();
+                ));
             }
         }
 

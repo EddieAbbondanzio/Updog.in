@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Updog.Domain;
 
@@ -11,7 +12,7 @@ namespace Updog.Application {
         /// </summary>
         /// <param name="pagination">Paging info</param>
         /// <returns>The newest new posts.</returns>
-        Task<Post[]> FindNewest(PaginationInfo pagination);
+        Task<IEnumerable<Post>> FindNewest(PaginationInfo pagination);
 
         /// <summary>
         /// Find posts for a specific user.
@@ -19,6 +20,6 @@ namespace Updog.Application {
         /// <param name="username">THe username to look for.</param>
         /// <param name="pagination">Paging info</param>
         /// <returns>The collection of their posts (if any).</returns>
-        Task<Post[]> FindByUser(string username, PaginationInfo pagination);
+        Task<IEnumerable<Post>> FindByUser(string username, PaginationInfo pagination);
     }
 }

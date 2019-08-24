@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Updog.Domain;
@@ -7,7 +8,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to find comments on a post.
     /// </summary>
-    public sealed class CommentFinderByUser : IInteractor<CommentFinderByUserParams, CommentView[]> {
+    public sealed class CommentFinderByUser : IInteractor<CommentFinderByUserParams, IEnumerable<CommentView>> {
         #region Fields
         /// <summary>
         /// The underlying repo for finding comments in the database.
@@ -33,12 +34,12 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<CommentView[]> Handle(CommentFinderByUserParams input) {
-            Comment[] comments = await commentRepo.FindByUser(input.Username, input.PaginationInfo);
-            CommentView[] views = new CommentView[comments.Length];
+        public async Task<IEnumerable<CommentView>> Handle(CommentFinderByUserParams input) {
+            IEnumerable<Comment> comments = await commentRepo.FindByUser(input.Username, input.PaginationInfo);
+            List<CommentView> views = new List<CommentView>();
 
-            for (int i = 0; i < comments.Length; i++) {
-                views[i] = commentMapper.Map(comments[i]);
+            foreach (Comment c in comments) {
+                views.Add(commentMapper.Map(c));
             }
 
             return views;

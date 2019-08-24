@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Updog.Domain;
 
@@ -12,7 +13,7 @@ namespace Updog.Application {
         /// </summary>
         /// <param name="post">The post ID.</param>
         /// <returns>The comments associated with it.</returns>
-        Task<Comment[]> FindByPost(int postId);
+        Task<IEnumerable<Comment>> FindByPost(int postId);
 
         /// <summary>
         /// Find a page of comments made by a specific user.
@@ -20,7 +21,7 @@ namespace Updog.Application {
         /// <param name="username">The user to look for.</param>
         /// <param name="paginationInfo">Paging info.</param>
         /// <returns>The comments found.</returns>
-        Task<Comment[]> FindByUser(string username, PaginationInfo paginationInfo);
+        Task<IEnumerable<Comment>> FindByUser(string username, PaginationInfo paginationInfo);
         #endregion
     }
 }
