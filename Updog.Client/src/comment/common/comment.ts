@@ -5,6 +5,11 @@ import { User } from '@/user/common/user';
  */
 export class Comment {
     /**
+     * The maximum number of characters allowed in the comment body.
+     */
+    public static BODY_MAX_LENGTH = 10_000;
+
+    /**
      *
      * @param id The ID of the comment.
      * @param user The user who posted it.
