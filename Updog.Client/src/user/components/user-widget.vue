@@ -1,8 +1,8 @@
 <template>
     <div class="ml-auto">
         <div v-if="user == null">
-            <b-button variant="outline-dark" to="login" class="mr-2">Log In</b-button>
-            <b-button variant="outline-dark" to="signup" class="ml-2">Sign Up</b-button>
+            <b-button variant="outline-dark" :to="{name:'login'}" class="mr-2">Log In</b-button>
+            <b-button variant="outline-dark" :to="{ name: 'signup'}" class="ml-2">Sign Up</b-button>
         </div>
         <div class="d-flex align-items-center flex-row" v-else>
             <material-icon
