@@ -6,22 +6,25 @@ namespace Updog.Application {
     /// <summary>
     /// Adds new posts to the system.
     /// </summary>
-    public sealed class PostCreator : IInteractor<PostCreateParams, Post> {
+    public sealed class PostCreator : IInteractor<PostCreateParams, PostView> {
         #region Fields
         private IPostRepo postRepo;
 
         private AbstractValidator<PostCreateParams> postValidator;
+
+        private IMapper<Post, PostView> postMapper;
         #endregion
 
         #region Constructor(s)
-        public PostCreator(IPostRepo postRepo, AbstractValidator<PostCreateParams> postValidator) {
+        public PostCreator(IPostRepo postRepo, AbstractValidator<PostCreateParams> postValidator, IMapper<Post, PostView> postMapper) {
             this.postRepo = postRepo;
             this.postValidator = postValidator;
+            this.postMapper = postMapper;
         }
         #endregion
 
         #region Publics
-        public async Task<Post> Handle(PostCreateParams input) {
+        public async Task<PostView> Handle(PostCreateParams input) {
             await postValidator.ValidateAndThrowAsync(input);
 
             Post post = new Post() {
@@ -32,7 +35,7 @@ namespace Updog.Application {
             };
 
             await postRepo.Add(post);
-            return post;
+            return postMapper.Map(post);
         }
         #endregion
     }

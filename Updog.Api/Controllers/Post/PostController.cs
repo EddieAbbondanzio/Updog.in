@@ -74,7 +74,7 @@ namespace Updog.Api {
         [HttpPost]
         public async Task<ActionResult> Create([FromBody]PostCreateRequest payload) {
             try {
-                Post post = await postCreator.Handle(new PostCreateParams(payload.Type, payload.Title, payload.Body, User));
+                PostView post = await postCreator.Handle(new PostCreateParams(payload.Type, payload.Title, payload.Body, User));
                 return Ok(post);
             } catch (ValidationException ex) {
                 return BadRequest(ex.Message);
