@@ -6,6 +6,7 @@ using Dapper;
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using Updog.Application.Paging;
 
 namespace Updog.Persistance {
     /// <summary>
@@ -38,11 +39,12 @@ namespace Updog.Persistance {
         /// <summary>
         /// Find the newest posts by their creation date.
         /// </summary>
-        /// <param name="pagination">The paging info.</param>
-        /// <returns></returns>
-        public async Task<IEnumerable<Post>> FindNewest(PaginationInfo pagination) {
+        /// <param name="pageNumber">Index of the page..</param>
+        /// <param name="pageSize">Page size.</param>
+        /// <returns>The result set.</returns>
+        public async Task<PagedResultSet<Post>> FindNewest(int pageNumber, int pageSize) {
             using (DbConnection connection = GetConnection()) {
-                return (await connection.QueryAsync<PostRecord, UserRecord, Post>(
+                IEnumerable<Post> posts = await connection.QueryAsync<PostRecord, UserRecord, Post>(
                     @"SELECT * FROM Post
                     LEFT JOIN User ON User.Id = Post.UserId
                     ORDER BY CreationDate ASC
@@ -50,12 +52,16 @@ namespace Updog.Persistance {
                     OFFSET @Offset",
                     (PostRecord postRec, UserRecord userRec) => {
                         return postMapper.Map(Tuple.Create(postRec, userRec));
-                    }
-                    , new {
-                        Limit = pagination.PageSize,
-                        Offset = pagination.GetOffset()
-                    }
-                ));
+                    },
+                    BuildPaginationParams(pageNumber, pageSize)
+                );
+
+                //Get total count
+                int totalCount = await connection.ExecuteScalarAsync<int>(
+                    "SELECT COUNT(*) FROM Post;"
+                );
+
+                return new PagedResultSet<Post>(posts, new PaginationInfo(pageNumber, pageSize, totalCount));
             }
         }
 
@@ -63,12 +69,13 @@ namespace Updog.Persistance {
         /// Find posts for a specific user.
         /// </summary>
         /// <param name="username">The username to look for.</param>
-        /// <param name="pagination">Paging info</param>
+        /// <param name="pageNumber">Index of the page.</param>
+        /// <param name="pageSize">Size of the page.</param>
         /// <returns>The collection of their posts (if any).</returns>
 
-        public async Task<IEnumerable<Post>> FindByUser(string username, PaginationInfo pagination) {
+        public async Task<PagedResultSet<Post>> FindByUser(string username, int pageNumber, int pageSize) {
             using (DbConnection connection = GetConnection()) {
-                return (await connection.QueryAsync<PostRecord, UserRecord, Post>(
+                IEnumerable<Post> posts = await connection.QueryAsync<PostRecord, UserRecord, Post>(
                     @"SELECT * FROM Post
                     LEFT JOIN User ON User.Id = Post.UserId
                     WHERE User.Username = @Username
@@ -78,12 +85,17 @@ namespace Updog.Persistance {
                     (PostRecord postRec, UserRecord userRec) => {
                         return postMapper.Map(Tuple.Create(postRec, userRec));
                     },
-                    new {
-                        Username = username,
-                        Limit = pagination.PageSize,
-                        Offset = pagination.GetOffset()
-                    }
-                ));
+                    BuildPaginationParams(new { Username = username }, pageNumber, pageSize)
+                );
+
+                //Get total count
+                int totalCount = await connection.ExecuteScalarAsync<int>(
+                    "SELECT COUNT(*) FROM Post LEFT JOIN User ON Post.UserId = User.Id WHERE User.Username = @Username",
+                    new { Username = username }
+                );
+
+                return new PagedResultSet<Post>(posts, new PaginationInfo(pageNumber, pageSize, totalCount));
+
             }
         }
 

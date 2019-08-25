@@ -2,17 +2,16 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters for the comment finder by user interactor.
     /// </summary>
-    public sealed class CommentFinderByUserParams {
+    public sealed class CommentFinderByUserParams : IPagable {
         #region Properties
         /// <summary>
         /// The username of the user to look for.
         /// </summary>
         public string Username { get; }
 
-        /// <summary>
-        /// How large of a page, and what page to get.
-        /// </summary>
-        public PaginationInfo PaginationInfo { get; }
+        public int PageNumber { get; }
+
+        public int PageSize { get; }
         #endregion
 
         #region Constructor(s)
@@ -20,10 +19,12 @@ namespace Updog.Application {
         /// Create a new set of comment finder by user params.
         /// </summary>
         /// <param name="userId">The user ID to look for.</param>
-        /// <param name="paginationInfo">Paging info.</param>
-        public CommentFinderByUserParams(string username, PaginationInfo paginationInfo) {
+        /// <param name="pageNumber">Page index..</param>
+        /// <param name="pageSize">The size of the page..</param>
+        public CommentFinderByUserParams(string username, int pageNumber, int pageSize) {
             Username = username;
-            PaginationInfo = paginationInfo;
+            PageNumber = pageNumber;
+            PageSize = pageSize;
         }
         #endregion
     }

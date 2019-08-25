@@ -6,6 +6,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Updog.Application;
+using Updog.Application.Paging;
 using Updog.Domain;
 
 namespace Updog.Api {
@@ -72,7 +73,7 @@ namespace Updog.Api {
         [HttpGet("user/{username}")]
         public async Task<ActionResult> GetCommentsByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery]int pageSize = Post.PageSize) {
             // try {
-            IEnumerable<CommentView> comments = await commentFinderByUser.Handle(new CommentFinderByUserParams(username, new PaginationInfo(pageNumber, pageSize)));
+            PagedResultSet<CommentView> comments = await commentFinderByUser.Handle(new CommentFinderByUserParams(username, pageNumber, pageSize));
             return Ok(comments);
             // } catch {
             // return InternalServerError();

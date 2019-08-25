@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Updog.Application.Paging;
 using Updog.Domain;
 
 namespace Updog.Application {
@@ -19,9 +20,10 @@ namespace Updog.Application {
         /// Find a page of comments made by a specific user.
         /// </summary>
         /// <param name="username">The user to look for.</param>
-        /// <param name="paginationInfo">Paging info.</param>
+        /// <param name="pageNumber">Index of the page..</param>
+        /// <param name="pageSize">Size of the page..</param>
         /// <returns>The comments found.</returns>
-        Task<IEnumerable<Comment>> FindByUser(string username, PaginationInfo paginationInfo);
+        Task<PagedResultSet<Comment>> FindByUser(string username, int pageNumber, int pageSize);
         #endregion
     }
 }

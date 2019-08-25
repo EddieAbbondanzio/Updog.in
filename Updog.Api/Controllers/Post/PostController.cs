@@ -7,6 +7,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Updog.Application.Paging;
 
 namespace Updog.Api {
     /// <summary>
@@ -57,14 +58,16 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("new")]
         public async Task<ActionResult> FindByNew([FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            IEnumerable<PostView> posts = await postFinderByNew.Handle(new PaginationInfo(pageNumber, pageSize));
+            PagedResultSet<PostView> posts = await postFinderByNew.Handle(new PostFinderByNewParams(pageNumber, pageSize));
+            SetContentRangeHeader(posts.Pagination);
             return Ok(posts);
         }
 
         [AllowAnonymous]
         [HttpGet("user/{username}")]
         public async Task<ActionResult> FindByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            IEnumerable<PostView> posts = await postFinderByUser.Handle(new PostFinderByUserParam(username, new PaginationInfo(pageNumber, pageSize)));
+            PagedResultSet<PostView> posts = await postFinderByUser.Handle(new PostFinderByUserParam(username, pageNumber, pageSize));
+            SetContentRangeHeader(posts.Pagination);
             return Ok(posts);
         }
 

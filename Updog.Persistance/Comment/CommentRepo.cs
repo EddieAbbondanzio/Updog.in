@@ -6,6 +6,7 @@ using Dapper;
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using Updog.Application.Paging;
 
 namespace Updog.Persistance {
     /// <summary>
@@ -95,21 +96,29 @@ namespace Updog.Persistance {
         /// Find a page of comments made by a specific user.
         /// </summary>
         /// <param name="username">The user to look for.</param>
-        /// <param name="paginationInfo">Paging info.</param>
+        /// <param name="pageNumber">Page index.</param>
+        /// <param name="pageSize">Page size</param>
         /// <returns>The comments found.</returns>
-        public async Task<IEnumerable<Comment>> FindByUser(string username, PaginationInfo paginationInfo) {
+        public async Task<PagedResultSet<Comment>> FindByUser(string username, int pageNumber, int pageSize) {
             using (DbConnection connection = GetConnection()) {
-                return (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
+                IEnumerable<Comment> comments = await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
                     "SELECT * FROM Comment LEFT JOIN User ON Comment.UserId = User.Id WHERE User.Username = @Username LIMIT @Limit OFFSET @Offset ",
                     (commentRec, userRec) => {
                         return commentMapper.Map(Tuple.Create(commentRec, userRec));
                     },
+                    BuildPaginationParams(
                     new {
-                        Username = username,
-                        Offset = paginationInfo.GetOffset(),
-                        Limit = paginationInfo.PageSize
-                    }
-                ));
+                        Username = username
+                    }, pageNumber, pageSize)
+                );
+
+                //Get total count
+                int totalCount = await connection.ExecuteScalarAsync<int>(
+                    "SELECT COUNT(*) FROM Comment LEFT JOIN User ON Comment.UserId = User.Id WHERE User.Username = @Username",
+                    new { Username = username }
+                );
+
+                return new PagedResultSet<Comment>(comments, new PaginationInfo(pageNumber, pageSize, totalCount));
             }
         }
 
