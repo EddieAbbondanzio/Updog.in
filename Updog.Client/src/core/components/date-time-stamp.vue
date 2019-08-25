@@ -1,5 +1,9 @@
 <template>
-    <time :title="date">{{ humanReadableDifference }} ago&nbsp;</time>
+    <div class="d-inline-block" :title="date">
+        <time>{{ humanReadableDifference }} ago</time>
+        <span v-if="modified">*</span>
+        <span>&nbsp;</span>
+    </div>
 </template>
 
 <script lang="ts">
@@ -19,6 +23,13 @@ export default class DateTimeStamp extends Vue {
      */
     @Prop()
     public date!: Date;
+
+    /**
+     * If the resource has been modified since it's original creation.
+     * Causes a "*" to appear.
+     */
+    @Prop({ default: false })
+    public modified!: boolean;
 
     /**
      * How long ago the date occured from today.

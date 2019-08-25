@@ -17,7 +17,7 @@
                     </h4>
                     <p class="text-muted">
                         Posted
-                        <date-time-stamp :date="post.creationDate" />by
+                        <date-time-stamp :date="post.creationDate" :modified="post.wasUpdated" />by
                         <user-link :user="post.user" />
                     </p>
 

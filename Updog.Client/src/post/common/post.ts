@@ -42,7 +42,7 @@ export class Post extends UserEntity {
         public user: User,
         public creationDate: Date,
         public commentCount: number,
-        public wasUpdate: boolean,
+        public wasUpdated: boolean,
         public wasDeleted: boolean
     ) {
         super();
