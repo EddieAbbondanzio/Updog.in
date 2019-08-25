@@ -26,7 +26,7 @@
 import { Component, Vue, Prop, Mixins } from 'vue-property-decorator';
 import { Post } from '../post/common/post';
 import { PostMixin } from '../post/mixins/post-mixin';
-import { PaginationInfo } from '../core/pagination-info';
+import { PaginationParams } from '../core/pagination/pagination-params';
 import MasterPage from '@/core/components/master-page.vue';
 import { UserMixin } from '@/user/mixins/user-mixin';
 import { User as UserEntity } from '@/user/common/user';
@@ -76,8 +76,11 @@ export default class User extends Mixins(UserMixin, PostMixin, CommentMixin) {
         const username = this.$route.params.username;
         this.user = await this.$findUserByUsername(username);
 
-        this.posts = await this.$findPostsByUser(username, new PaginationInfo(0, User.DEFAULT_POST_PAGE_SIZE));
-        this.comments = await this.$findCommentsByUser(username, new PaginationInfo(0, User.DEFAULT_COMMENT_PAGE_SIZE));
+        this.posts = await this.$findPostsByUser(username, new PaginationParams(0, User.DEFAULT_POST_PAGE_SIZE));
+        this.comments = await this.$findCommentsByUser(
+            username,
+            new PaginationParams(0, User.DEFAULT_COMMENT_PAGE_SIZE)
+        );
     }
 
     public memberLength() {

@@ -1,6 +1,6 @@
 import { PostType } from './post-type';
 import { User } from '@/user/common/user';
-import { PaginationInfo } from '@/core/pagination-info';
+import { PaginationParams } from '@/core/pagination/pagination-params';
 
 /**
  * Post made by a user. Probably a repost...

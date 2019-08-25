@@ -1,7 +1,7 @@
 /**
  * Pagination information to retrieve a specific page of data.
  */
-export class PaginationInfo {
+export class PaginationParams {
     /**
      * Create a new set of pagination info.
      * @param pageNumber The number of the page.

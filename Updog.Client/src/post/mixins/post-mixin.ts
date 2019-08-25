@@ -4,10 +4,11 @@ import { PostCreateParams } from '../use-cases/create/post-create-params';
 import { Post } from '../common/post';
 import { PostCreator } from '../use-cases/create/post-creator';
 import { PostFinderById } from '../use-cases/find-by-id/post-finder-by-id';
-import { PaginationInfo } from '@/core/pagination-info';
+import { PaginationParams } from '@/core/pagination/pagination-params';
 import { PostFinderByNew } from '../use-cases/find-by-new/post-finder-by-new';
 import { PostFinderByUser } from '../use-cases/find-by-user/post-finder-by-user';
 import { PostFinderByUserParams } from '../use-cases/find-by-user/post-finder-by-user-params';
+import { PagedResultSet } from '@/core/pagination/paged-result-set';
 
 @Component
 export class PostMixin extends Vue {
@@ -31,7 +32,7 @@ export class PostMixin extends Vue {
      * Find a collection of posts by new.
      * @param paginationInfo The pagination info.
      */
-    public async $findPostsByNew(paginationInfo: PaginationInfo): Promise<Post[]> {
+    public async $findPostsByNew(paginationInfo: PaginationParams): Promise<PagedResultSet<Post>> {
         return new PostFinderByNew().handle(paginationInfo);
     }
 
@@ -40,7 +41,7 @@ export class PostMixin extends Vue {
      * @param username The username to look for.
      * @param paginationInfo The paging info.
      */
-    public async $findPostsByUser(username: string, paginationInfo: PaginationInfo): Promise<Post[]> {
+    public async $findPostsByUser(username: string, paginationInfo: PaginationParams): Promise<Post[]> {
         return new PostFinderByUser().handle(new PostFinderByUserParams(username, paginationInfo));
     }
 }
