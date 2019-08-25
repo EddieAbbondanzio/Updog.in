@@ -3,7 +3,7 @@
         <template>
             <div v-if="post != null">
                 <post-summary :post="post" expand="true" />
-                <comment-create-form @submit="onCommentCreate" />
+                <comment-create-form @submit="onCommentCreate" ref="commentCreateForm" />
 
                 <!-- Comments! -->
                 <comment-summary
@@ -48,6 +48,10 @@ import { Comment } from '../comment/common/comment';
     mixins: [PostMixin, CommentMixin]
 })
 export default class Post extends Mixins(PostMixin, CommentMixin) {
+    public $refs!: {
+        commentCreateForm: CommentCreateForm;
+    };
+
     /**
      * The post being displayed.
      */
@@ -71,6 +75,7 @@ export default class Post extends Mixins(PostMixin, CommentMixin) {
 
         const c = await this.$createComment(new CommentCreateParams(comment, this.post!.id, 0));
         this.comments.unshift(c);
+        this.$refs.commentCreateForm.clear();
     }
 }
 </script>

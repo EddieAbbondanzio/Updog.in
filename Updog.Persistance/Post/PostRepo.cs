@@ -47,7 +47,7 @@ namespace Updog.Persistance {
                 IEnumerable<Post> posts = await connection.QueryAsync<PostRecord, UserRecord, Post>(
                     @"SELECT * FROM Post
                     LEFT JOIN User ON User.Id = Post.UserId
-                    ORDER BY CreationDate ASC
+                    ORDER BY CreationDate DESC
                     LIMIT @Limit
                     OFFSET @Offset",
                     (PostRecord postRec, UserRecord userRec) => {
@@ -126,7 +126,7 @@ namespace Updog.Persistance {
         public async Task Add(Post post) {
             using (DbConnection connection = GetConnection()) {
                 post.Id = await connection.QueryFirstOrDefaultAsync<int>(
-                    "INSERT INTO Post (Title, Body, Type, CreationDate, UserId, WasUpdated, WasDeleted) VALUES (@Title, @Body, @Type, @CreationDate, @UserId, @WasUpdated, @WasDeleted); SELECT LAST_INSERT_ID();",
+                    "INSERT INTO Post (Title, Body, Type, CreationDate, UserId, WasUpdated, WasDeleted, CommentCount) VALUES (@Title, @Body, @Type, @CreationDate, @UserId, @WasUpdated, @WasDeleted, @CommentCount); SELECT LAST_INSERT_ID();",
                     postMapper.Reverse(post).Item1
                 );
             }

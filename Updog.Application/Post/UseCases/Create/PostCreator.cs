@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Updog.Domain;
 using FluentValidation;
+using System;
 
 namespace Updog.Application {
     /// <summary>
@@ -31,7 +32,8 @@ namespace Updog.Application {
                 Type = input.Type,
                 Title = input.Title,
                 Body = input.Body,
-                User = input.User
+                User = input.User,
+                CreationDate = DateTime.UtcNow
             };
 
             await postRepo.Add(post);

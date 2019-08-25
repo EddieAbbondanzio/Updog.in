@@ -131,6 +131,7 @@ namespace Updog.Api {
                 b.AllowAnyOrigin();
                 b.AllowAnyMethod();
                 b.AllowAnyHeader();
+                b.WithExposedHeaders("Content-Range");
             });
 
             app.UseAuthentication();

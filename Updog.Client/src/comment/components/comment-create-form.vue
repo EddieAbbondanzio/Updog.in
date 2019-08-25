@@ -49,6 +49,10 @@ export default class CommentCreateForm extends Vue {
         this.$emit('submit', this.comment);
     }
 
+    public clear(): void {
+        this.comment = '';
+    }
+
     public getMaxLength() {
         return Comment.BODY_MAX_LENGTH;
     }

@@ -74,6 +74,7 @@ namespace Updog.Api {
         public async Task<ActionResult> GetCommentsByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery]int pageSize = Post.PageSize) {
             // try {
             PagedResultSet<CommentView> comments = await commentFinderByUser.Handle(new CommentFinderByUserParams(username, pageNumber, pageSize));
+            SetContentRangeHeader(comments.Pagination);
             return Ok(comments);
             // } catch {
             // return InternalServerError();

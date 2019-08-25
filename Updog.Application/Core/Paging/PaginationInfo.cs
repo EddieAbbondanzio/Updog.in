@@ -32,7 +32,7 @@ namespace Updog.Application.Paging {
         /// <param name="totalRecordCount">Total available pages.</param>
         public PaginationInfo(int pageNumber, int pageSize, int totalRecordCount) {
             PageNumber = pageNumber;
-            PageSize = Math.Min(pageSize, totalRecordCount);
+            PageSize = pageSize;
             TotalRecordCount = totalRecordCount;
         }
         #endregion
