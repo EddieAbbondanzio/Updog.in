@@ -76,6 +76,9 @@ export default class Post extends Mixins(PostMixin, CommentMixin) {
         const c = await this.$createComment(new CommentCreateParams(comment, this.post!.id, 0));
         this.comments.unshift(c);
         this.$refs.commentCreateForm.clear();
+
+        // Hack...
+        this.post.commentCount++;
     }
 }
 </script>

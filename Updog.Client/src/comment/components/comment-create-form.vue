@@ -51,6 +51,7 @@ export default class CommentCreateForm extends Vue {
 
     public clear(): void {
         this.comment = '';
+        this.$validator.reset();
     }
 
     public getMaxLength() {
