@@ -5,6 +5,8 @@
                 <post-summary :post="post" expand="true" />
                 <comment-create-form @submit="onCommentCreate" ref="commentCreateForm" />
 
+                <user-not-logged-in-popup ref="userNotLoggedInPopup" />
+
                 <!-- Comments! -->
                 <comment-summary
                     v-for="comment in comments"
@@ -33,6 +35,9 @@ import { CommentCreateParams } from '../comment/use-cases/create/comment-create-
 import { Post as PostEntity } from '@/post/common/post';
 import CommentSummary from '@/comment/components/comment-summary.vue';
 import { Comment } from '../comment/common/comment';
+import UserNotLoggedInPopup from '@/user/components/user-not-logged-in-popup.vue';
+import User from './user.vue';
+import { Context } from '../core/context';
 
 /**
  * View a post via it's ID.
@@ -43,13 +48,15 @@ import { Comment } from '../comment/common/comment';
         MasterPage,
         PostSummary,
         CommentCreateForm,
-        CommentSummary
+        CommentSummary,
+        UserNotLoggedInPopup
     },
     mixins: [PostMixin, CommentMixin]
 })
 export default class Post extends Mixins(PostMixin, CommentMixin) {
     public $refs!: {
         commentCreateForm: CommentCreateForm;
+        userNotLoggedInPopup: UserNotLoggedInPopup;
     };
 
     /**
@@ -69,6 +76,12 @@ export default class Post extends Mixins(PostMixin, CommentMixin) {
     }
 
     public async onCommentCreate(comment: string) {
+        // Redirect to login if no user is logged in.
+        if (Context.login == null) {
+            this.$router.push({ name: 'login' });
+            return;
+        }
+
         if (this.post == null) {
             throw new Error();
         }
