@@ -27,6 +27,9 @@ import { Post } from '../post/common/post';
 import { PagedResultSet } from '../core/pagination/paged-result-set';
 import PaginationNavigation from '@/core/components/pagination-navigation.vue';
 
+/**
+ * Home page that shows off the newests new posts.
+ */
 @Component({
     components: {
         CreatePostButtons,
@@ -41,17 +44,21 @@ export default class Home extends PostMixin {
     public currentPage: number = 0;
 
     public async created() {
-        this.posts = await this.$findPostsByNew(new PaginationParams(this.currentPage, 3));
+        this.refreshPosts();
     }
 
     public async onPrevious() {
         this.currentPage--;
-        this.posts = await this.$findPostsByNew(new PaginationParams(this.currentPage, 3));
+        this.refreshPosts();
     }
 
     public async onNext() {
         this.currentPage++;
-        this.posts = await this.$findPostsByNew(new PaginationParams(this.currentPage, 3));
+        this.refreshPosts();
+    }
+
+    public async refreshPosts() {
+        this.posts = await this.$findPostsByNew(new PaginationParams(this.currentPage, Post.DEFAULT_PAGE_SIZE));
     }
 }
 </script>

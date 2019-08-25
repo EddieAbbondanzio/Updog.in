@@ -43,6 +43,10 @@ export abstract class ApiInteractor<TInput, TOutput> {
          * TOTAL_COUNT: The total number of resources available.
          */
 
+        if (response.headers['content-range'] == null) {
+            throw new Error('No Content-Range header was set');
+        }
+
         const rangeHeader = response.headers['content-range'];
 
         const splitHeader = rangeHeader.split('/');

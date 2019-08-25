@@ -1,16 +1,32 @@
 <template>
     <master-page>
         <template>
-            <b-tabs cont>
+            <b-tabs>
                 <b-tab title="Posts">
-                    <post-summary :post="post" v-for="post in posts" v-bind:key="post.id" />
+                    <div v-if="posts != null">
+                        <post-summary :post="post" v-for="post in posts" v-bind:key="post.id" />
+
+                        <pagination-navigation
+                            :pagination="posts.pagination"
+                            @previous="onPostPrevious"
+                            @next="onPostNext"
+                        />
+                    </div>
                 </b-tab>
                 <b-tab title="Comments">
-                    <comment-summary
-                        :comment="comment"
-                        v-for="comment in comments"
-                        v-bind:key="comment.id"
-                    />
+                    <div v-if="comments != null">
+                        <comment-summary
+                            :comment="comment"
+                            v-for="comment in comments"
+                            v-bind:key="comment.id"
+                        />
+
+                        <pagination-navigation
+                            :pagination="comments.pagination"
+                            @previous="onCommentPrevious"
+                            @next="onCommentNext"
+                        />
+                    </div>
                 </b-tab>
             </b-tabs>
         </template>
@@ -35,6 +51,8 @@ import PostSummary from '@/post/components/post-summary.vue';
 import CommentSummary from '@/comment/components/comment-summary.vue';
 import { CommentMixin } from '../comment/mixins/comment-mixin';
 import { Comment } from '../comment/common/comment';
+import PaginationNavigation from '@/core/components/pagination-navigation.vue';
+import { PagedResultSet } from '../core/pagination/paged-result-set';
 
 /**
  * User details page.
@@ -45,7 +63,8 @@ import { Comment } from '../comment/common/comment';
         MasterPage,
         UserSummary,
         PostSummary,
-        CommentSummary
+        CommentSummary,
+        PaginationNavigation
     },
     mixins: [UserMixin, PostMixin, CommentMixin]
 })
@@ -65,21 +84,63 @@ export default class User extends Mixins(UserMixin, PostMixin, CommentMixin) {
     /**
      * Posts the user has made.
      */
-    public posts: Post[] = [];
+    public posts: PagedResultSet<Post> | null = null;
+
+    /**
+     * The current post page being displayed.
+     */
+    public postCurrentPage: number = 0;
 
     /**
      * Comments the user had made.
      */
-    public comments: Comment[] = [];
+    public comments: PagedResultSet<Comment> | null = null;
+
+    public commentCurrentpage: number = 0;
 
     public async created() {
         const username = this.$route.params.username;
         this.user = await this.$findUserByUsername(username);
 
-        this.posts = await this.$findPostsByUser(username, new PaginationParams(0, User.DEFAULT_POST_PAGE_SIZE));
+        this.posts = await this.$findPostsByUser(
+            username,
+            new PaginationParams(this.postCurrentPage, User.DEFAULT_POST_PAGE_SIZE)
+        );
         this.comments = await this.$findCommentsByUser(
             username,
-            new PaginationParams(0, User.DEFAULT_COMMENT_PAGE_SIZE)
+            new PaginationParams(this.commentCurrentpage, User.DEFAULT_COMMENT_PAGE_SIZE)
+        );
+    }
+
+    public async onPostNext() {
+        this.postCurrentPage++;
+        this.posts = await this.$findPostsByUser(
+            this.user!.username,
+            new PaginationParams(this.postCurrentPage, User.DEFAULT_POST_PAGE_SIZE)
+        );
+    }
+
+    public async onPostPrevious() {
+        this.postCurrentPage--;
+        this.posts = await this.$findPostsByUser(
+            this.user!.username,
+            new PaginationParams(this.postCurrentPage, User.DEFAULT_POST_PAGE_SIZE)
+        );
+    }
+
+    public async onCommentNext() {
+        this.postCurrentPage--;
+        this.comments = await this.$findCommentsByUser(
+            this.user!.username,
+            new PaginationParams(this.commentCurrentpage, User.DEFAULT_COMMENT_PAGE_SIZE)
+        );
+    }
+
+    public async onCommentPrevious() {
+        this.postCurrentPage--;
+        this.comments = await this.$findCommentsByUser(
+            this.user!.username,
+            new PaginationParams(this.commentCurrentpage, User.DEFAULT_COMMENT_PAGE_SIZE)
         );
     }
 

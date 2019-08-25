@@ -41,7 +41,7 @@ export class PostMixin extends Vue {
      * @param username The username to look for.
      * @param paginationInfo The paging info.
      */
-    public async $findPostsByUser(username: string, paginationInfo: PaginationParams): Promise<Post[]> {
+    public async $findPostsByUser(username: string, paginationInfo: PaginationParams): Promise<PagedResultSet<Post>> {
         return new PostFinderByUser().handle(new PostFinderByUserParams(username, paginationInfo));
     }
 }

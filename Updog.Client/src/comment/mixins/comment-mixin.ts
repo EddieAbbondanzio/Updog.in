@@ -8,6 +8,7 @@ import { Comment } from '@/comment/common/comment';
 import { PaginationParams } from '@/core/pagination/pagination-params';
 import { CommentFinderByUser } from '../use-cases/find-by-user/comment-finder-by-user';
 import { CommentFinderByUserParams } from '../use-cases/find-by-user/comment-finder-by-user-param';
+import { PagedResultSet } from '@/core/pagination/paged-result-set';
 
 /**
  * Mixin to handle comment related things.
@@ -35,7 +36,10 @@ export class CommentMixin extends Vue {
      * @param username The username of the user.
      * @param paginationInfo Pagination info.
      */
-    public async $findCommentsByUser(username: string, paginationInfo: PaginationParams): Promise<Comment[]> {
+    public async $findCommentsByUser(
+        username: string,
+        paginationInfo: PaginationParams
+    ): Promise<PagedResultSet<Comment>> {
         return new CommentFinderByUser().handle(new CommentFinderByUserParams(username, paginationInfo));
     }
 
