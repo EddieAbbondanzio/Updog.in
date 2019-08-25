@@ -9,6 +9,8 @@ import { PostFinderByNew } from '../use-cases/find-by-new/post-finder-by-new';
 import { PostFinderByUser } from '../use-cases/find-by-user/post-finder-by-user';
 import { PostFinderByUserParams } from '../use-cases/find-by-user/post-finder-by-user-params';
 import { PagedResultSet } from '@/core/pagination/paged-result-set';
+import { PostUpdateParams } from '../use-cases/update/post-update-params';
+import { PostUpdater } from '../use-cases/update/post-updater';
 
 @Component
 export class PostMixin extends Vue {
@@ -18,6 +20,14 @@ export class PostMixin extends Vue {
      */
     public async $createPost(request: PostCreateParams): Promise<Post> {
         return new PostCreator().handle(request);
+    }
+
+    /**
+     * Update a post with the backend.
+     * @param request The post update params.
+     */
+    public async $updatePost(request: PostUpdateParams): Promise<Post> {
+        return new PostUpdater().handle(request);
     }
 
     /**

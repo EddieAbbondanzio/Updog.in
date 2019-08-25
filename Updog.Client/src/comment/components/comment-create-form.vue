@@ -45,7 +45,11 @@ export default class CommentCreateForm extends Vue {
         });
     }
 
-    public onSubmit() {
+    public async onSubmit() {
+        // Validate first.
+        if (!(await this.$validator.validate())) {
+            return;
+        }
         this.$emit('submit', this.comment);
     }
 

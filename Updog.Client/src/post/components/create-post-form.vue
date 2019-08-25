@@ -153,7 +153,7 @@ export default class CreatePostForm extends Vue {
                 },
                 textBody: {
                     required: 'Body is required.',
-                    confirmed: 'Passwords do not match.'
+                    max: 'Body may not be longer than 10,000 characters.'
                 }
             }
         });
