@@ -2,7 +2,7 @@
     <master-page>
         <template>
             <div v-if="post != null">
-                <post-summary :post="post" expand="true" />
+                <post-summary :post="post" :showEditControls="true" expand="true" />
                 <comment-create-form @submit="onCommentCreate" ref="commentCreateForm" />
 
                 <user-not-logged-in-popup ref="userNotLoggedInPopup" />
@@ -75,6 +75,9 @@ export default class Post extends Mixins(PostMixin, CommentMixin) {
         this.comments = await this.$findCommentsByPost(postId);
     }
 
+    /**
+     * Event handler for when a comment is created.
+     */
     public async onCommentCreate(comment: string) {
         // Redirect to login if no user is logged in.
         if (Context.login == null) {

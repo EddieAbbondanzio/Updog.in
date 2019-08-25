@@ -54,7 +54,9 @@ export class PostMapper implements Mapper<{ [key: string]: any }, Post> {
             source.body,
             user,
             new Date(source.creationDate),
-            source.commentCount
+            source.commentCount,
+            source.wasUpdated,
+            source.wasDeleted
         );
     }
 }

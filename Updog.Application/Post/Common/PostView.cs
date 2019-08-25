@@ -43,6 +43,16 @@ namespace Updog.Application {
         /// </summary>
         /// <value></value>
         public int CommentCount { get; }
+
+        /// <summary>
+        /// If the post has ben editted.
+        /// </summary>
+        public bool WasUpdated { get; }
+
+        /// <summary>
+        /// If the post has been deleted.
+        /// </summary>
+        public bool WasDeleted { get; }
         #endregion
 
         #region Constructor(s)
@@ -56,7 +66,9 @@ namespace Updog.Application {
         /// <param name="user">The OP.</param>
         /// <param name="creationDate">The date the post was created on.</param>
         /// <param name="commentCount">The comment countof the post</param>
-        public PostView(int id, PostType type, string title, string body, UserView user, DateTime creationDate, int commentCount) {
+        /// <param name="wasEditted">If the post has been editted</param>
+        /// <param name="wasDeleted">If the post has been deleted.</param>
+        public PostView(int id, PostType type, string title, string body, UserView user, DateTime creationDate, int commentCount, bool wasEditted, bool wasDeleted) {
             Id = id;
             Type = type;
             Title = title;
@@ -64,6 +76,8 @@ namespace Updog.Application {
             User = user;
             CreationDate = creationDate;
             CommentCount = commentCount;
+            WasUpdated = wasEditted;
+            WasDeleted = wasDeleted;
         }
         #endregion
     }

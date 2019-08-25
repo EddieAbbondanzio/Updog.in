@@ -39,6 +39,8 @@ export class CommentMapper implements Mapper<{ [key: string]: any }, Comment> {
             user,
             source.body,
             new Date(source.creationDate),
+            source.wasUpdated,
+            source.wasDeleted,
             source.children.map(c => this.map(c))
         );
     }

@@ -1,11 +1,12 @@
 import { PostType } from './post-type';
 import { User } from '@/user/common/user';
 import { PaginationParams } from '@/core/pagination/pagination-params';
+import { UserEntity } from '@/core/common/user-entity';
 
 /**
  * Post made by a user. Probably a repost...
  */
-export class Post {
+export class Post extends UserEntity {
     /**
      * Default number of posts in a page.
      */
@@ -30,6 +31,8 @@ export class Post {
      * @param user The user that posted the post.
      * @param creationDate Date and time of posting.
      * @param commentCount The number of comments on it.
+     * @param wasUpdated If the post was editted.
+     * @param wasDeleted If the post was deleted.
      */
     constructor(
         public id: number,
@@ -38,6 +41,10 @@ export class Post {
         public body: string,
         public user: User,
         public creationDate: Date,
-        public commentCount: number
-    ) {}
+        public commentCount: number,
+        public wasUpdate: boolean,
+        public wasDeleted: boolean
+    ) {
+        super();
+    }
 }

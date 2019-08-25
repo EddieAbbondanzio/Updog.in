@@ -26,7 +26,7 @@ namespace Updog.Application {
         #region Publics
         public PostView Map(Post post) {
             UserView userView = userMapper.Map(post.User);
-            return new PostView(post.Id, post.Type, post.Title, post.Body, userView, post.CreationDate, post.CommentCount);
+            return new PostView(post.Id, post.Type, post.Title, post.Body, userView, post.CreationDate, post.CommentCount, post.WasUpdated, post.WasDeleted);
         }
         #endregion
     }
