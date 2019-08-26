@@ -35,7 +35,6 @@ import { CommentCreateParams } from '../comment/use-cases/create/comment-create-
 import { Post as PostEntity } from '@/post/common/post';
 import CommentSummary from '@/comment/components/comment-summary.vue';
 import { Comment } from '../comment/common/comment';
-import UserNotLoggedInPopup from '@/user/components/user-not-logged-in-popup.vue';
 import User from './user.vue';
 import { Context } from '../core/context';
 
@@ -48,15 +47,13 @@ import { Context } from '../core/context';
         MasterPage,
         PostSummary,
         CommentCreateForm,
-        CommentSummary,
-        UserNotLoggedInPopup
+        CommentSummary
     },
     mixins: [PostMixin, CommentMixin]
 })
 export default class Post extends Mixins(PostMixin, CommentMixin) {
     public $refs!: {
         commentCreateForm: CommentCreateForm;
-        userNotLoggedInPopup: UserNotLoggedInPopup;
     };
 
     /**

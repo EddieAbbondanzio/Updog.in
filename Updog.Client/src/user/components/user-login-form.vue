@@ -55,7 +55,6 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { UserMixin } from '@/user/mixins/user-mixin';
 import { UserCredentials } from '../common/user-credentials';
 import { EventBus } from '../../core/event-bus';
 

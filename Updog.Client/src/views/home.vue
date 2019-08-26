@@ -26,6 +26,11 @@ import PostSummary from '@/post/components/post-summary.vue';
 import { Post } from '../post/common/post';
 import { PagedResultSet } from '../core/pagination/paged-result-set';
 import PaginationNavigation from '@/core/components/pagination-navigation.vue';
+import { UserCredentials } from '../user/common/user-credentials';
+import { getModule } from 'vuex-module-decorators';
+import UserModule from '../user/store/user-module';
+import { UserLogin } from '../user/common/user-login';
+import { UserLoginMixin } from '@/user/mixins/user-login-mixin';
 
 /**
  * Home page that shows off the newests new posts.
@@ -43,8 +48,10 @@ export default class Home extends PostMixin {
 
     public currentPage: number = 0;
 
-    public async created() {
+    public async mounted() {
         this.refreshPosts();
+        // this.$store.state.user.test;
+        // console.log(await getModule(UserModule, this.$store).login(new UserCredentials('fake', 'password')));
     }
 
     public async onPrevious() {
@@ -58,7 +65,7 @@ export default class Home extends PostMixin {
     }
 
     public async refreshPosts() {
-        this.posts = await this.$findPostsByNew(new PaginationParams(this.currentPage, Post.DEFAULT_PAGE_SIZE));
+        // this.posts = await this.$findPostsByNew(new PaginationParams(this.currentPage, Post.DEFAULT_PAGE_SIZE));
     }
 }
 </script>

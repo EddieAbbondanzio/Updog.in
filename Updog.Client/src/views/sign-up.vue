@@ -18,8 +18,8 @@ import { User } from '@/user/common/user';
 import { UserLogin } from '@/user/common/user-login';
 import { Context } from '@/core/context';
 import MasterPage from '@/core/components/master-page.vue';
-import { UserMixin } from '../user/mixins/user-mixin';
-import { UserRegistration } from '../user/use-cases/register/user-registration';
+import { UserRegisterMixin } from '@/user/mixins/user-register-mixin';
+import { UserRegistration } from '@/user/common/user-registration';
 
 @Component({
     components: {
@@ -27,7 +27,7 @@ import { UserRegistration } from '../user/use-cases/register/user-registration';
         MasterPage
     }
 })
-export default class SignUp extends UserMixin {
+export default class SignUp extends UserRegisterMixin {
     public async onSubmit(userReg: UserRegistration) {
         const login = await this.$register(userReg);
         Context.login = login;

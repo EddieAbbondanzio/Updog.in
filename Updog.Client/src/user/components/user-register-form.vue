@@ -78,9 +78,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { UserMixin } from '@/user/mixins/user-mixin';
 import { EventBus } from '../../core/event-bus';
-import { UserRegistration } from '../use-cases/register/user-registration';
+import { UserRegistration } from '@/user/common/user-registration';
 
 /**
  * Login form for logging in users via username / password.

@@ -44,7 +44,6 @@ import { Post } from '../post/common/post';
 import { PostMixin } from '../post/mixins/post-mixin';
 import { PaginationParams } from '../core/pagination/pagination-params';
 import MasterPage from '@/core/components/master-page.vue';
-import { UserMixin } from '@/user/mixins/user-mixin';
 import { User as UserEntity } from '@/user/common/user';
 import UserSummary from '@/user/components/user-summary.vue';
 import PostSummary from '@/post/components/post-summary.vue';
@@ -53,6 +52,7 @@ import { CommentMixin } from '../comment/mixins/comment-mixin';
 import { Comment } from '../comment/common/comment';
 import PaginationNavigation from '@/core/components/pagination-navigation.vue';
 import { PagedResultSet } from '../core/pagination/paged-result-set';
+import { UserFinderMixin } from '@/user/mixins/user-finder-mixin';
 
 /**
  * User details page.
@@ -66,9 +66,9 @@ import { PagedResultSet } from '../core/pagination/paged-result-set';
         CommentSummary,
         PaginationNavigation
     },
-    mixins: [UserMixin, PostMixin, CommentMixin]
+    mixins: [UserFinderMixin, PostMixin, CommentMixin]
 })
-export default class User extends Mixins(UserMixin, PostMixin, CommentMixin) {
+export default class User extends Mixins(UserFinderMixin, PostMixin, CommentMixin) {
     public static DEFAULT_POST_PAGE_SIZE = 20;
 
     /**
