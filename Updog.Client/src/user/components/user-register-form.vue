@@ -11,7 +11,7 @@
             <b-form-input
                 type="text"
                 placeholder="Username"
-                v-model="registerUsername"
+                v-model="username"
                 ref="registerUsernameTextbox"
                 name="registerUsername"
                 v-validate="'required|min:4'"
@@ -25,7 +25,7 @@
             <b-form-input
                 type="email"
                 placeholder="Email"
-                v-model="registerEmail"
+                v-model="email"
                 name="registerEmail"
                 v-validate="'email'"
             />
@@ -38,7 +38,7 @@
             <b-form-input
                 type="password"
                 placeholder="Password"
-                v-model="registerPassword"
+                v-model="password"
                 ref="registerPassword"
                 name="registerPassword"
                 v-validate="'required'"
@@ -52,7 +52,7 @@
             <b-form-input
                 type="password"
                 placeholder="Confirm password"
-                v-model="registerConfirmPassword"
+                v-model="confirmPassword"
                 name="registerConfirmPassword"
                 v-validate="'required|confirmed:registerPassword'"
             />
@@ -78,8 +78,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { EventBus } from '../../core/event-bus';
 import { UserRegistration } from '@/user/common/user-registration';
+import { UserAuthMixin } from '../mixins/user-auth-mixin';
 
 /**
  * Login form for logging in users via username / password.
@@ -88,15 +88,15 @@ import { UserRegistration } from '@/user/common/user-registration';
     name: 'user-login-form',
     components: {}
 })
-export default class UserRegisterForm extends Vue {
+export default class UserRegisterForm extends UserAuthMixin {
     public $refs!: {
         registerUsernameTextbox: HTMLInputElement;
     };
 
-    public registerUsername: string = '';
-    public registerEmail: string = '';
-    public registerPassword: string = '';
-    public registerConfirmPassword: string = '';
+    public username: string = '';
+    public email: string = '';
+    public password: string = '';
+    public confirmPassword: string = '';
 
     public created() {
         this.$validator.localize('en', {
@@ -133,14 +133,19 @@ export default class UserRegisterForm extends Vue {
             return;
         }
 
-        this.$emit('submit', new UserRegistration(this.registerUsername, this.registerPassword, this.registerEmail));
+        const login = await this.$registerUser(new UserRegistration(this.username, this.password, this.email));
+
+        this.$emit('register', login);
     }
 
+    /**
+     * Reset the form back to initial state.
+     */
     public onReset() {
-        this.registerUsername = '';
-        this.registerEmail = '';
-        this.registerPassword = '';
-        this.registerConfirmPassword = '';
+        this.username = '';
+        this.email = '';
+        this.password = '';
+        this.confirmPassword = '';
         this.$validator.reset();
     }
 }

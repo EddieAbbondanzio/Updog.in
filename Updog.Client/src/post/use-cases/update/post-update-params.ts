@@ -1,4 +1,5 @@
 import { User } from '@/user/common/user';
+import { UserLogin } from '@/user/common/user-login';
 
 /**
  * Parameters to update a post.

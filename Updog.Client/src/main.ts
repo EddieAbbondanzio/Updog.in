@@ -5,7 +5,6 @@ import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import VeeVaidate from 'vee-validate';
-import Vuex from 'vuex';
 import store from '@/core/store/store';
 
 Vue.config.productionTip = false;

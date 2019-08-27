@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/home.vue';
-import { Context } from './core/context';
+import store from '@/core/store/store';
 
 Vue.use(Router);
 
@@ -42,9 +42,9 @@ const r = new Router({
 });
 
 r.beforeEach(async (to, from, next) => {
-    if (to.meta.authenticate && Context.login == null) {
+    if (to.meta.authenticate && store.state.user.userLogin == null) {
         next({
-            path: '/login'
+            name: 'login'
         });
     } else {
         next();

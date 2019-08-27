@@ -14,8 +14,8 @@ export abstract class CommentApiInteractor<TInput, TOutput> extends ApiInteracto
     /**
      * Create a new comment api interactor.
      */
-    constructor() {
-        super();
+    constructor(authToken: string = '') {
+        super(authToken);
         this.commentMapper = new CommentMapper(new UserMapper());
     }
 }

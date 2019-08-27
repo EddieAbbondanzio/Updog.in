@@ -9,8 +9,10 @@ import { PostFinderByNew } from '../use-cases/find-by-new/post-finder-by-new';
 import { PostFinderByUser } from '../use-cases/find-by-user/post-finder-by-user';
 import { PostFinderByUserParams } from '../use-cases/find-by-user/post-finder-by-user-params';
 import { PagedResultSet } from '@/core/pagination/paged-result-set';
-import { PostUpdateParams } from '../use-cases/update/post-update-params';
 import { PostUpdater } from '../use-cases/update/post-updater';
+import { PostUpdateParams } from '../use-cases/update/post-update-params';
+import UserModule from '@/user/store/user-module';
+import { getModule } from 'vuex-module-decorators';
 
 @Component
 export class PostMixin extends Vue {

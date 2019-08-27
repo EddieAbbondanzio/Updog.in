@@ -1,6 +1,5 @@
 import { ApiInteractor } from '@/core/api-interactor';
 import { Post } from '../../common/post';
-import { Context } from '@/core/context';
 import { PostApiInteractor } from '@/post/common/post-api-interactor';
 
 /**

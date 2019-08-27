@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig } from 'axios';
 import { PaginationInfo } from './pagination/pagination-info';
 
 /**
@@ -19,9 +19,14 @@ export abstract class ApiInteractor<TInput, TOutput> {
      * Create a new API interactor.
      * @param baseUrl The base URL of the interactor.
      */
-    constructor(baseUrl: string = '') {
+    constructor(authToken = '') {
         this.http = axios.create({
-            baseURL: baseUrl === '' ? ApiInteractor.BACKEND_URL : `${ApiInteractor.BACKEND_URL}/${baseUrl}`
+            baseURL: ApiInteractor.BACKEND_URL
+        });
+
+        this.http.interceptors.request.use((request: AxiosRequestConfig) => {
+            request.headers['Authorization'] = `Bearer ${authToken}`;
+            return request;
         });
     }
 

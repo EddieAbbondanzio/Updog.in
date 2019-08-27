@@ -1,4 +1,4 @@
-import { Module, VuexModule, Mutation, Action, MutationAction } from 'vuex-module-decorators';
+import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { User } from '../common/user';
 import { UserCredentials } from '../common/user-credentials';
 import { UserLoginInteractor } from '../use-cases/login/user-login-interactor';
@@ -6,21 +6,31 @@ import { UserLogin } from '../common/user-login';
 import { UserRegisterInteractor } from '../use-cases/register/user-register-interactor';
 import { UserFinderByUsername } from '../use-cases/find-by-username/user-finder-by-username';
 import { UserRegistration } from '../common/user-registration';
+import { UserMutation } from './user-mutation';
+import Vue from 'vue';
 
 /**
  * Vuex store module for managing user data.
  */
 @Module({ namespaced: true, name: 'user' })
 export default class UserModule extends VuexModule {
-    private userLogin: UserLogin | null = null;
+    public userLogin: UserLogin | null = null;
 
     /**
      * Set a log in in the store module.
      * @param login The login to set.
      */
     @Mutation
-    public setLogin(login: UserLogin) {
+    public [UserMutation.SetLogin](login: UserLogin) {
         this.userLogin = login;
+    }
+
+    /**
+     * Clear the active login.
+     */
+    @Mutation
+    public [UserMutation.ClearLogin]() {
+        this.userLogin = null;
     }
 
     /**
@@ -39,9 +49,15 @@ export default class UserModule extends VuexModule {
     @Action
     public async login(userCreds: UserCredentials) {
         const login = await new UserLoginInteractor().handle(userCreds);
-        this.context.commit('setLogin', login);
+        this.context.commit(UserMutation.SetLogin, login);
+    }
 
-        return login;
+    /**
+     * Log out the active user.
+     */
+    @Action
+    public async logout() {
+        this.context.commit(UserMutation.ClearLogin);
     }
 
     /**
@@ -51,8 +67,6 @@ export default class UserModule extends VuexModule {
     @Action
     public async register(userReg: UserRegistration) {
         const login = await new UserRegisterInteractor().handle(userReg);
-        this.context.commit('setLogin', login);
-
-        return login;
+        this.context.commit(UserMutation.SetLogin, login);
     }
 }

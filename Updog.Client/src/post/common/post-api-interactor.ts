@@ -14,8 +14,8 @@ export abstract class PostApiInteractor<TInput, TOutput> extends ApiInteractor<T
     /**
      * Create a new post api interactor
      */
-    constructor() {
-        super();
+    constructor(authToken: string = '') {
+        super(authToken);
         this.postMapper = new PostMapper(new UserMapper());
     }
 }

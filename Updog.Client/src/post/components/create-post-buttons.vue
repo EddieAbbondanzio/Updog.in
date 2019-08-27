@@ -18,7 +18,6 @@
  * Widget to create a new post.
  */
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Context } from '../../core/context';
 @Component({
     name: 'post-widget'
 })

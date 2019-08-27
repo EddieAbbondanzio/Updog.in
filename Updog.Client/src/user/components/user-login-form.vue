@@ -12,7 +12,7 @@
             <b-form-input
                 type="text"
                 placeholder="Username"
-                v-model="loginUsername"
+                v-model="username"
                 ref="loginUsernameTextbox"
                 name="loginUsername"
                 v-validate="'required'"
@@ -27,7 +27,7 @@
             <b-form-input
                 type="password"
                 placeholder="Password"
-                v-model="loginPassword"
+                v-model="password"
                 name="loginPassword"
                 v-validate="'required'"
                 @keyup.enter="onLogin"
@@ -56,24 +56,32 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { UserCredentials } from '../common/user-credentials';
-import { EventBus } from '../../core/event-bus';
+import { UserAuthMixin } from '../mixins/user-auth-mixin';
 
 /**
  * Login form for logging in users via username / password.
  */
 @Component({
-    name: 'user-login-form',
-    components: {}
+    name: 'user-login-form'
 })
-export default class UserLoginForm extends Vue {
+export default class UserLoginForm extends UserAuthMixin {
     public $refs!: {
         loginUsernameTextbox: HTMLInputElement;
     };
 
-    public loginUsername: string = '';
+    /**
+     * Username entered by the user.
+     */
+    public username: string = '';
 
-    public loginPassword: string = '';
+    /**
+     * Password entered by the user.
+     */
+    public password: string = '';
 
+    /**
+     * Set up the error messages when the component is created.
+     */
     public created() {
         this.$validator.localize('en', {
             custom: {
@@ -104,12 +112,18 @@ export default class UserLoginForm extends Vue {
             return;
         }
 
-        this.$emit('submit', new UserCredentials(this.loginUsername, this.loginPassword));
+        // Send off the request to the backend.
+        const login = await this.$loginUser(new UserCredentials(this.username, this.password));
+
+        this.$emit('login', login);
     }
 
+    /**
+     * Reset the form back to defaults.
+     */
     public onReset() {
-        this.loginUsername = '';
-        this.loginPassword = '';
+        this.username = '';
+        this.password = '';
         this.$validator.reset();
     }
 }

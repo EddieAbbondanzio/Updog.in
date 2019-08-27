@@ -1,11 +1,12 @@
 import { Post } from '@/post/common/post';
+import { UserLogin } from '@/user/common/user-login';
 
 /**
  * Information to create a new comment.
  */
 export class CommentCreateParams {
     /**
-     *
+     * Create a new comment create request.
      * @param body The text of the comment.
      * @param post The post being commented on.
      * @param parent The parent comment it's a child of. (If any).

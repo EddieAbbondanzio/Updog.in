@@ -3,7 +3,7 @@
         <b-container>
             <b-row>
                 <b-col md="8" lg="6" offset-md="2" offset-lg="3">
-                    <user-register-form @submit="onSubmit" />
+                    <user-register-form @register="onRegister" />
                 </b-col>
             </b-row>
         </b-container>
@@ -13,12 +13,9 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import UserRegisterForm from '@/user/components/user-register-form.vue';
-import { EventBus } from '@/core/event-bus';
 import { User } from '@/user/common/user';
 import { UserLogin } from '@/user/common/user-login';
-import { Context } from '@/core/context';
 import MasterPage from '@/core/components/master-page.vue';
-import { UserRegisterMixin } from '@/user/mixins/user-register-mixin';
 import { UserRegistration } from '@/user/common/user-registration';
 
 @Component({
@@ -27,13 +24,11 @@ import { UserRegistration } from '@/user/common/user-registration';
         MasterPage
     }
 })
-export default class SignUp extends UserRegisterMixin {
-    public async onSubmit(userReg: UserRegistration) {
-        const login = await this.$register(userReg);
-        Context.login = login;
+export default class SignUp extends Vue {
+    public async onRegister(userLogin: UserLogin) {
         this.$router.push({ name: 'home' });
 
-        EventBus.emit('login', login);
+        // EventBus.emit('login', userLogin);
     }
 }
 </script>

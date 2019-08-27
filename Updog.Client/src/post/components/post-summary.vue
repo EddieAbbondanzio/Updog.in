@@ -79,8 +79,9 @@ import MaterialIcon from '@/core/components/material-icon.vue';
 import { Post } from '../common/post';
 import DateTimeStamp from '@/core/components/date-time-stamp.vue';
 import UserLink from '@/user/components/user-link.vue';
-import { Context } from '@/core/context';
 import { PostMixin } from '../mixins/post-mixin';
+import { UserAuthMixin } from '../../user/mixins/user-auth-mixin';
+import { mixins } from 'vue-class-component';
 import { PostUpdateParams } from '../use-cases/update/post-update-params';
 
 /**
@@ -92,9 +93,10 @@ import { PostUpdateParams } from '../use-cases/update/post-update-params';
         MaterialIcon,
         DateTimeStamp,
         UserLink
-    }
+    },
+    mixins: [UserAuthMixin, PostMixin]
 })
-export default class PostSummary extends PostMixin {
+export default class PostSummary extends mixins(UserAuthMixin, PostMixin) {
     /**
      * The post to display.
      */
@@ -160,7 +162,9 @@ export default class PostSummary extends PostMixin {
         this.edittedBody = '';
     }
 
-    public onDeletePost() {}
+    public onDeletePost() {
+        alert('reee');
+    }
 
     /**
      * Check to see if a post is a text post.
@@ -187,11 +191,12 @@ export default class PostSummary extends PostMixin {
      * Check to see if the currently logged in user is the post owner.
      */
     protected isPostOwner() {
-        if (Context.login == null) {
+        if (!this.$isLoggedIn()) {
             return false;
         }
 
-        return this.post.isOwner(Context.login.user);
+        return false;
+        // return this.post.isOwner(this.$login.user);
     }
 }
 </script>

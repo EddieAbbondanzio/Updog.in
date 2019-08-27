@@ -13,8 +13,8 @@ export abstract class UserApiInteractor<TInput, TOutput> extends ApiInteractor<T
     /**
      * Create a new user api interactor.
      */
-    constructor() {
-        super();
+    constructor(authToken: string = '') {
+        super(authToken);
         this.userMapper = new UserMapper();
     }
 }

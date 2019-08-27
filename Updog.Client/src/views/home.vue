@@ -30,7 +30,9 @@ import { UserCredentials } from '../user/common/user-credentials';
 import { getModule } from 'vuex-module-decorators';
 import UserModule from '../user/store/user-module';
 import { UserLogin } from '../user/common/user-login';
-import { UserLoginMixin } from '@/user/mixins/user-login-mixin';
+import PostModule from '../post/store/post-module';
+import { PostCreateParams } from '../post/use-cases/create/post-create-params';
+import { PostType } from '../post/common/post-type';
 
 /**
  * Home page that shows off the newests new posts.
@@ -46,9 +48,12 @@ import { UserLoginMixin } from '@/user/mixins/user-login-mixin';
 export default class Home extends PostMixin {
     public posts: PagedResultSet<Post> | null = null;
 
+    public postStore: PostModule = getModule(PostModule, this.$store);
+
     public currentPage: number = 0;
 
     public async mounted() {
+        // console.log(await this.postStore.create(null!));
         this.refreshPosts();
         // this.$store.state.user.test;
         // console.log(await getModule(UserModule, this.$store).login(new UserCredentials('fake', 'password')));

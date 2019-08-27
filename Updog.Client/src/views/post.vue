@@ -31,12 +31,12 @@ import PostSummary from '@/post/components/post-summary.vue';
 import CommentCreateForm from '@/comment/components/comment-create-form.vue';
 import { CommentMixin } from '@/comment/mixins/comment-mixin';
 import { mixins } from 'vue-class-component/lib/util';
-import { CommentCreateParams } from '../comment/use-cases/create/comment-create-params';
 import { Post as PostEntity } from '@/post/common/post';
 import CommentSummary from '@/comment/components/comment-summary.vue';
 import { Comment } from '../comment/common/comment';
 import User from './user.vue';
-import { Context } from '../core/context';
+import { UserAuthMixin } from '@/user/mixins/user-auth-mixin';
+import { CommentCreateParams } from '../comment/use-cases/create/comment-create-params';
 
 /**
  * View a post via it's ID.
@@ -49,9 +49,9 @@ import { Context } from '../core/context';
         CommentCreateForm,
         CommentSummary
     },
-    mixins: [PostMixin, CommentMixin]
+    mixins: [UserAuthMixin, PostMixin, CommentMixin]
 })
-export default class Post extends Mixins(PostMixin, CommentMixin) {
+export default class Post extends Mixins(UserAuthMixin, PostMixin, CommentMixin) {
     public $refs!: {
         commentCreateForm: CommentCreateForm;
     };
@@ -76,9 +76,9 @@ export default class Post extends Mixins(PostMixin, CommentMixin) {
      * Event handler for when a comment is created.
      */
     public async onCommentCreate(comment: string) {
-        // Redirect to login if no user is logged in.
-        if (Context.login == null) {
-            this.$router.push({ name: 'login' });
+        // Redirect to login if no user present.
+        if (!this.$isLoggedIn()) {
+            this.$redirectToLogin();
             return;
         }
 
