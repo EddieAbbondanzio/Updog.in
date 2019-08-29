@@ -21,6 +21,7 @@ export class UserFinderMixin extends Vue {
      * @param username The username to look for.
      */
     public $findUserByUsername(username: string): Promise<User> {
-        return this.userModule.findByUsername(username);
+        throw new Error();
+        // return this.userModule.findByUsername(username);
     }
 }

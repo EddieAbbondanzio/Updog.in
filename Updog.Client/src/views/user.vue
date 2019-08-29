@@ -99,17 +99,16 @@ export default class User extends Mixins(UserFinderMixin, PostMixin, CommentMixi
     public commentCurrentpage: number = 0;
 
     public async created() {
-        const username = this.$route.params.username;
-        this.user = await this.$findUserByUsername(username);
-
-        this.posts = await this.$findPostsByUser(
-            username,
-            new PaginationParams(this.postCurrentPage, User.DEFAULT_POST_PAGE_SIZE)
-        );
-        this.comments = await this.$findCommentsByUser(
-            username,
-            new PaginationParams(this.commentCurrentpage, User.DEFAULT_COMMENT_PAGE_SIZE)
-        );
+        // const username = this.$route.params.username;
+        // this.user = await this.$findUserByUsername(username);
+        // this.posts = await this.$findPostsByUser(
+        //     username,
+        //     new PaginationParams(this.postCurrentPage, User.DEFAULT_POST_PAGE_SIZE)
+        // );
+        // this.comments = await this.$findCommentsByUser(
+        //     username,
+        //     new PaginationParams(this.commentCurrentpage, User.DEFAULT_COMMENT_PAGE_SIZE)
+        // );
     }
 
     public async onPostNext() {

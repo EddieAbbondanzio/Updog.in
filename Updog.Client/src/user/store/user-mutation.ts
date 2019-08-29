@@ -1,5 +1,7 @@
-export abstract class UserMutation {
-    public static SetLogin: string = 'setLogin';
-
-    public static ClearLogin: string = 'clearLogin';
+/**
+ * User store module mutation constants.
+ */
+export enum UserMutation {
+    SetLogin = 'setLogin',
+    ClearLogin = 'clearLogin'
 }

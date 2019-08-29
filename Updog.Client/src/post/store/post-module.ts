@@ -8,6 +8,10 @@ import { PostFinderByUser } from '../use-cases/find-by-user/post-finder-by-user'
 import { PostFinderByUserParams } from '../use-cases/find-by-user/post-finder-by-user-params';
 import { PostCreator } from '../use-cases/create/post-creator';
 import UserModule from '@/user/store/user-module';
+import { Post } from '../common/post';
+import { PagedResultSet } from '@/core/pagination/paged-result-set';
+import { PaginationParams } from '@/core/pagination/pagination-params';
+import { PostMutation } from './post-mutation';
 
 /**
  * Module for posts
@@ -15,12 +19,27 @@ import UserModule from '@/user/store/user-module';
 @Module({ namespaced: true, name: 'post' })
 export default class PostModule extends VuexModule {
     /**
+     * The collection of cached posts.
+     */
+    public posts: PagedResultSet<Post> | null = null;
+
+    @Mutation
+    public [PostMutation.SetPosts](posts: PagedResultSet<Post>) {
+        this.posts = posts;
+    }
+
+    /**
      * Create a new post.
      * @param params The post creation parameters.
      */
     @Action
     public async create(params: PostCreateParams) {
-        new PostCreator(this.authToken).handle(params);
+        const posts = new PagedResultSet(
+            [await new PostCreator(this.context.getters['authToken']).handle(params)],
+            new PaginationInfo(0, 1, 1)
+        );
+
+        this.context.commit(PostMutation.SetPosts, posts);
     }
 
     /**
@@ -29,7 +48,12 @@ export default class PostModule extends VuexModule {
      */
     @Action
     public async findById(id: number) {
-        new PostFinderById(this.authToken).handle(id);
+        const posts = new PagedResultSet(
+            [await new PostFinderById(this.context.getters['authToken']).handle(id)],
+            new PaginationInfo(0, 1, 1)
+        );
+
+        this.context.commit(PostMutation.SetPosts, posts);
     }
 
     /**
@@ -37,8 +61,9 @@ export default class PostModule extends VuexModule {
      * @param paging The paging info.
      */
     @Action
-    public async findByNew(paging: PaginationInfo) {
-        new PostFinderByNew(this.authToken).handle(paging);
+    public async findByNew(paging: PaginationParams) {
+        const posts = await new PostFinderByNew().handle(paging);
+        this.context.commit(PostMutation.SetPosts, posts);
     }
 
     /**
@@ -47,13 +72,7 @@ export default class PostModule extends VuexModule {
      */
     @Action
     public async findByUser(params: PostFinderByUserParams) {
-        new PostFinderByUser(this.authToken).handle(params);
-    }
-
-    /**
-     * Helper to get the auth token of the current user.
-     */
-    private get authToken() {
-        return this.context.rootState.user.userLogin != null ? this.context.rootState.user.userLogin.authToken : '';
+        const posts = await new PostFinderByUser(this.context.getters['authToken']).handle(params);
+        this.context.commit(PostMutation.SetPosts, posts);
     }
 }

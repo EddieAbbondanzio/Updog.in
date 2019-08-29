@@ -18,6 +18,13 @@ export class UserAuthMixin extends Vue {
     private userModule: UserModule = getModule(UserModule, this.$store);
 
     /**
+     * Get the currently logged in user.
+     */
+    get $login(): UserLogin | null {
+        return this.userModule.userLogin;
+    }
+
+    /**
      * Redirect the current page to the login page.
      */
     public $redirectToLogin() {
@@ -36,13 +43,6 @@ export class UserAuthMixin extends Vue {
      */
     public $isLoggedIn(): boolean {
         return this.userModule.userLogin != null;
-    }
-
-    /**
-     * Get the currently logged in user.
-     */
-    get $login(): UserLogin | null {
-        return this.userModule.userLogin;
     }
 
     /**

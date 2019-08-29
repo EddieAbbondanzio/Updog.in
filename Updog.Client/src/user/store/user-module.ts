@@ -7,7 +7,6 @@ import { UserRegisterInteractor } from '../use-cases/register/user-register-inte
 import { UserFinderByUsername } from '../use-cases/find-by-username/user-finder-by-username';
 import { UserRegistration } from '../common/user-registration';
 import { UserMutation } from './user-mutation';
-import Vue from 'vue';
 
 /**
  * Vuex store module for managing user data.
@@ -15,6 +14,17 @@ import Vue from 'vue';
 @Module({ namespaced: true, name: 'user' })
 export default class UserModule extends VuexModule {
     public userLogin: UserLogin | null = null;
+
+    /**
+     * Get the auth token for the currently logged in user.
+     */
+    get authToken() {
+        if (this.userLogin == null) {
+            return '';
+        }
+
+        return this.userLogin.authToken;
+    }
 
     /**
      * Set a log in in the store module.
@@ -39,7 +49,7 @@ export default class UserModule extends VuexModule {
      */
     @Action
     public async findByUsername(username: string) {
-        return new UserFinderByUsername().handle(username);
+        await new UserFinderByUsername().handle(username);
     }
 
     /**

@@ -24,10 +24,12 @@ export abstract class ApiInteractor<TInput, TOutput> {
             baseURL: ApiInteractor.BACKEND_URL
         });
 
-        this.http.interceptors.request.use((request: AxiosRequestConfig) => {
-            request.headers['Authorization'] = `Bearer ${authToken}`;
-            return request;
-        });
+        if (authToken !== '') {
+            this.http.interceptors.request.use((request: AxiosRequestConfig) => {
+                request.headers['Authorization'] = `Bearer ${authToken}`;
+                return request;
+            });
+        }
     }
 
     /**
