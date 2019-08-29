@@ -12,7 +12,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import MasterPage from '@/core/components/master-page.vue';
 import CreatePostForm from '@/post/components/create-post-form.vue';
-import { PostMixin } from '@/post/mixins/post-mixin';
+import { PostCreatorMixin } from '@/post/mixins/post-creator-mixin';
 import { PostCreateParams } from '@/post/use-cases/create/post-create-params';
 
 @Component({
@@ -21,10 +21,10 @@ import { PostCreateParams } from '@/post/use-cases/create/post-create-params';
         CreatePostForm
     }
 })
-export default class Home extends PostMixin {
+export default class Submit extends PostCreatorMixin {
     public async onSubmit(creationParams: PostCreateParams) {
         const result = await this.$createPost(creationParams);
-        this.$router.push(`/post/${result.id}`);
+        this.$redirectToPost(result.id);
     }
 }
 </script>

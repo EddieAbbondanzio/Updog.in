@@ -26,7 +26,7 @@
 import { Component, Vue, Mixins } from 'vue-property-decorator';
 import CreatePostButtons from '@/post/components/create-post-buttons.vue';
 import MasterPage from '@/core/components/master-page.vue';
-import { PostMixin } from '../post/mixins/post-mixin';
+import { PostFinderMixin } from '../post/mixins/post-finder-mixin';
 import PostSummary from '@/post/components/post-summary.vue';
 import CommentCreateForm from '@/comment/components/comment-create-form.vue';
 import { CommentMixin } from '@/comment/mixins/comment-mixin';
@@ -49,9 +49,9 @@ import { CommentCreateParams } from '../comment/use-cases/create/comment-create-
         CommentCreateForm,
         CommentSummary
     },
-    mixins: [UserAuthMixin, PostMixin, CommentMixin]
+    mixins: [UserAuthMixin, PostFinderMixin, CommentMixin]
 })
-export default class Post extends Mixins(UserAuthMixin, PostMixin, CommentMixin) {
+export default class Post extends Mixins(UserAuthMixin, PostFinderMixin, CommentMixin) {
     public $refs!: {
         commentCreateForm: CommentCreateForm;
     };

@@ -21,16 +21,16 @@ export class PostFinderMixin extends Vue {
      * Find an active post.
      * @param id The post to look for.
      */
-    public async $findById(id: number) {
+    public async $findPostById(id: number) {
         await this.postModule.findById(id);
-        return this.$posts;
+        return this.$posts != null ? this.$posts[0] : null;
     }
 
     /**
      * Find a set of new posts.
      * @param paging The paging info.
      */
-    public async $findByNew(paging: PaginationParams) {
+    public async $findPostsByNew(paging: PaginationParams) {
         await this.postModule.findByNew(paging);
         return this.$posts;
     }
@@ -39,7 +39,7 @@ export class PostFinderMixin extends Vue {
      * Find a set of posts for a user.
      * @param params The input parameters.
      */
-    public async $findByUser(params: PostFinderByUserParams) {
+    public async $findPostsByUser(params: PostFinderByUserParams) {
         await this.postModule.findByUser(params);
         return this.$posts;
     }

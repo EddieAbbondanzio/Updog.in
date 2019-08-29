@@ -79,7 +79,7 @@ import MaterialIcon from '@/core/components/material-icon.vue';
 import { Post } from '../common/post';
 import DateTimeStamp from '@/core/components/date-time-stamp.vue';
 import UserLink from '@/user/components/user-link.vue';
-import { PostMixin } from '../mixins/post-mixin';
+import { PostUpdaterMixin } from '../mixins/post-updater-mixin';
 import { UserAuthMixin } from '../../user/mixins/user-auth-mixin';
 import { mixins } from 'vue-class-component';
 import { PostUpdateParams } from '../use-cases/update/post-update-params';
@@ -94,9 +94,9 @@ import { PostUpdateParams } from '../use-cases/update/post-update-params';
         DateTimeStamp,
         UserLink
     },
-    mixins: [UserAuthMixin, PostMixin]
+    mixins: [UserAuthMixin, PostUpdaterMixin]
 })
-export default class PostSummary extends mixins(UserAuthMixin, PostMixin) {
+export default class PostSummary extends mixins(UserAuthMixin, PostUpdaterMixin) {
     /**
      * The post to display.
      */

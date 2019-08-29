@@ -41,7 +41,7 @@
 <script lang="ts">
 import { Component, Vue, Prop, Mixins } from 'vue-property-decorator';
 import { Post } from '../post/common/post';
-import { PostMixin } from '../post/mixins/post-mixin';
+import { PostFinderMixin } from '../post/mixins/post-finder-mixin';
 import { PaginationParams } from '../core/pagination/pagination-params';
 import MasterPage from '@/core/components/master-page.vue';
 import { User as UserEntity } from '@/user/common/user';
@@ -53,6 +53,7 @@ import { Comment } from '../comment/common/comment';
 import PaginationNavigation from '@/core/components/pagination-navigation.vue';
 import { PagedResultSet } from '../core/pagination/paged-result-set';
 import { UserFinderMixin } from '@/user/mixins/user-finder-mixin';
+import { PostFinderByUserParams } from '../post/use-cases/find-by-user/post-finder-by-user-params';
 
 /**
  * User details page.
@@ -66,9 +67,9 @@ import { UserFinderMixin } from '@/user/mixins/user-finder-mixin';
         CommentSummary,
         PaginationNavigation
     },
-    mixins: [UserFinderMixin, PostMixin, CommentMixin]
+    mixins: [UserFinderMixin, PostFinderMixin, CommentMixin]
 })
-export default class User extends Mixins(UserFinderMixin, PostMixin, CommentMixin) {
+export default class User extends Mixins(UserFinderMixin, PostFinderMixin, CommentMixin) {
     public static DEFAULT_POST_PAGE_SIZE = 20;
 
     /**
@@ -114,16 +115,20 @@ export default class User extends Mixins(UserFinderMixin, PostMixin, CommentMixi
     public async onPostNext() {
         this.postCurrentPage++;
         this.posts = await this.$findPostsByUser(
-            this.user!.username,
-            new PaginationParams(this.postCurrentPage, User.DEFAULT_POST_PAGE_SIZE)
+            new PostFinderByUserParams(
+                this.user!.username,
+                new PaginationParams(this.postCurrentPage, User.DEFAULT_POST_PAGE_SIZE)
+            )
         );
     }
 
     public async onPostPrevious() {
         this.postCurrentPage--;
         this.posts = await this.$findPostsByUser(
-            this.user!.username,
-            new PaginationParams(this.postCurrentPage, User.DEFAULT_POST_PAGE_SIZE)
+            new PostFinderByUserParams(
+                this.user!.username,
+                new PaginationParams(this.postCurrentPage, User.DEFAULT_POST_PAGE_SIZE)
+            )
         );
     }
 

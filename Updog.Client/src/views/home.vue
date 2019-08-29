@@ -67,7 +67,7 @@ export default class Home extends PostFinderMixin {
     }
 
     public async refreshPosts() {
-        await this.$findByNew(new PaginationParams(this.currentPage, Post.DEFAULT_PAGE_SIZE));
+        await this.$findPostsByNew(new PaginationParams(this.currentPage, Post.DEFAULT_PAGE_SIZE));
     }
 }
 </script>
