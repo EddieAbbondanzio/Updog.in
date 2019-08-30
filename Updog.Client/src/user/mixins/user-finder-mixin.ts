@@ -20,8 +20,8 @@ export class UserFinderMixin extends Vue {
      * Find a user via their username.
      * @param username The username to look for.
      */
-    public $findUserByUsername(username: string): Promise<User> {
-        throw new Error();
-        // return this.userModule.findByUsername(username);
+    public async $findUserByUsername(username: string) {
+        await this.userModule.findByUsername(username);
+        return this.userModule.users.find(u => u.username === username);
     }
 }

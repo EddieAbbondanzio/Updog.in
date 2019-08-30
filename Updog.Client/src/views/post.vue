@@ -5,8 +5,6 @@
                 <post-summary :post="post" :showEditControls="true" expand="true" />
                 <comment-create-form @submit="onCommentCreate" ref="commentCreateForm" />
 
-                <user-not-logged-in-popup ref="userNotLoggedInPopup" />
-
                 <!-- Comments! -->
                 <comment-summary
                     v-for="comment in comments"
@@ -29,7 +27,8 @@ import MasterPage from '@/core/components/master-page.vue';
 import { PostFinderMixin } from '../post/mixins/post-finder-mixin';
 import PostSummary from '@/post/components/post-summary.vue';
 import CommentCreateForm from '@/comment/components/comment-create-form.vue';
-import { CommentMixin } from '@/comment/mixins/comment-mixin';
+import { CommentFinderMixin } from '@/comment/mixins/comment-finder-mixin';
+import { CommentCreatorMixin } from '@/comment/mixins/comment-creator-mixin';
 import { mixins } from 'vue-class-component/lib/util';
 import { Post as PostEntity } from '@/post/common/post';
 import CommentSummary from '@/comment/components/comment-summary.vue';
@@ -49,9 +48,9 @@ import { CommentCreateParams } from '../comment/use-cases/create/comment-create-
         CommentCreateForm,
         CommentSummary
     },
-    mixins: [UserAuthMixin, PostFinderMixin, CommentMixin]
+    mixins: [UserAuthMixin, PostFinderMixin, CommentFinderMixin, CommentCreatorMixin]
 })
-export default class Post extends Mixins(UserAuthMixin, PostFinderMixin, CommentMixin) {
+export default class Post extends Mixins(UserAuthMixin, PostFinderMixin, CommentFinderMixin, CommentCreatorMixin) {
     public $refs!: {
         commentCreateForm: CommentCreateForm;
     };

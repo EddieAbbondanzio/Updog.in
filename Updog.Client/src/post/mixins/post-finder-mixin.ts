@@ -23,7 +23,7 @@ export class PostFinderMixin extends Vue {
      */
     public async $findPostById(id: number) {
         await this.postModule.findById(id);
-        return this.$posts != null ? this.$posts[0] : null;
+        return this.postModule.activePost;
     }
 
     /**

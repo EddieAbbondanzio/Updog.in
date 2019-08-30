@@ -1,4 +1,4 @@
-import Component from 'vue-class-component';
+import Mixin from 'vue-class-component';
 import Vue from 'vue';
 import { CommentFinderById } from '../use-cases/find-by-id/comment-finder-by-id';
 import { CommentFinderByPost } from '../use-cases/find-by-post/comment-finder-by-post';
@@ -13,8 +13,8 @@ import { PagedResultSet } from '@/core/pagination/paged-result-set';
 /**
  * Mixin to handle comment related things.
  */
-@Component
-export class CommentMixin extends Vue {
+@Mixin
+export class CommentFinderMixin extends Vue {
     /**
      * Find a post by it's unique ID.
      * @param request The ID of the post to retrieve.
@@ -43,11 +43,11 @@ export class CommentMixin extends Vue {
         return new CommentFinderByUser().handle(new CommentFinderByUserParams(username, paginationInfo));
     }
 
-    /**
-     * Create a new comment.
-     * @param params The new comment info.
-     */
-    public async $createComment(params: CommentCreateParams): Promise<Comment> {
-        return new CommentCreator().handle(params);
-    }
+    // /**
+    //  * Create a new comment.
+    //  * @param params The new comment info.
+    //  */
+    // public async $createComment(params: CommentCreateParams): Promise<Comment> {
+    //     return new CommentCreator().handle(params);
+    // }
 }

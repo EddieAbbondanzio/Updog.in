@@ -1,3 +1,4 @@
 export enum PostMutation {
-    SetPosts = 'setPosts'
+    SetPosts = 'setPosts',
+    SetActivePost = 'setActivePost'
 }

@@ -13,7 +13,12 @@ import { UserMutation } from './user-mutation';
  */
 @Module({ namespaced: true, name: 'user' })
 export default class UserModule extends VuexModule {
+    /**
+     * The actively logged in user.
+     */
     public userLogin: UserLogin | null = null;
+
+    public users: User[] = [];
 
     /**
      * Get the auth token for the currently logged in user.
@@ -43,13 +48,21 @@ export default class UserModule extends VuexModule {
         this.userLogin = null;
     }
 
+    @Mutation
+    public [UserMutation.CacheUser](user: User) {
+        if (this.users.findIndex(u => u.id === user.id) === -1) {
+            this.users.push(user);
+        }
+    }
+
     /**
      * Find a user via their username.
      * @param username The username to look for.
      */
     @Action
     public async findByUsername(username: string) {
-        await new UserFinderByUsername().handle(username);
+        const u = await new UserFinderByUsername().handle(username);
+        this.context.commit(UserMutation.CacheUser, u);
     }
 
     /**

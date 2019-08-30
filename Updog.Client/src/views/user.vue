@@ -48,7 +48,7 @@ import { User as UserEntity } from '@/user/common/user';
 import UserSummary from '@/user/components/user-summary.vue';
 import PostSummary from '@/post/components/post-summary.vue';
 import CommentSummary from '@/comment/components/comment-summary.vue';
-import { CommentMixin } from '../comment/mixins/comment-mixin';
+import { CommentFinderMixin } from '../comment/mixins/comment-finder-mixin';
 import { Comment } from '../comment/common/comment';
 import PaginationNavigation from '@/core/components/pagination-navigation.vue';
 import { PagedResultSet } from '../core/pagination/paged-result-set';
@@ -67,9 +67,9 @@ import { PostFinderByUserParams } from '../post/use-cases/find-by-user/post-find
         CommentSummary,
         PaginationNavigation
     },
-    mixins: [UserFinderMixin, PostFinderMixin, CommentMixin]
+    mixins: [UserFinderMixin, PostFinderMixin, CommentFinderMixin]
 })
-export default class User extends Mixins(UserFinderMixin, PostFinderMixin, CommentMixin) {
+export default class User extends Mixins(UserFinderMixin, PostFinderMixin, CommentFinderMixin) {
     public static DEFAULT_POST_PAGE_SIZE = 20;
 
     /**
@@ -100,16 +100,26 @@ export default class User extends Mixins(UserFinderMixin, PostFinderMixin, Comme
     public commentCurrentpage: number = 0;
 
     public async created() {
-        // const username = this.$route.params.username;
-        // this.user = await this.$findUserByUsername(username);
-        // this.posts = await this.$findPostsByUser(
-        //     username,
-        //     new PaginationParams(this.postCurrentPage, User.DEFAULT_POST_PAGE_SIZE)
-        // );
-        // this.comments = await this.$findCommentsByUser(
-        //     username,
-        //     new PaginationParams(this.commentCurrentpage, User.DEFAULT_COMMENT_PAGE_SIZE)
-        // );
+        const username = this.$route.params.username;
+        const user = await this.$findUserByUsername(username);
+
+        if (user == null) {
+            this.$router.push({ name: 'home' });
+            return;
+        }
+
+        this.user = user;
+
+        this.posts = await this.$findPostsByUser(
+            new PostFinderByUserParams(
+                username,
+                new PaginationParams(this.postCurrentPage, User.DEFAULT_POST_PAGE_SIZE)
+            )
+        );
+        this.comments = await this.$findCommentsByUser(
+            username,
+            new PaginationParams(this.commentCurrentpage, User.DEFAULT_COMMENT_PAGE_SIZE)
+        );
     }
 
     public async onPostNext() {

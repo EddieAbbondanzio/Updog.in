@@ -57,13 +57,13 @@
                             variant="link"
                             class="text-muted px-1"
                             @click="onEditPost"
-                            v-if="canEdit && showEditControls"
+                            v-if="canEdit() && showEditControls"
                         >edit</b-button>
                         <b-button
                             variant="link"
                             class="text-muted px-1"
                             @click="onDeletePost"
-                            v-if="canDelete && showEditControls"
+                            v-if="canDelete() && showEditControls"
                         >delete</b-button>
                     </div>
                 </div>
@@ -195,8 +195,7 @@ export default class PostSummary extends mixins(UserAuthMixin, PostUpdaterMixin)
             return false;
         }
 
-        return false;
-        // return this.post.isOwner(this.$login.user);
+        return this.post.isOwner(this.$login!.user);
     }
 }
 </script>
