@@ -17,11 +17,14 @@ import { Comment } from '@/comment/common/comment';
 export default class CommentModule extends VuexModule {
     public comments: PagedResultSet<Comment> | null = null;
 
-    public activeComment: Comment | null = null;
+    @Mutation
+    public [CommentMutation.SetComments](comments: PagedResultSet<Comment>) {
+        this.comments = comments;
+    }
 
     @Mutation
-    public [CommentMutation.CacheComments](comments: PagedResultSet<Comment>) {
-        this.comments = comments;
+    public [CommentMutation.ClearComments]() {
+        this.comments = null;
     }
 
     /**
@@ -30,8 +33,7 @@ export default class CommentModule extends VuexModule {
      */
     @Action
     public async findById(id: number) {
-        const c = await new CommentFinderById(this.context.rootGetters['user/authToken']).handle(id);
-        this.context.commit(CommentMutation.SetActiveComment, c);
+        return new CommentFinderById(this.context.rootGetters['user/authToken']).handle(id);
     }
 
     /**
@@ -40,8 +42,11 @@ export default class CommentModule extends VuexModule {
      */
     @Action
     public async findByPost(postId: number) {
+        this.context.commit(CommentMutation.ClearComments);
         const comments = await new CommentFinderByPost(this.context.rootGetters['user/authToken']).handle(postId);
-        this.context.commit(CommentMutation.CacheComments, comments);
+        this.context.commit(CommentMutation.SetComments, comments);
+
+        return comments;
     }
 
     /**
@@ -50,8 +55,11 @@ export default class CommentModule extends VuexModule {
      */
     @Action
     public async findByUser(params: CommentFinderByUserParams) {
+        this.context.commit(CommentMutation.ClearComments);
         const comments = await new CommentFinderByUser(this.context.rootGetters['user/authToken']).handle(params);
-        this.context.commit(CommentMutation.CacheComments, comments);
+        this.context.commit(CommentMutation.SetComments, comments);
+
+        return comments;
     }
 
     /**
@@ -60,7 +68,6 @@ export default class CommentModule extends VuexModule {
      */
     @Action
     public async create(params: CommentCreateParams) {
-        const c = await new CommentCreator(this.context.rootGetters['user/authToken']).handle(params);
-        this.context.commit(CommentMutation.SetActiveComment, c);
+        return new CommentCreator(this.context.rootGetters['user/authToken']).handle(params);
     }
 }

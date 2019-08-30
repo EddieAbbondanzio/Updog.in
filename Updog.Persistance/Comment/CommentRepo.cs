@@ -154,7 +154,7 @@ namespace Updog.Persistance {
             CommentRecord commentRec = this.commentMapper.Reverse(entity).Item1;
 
             using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync("UPDATE Comment SET Body = @Body WHERE Id = @Id", commentRec);
+                await connection.ExecuteAsync("UPDATE Comment SET Body = @Body, WasUpdated = TRUE WHERE Id = @Id", commentRec);
             }
         }
 
