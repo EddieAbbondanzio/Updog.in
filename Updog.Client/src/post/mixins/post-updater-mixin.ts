@@ -28,7 +28,6 @@ export class PostUpdaterMixin extends Vue {
      * @param request The post update params.
      */
     public async $updatePost(request: PostUpdateParams): Promise<Post> {
-        await this.postModule.update(request);
-        return this.postModule.activePost!;
+        return this.postModule.update(request);
     }
 }

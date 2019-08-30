@@ -23,9 +23,8 @@ export class CommentCreatorMixin extends Vue {
      * Create a new comment.
      * @param params The new comment info.
      */
-    public async $createComment(params: CommentCreateParams): Promise<Comment> {
+    public async $createComment(params: CommentCreateParams) {
         await this.commentModule.create(params);
-
-        return new CommentCreator().handle(params);
+        return this.commentModule.activeComment!;
     }
 }

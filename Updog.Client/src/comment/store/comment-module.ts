@@ -8,6 +8,7 @@ import { CommentCreator } from '../use-cases/create/comment-creator';
 import { PagedResultSet } from '@/core/pagination/paged-result-set';
 import { CommentMutation } from './comment-mutation';
 import { PaginationInfo } from '@/core/pagination/pagination-info';
+import { Comment } from '@/comment/common/comment';
 
 /**
  * Cache module for comments.
@@ -16,14 +17,7 @@ import { PaginationInfo } from '@/core/pagination/pagination-info';
 export default class CommentModule extends VuexModule {
     public comments: PagedResultSet<Comment> | null = null;
 
-    @Mutation
-    public [CommentMutation.CacheComment](comment: Comment) {
-        if (this.comments == null) {
-            throw new Error('Cannot add to cache if non-existant!');
-        }
-
-        this.comments.push(comment);
-    }
+    public activeComment: Comment | null = null;
 
     @Mutation
     public [CommentMutation.CacheComments](comments: PagedResultSet<Comment>) {
@@ -37,7 +31,7 @@ export default class CommentModule extends VuexModule {
     @Action
     public async findById(id: number) {
         const c = await new CommentFinderById(this.context.rootGetters['user/authToken']).handle(id);
-        this.context.commit(CommentMutation.CacheComments, new PagedResultSet([c], new PaginationInfo(0, 1, 1)));
+        this.context.commit(CommentMutation.SetActiveComment, c);
     }
 
     /**
@@ -67,6 +61,6 @@ export default class CommentModule extends VuexModule {
     @Action
     public async create(params: CommentCreateParams) {
         const c = await new CommentCreator(this.context.rootGetters['user/authToken']).handle(params);
-        this.context.commit(CommentMutation.CacheComment, c);
+        this.context.commit(CommentMutation.SetActiveComment, c);
     }
 }

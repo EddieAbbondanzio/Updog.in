@@ -25,19 +25,14 @@ export default class PostModule extends VuexModule {
      */
     public posts: PagedResultSet<Post> | null = null;
 
-    /**
-     * The currently active post.
-     */
-    public activePost: Post | null = null;
-
     @Mutation
     public [PostMutation.SetPosts](posts: PagedResultSet<Post>) {
         this.posts = posts;
     }
 
     @Mutation
-    public [PostMutation.SetActivePost](post: Post) {
-        this.activePost = post;
+    public [PostMutation.ClearPosts]() {
+        this.posts = null;
     }
 
     /**
@@ -46,8 +41,7 @@ export default class PostModule extends VuexModule {
      */
     @Action
     public async create(params: PostCreateParams) {
-        const post = await new PostCreator(this.context.rootGetters['user/authToken']).handle(params);
-        this.context.commit(PostMutation.SetActivePost, post);
+        return new PostCreator(this.context.rootGetters['user/authToken']).handle(params);
     }
 
     /**
@@ -56,8 +50,7 @@ export default class PostModule extends VuexModule {
      */
     @Action
     public async update(params: PostUpdateParams) {
-        const post = await new PostUpdater(this.context.rootGetters['user/authToken']).handle(params);
-        this.context.commit(PostMutation.SetActivePost, post);
+        return new PostUpdater(this.context.rootGetters['user/authToken']).handle(params);
     }
 
     /**
@@ -66,8 +59,7 @@ export default class PostModule extends VuexModule {
      */
     @Action
     public async findById(id: number) {
-        const post = await new PostFinderById(this.context.rootGetters['user/authToken']).handle(id);
-        this.context.commit(PostMutation.SetActivePost, post);
+        return new PostFinderById(this.context.rootGetters['user/authToken']).handle(id);
     }
 
     /**
@@ -76,8 +68,11 @@ export default class PostModule extends VuexModule {
      */
     @Action
     public async findByNew(paging: PaginationParams) {
+        this.context.commit(PostMutation.ClearPosts);
         const posts = await new PostFinderByNew().handle(paging);
         this.context.commit(PostMutation.SetPosts, posts);
+
+        return posts;
     }
 
     /**
@@ -86,7 +81,10 @@ export default class PostModule extends VuexModule {
      */
     @Action
     public async findByUser(params: PostFinderByUserParams) {
+        this.context.commit(PostMutation.ClearPosts);
         const posts = await new PostFinderByUser(this.context.rootGetters['user/authToken']).handle(params);
         this.context.commit(PostMutation.SetPosts, posts);
+
+        return posts;
     }
 }

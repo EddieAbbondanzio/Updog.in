@@ -1,4 +1,4 @@
 export enum CommentMutation {
-    CacheComment = 'cacheComment',
-    CacheComments = 'cacheComments'
+    CacheComments = 'cacheComments',
+    SetActiveComment = 'setActiveComment'
 }

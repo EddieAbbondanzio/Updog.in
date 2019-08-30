@@ -26,7 +26,6 @@ export class PostCreatorMixin extends Vue {
      * @param request The post creation details.
      */
     public async $createPost(request: PostCreateParams): Promise<Post> {
-        await this.postModule.create(request);
-        return this.postModule.activePost!;
+        return this.postModule.create(request);
     }
 }
