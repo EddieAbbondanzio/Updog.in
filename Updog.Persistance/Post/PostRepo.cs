@@ -138,7 +138,7 @@ namespace Updog.Persistance {
         /// <param name="post">The post to update.</param>
         public async Task Update(Post post) {
             using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync("UPDATE Post SET Body = @Body WHERE Id = @Id", postMapper.Reverse(post).Item1);
+                await connection.ExecuteAsync("UPDATE Post SET Body = @Body, WasUpdated = True WHERE Id = @Id", postMapper.Reverse(post).Item1);
             }
         }
 

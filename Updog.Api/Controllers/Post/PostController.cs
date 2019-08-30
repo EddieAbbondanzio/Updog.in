@@ -90,9 +90,9 @@ namespace Updog.Api {
         /// Update a post.
         /// </summary>
         [HttpPatch("{id}")]
-        public async Task<ActionResult> Update(int id, [FromBody]string body) {
+        public async Task<ActionResult> Update(int id, [FromBody]PostUpdateRequest payload) {
             try {
-                PostView p = await postUpdater.Handle(new PostUpdateParams(User, id, body));
+                PostView p = await postUpdater.Handle(new PostUpdateParams(User, id, payload.Body));
                 return Ok(p);
             } catch (ValidationException ex) {
                 return BadRequest(ex.Message);
