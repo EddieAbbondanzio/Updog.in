@@ -1,0 +1,14 @@
+import { CommentApiInteractor } from '@/comment/common/comment-api-interactor';
+import { CommentUpdateParams } from './comment-update-params';
+import { Comment } from '@/comment/common/comment';
+
+/**
+ * Interactor to update an existing post.
+ */
+export class CommentUpdater extends CommentApiInteractor<CommentUpdateParams, Comment> {
+    public async handle(input: CommentUpdateParams): Promise<Comment> {
+        const response = await this.http.patch<Comment>(`/post/${input.commentId}`, { body: input.body });
+
+        return this.commentMapper.map(response.data);
+    }
+}

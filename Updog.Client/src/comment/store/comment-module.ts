@@ -9,6 +9,8 @@ import { PagedResultSet } from '@/core/pagination/paged-result-set';
 import { CommentMutation } from './comment-mutation';
 import { PaginationInfo } from '@/core/pagination/pagination-info';
 import { Comment } from '@/comment/common/comment';
+import { CommentUpdateParams } from '../use-cases/update/comment-update-params';
+import { CommentUpdater } from '../use-cases/update/comment-updater';
 
 /**
  * Cache module for comments.
@@ -69,5 +71,14 @@ export default class CommentModule extends VuexModule {
     @Action
     public async create(params: CommentCreateParams) {
         return new CommentCreator(this.context.rootGetters['user/authToken']).handle(params);
+    }
+
+    /**
+     * Update an existing comment.
+     * @param params The comment update params.
+     */
+    @Action
+    public async update(params: CommentUpdateParams) {
+        return new CommentUpdater(this.context.rootGetters['user/authToken']).handle(params);
     }
 }
