@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Updog.Domain;
 using Updog.Application;
-using MySql.Data.MySqlClient;
 using System.Data.Common;
 using Dapper;
 

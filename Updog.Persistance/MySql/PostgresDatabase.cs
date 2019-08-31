@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Data.Common;
-using MySql.Data.MySqlClient;
+using Npgsql;
 
 namespace Updog.Persistance {
     /// <summary>
-    /// A database for data persistance that runs MySQL.
+    /// A database for data persistance that runs PostgreSQL.
     /// </summary>
-    public sealed class MySqlDatabase : IDatabase {
+    public sealed class PostgresDatabase : IDatabase {
         #region Properties
         /// <summary>
         /// The connection string for initiating new connections.
@@ -19,13 +19,14 @@ namespace Updog.Persistance {
         /// Create a new database.
         /// </summary>
         /// <param name="connection">The connection config.</param>
-        public MySqlDatabase(IDatabaseConfig config) {
-            MySqlConnectionStringBuilder connBuilder = new MySqlConnectionStringBuilder();
-            connBuilder.Server = config.Host;
-            connBuilder.Port = config.Port;
-            connBuilder.UserID = config.User;
-            connBuilder.Password = config.Password;
-            connBuilder.Database = config.Database;
+        public PostgresDatabase(IDatabaseConfig config) {
+            NpgsqlConnectionStringBuilder connBuilder = new NpgsqlConnectionStringBuilder() {
+                Host = config.Host,
+                Port = config.Port,
+                Username = config.User,
+                Password = config.Password,
+                Database = config.Database
+            };
 
             Connection = connBuilder.ToString();
         }
@@ -37,7 +38,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <returns>A new pooled connection.</returns>
         public DbConnection GetConnection() {
-            return new MySqlConnection(Connection);
+            return new NpgsqlConnection(Connection);
         }
         #endregion
     }

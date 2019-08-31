@@ -13,8 +13,10 @@ namespace Updog.Application {
         /// Find the comments of a post.
         /// </summary>
         /// <param name="post">The post ID.</param>
+        /// <param name="pageNumber">Index of the page..</param>
+        /// <param name="pageSize">Size of the page..</param>
         /// <returns>The comments associated with it.</returns>
-        Task<IEnumerable<Comment>> FindByPost(int postId);
+        Task<PagedResultSet<Comment>> FindByPost(int postId, int pageNumber, int pageSize);
 
         /// <summary>
         /// Find a page of comments made by a specific user.

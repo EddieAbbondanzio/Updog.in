@@ -48,7 +48,7 @@ namespace Updog.Persistance {
             // This doesn't pull in comment children and it should.
             using (DbConnection connection = GetConnection()) {
                 Comment comment = (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
-                    "SELECT * FROM Comment LEFT JOIN User ON User.Id = Comment.UserId WHERE Comment.Id = @Id;",
+                    @"SELECT * FROM Comment LEFT JOIN User ON User.Id = Comment.UserId WHERE Comment.Id = @Id ORDER BY CreationDate DESC",
                     (CommentRecord rec, UserRecord u) => {
                         return this.commentMapper.Map(Tuple.Create(rec, u));
                     },
@@ -65,7 +65,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="postId">The ID of the post.</param>
         /// <returns>It's children comments.</returns>
-        public async Task<IEnumerable<Comment>> FindByPost(int postId) {
+        public async Task<PagedResultSet<Comment>> FindByPost(int postId, int pageNumber, int pageSize) {
             Post p = await postRepo.FindById(postId);
 
             if (p == null) {
@@ -75,7 +75,7 @@ namespace Updog.Persistance {
             using (DbConnection connection = GetConnection()) {
                 // Pull in every relevant comment first. This will be flat so we'll have to do some work.
                 IEnumerable<Comment> comments = (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
-                    "SELECT * FROM Comment LEFT JOIN User ON Comment.UserId = User.Id WHERE PostId = @PostId;",
+                    @"SELECT * FROM Comment LEFT JOIN User ON Comment.UserId = User.Id WHERE PostId = @PostId ORDER BY CreationDate DESC LIMIT @Limit OFFSET @Offset",
                     (CommentRecord commentRec, UserRecord userRec) => {
                         Comment c = this.commentMapper.Map(Tuple.Create(commentRec, userRec));
 
@@ -84,11 +84,22 @@ namespace Updog.Persistance {
 
                         return c;
                     },
-                    new {
-                        PostId = postId
-                    }));
+                    BuildPaginationParams(
+                        new { PostId = postId },
+                        pageNumber,
+                        pageSize
+                    )
+                ));
 
-                return BuildCommentTree(comments);
+                //Get total count
+                int totalCount = await connection.ExecuteScalarAsync<int>(
+                    "SELECT COUNT(*) FROM Comment WHERE PostId = @PostId",
+                        new { PostId = postId }
+                );
+
+                List<Comment> tree = BuildCommentTree(comments);
+
+                return new PagedResultSet<Comment>(tree, new PaginationInfo(pageNumber, pageSize, totalCount));
             }
         }
 
@@ -102,14 +113,15 @@ namespace Updog.Persistance {
         public async Task<PagedResultSet<Comment>> FindByUser(string username, int pageNumber, int pageSize) {
             using (DbConnection connection = GetConnection()) {
                 IEnumerable<Comment> comments = await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
-                    "SELECT * FROM Comment LEFT JOIN User ON Comment.UserId = User.Id WHERE User.Username = @Username LIMIT @Limit OFFSET @Offset ",
+                    "SELECT * FROM Comment LEFT JOIN User ON Comment.UserId = User.Id WHERE User.Username = @Username ORDER BY CreationDate DESC LIMIT @Limit OFFSET @Offset ",
                     (commentRec, userRec) => {
                         return commentMapper.Map(Tuple.Create(commentRec, userRec));
                     },
                     BuildPaginationParams(
-                    new {
-                        Username = username
-                    }, pageNumber, pageSize)
+                        new { Username = username },
+                        pageNumber,
+                        pageSize
+                    )
                 );
 
                 //Get total count

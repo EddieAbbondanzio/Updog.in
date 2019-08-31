@@ -60,9 +60,10 @@ namespace Updog.Api {
         /// <param name="postId">The post ID.</param>
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult> GetComments([FromQuery]int postId) {
+        public async Task<ActionResult> GetComments([FromQuery]int postId, [FromQuery]int pageNumber, [FromQuery] int pageSize = Comment.PageSize) {
             try {
-                IEnumerable<CommentView> comments = await commentFinderByPost.Handle(postId);
+                PagedResultSet<CommentView> comments = await commentFinderByPost.Handle(new CommentFinderByPostParams(postId, pageNumber, pageSize));
+                SetContentRangeHeader(comments.Pagination);
                 return Ok(comments);
             } catch {
                 return InternalServerError();

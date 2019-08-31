@@ -11,6 +11,8 @@ namespace Updog.Domain {
         /// The maximum number of characters in a comment body.
         /// </summary>
         public const int BodyMaxLength = 10_000;
+
+        public const int PageSize = 500;
         #endregion
 
         #region Properties

@@ -13,7 +13,7 @@ namespace Updog.Persistance {
         /// <summary>
         /// The port number of the IP.
         /// </summary>
-        uint Port { get; set; }
+        int Port { get; set; }
 
         /// <summary>
         /// The username to authenticate under.
