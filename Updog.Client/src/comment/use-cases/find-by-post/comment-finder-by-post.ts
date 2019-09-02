@@ -7,19 +7,12 @@ import { PagedResultSet } from '@/core/pagination/paged-result-set';
 /**
  * Interactor to find a post by it's ID.
  */
-export class CommentFinderByPost extends CommentApiInteractor<CommentFinderByPostParams, PagedResultSet<Comment>> {
-    public async handle(input: CommentFinderByPostParams): Promise<PagedResultSet<Comment>> {
-        const response = await this.http.get<Comment[]>(`/comment/`, {
-            params: {
-                postId: input.postId,
-                pageNumber: input.paginationInfo.pageNumber,
-                pageSize: input.paginationInfo.pageSize
-            }
-        });
+export class CommentFinderByPost extends CommentApiInteractor<CommentFinderByPostParams, Comment[]> {
+    public async handle(input: CommentFinderByPostParams): Promise<Comment[]> {
+        const response = await this.http.get<Comment[]>(`/post/${input.postId}/comment/`);
 
-        const pagination = this.getPaginationInfo(response);
         const items = response.data.map(ci => this.commentMapper.map(ci));
 
-        return new PagedResultSet(items, pagination);
+        return items;
     }
 }

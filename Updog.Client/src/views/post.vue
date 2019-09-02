@@ -12,8 +12,6 @@
                         :comment="comment"
                         v-bind:key="comment.id"
                     />
-
-                    <pagination-navigation :pagination="comments.pagination" />
                 </div>
             </div>
         </template>
@@ -72,15 +70,12 @@ export default class Post extends Mixins(UserAuthMixin, PostFinderMixin, Comment
     /**
      * Comments on the post.
      */
-    public comments: PagedResultSet<Comment> | null = null;
+    public comments: Comment[] | null = null;
 
     public async created() {
         const postId = Number.parseInt(this.$route.params.id, 10);
         this.post = await this.$findPostById(postId);
-        this.comments = await this.$findCommentsByPost(
-            new CommentFinderByPostParams(postId, new PaginationParams(0, Comment.PAGE_SIZE))
-        );
-        console.log(this.comments.pagination);
+        this.comments = await this.$findCommentsByPost(new CommentFinderByPostParams(postId));
     }
 
     /**
