@@ -152,12 +152,12 @@ export default class CommentSummary extends Mixins(UserAuthMixin, CommentCreator
      * Check to see if the user can actually edit this comment.
      */
     public canEdit() {
-        //First check to see if they are even logged in.
+        // First check to see if they are even logged in.
         if (!this.$isLoggedIn()) {
             return false;
         }
 
-        return this.comment.user.id == this.$login!.user.id;
+        return this.comment.user.id === this.$login!.user.id;
     }
 
     public onEditClick() {
@@ -172,6 +172,7 @@ export default class CommentSummary extends Mixins(UserAuthMixin, CommentCreator
         }
 
         await this.$updateComment(new CommentUpdateParams(this.comment.id, this.editedBody));
+        this.isEditing = false;
     }
 
     public async onEditCancel() {

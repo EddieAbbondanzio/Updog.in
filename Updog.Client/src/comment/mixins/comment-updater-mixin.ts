@@ -15,6 +15,6 @@ export class CommentUpdaterMixin extends Vue {
      */
     public async $updateComment(params: CommentUpdateParams) {
         const commentModule: CommentModule = getModule(CommentModule, this.$store);
-        return commentModule.update(params);
+        return await commentModule.update(params);
     }
 }

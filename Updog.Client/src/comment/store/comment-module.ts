@@ -12,7 +12,7 @@ import { Comment } from '@/comment/common/comment';
 import { CommentUpdateParams } from '../use-cases/update/comment-update-params';
 import { CommentUpdater } from '../use-cases/update/comment-updater';
 import { CommentFinderByPostParams } from '../use-cases/find-by-post/comment-finder-by-post-params';
-
+import Vue from 'vue';
 /**
  * Cache module for comments.
  */
@@ -22,12 +22,12 @@ export default class CommentModule extends VuexModule {
 
     @Mutation
     public [CommentMutation.SetComments](comments: Comment[]) {
-        this.comments = comments;
+        Vue.set(this, 'comments', comments);
     }
 
     @Mutation
     public [CommentMutation.ClearComments]() {
-        this.comments = null;
+        Vue.set(this, 'comments', []);
     }
 
     /**
@@ -71,19 +71,26 @@ export default class CommentModule extends VuexModule {
      */
     @Action
     public async create(params: CommentCreateParams) {
-        return new CommentCreator(this.context.rootGetters['user/authToken']).handle(params);
+        const c = await new CommentCreator(this.context.rootGetters['user/authToken']).handle(params);
+        const all = [c, ...this.comments!];
+        this.context.commit(CommentMutation.SetComments, all);
+        return c;
     }
 
     /**
      * Update an existing comment.
      * @param params The comment update params.
      */
-    @Action
+    @Action({ rawError: true })
     public async update(params: CommentUpdateParams) {
-        // const updatedComment = await new CommentUpdater(this.context.rootGetters['user/authToken']).handle(params);
-        console.log(this.comments);
+        const updatedComment = await new CommentUpdater(this.context.rootGetters['user/authToken']).handle(params);
 
-        // const others = this.comments!.filter(c => c.id != params.commentId);
-        // this.context.commit(CommentMutation.SetComments, [...others, updatedComment]);
+        const oldIndex = this.comments!.findIndex(c => c.id === params.commentId);
+        const newComments = [...this.comments!];
+        newComments.splice(oldIndex, 1, updatedComment);
+
+        this.context.commit(CommentMutation.SetComments, newComments);
+
+        return updatedComment;
     }
 }

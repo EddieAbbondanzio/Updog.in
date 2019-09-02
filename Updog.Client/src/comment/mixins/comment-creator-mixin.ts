@@ -17,13 +17,12 @@ import { getModule } from 'vuex-module-decorators';
  */
 @Mixin
 export class CommentCreatorMixin extends Vue {
-    private commentModule: CommentModule = getModule(CommentModule, this.$store);
-
     /**
      * Create a new comment.
      * @param params The new comment info.
      */
     public async $createComment(params: CommentCreateParams) {
-        return this.commentModule.create(params);
+        const commentModule = getModule(CommentModule, this.$store);
+        return commentModule.create(params);
     }
 }
