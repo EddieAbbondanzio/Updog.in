@@ -65,8 +65,15 @@ namespace Updog.Persistance {
                     return null;
                 }
 
+                //Wipe out parent. We don't care about it.
+                // foreach (Comment c in comments) {
+                //     if (c.Id == commentId) {
+                //         c.Parent = null;
+                //     }
+                // }
+
                 // return comment;
-                return BuildCommentTree(comments)[0];
+                return BuildCommentTree(comments, commentId)[0];
             }
         }
 
@@ -207,7 +214,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="flatComments">The comments before de-flattening.</param>
         /// <returns>The comments in hierarcheal order.</returns>
-        private List<Comment> BuildCommentTree(IEnumerable<Comment> flatComments) {
+        private List<Comment> BuildCommentTree(IEnumerable<Comment> flatComments, int rootId = 0) {
             Dictionary<int, Comment> lookup = new Dictionary<int, Comment>();
 
             //Populate the lookup table
@@ -218,13 +225,20 @@ namespace Updog.Persistance {
             //Now iterate through the list and build the tree
             foreach (Comment c in lookup.Values) {
                 if (c.Parent != null) {
-                    Comment parent = lookup[c.Parent.Id];
-                    parent.Children.Add(c);
+
+                    if (lookup.ContainsKey(c.Parent.Id)) {
+                        Comment parent = lookup[c.Parent.Id];
+                        parent.Children.Add(c);
+                    }
                 }
             }
 
-            //Pull out the top level list.
-            return lookup.Values.Where(c => c.Parent == null).ToList();
+            if (rootId != 0) {
+                return lookup.Values.Where(c => c.Id == rootId).ToList();
+            } else {
+                //Pull out the top level list.
+                return lookup.Values.Where(c => c.Parent == null).ToList();
+            }
         }
         #endregion
     }

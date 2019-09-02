@@ -82,9 +82,9 @@ namespace Updog.Api {
         /// Edit a comment.
         /// </summary>
         [HttpPatch("{commentId}")]
-        public async Task<ActionResult> Update(int commentId, [FromBody]string body) {
+        public async Task<ActionResult> Update(int commentId, [FromBody]CommentUpdateRequest request) {
             try {
-                Comment c = await commentUpdater.Handle(new CommentUpdateParams(User, commentId, body));
+                Comment c = await commentUpdater.Handle(new CommentUpdateParams(User, commentId, request.Body));
                 return Ok(c);
             } catch (ValidationException ex) {
                 return BadRequest(ex.Message);

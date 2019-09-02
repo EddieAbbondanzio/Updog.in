@@ -10,9 +10,9 @@ namespace Updog.Application {
 #pragma warning disable 1998
         public async Task<bool> HasPermission(User user, PermissionAction action, Comment comment) {
             switch (action) {
-                case PermissionAction.UpdatePost:
+                case PermissionAction.UpdateComment:
                     return user.Id == comment.User.Id;
-                case PermissionAction.DeletePost:
+                case PermissionAction.DeleteComment:
                     return user.Id == comment.User.Id;
                 default:
                     throw new NotSupportedException();

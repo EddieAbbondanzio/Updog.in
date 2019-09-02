@@ -7,7 +7,7 @@ import { Comment } from '@/comment/common/comment';
  */
 export class CommentUpdater extends CommentApiInteractor<CommentUpdateParams, Comment> {
     public async handle(input: CommentUpdateParams): Promise<Comment> {
-        const response = await this.http.patch<Comment>(`/post/${input.commentId}`, { body: input.body });
+        const response = await this.http.patch<Comment>(`/comment/${input.commentId}`, { body: input.body });
 
         return this.commentMapper.map(response.data);
     }

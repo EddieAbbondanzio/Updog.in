@@ -9,13 +9,12 @@ import { CommentUpdateParams } from '../use-cases/update/comment-update-params';
  */
 @Mixin
 export class CommentUpdaterMixin extends Vue {
-    private commentModule: CommentModule = getModule(CommentModule, this.$store);
-
     /**
      * Create a new comment.
      * @param params The new comment info.
      */
     public async $updateComment(params: CommentUpdateParams) {
-        return this.commentModule.update(params);
+        const commentModule: CommentModule = getModule(CommentModule, this.$store);
+        return commentModule.update(params);
     }
 }
