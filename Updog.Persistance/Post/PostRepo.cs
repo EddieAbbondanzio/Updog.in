@@ -46,7 +46,7 @@ namespace Updog.Persistance {
             using (DbConnection connection = GetConnection()) {
                 IEnumerable<Post> posts = await connection.QueryAsync<PostRecord, UserRecord, Post>(
                     @"SELECT * FROM Post
-                    LEFT JOIN User ON User.Id = Post.UserId
+                    LEFT JOIN ""User"" ON ""User"".Id = Post.UserId
                     ORDER BY CreationDate DESC
                     LIMIT @Limit
                     OFFSET @Offset",
@@ -77,8 +77,8 @@ namespace Updog.Persistance {
             using (DbConnection connection = GetConnection()) {
                 IEnumerable<Post> posts = await connection.QueryAsync<PostRecord, UserRecord, Post>(
                     @"SELECT * FROM Post
-                    LEFT JOIN User ON User.Id = Post.UserId
-                    WHERE User.Username = @Username
+                    LEFT JOIN ""User"" ON ""User"".Id = Post.UserId
+                    WHERE ""User"".Username = @Username
                     ORDER BY CreationDate ASC
                     LIMIT @Limit
                     OFFSET @Offset",
@@ -107,15 +107,12 @@ namespace Updog.Persistance {
         public async Task<Post> FindById(int id) {
             using (DbConnection connection = GetConnection()) {
                 return (await connection.QueryAsync<PostRecord, UserRecord, Post>(
-                    @"SELECT * FROM Post 
-                    LEFT JOIN User ON Post.UserId = User.Id 
-                    WHERE Post.Id = @Id;",
+                    @"SELECT * FROM Post LEFT JOIN ""User"" ON Post.UserId = User.Id WHERE Post.Id = @Id;",
                     (PostRecord p, UserRecord u) => {
                         return postMapper.Map(Tuple.Create(p, u));
                     },
                     new { Id = id }
                 )).FirstOrDefault();
-
             }
         }
 
@@ -126,7 +123,7 @@ namespace Updog.Persistance {
         public async Task Add(Post post) {
             using (DbConnection connection = GetConnection()) {
                 post.Id = await connection.QueryFirstOrDefaultAsync<int>(
-                    "INSERT INTO Post (Title, Body, Type, CreationDate, UserId, WasUpdated, WasDeleted, CommentCount) VALUES (@Title, @Body, @Type, @CreationDate, @UserId, @WasUpdated, @WasDeleted, @CommentCount); SELECT LAST_INSERT_ID();",
+                    @"INSERT INTO Post (Title, Body, Type, CreationDate, UserId, WasUpdated, WasDeleted, CommentCount) VALUES (@Title, @Body, @Type, @CreationDate, @UserId, @WasUpdated, @WasDeleted, @CommentCount) RETURNING Id;",
                     postMapper.Reverse(post).Item1
                 );
             }
@@ -138,7 +135,19 @@ namespace Updog.Persistance {
         /// <param name="post">The post to update.</param>
         public async Task Update(Post post) {
             using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync("UPDATE Post SET Body = @Body, WasUpdated = True WHERE Id = @Id", postMapper.Reverse(post).Item1);
+                await connection.ExecuteAsync(
+                    @"UPDATE Post SET 
+                    UserId = @UserId, 
+                    Type = @Type, 
+                    Title = @Title, 
+                    Body = @Body, 
+                    CreationDate = @CreationDate, 
+                    WasUpdated = @WasUpdated, 
+                    WasDeleted = @WasDeleted, 
+                    CommentCount = @CommentCount 
+                    WHERE Id = @Id",
+                    postMapper.Reverse(post).Item1
+                );
             }
         }
 
@@ -148,7 +157,10 @@ namespace Updog.Persistance {
         /// <param name="post">The post to delete.</param>
         public async Task Delete(Post post) {
             using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync("UPDATE Post SET WasDeleted = TRUE WHERE Id = @Id", postMapper.Reverse(post).Item1);
+                await connection.ExecuteAsync(
+                    @"UPDATE Post SET WasDeleted = TRUE WHERE Id = @Id",
+                    postMapper.Reverse(post).Item1
+                );
             }
         }
         #endregion

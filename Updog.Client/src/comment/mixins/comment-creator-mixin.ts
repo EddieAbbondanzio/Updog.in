@@ -7,7 +7,7 @@ import { CommentCreator } from '../use-cases/create/comment-creator';
 import { Comment } from '@/comment/common/comment';
 import { PaginationParams } from '@/core/pagination/pagination-params';
 import { CommentFinderByUser } from '../use-cases/find-by-user/comment-finder-by-user';
-import { CommentFinderByUserParams } from '../use-cases/find-by-user/comment-finder-by-user-param';
+import { CommentFinderByUserParams } from '../use-cases/find-by-user/comment-finder-by-user-params';
 import { PagedResultSet } from '@/core/pagination/paged-result-set';
 import CommentModule from '../store/comment-module';
 import { getModule } from 'vuex-module-decorators';

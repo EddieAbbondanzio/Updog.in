@@ -11,6 +11,11 @@ export class Comment extends UserEntity {
     public static BODY_MAX_LENGTH = 10_000;
 
     /**
+     * The number of comments per page.
+     */
+    public static PAGE_SIZE = 10;
+
+    /**
      *
      * @param id The ID of the comment.
      * @param user The user who posted it.

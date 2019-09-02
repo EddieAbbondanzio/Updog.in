@@ -3,7 +3,7 @@ import { PaginationParams } from '@/core/pagination/pagination-params';
 import { Post } from '@/post/common/post';
 import { PostMapper } from '@/post/common/post-mapper';
 import { PostApiInteractor } from '@/post/common/post-api-interactor';
-import { CommentFinderByUserParams } from './comment-finder-by-user-param';
+import { CommentFinderByUserParams } from './comment-finder-by-user-params';
 import { Comment } from '@/comment/common/comment';
 import { CommentApiInteractor } from '@/comment/common/comment-api-interactor';
 import { PagedResultSet } from '@/core/pagination/paged-result-set';

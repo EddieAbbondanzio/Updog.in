@@ -48,7 +48,7 @@ namespace Updog.Persistance {
             // This doesn't pull in comment children and it should.
             using (DbConnection connection = GetConnection()) {
                 Comment comment = (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
-                    @"SELECT * FROM Comment LEFT JOIN User ON User.Id = Comment.UserId WHERE Comment.Id = @Id ORDER BY CreationDate DESC",
+                    @"SELECT * FROM Comment LEFT JOIN ""User"" ON ""User"".Id = Comment.UserId WHERE Comment.Id = @Id ORDER BY CreationDate DESC",
                     (CommentRecord rec, UserRecord u) => {
                         return this.commentMapper.Map(Tuple.Create(rec, u));
                     },
@@ -75,7 +75,7 @@ namespace Updog.Persistance {
             using (DbConnection connection = GetConnection()) {
                 // Pull in every relevant comment first. This will be flat so we'll have to do some work.
                 IEnumerable<Comment> comments = (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
-                    @"SELECT * FROM Comment LEFT JOIN User ON Comment.UserId = User.Id WHERE PostId = @PostId ORDER BY CreationDate DESC LIMIT @Limit OFFSET @Offset",
+                    @"SELECT * FROM Comment LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id WHERE PostId = @PostId ORDER BY CreationDate DESC LIMIT @Limit OFFSET @Offset",
                     (CommentRecord commentRec, UserRecord userRec) => {
                         Comment c = this.commentMapper.Map(Tuple.Create(commentRec, userRec));
 
@@ -93,8 +93,8 @@ namespace Updog.Persistance {
 
                 //Get total count
                 int totalCount = await connection.ExecuteScalarAsync<int>(
-                    "SELECT COUNT(*) FROM Comment WHERE PostId = @PostId",
-                        new { PostId = postId }
+                    @"SELECT COUNT(*) FROM Comment WHERE PostId = @PostId",
+                    new { PostId = postId }
                 );
 
                 List<Comment> tree = BuildCommentTree(comments);
@@ -113,7 +113,7 @@ namespace Updog.Persistance {
         public async Task<PagedResultSet<Comment>> FindByUser(string username, int pageNumber, int pageSize) {
             using (DbConnection connection = GetConnection()) {
                 IEnumerable<Comment> comments = await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
-                    "SELECT * FROM Comment LEFT JOIN User ON Comment.UserId = User.Id WHERE User.Username = @Username ORDER BY CreationDate DESC LIMIT @Limit OFFSET @Offset ",
+                    @"SELECT * FROM Comment LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id WHERE ""User"".Username = @Username ORDER BY CreationDate DESC LIMIT @Limit OFFSET @Offset ",
                     (commentRec, userRec) => {
                         return commentMapper.Map(Tuple.Create(commentRec, userRec));
                     },
@@ -126,7 +126,7 @@ namespace Updog.Persistance {
 
                 //Get total count
                 int totalCount = await connection.ExecuteScalarAsync<int>(
-                    "SELECT COUNT(*) FROM Comment LEFT JOIN User ON Comment.UserId = User.Id WHERE User.Username = @Username",
+                    @"SELECT COUNT(*) FROM Comment LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id WHERE ""User"".Username = @Username",
                     new { Username = username }
                 );
 
@@ -146,12 +146,12 @@ namespace Updog.Persistance {
 
                 using (DbTransaction transaction = connection.BeginTransaction()) {
                     entity.Id = await connection.QueryFirstOrDefaultAsync<int>(
-                        "INSERT INTO Comment (UserId, PostId, ParentId, Body, CreationDate, WasUpdated, WasDeleted) VALUES (@UserId, @PostId, @ParentId, @Body, @CreationDate, @WasUpdated, @WasDeleted); SELECT LAST_INSERT_ID();",
+                        @"INSERT INTO Comment (UserId, PostId, ParentId, Body, CreationDate, WasUpdated, WasDeleted) VALUES (@UserId, @PostId, @ParentId, @Body, @CreationDate, @WasUpdated, @WasDeleted) RETURNING Id;",
                         commentRec, transaction
                     );
 
                     //Update post comment count.
-                    await connection.ExecuteAsync("UPDATE Post Set CommentCount = CommentCount + 1 WHERE Id = @Id", new { Id = entity.Post.Id }, transaction);
+                    await connection.ExecuteAsync(@"UPDATE Post SET CommentCount = CommentCount + 1 WHERE Id = @Id", new { Id = entity.Post.Id }, transaction);
 
                     transaction.Commit();
                 }
@@ -166,7 +166,18 @@ namespace Updog.Persistance {
             CommentRecord commentRec = this.commentMapper.Reverse(entity).Item1;
 
             using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync("UPDATE Comment SET Body = @Body, WasUpdated = TRUE WHERE Id = @Id", commentRec);
+                await connection.ExecuteAsync(
+                    @"UPDATE Comment SET 
+                    UserId = @UserId, 
+                    PostId = @PostId, 
+                    ParentId = @ParentId, 
+                    Body = @Body, 
+                    CreationDate = @CreationDate, 
+                    WasUpdated = @WasUpdated, 
+                    WasDeleted = @WasDeleted 
+                    WHERE Id = @Id",
+                    commentRec
+                );
             }
         }
 
@@ -178,7 +189,7 @@ namespace Updog.Persistance {
             CommentRecord commentRec = this.commentMapper.Reverse(entity).Item1;
 
             using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync("UPDATE Comment SET WasDeleted = TRUE Where Id = @Id", commentRec);
+                await connection.ExecuteAsync(@"UPDATE Comment SET WasDeleted = TRUE Where Id = @Id", commentRec);
             }
         }
         #endregion

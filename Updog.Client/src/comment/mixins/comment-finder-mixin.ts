@@ -7,8 +7,9 @@ import { CommentCreator } from '../use-cases/create/comment-creator';
 import { Comment } from '@/comment/common/comment';
 import { PaginationParams } from '@/core/pagination/pagination-params';
 import { CommentFinderByUser } from '../use-cases/find-by-user/comment-finder-by-user';
-import { CommentFinderByUserParams } from '../use-cases/find-by-user/comment-finder-by-user-param';
+import { CommentFinderByUserParams } from '../use-cases/find-by-user/comment-finder-by-user-params';
 import { PagedResultSet } from '@/core/pagination/paged-result-set';
+import { CommentFinderByPostParams } from '../use-cases/find-by-post/comment-finder-by-post-params';
 
 /**
  * Mixin to handle comment related things.
@@ -19,16 +20,16 @@ export class CommentFinderMixin extends Vue {
      * Find a post by it's unique ID.
      * @param request The ID of the post to retrieve.
      */
-    public async $findCommentById(request: number): Promise<Comment> {
+    public async $findCommentById(request: number) {
         return new CommentFinderById().handle(request);
     }
 
     /**
      * Find all of the comments for a post.
-     * @param postId The ID of the post to get comments for.
+     * @param params The info of the post to get comments for.
      */
-    public async $findCommentsByPost(postId: number): Promise<Comment[]> {
-        return new CommentFinderByPost().handle(postId);
+    public async $findCommentsByPost(params: CommentFinderByPostParams) {
+        return new CommentFinderByPost().handle(params);
     }
 
     /**

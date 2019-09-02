@@ -76,7 +76,7 @@ namespace Updog.Api {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSingleton<IAuthenticationTokenHandler, JsonWebTokenHandler>();
-            services.AddSingleton<IDatabase, MySqlDatabase>();
+            services.AddSingleton<IDatabase, PostgresDatabase>();
             services.AddTransient<IUserRepo, UserRepo>();
             services.AddTransient<IPostRepo, PostRepo>();
 

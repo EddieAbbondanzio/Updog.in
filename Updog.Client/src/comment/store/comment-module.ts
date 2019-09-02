@@ -1,6 +1,6 @@
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import { CommentCreateParams } from '../use-cases/create/comment-create-params';
-import { CommentFinderByUserParams } from '../use-cases/find-by-user/comment-finder-by-user-param';
+import { CommentFinderByUserParams } from '../use-cases/find-by-user/comment-finder-by-user-params';
 import { CommentFinderById } from '../use-cases/find-by-id/comment-finder-by-id';
 import { CommentFinderByPost } from '../use-cases/find-by-post/comment-finder-by-post';
 import { CommentFinderByUser } from '../use-cases/find-by-user/comment-finder-by-user';
@@ -11,6 +11,7 @@ import { PaginationInfo } from '@/core/pagination/pagination-info';
 import { Comment } from '@/comment/common/comment';
 import { CommentUpdateParams } from '../use-cases/update/comment-update-params';
 import { CommentUpdater } from '../use-cases/update/comment-updater';
+import { CommentFinderByPostParams } from '../use-cases/find-by-post/comment-finder-by-post-params';
 
 /**
  * Cache module for comments.
@@ -40,12 +41,12 @@ export default class CommentModule extends VuexModule {
 
     /**
      * Find a set of comments for a post.
-     * @param postId The post Id to look for.
+     * @param params The post info to look for.
      */
     @Action
-    public async findByPost(postId: number) {
+    public async findByPost(params: CommentFinderByPostParams) {
         this.context.commit(CommentMutation.ClearComments);
-        const comments = await new CommentFinderByPost(this.context.rootGetters['user/authToken']).handle(postId);
+        const comments = await new CommentFinderByPost(this.context.rootGetters['user/authToken']).handle(params);
         this.context.commit(CommentMutation.SetComments, comments);
 
         return comments;

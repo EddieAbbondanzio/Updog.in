@@ -13,7 +13,7 @@ export class PostFinderByNew extends PostApiInteractor<PaginationParams, PagedRe
         const response = await this.http.get<Post[]>(`/post/new/`, { params: input });
 
         const pagination = this.getPaginationInfo(response);
-        const posts = response.data.map(postInfo => this.postMapper.map(postInfo));
+        const posts = response.data.map((postInfo: any) => this.postMapper.map(postInfo));
 
         return new PagedResultSet(posts, pagination);
     }

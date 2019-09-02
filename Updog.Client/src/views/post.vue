@@ -6,11 +6,15 @@
                 <comment-create-form @submit="onCommentCreate" ref="commentCreateForm" />
 
                 <!-- Comments! -->
-                <comment-summary
-                    v-for="comment in comments"
-                    :comment="comment"
-                    v-bind:key="comment.id"
-                />
+                <div v-if="comments != null">
+                    <comment-summary
+                        v-for="comment in comments"
+                        :comment="comment"
+                        v-bind:key="comment.id"
+                    />
+
+                    <pagination-navigation :pagination="comments.pagination" />
+                </div>
             </div>
         </template>
         <template slot="side-bar">
@@ -36,6 +40,10 @@ import { Comment } from '../comment/common/comment';
 import User from './user.vue';
 import { UserAuthMixin } from '@/user/mixins/user-auth-mixin';
 import { CommentCreateParams } from '../comment/use-cases/create/comment-create-params';
+import { CommentFinderByPostParams } from '../comment/use-cases/find-by-post/comment-finder-by-post-params';
+import { PaginationParams } from '../core/pagination/pagination-params';
+import { PagedResultSet } from '../core/pagination/paged-result-set';
+import PaginationNavigation from '@/core/components/pagination-navigation.vue';
 
 /**
  * View a post via it's ID.
@@ -46,7 +54,8 @@ import { CommentCreateParams } from '../comment/use-cases/create/comment-create-
         MasterPage,
         PostSummary,
         CommentCreateForm,
-        CommentSummary
+        CommentSummary,
+        PaginationNavigation
     },
     mixins: [UserAuthMixin, PostFinderMixin, CommentFinderMixin, CommentCreatorMixin]
 })
@@ -63,12 +72,15 @@ export default class Post extends Mixins(UserAuthMixin, PostFinderMixin, Comment
     /**
      * Comments on the post.
      */
-    public comments: Comment[] = [];
+    public comments: PagedResultSet<Comment> | null = null;
 
     public async created() {
         const postId = Number.parseInt(this.$route.params.id, 10);
         this.post = await this.$findPostById(postId);
-        this.comments = await this.$findCommentsByPost(postId);
+        this.comments = await this.$findCommentsByPost(
+            new CommentFinderByPostParams(postId, new PaginationParams(0, Comment.PAGE_SIZE))
+        );
+        console.log(this.comments.pagination);
     }
 
     /**
@@ -86,7 +98,7 @@ export default class Post extends Mixins(UserAuthMixin, PostFinderMixin, Comment
         }
 
         const c = await this.$createComment(new CommentCreateParams(comment, this.post!.id, 0));
-        this.comments.unshift(c);
+        this.comments!.unshift(c);
         this.$refs.commentCreateForm.clear();
 
         // Hack...

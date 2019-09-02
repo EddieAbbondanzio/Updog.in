@@ -14,7 +14,7 @@ export class PostFinderByUser extends PostApiInteractor<PostFinderByUserParams, 
         const response = await this.http.get<Post[]>(`/post/user/${input.username}`, { params: input.paginationInfo });
 
         const pagination = this.getPaginationInfo(response);
-        const posts = response.data.map(postInfo => this.postMapper.map(postInfo));
+        const posts = response.data.map((postInfo: any) => this.postMapper.map(postInfo));
 
         return new PagedResultSet(posts, pagination);
     }

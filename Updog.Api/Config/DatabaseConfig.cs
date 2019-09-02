@@ -15,7 +15,7 @@ namespace Updog.Api {
         /// <summary>
         /// The port number of the IP.
         /// </summary>
-        public uint Port { get; set; }
+        public int Port { get; set; }
 
         /// <summary>
         /// The username to authenticate under.
