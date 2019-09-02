@@ -18,10 +18,10 @@ import { CommentFinderByPostParams } from '../use-cases/find-by-post/comment-fin
  */
 @Module({ namespaced: true, name: 'comment' })
 export default class CommentModule extends VuexModule {
-    public comments: PagedResultSet<Comment> | null = null;
+    public comments: Comment[] | null = null;
 
     @Mutation
-    public [CommentMutation.SetComments](comments: PagedResultSet<Comment>) {
+    public [CommentMutation.SetComments](comments: Comment[]) {
         this.comments = comments;
     }
 
@@ -80,6 +80,10 @@ export default class CommentModule extends VuexModule {
      */
     @Action
     public async update(params: CommentUpdateParams) {
-        return new CommentUpdater(this.context.rootGetters['user/authToken']).handle(params);
+        // const updatedComment = await new CommentUpdater(this.context.rootGetters['user/authToken']).handle(params);
+        console.log(this.comments);
+
+        // const others = this.comments!.filter(c => c.id != params.commentId);
+        // this.context.commit(CommentMutation.SetComments, [...others, updatedComment]);
     }
 }

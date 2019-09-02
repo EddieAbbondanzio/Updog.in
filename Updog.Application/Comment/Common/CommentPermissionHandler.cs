@@ -11,9 +11,8 @@ namespace Updog.Application {
         public async Task<bool> HasPermission(User user, PermissionAction action, Comment comment) {
             switch (action) {
                 case PermissionAction.UpdateComment:
-                    return user.Id == comment.User.Id;
                 case PermissionAction.DeleteComment:
-                    return user.Id == comment.User.Id;
+                    return user.Equals(comment.User);
                 default:
                     throw new NotSupportedException();
             }

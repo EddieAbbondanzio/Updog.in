@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updog.Infrastructure.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updog.Application.Tests", "Updog.Application.Tests\Updog.Application.Tests.csproj", "{41274940-7A49-411A-9434-4FB96897FA1B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updog.Domain.Tests", "Updog.Domain.Tests\Updog.Domain.Tests.csproj", "{24E5DF34-551C-4127-A85E-776F6B620CAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,5 +116,17 @@ Global
 		{41274940-7A49-411A-9434-4FB96897FA1B}.Release|x64.Build.0 = Release|Any CPU
 		{41274940-7A49-411A-9434-4FB96897FA1B}.Release|x86.ActiveCfg = Release|Any CPU
 		{41274940-7A49-411A-9434-4FB96897FA1B}.Release|x86.Build.0 = Release|Any CPU
+		{24E5DF34-551C-4127-A85E-776F6B620CAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24E5DF34-551C-4127-A85E-776F6B620CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24E5DF34-551C-4127-A85E-776F6B620CAE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{24E5DF34-551C-4127-A85E-776F6B620CAE}.Debug|x64.Build.0 = Debug|Any CPU
+		{24E5DF34-551C-4127-A85E-776F6B620CAE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{24E5DF34-551C-4127-A85E-776F6B620CAE}.Debug|x86.Build.0 = Debug|Any CPU
+		{24E5DF34-551C-4127-A85E-776F6B620CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24E5DF34-551C-4127-A85E-776F6B620CAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24E5DF34-551C-4127-A85E-776F6B620CAE}.Release|x64.ActiveCfg = Release|Any CPU
+		{24E5DF34-551C-4127-A85E-776F6B620CAE}.Release|x64.Build.0 = Release|Any CPU
+		{24E5DF34-551C-4127-A85E-776F6B620CAE}.Release|x86.ActiveCfg = Release|Any CPU
+		{24E5DF34-551C-4127-A85E-776F6B620CAE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
