@@ -31,8 +31,13 @@ const r = new Router({
             }
         },
         {
-            path: '/post/:id',
-            component: () => import('./views/post.vue')
+            name: 'post',
+            path: '/post/:postId',
+            component: () => import('./views/post.vue'),
+            children: [
+                { name: 'comments', path: 'comments', component: () => import('./views/comments.vue') },
+                { name: 'comment', path: 'comment/:commentId', component: () => import('./views/comment.vue') }
+            ]
         },
         {
             path: '/user/:username',

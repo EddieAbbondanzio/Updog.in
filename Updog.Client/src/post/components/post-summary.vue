@@ -15,7 +15,7 @@
                     <div>
                         <h4 class="mb-0">
                             <router-link
-                                :to="`post/${post.id}`"
+                                :to="{name:'comments', params: { postId: post.id}}"
                                 v-if="isTextPost()"
                             >{{ post.title }}</router-link>
                             <a :href="`//${this.post.body}`" v-else>{{ post.title }}</a>
@@ -51,7 +51,7 @@
                         <b-button
                             variant="link"
                             class="text-muted pl-0 pr-1"
-                            :to="`/post/${post.id}`"
+                            :to="{name: 'comments', params: {postId: post.id}}"
                         >{{ post.commentCount == 1 ? `1 comment` : `${post.commentCount} comments` }}</b-button>
                         <b-button
                             variant="link"

@@ -28,15 +28,15 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import NavBar from '@/core/components/nav-bar.vue';
 
 /**
- * Master page for the site.
+ * Page layout for the site.
  */
 @Component({
-    name: 'master-page',
+    name: 'layout',
     components: {
         NavBar
     }
 })
-export default class MasterPage extends Vue {
+export default class Layout extends Vue {
     /**
      * If the sidebar should be hidden.
      */

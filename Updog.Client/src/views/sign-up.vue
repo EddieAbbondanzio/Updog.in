@@ -1,5 +1,5 @@
 <template>
-    <master-page noSideBar="true">
+    <layout noSideBar="true">
         <b-container>
             <b-row>
                 <b-col md="8" lg="6" offset-md="2" offset-lg="3">
@@ -7,7 +7,7 @@
                 </b-col>
             </b-row>
         </b-container>
-    </master-page>
+    </layout>
 </template>
 
 <script lang="ts">
@@ -15,13 +15,13 @@ import { Component, Vue } from 'vue-property-decorator';
 import UserRegisterForm from '@/user/components/user-register-form.vue';
 import { User } from '@/user/common/user';
 import { UserLogin } from '@/user/common/user-login';
-import MasterPage from '@/core/components/master-page.vue';
+import Layout from '@/core/components/layout.vue';
 import { UserRegistration } from '@/user/common/user-registration';
 
 @Component({
     components: {
         UserRegisterForm,
-        MasterPage
+        Layout
     }
 })
 export default class SignUp extends Vue {

@@ -1,5 +1,5 @@
 <template>
-    <master-page>
+    <layout>
         <template>
             <b-tabs>
                 <b-tab title="Posts">
@@ -35,7 +35,7 @@
                 <user-summary :user="user" />
             </div>
         </template>
-    </master-page>
+    </layout>
 </template>
 
 <script lang="ts">
@@ -43,7 +43,7 @@ import { Component, Vue, Prop, Mixins } from 'vue-property-decorator';
 import { Post } from '../post/common/post';
 import { PostFinderMixin } from '../post/mixins/post-finder-mixin';
 import { PaginationParams } from '../core/pagination/pagination-params';
-import MasterPage from '@/core/components/master-page.vue';
+import Layout from '@/core/components/layout.vue';
 import { User as UserEntity } from '@/user/common/user';
 import UserSummary from '@/user/components/user-summary.vue';
 import PostSummary from '@/post/components/post-summary.vue';
@@ -61,7 +61,7 @@ import { PostFinderByUserParams } from '../post/use-cases/find-by-user/post-find
 @Component({
     name: 'user',
     components: {
-        MasterPage,
+        Layout,
         UserSummary,
         PostSummary,
         CommentSummary,

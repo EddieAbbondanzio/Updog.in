@@ -1,5 +1,5 @@
 <template>
-    <master-page>
+    <layout>
         <template v-if="$posts != null">
             <post-summary v-for="post in $posts" v-bind:key="post.id" :post="post" />
             <pagination-navigation
@@ -13,13 +13,13 @@
                 <create-post-buttons />
             </div>
         </template>
-    </master-page>
+    </layout>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import CreatePostButtons from '@/post/components/create-post-buttons.vue';
-import MasterPage from '@/core/components/master-page.vue';
+import Layout from '@/core/components/layout.vue';
 import { PostFinderMixin } from '../post/mixins/post-finder-mixin';
 import { PaginationParams } from '../core/pagination/pagination-params';
 import PostSummary from '@/post/components/post-summary.vue';
@@ -41,7 +41,7 @@ import { PaginationInfo } from '../core/pagination/pagination-info';
 @Component({
     components: {
         CreatePostButtons,
-        MasterPage,
+        Layout,
         PostSummary,
         PaginationNavigation
     }

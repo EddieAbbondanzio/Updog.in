@@ -1,34 +1,26 @@
 <template>
-    <master-page>
+    <layout>
         <template>
             <div v-if="post != null">
                 <post-summary :post="post" :showEditControls="true" expand="true" />
-                <comment-create-form @submit="onCommentCreate" ref="commentCreateForm" />
 
                 <!-- Comments! -->
-                <div v-if="comments != null">
-                    <comment-summary
-                        v-for="comment in comments"
-                        :comment="comment"
-                        v-bind:key="comment.id"
-                    />
-                </div>
+                <router-view></router-view>
             </div>
         </template>
         <template slot="side-bar">
             <create-post-buttons />
         </template>
         <template slot="footer">FOOTER!</template>
-    </master-page>
+    </layout>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Mixins } from 'vue-property-decorator';
 import CreatePostButtons from '@/post/components/create-post-buttons.vue';
-import MasterPage from '@/core/components/master-page.vue';
+import Layout from '@/core/components/layout.vue';
 import { PostFinderMixin } from '../post/mixins/post-finder-mixin';
 import PostSummary from '@/post/components/post-summary.vue';
-import CommentCreateForm from '@/comment/components/comment-create-form.vue';
 import { CommentFinderMixin } from '@/comment/mixins/comment-finder-mixin';
 import { CommentCreatorMixin } from '@/comment/mixins/comment-creator-mixin';
 import { mixins } from 'vue-class-component/lib/util';
@@ -49,33 +41,22 @@ import PaginationNavigation from '@/core/components/pagination-navigation.vue';
 @Component({
     components: {
         CreatePostButtons,
-        MasterPage,
+        Layout,
         PostSummary,
-        CommentCreateForm,
         CommentSummary,
         PaginationNavigation
     },
-    mixins: [UserAuthMixin, PostFinderMixin, CommentFinderMixin, CommentCreatorMixin]
+    mixins: [UserAuthMixin, PostFinderMixin, CommentFinderMixin]
 })
-export default class Post extends Mixins(UserAuthMixin, PostFinderMixin, CommentFinderMixin, CommentCreatorMixin) {
-    public $refs!: {
-        commentCreateForm: CommentCreateForm;
-    };
-
+export default class Post extends Mixins(UserAuthMixin, PostFinderMixin, CommentFinderMixin) {
     /**
      * The post being displayed.
      */
     public post: PostEntity | null = null;
 
-    /**
-     * Comments on the post.
-     */
-    public comments: Comment[] | null = null;
-
     public async created() {
-        const postId = Number.parseInt(this.$route.params.id, 10);
+        const postId = Number.parseInt(this.$route.params.postId, 10);
         this.post = await this.$findPostById(postId);
-        this.comments = await this.$findCommentsByPost(new CommentFinderByPostParams(postId));
     }
 
     /**
@@ -92,12 +73,11 @@ export default class Post extends Mixins(UserAuthMixin, PostFinderMixin, Comment
             throw new Error();
         }
 
-        const c = await this.$createComment(new CommentCreateParams(comment, this.post!.id, 0));
-        this.comments!.unshift(c);
-        this.$refs.commentCreateForm.clear();
+        // const c = await this.$createComment(new CommentCreateParams(comment, this.post!.id, 0));
+        // this.$refs.commentCreateForm.clear();
 
         // Hack...
-        this.post.commentCount++;
+        // this.post.commentCount++;
     }
 }
 </script>
