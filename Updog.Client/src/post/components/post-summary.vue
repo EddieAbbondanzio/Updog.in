@@ -1,7 +1,7 @@
 <template>
     <div class="bg-light border mb-2 px-3 py-1">
         <div class="d-flex flex-row">
-            <div>
+            <div v-if="showToggle">
                 <material-icon
                     :icon="isExpanded ? 'expand_less' : 'expand_more'"
                     variant="dark"
@@ -57,13 +57,13 @@
                             variant="link"
                             class="text-muted px-1"
                             @click="onEditPost"
-                            v-if="canEdit() && showEditControls"
+                            v-if="canEdit() && showEdit"
                         >edit</b-button>
                         <b-button
                             variant="link"
                             class="text-muted px-1"
                             @click="onDeletePost"
-                            v-if="canDelete() && showEditControls"
+                            v-if="canDelete() && showEdit"
                         >delete</b-button>
                     </div>
                 </div>
@@ -113,7 +113,13 @@ export default class PostSummary extends mixins(UserAuthMixin, PostUpdaterMixin)
      * If the edit controls should be visible.
      */
     @Prop({ default: false })
-    public showEditControls!: boolean;
+    public showEdit!: boolean;
+
+    /**
+     * If the expand / collapse button should be visible.
+     */
+    @Prop({ default: true })
+    public showToggle!: boolean;
 
     /**
      * If the component should show the body
@@ -177,14 +183,14 @@ export default class PostSummary extends mixins(UserAuthMixin, PostUpdaterMixin)
      * If the user can edit the post.
      */
     protected canEdit(): boolean {
-        return this.showEditControls && this.isPostOwner() && this.post.type === PostType.Text;
+        return this.showEdit && this.isPostOwner() && this.post.type === PostType.Text;
     }
 
     /**
      * If the user can delete the post.
      */
     protected canDelete(): boolean {
-        return this.showEditControls && this.isPostOwner();
+        return this.showEdit && this.isPostOwner();
     }
 
     /**

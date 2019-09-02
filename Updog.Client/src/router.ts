@@ -34,6 +34,7 @@ const r = new Router({
             name: 'post',
             path: '/post/:postId',
             component: () => import('./views/post.vue'),
+            redirect: '/',
             children: [
                 { name: 'comments', path: 'comments', component: () => import('./views/comments.vue') },
                 { name: 'comment', path: 'comment/:commentId', component: () => import('./views/comment.vue') }
@@ -45,6 +46,8 @@ const r = new Router({
         }
     ]
 });
+
+r.mode = 'history';
 
 r.beforeEach(async (to, from, next) => {
     if (to.meta.authenticate && store.state.user.userLogin == null) {

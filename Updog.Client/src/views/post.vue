@@ -2,7 +2,7 @@
     <layout>
         <template>
             <div v-if="post != null">
-                <post-summary :post="post" :showEditControls="true" expand="true" />
+                <post-summary :post="post" :showEdit="true" :showToggle="false" expand="true" />
 
                 <!-- Comments! -->
                 <router-view></router-view>
