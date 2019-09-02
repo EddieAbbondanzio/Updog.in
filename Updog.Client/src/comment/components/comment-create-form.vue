@@ -51,6 +51,7 @@ export default class CommentCreateForm extends Vue {
             return;
         }
         this.$emit('submit', this.comment);
+        this.clear();
     }
 
     public clear(): void {
