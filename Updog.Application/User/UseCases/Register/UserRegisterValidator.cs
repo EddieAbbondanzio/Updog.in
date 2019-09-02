@@ -14,7 +14,7 @@ namespace Updog.Application {
                 User existingUser = await userRepo.FindByUsername(username);
                 return existingUser == null;
             });
-            RuleFor(reg => reg.Password).NotNull().NotEmpty().MinimumLength(8);
+            RuleFor(reg => reg.Password).NotNull().NotEmpty().MinimumLength(User.PasswordMinLength);
             RuleFor(reg => reg.Email).EmailAddress().MaximumLength(64).MustAsync(async (email, cancellationToken) => {
                 User existingUser = await userRepo.FindByEmail(email);
                 return existingUser == null;

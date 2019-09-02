@@ -47,16 +47,26 @@ namespace Updog.Persistance {
         public async Task<Comment> FindById(int commentId) {
             // This doesn't pull in comment children and it should.
             using (DbConnection connection = GetConnection()) {
-                Comment comment = (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
-                    @"SELECT * FROM Comment LEFT JOIN ""User"" ON ""User"".Id = Comment.UserId WHERE Comment.Id = @Id ORDER BY CreationDate DESC",
+                IEnumerable<Comment> comments = await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
+                    @"WITH RECURSIVE commenttree AS (
+                    SELECT r.* FROM Comment r WHERE Id = @Id 
+                    UNION ALL
+                    SELECT c.* FROM Comment c
+                    INNER JOIN commenttree ct ON ct.Id = c.ParentId
+                    ) SELECT * FROM commenttree
+                    LEFT JOIN ""User"" ON UserId = ""User"".Id ORDER BY ParentId, CreationDate ASC;",
                     (CommentRecord rec, UserRecord u) => {
                         return this.commentMapper.Map(Tuple.Create(rec, u));
                     },
                     new { Id = commentId }
-                )).FirstOrDefault();
+                );
 
-                return comment;
-                // return BuildCommentTree(comments).ToArray();
+                if (comments.Count() == 0) {
+                    return null;
+                }
+
+                // return comment;
+                return BuildCommentTree(comments)[0];
             }
         }
 
@@ -75,7 +85,15 @@ namespace Updog.Persistance {
             using (DbConnection connection = GetConnection()) {
                 // Pull in every relevant comment first. This will be flat so we'll have to do some work.
                 IEnumerable<Comment> comments = (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
-                    @"SELECT * FROM Comment LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id WHERE PostId = @PostId ORDER BY CreationDate DESC LIMIT @Limit OFFSET @Offset",
+                    @"
+                    WITH RECURSIVE commenttree AS (
+                    SELECT r.* FROM Comment r WHERE PostId = @PostId AND ParentId = 0 
+                    UNION ALL
+                    SELECT c.* FROM Comment c
+                    INNER JOIN commenttree ct ON ct.Id = c.ParentId
+                    ) SELECT * FROM commenttree
+                    LEFT JOIN ""User"" ON UserId = ""User"".Id ORDER BY ParentId, CreationDate ASC;",
+                    // SELECT * FROM Comment LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id WHERE PostId = @PostId ORDER BY CreationDate DESC LIMIT @Limit OFFSET @Offset",
                     (CommentRecord commentRec, UserRecord userRec) => {
                         Comment c = this.commentMapper.Map(Tuple.Create(commentRec, userRec));
 

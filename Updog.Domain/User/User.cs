@@ -7,6 +7,13 @@ namespace Updog.Domain {
     /// A user of the site.
     /// </summary>
     public sealed class User : ClaimsPrincipal, IEntity {
+        #region Constants
+        /// <summary>
+        /// Minimum number of characters in a password.
+        /// </summary>
+        public const int PasswordMinLength = 8;
+        #endregion
+
         #region Properties
         /// <summary>
         /// The unique ID of the user.

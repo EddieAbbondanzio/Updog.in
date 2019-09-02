@@ -90,7 +90,7 @@ namespace Updog.Persistance {
 
                 //Get total count
                 int totalCount = await connection.ExecuteScalarAsync<int>(
-                    "SELECT COUNT(*) FROM Post LEFT JOIN User ON Post.UserId = User.Id WHERE User.Username = @Username",
+                    @"SELECT COUNT(*) FROM Post LEFT JOIN ""User"" ON Post.UserId = ""User"".Id WHERE ""User"".Username = @Username",
                     new { Username = username }
                 );
 
@@ -107,7 +107,7 @@ namespace Updog.Persistance {
         public async Task<Post> FindById(int id) {
             using (DbConnection connection = GetConnection()) {
                 return (await connection.QueryAsync<PostRecord, UserRecord, Post>(
-                    @"SELECT * FROM Post LEFT JOIN ""User"" ON Post.UserId = User.Id WHERE Post.Id = @Id;",
+                    @"SELECT * FROM Post LEFT JOIN ""User"" ON Post.UserId = ""User"".Id WHERE Post.Id = @Id;",
                     (PostRecord p, UserRecord u) => {
                         return postMapper.Map(Tuple.Create(p, u));
                     },
