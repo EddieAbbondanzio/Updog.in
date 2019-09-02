@@ -20,8 +20,6 @@ namespace Updog.Api {
         #region Fields
         private CommentFinderById commentFinderById;
 
-        private CommentFinderByPost commentFinderByPost;
-
         private CommentFinderByUser commentFinderByUser;
 
         private CommentCreator commentCreator;
@@ -32,9 +30,8 @@ namespace Updog.Api {
         #endregion
 
         #region Constructor(s)
-        public CommentController(CommentFinderById commentFinderById, CommentFinderByPost commentFinderByPost, CommentFinderByUser commentFinderByUser, CommentCreator commentCreator, CommentUpdater commentUpdater, CommentDeleter commentDeleter) {
+        public CommentController(CommentFinderById commentFinderById, CommentFinderByUser commentFinderByUser, CommentCreator commentCreator, CommentUpdater commentUpdater, CommentDeleter commentDeleter) {
             this.commentFinderById = commentFinderById;
-            this.commentFinderByPost = commentFinderByPost;
             this.commentFinderByUser = commentFinderByUser;
             this.commentCreator = commentCreator;
             this.commentUpdater = commentUpdater;
@@ -52,22 +49,6 @@ namespace Updog.Api {
         public async Task<ActionResult> GetComment(int commentId) {
             CommentView c = await commentFinderById.Handle(commentId);
             return c != null ? Ok(c) : NotFound() as ActionResult;
-        }
-
-        /// <summary>
-        /// Get all the comments of a post.
-        /// </summary>
-        /// <param name="postId">The post ID.</param>
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<ActionResult> GetComments([FromQuery]int postId, [FromQuery]int pageNumber, [FromQuery] int pageSize = Comment.PageSize) {
-            try {
-                PagedResultSet<CommentView> comments = await commentFinderByPost.Handle(new CommentFinderByPostParams(postId, pageNumber, pageSize));
-                SetContentRangeHeader(comments.Pagination);
-                return Ok(comments);
-            } catch {
-                return InternalServerError();
-            }
         }
 
         [AllowAnonymous]

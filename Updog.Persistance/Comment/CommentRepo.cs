@@ -75,7 +75,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="postId">The ID of the post.</param>
         /// <returns>It's children comments.</returns>
-        public async Task<PagedResultSet<Comment>> FindByPost(int postId, int pageNumber, int pageSize) {
+        public async Task<IEnumerable<Comment>> FindByPost(int postId) {
             Post p = await postRepo.FindById(postId);
 
             if (p == null) {
@@ -102,22 +102,11 @@ namespace Updog.Persistance {
 
                         return c;
                     },
-                    BuildPaginationParams(
-                        new { PostId = postId },
-                        pageNumber,
-                        pageSize
-                    )
+                    new { PostId = postId }
                 ));
 
-                //Get total count
-                int totalCount = await connection.ExecuteScalarAsync<int>(
-                    @"SELECT COUNT(*) FROM Comment WHERE PostId = @PostId",
-                    new { PostId = postId }
-                );
-
                 List<Comment> tree = BuildCommentTree(comments);
-
-                return new PagedResultSet<Comment>(tree, new PaginationInfo(pageNumber, pageSize, totalCount));
+                return tree;
             }
         }
 

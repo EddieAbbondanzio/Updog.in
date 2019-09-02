@@ -1,4 +1,7 @@
 namespace Updog.Application {
+    /// <summary>
+    /// Action being performed on a resource.
+    /// </summary>
     public enum PermissionAction {
         CreatePost,
         ReadPost,

@@ -59,12 +59,15 @@ namespace Updog.Api {
                         IIdentity identity = c.Principal.Identity;
 
                         User u = await userRepo.FindById(userId);
-                        u.AddIdentity(identity as ClaimsIdentity);
 
-                        /*
-                         * Don't attempt to set this via c.HttpContext.Principal, ASP.NET seems to overwrite this later on...
-                         */
-                        c.Principal = u;
+                        if (u != null) {
+                            u.AddIdentity(identity as ClaimsIdentity);
+
+                            /*
+                             * Don't attempt to set this via c.HttpContext.Principal, ASP.NET seems to overwrite this later on...
+                             */
+                            c.Principal = u;
+                        }
                     }
                 };
             });

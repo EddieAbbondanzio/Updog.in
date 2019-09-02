@@ -21,6 +21,7 @@ namespace Updog.Api {
         private PostFinderById postFinderById;
         private PostFinderByNew postFinderByNew;
         private PostFinderByUser postFinderByUser;
+        private CommentFinderByPost commentFinderByPost;
         private PostCreator postCreator;
         private PostUpdater postUpdater;
 
@@ -28,10 +29,11 @@ namespace Updog.Api {
         #endregion
 
         #region Constructor(s)
-        public PostController(PostFinderById postFinderById, PostFinderByNew postFinderByNew, PostFinderByUser postFinderByUser, PostCreator postAdder, PostUpdater postUpdater, PostDeleter postDeleter) {
+        public PostController(PostFinderById postFinderById, PostFinderByNew postFinderByNew, PostFinderByUser postFinderByUser, CommentFinderByPost commentFinderByPost, PostCreator postAdder, PostUpdater postUpdater, PostDeleter postDeleter) {
             this.postFinderById = postFinderById;
             this.postFinderByNew = postFinderByNew;
             this.postFinderByUser = postFinderByUser;
+            this.commentFinderByPost = commentFinderByPost;
             this.postCreator = postAdder;
             this.postUpdater = postUpdater;
             this.postDeleter = postDeleter;
@@ -49,6 +51,22 @@ namespace Updog.Api {
         public async Task<ActionResult> FindById(int id) {
             PostView p = await postFinderById.Handle(id);
             return p != null ? Ok(p) : NotFound() as ActionResult;
+        }
+
+
+        /// <summary>
+        /// Get all the comments of a post.
+        /// </summary>
+        /// <param name="postId">The post ID.</param>
+        [AllowAnonymous]
+        [HttpGet("{postId}/comment")]
+        public async Task<ActionResult> GetComments(int postId) {
+            try {
+                IEnumerable<CommentView> comments = await commentFinderByPost.Handle(new CommentFinderByPostParams(postId));
+                return Ok(comments);
+            } catch {
+                return InternalServerError();
+            }
         }
 
         /// <summary>
