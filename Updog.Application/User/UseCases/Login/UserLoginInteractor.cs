@@ -8,35 +8,35 @@ namespace Updog.Application {
     /// </summary>
     public sealed class UserLoginInteractor : IInteractor<UserLoginParams, UserLogin> {
         #region Fields
-        private IUserRepo userRepo;
+        private IUserRepo _userRepo;
 
-        private IPasswordHasher passwordHasher;
+        private IPasswordHasher _passwordHasher;
 
-        private IAuthenticationTokenHandler tokenHandler;
+        private IAuthenticationTokenHandler _tokenHandler;
 
-        private IMapper<User, UserView> userMapper;
+        private IMapper<User, UserView> _userMapper;
         #endregion
 
         #region Constructor(s)
         public UserLoginInteractor(IUserRepo userRepo, IMapper<User, UserView> userMapper, IPasswordHasher passwordHasher, IAuthenticationTokenHandler tokenHandler) {
-            this.userRepo = userRepo;
-            this.userMapper = userMapper;
-            this.passwordHasher = passwordHasher;
-            this.tokenHandler = tokenHandler;
+            _userRepo = userRepo;
+            _userMapper = userMapper;
+            _passwordHasher = passwordHasher;
+            _tokenHandler = tokenHandler;
         }
         #endregion
 
         #region Publics
         public async Task<UserLogin> Handle(UserLoginParams input) {
-            User user = await userRepo.FindByUsername(input.Username);
+            User user = await _userRepo.FindByUsername(input.Username);
 
             if (user == null) {
                 return null;
             }
 
-            if (passwordHasher.Verify(input.Password, user.PasswordHash)) {
-                UserView userView = userMapper.Map(user);
-                string authToken = tokenHandler.IssueToken(user);
+            if (_passwordHasher.Verify(input.Password, user.PasswordHash)) {
+                UserView userView = _userMapper.Map(user);
+                string authToken = _tokenHandler.IssueToken(user);
 
                 return new UserLogin(userView, authToken);
             } else {

@@ -7,7 +7,8 @@ namespace Updog.Application {
     /// </summary>
     public sealed class UserUpdateValidator : AbstractValidator<UpdateUserParams> {
         public UserUpdateValidator() {
-            RuleFor(reg => reg.Email).NotNull().EmailAddress().MaximumLength(64).When(reg => reg.Email != null);
+            RuleFor(reg => reg.Email).EmailAddress().WithMessage("Email must be valid.");
+            RuleFor(reg => reg.Email).MaximumLength(User.EmailMaxLength).WithMessage($"Email must be less than {User.EmailMaxLength} characters.");
         }
     }
 }

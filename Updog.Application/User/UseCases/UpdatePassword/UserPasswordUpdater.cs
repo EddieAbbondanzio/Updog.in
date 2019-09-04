@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using FluentValidation;
+using Updog.Domain;
 
 namespace Updog.Application {
     public sealed class UserPasswordUpdater : IInteractor<UserPasswordUpdateParams> {

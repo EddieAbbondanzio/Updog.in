@@ -6,12 +6,15 @@ namespace Updog.Domain {
     /// <summary>
     /// A user of the site.
     /// </summary>
-    public sealed class User : ClaimsPrincipal, IEntity {
+    public partial class User : ClaimsPrincipal, IEntity {
         #region Constants
         /// <summary>
         /// Minimum number of characters in a password.
         /// </summary>
         public const int PasswordMinLength = 8;
+        public const int UsernameMinLength = 4;
+        public const int UsernameMaxLength = 24;
+        public const int EmailMaxLength = 64;
         #endregion
 
         #region Properties

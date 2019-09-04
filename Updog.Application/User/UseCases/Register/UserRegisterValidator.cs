@@ -2,6 +2,7 @@ using System;
 using Updog.Domain;
 using FluentValidation;
 using FluentValidation.Results;
+using System.Linq;
 
 namespace Updog.Application {
     /// <summary>
@@ -10,20 +11,24 @@ namespace Updog.Application {
     public sealed class UserRegisterValidator : AbstractValidator<UserRegisterParams> {
         #region Constructor(s)
         public UserRegisterValidator(IUserRepo userRepo) {
-            RuleFor(reg => reg.Username).NotNull().MinimumLength(4).MaximumLength(24).Matches(@"^[\w\s-]+$").MustAsync(async (username, cancellationToken) => {
-                User existingUser = await userRepo.FindByUsername(username);
-                return existingUser == null;
-            });
-            RuleFor(reg => reg.Password).NotNull().NotEmpty().MinimumLength(User.PasswordMinLength);
-            RuleFor(reg => reg.Email).EmailAddress().MaximumLength(64).MustAsync(async (email, cancellationToken) => {
-                User existingUser = await userRepo.FindByEmail(email);
-                return existingUser == null;
-            }).When(reg => reg.Email != null);
-        }
-        #endregion
+            //Username
+            RuleFor(reg => reg.Username).NotNull().WithMessage("Username is required.");
+            RuleFor(reg => reg.Username).MinimumLength(User.UsernameMinLength).WithMessage($"Username must be at least {User.UsernameMinLength} characters.");
+            RuleFor(reg => reg.Username).MaximumLength(User.UsernameMaxLength).WithMessage($"Username must be less than {User.UsernameMaxLength} characters.");
+            RuleFor(reg => reg.Username).Matches(@"^[\w-]+$").WithMessage("Username may only contain letters, numbers, underscores, or hypens.");
+            RuleFor(reg => reg.Username).Must((username) => User.BannedUsernames.Any(u => String.Equals(username, u, StringComparison.OrdinalIgnoreCase))).WithMessage("Username is unavailable.");
 
-        #region Publics
-        public override ValidationResult Validate(ValidationContext<UserRegisterParams> context) => throw new InvalidOperationException("This validator must be ran via ValidateAsync()");
+            // Password
+            RuleFor(reg => reg.Password).NotNull().WithMessage("Password is required.");
+            RuleFor(reg => reg.Password).NotEmpty().WithMessage("Password is required.");
+            RuleFor(reg => reg.Password).MinimumLength(User.PasswordMinLength).WithMessage($"Password must be at least {User.PasswordMinLength} characters.");
+
+            // Email is only validated when provided.
+            When(reg => reg.Email != null, () => {
+                RuleFor(reg => reg.Email).EmailAddress().WithMessage("Email must be valid.");
+                RuleFor(reg => reg.Email).MaximumLength(User.EmailMaxLength).WithMessage($"Email must be less than {User.EmailMaxLength} characters.");
+            });
+        }
         #endregion
     }
 }

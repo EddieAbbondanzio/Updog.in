@@ -85,12 +85,12 @@ namespace Updog.Api {
 
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
 
-            services.AddSingleton<IMapper<User, UserView>, UserViewMapper>();
+            services.AddSingleton<IUserViewMapper, UserViewMapper>();
             services.AddSingleton<IUserRecordMapper, UserRecordMapper>();
             services.AddTransient<UserFinderByUsername>();
             services.AddTransient<UserLoginInteractor>();
             services.AddTransient<UserRegisterInteractor>();
-            services.AddTransient<UpdateUserInteractor>();
+            services.AddTransient<UserUpdater>();
             services.AddTransient<UserPasswordUpdater>();
 
             services.AddTransient<AbstractValidator<UserRegisterParams>, UserRegisterValidator>();

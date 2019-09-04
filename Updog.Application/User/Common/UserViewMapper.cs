@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Mapper to convert a user into it's DTO.
     /// </summary>
-    public sealed class UserViewMapper : IMapper<User, UserView> {
+    public sealed class UserViewMapper : IUserViewMapper {
         #region Publics
         /// <summary>
         /// Map the user into it's DTO.
