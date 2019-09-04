@@ -7,6 +7,11 @@ namespace Updog.Domain {
     public sealed class Space : IEntity {
         #region Constants
         /// <summary>
+        /// The number of spaces per page when searching for them.
+        /// </summary>
+        public const int PageSize = 100;
+
+        /// <summary>
         /// The maximum number of characters allowed in a space name.
         /// </summary>
         public const int NameMaxLength = 24;

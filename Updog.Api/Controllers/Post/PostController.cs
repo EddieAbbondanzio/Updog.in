@@ -19,7 +19,6 @@ namespace Updog.Api {
     public sealed class PostController : ApiController {
         #region Fields
         private PostFinderById postFinderById;
-        private PostFinderByNew postFinderByNew;
         private PostFinderByUser postFinderByUser;
         private CommentFinderByPost commentFinderByPost;
         private PostCreator postCreator;
@@ -29,9 +28,8 @@ namespace Updog.Api {
         #endregion
 
         #region Constructor(s)
-        public PostController(PostFinderById postFinderById, PostFinderByNew postFinderByNew, PostFinderByUser postFinderByUser, CommentFinderByPost commentFinderByPost, PostCreator postAdder, PostUpdater postUpdater, PostDeleter postDeleter) {
+        public PostController(PostFinderById postFinderById, PostFinderByUser postFinderByUser, CommentFinderByPost commentFinderByPost, PostCreator postAdder, PostUpdater postUpdater, PostDeleter postDeleter) {
             this.postFinderById = postFinderById;
-            this.postFinderByNew = postFinderByNew;
             this.postFinderByUser = postFinderByUser;
             this.commentFinderByPost = commentFinderByPost;
             this.postCreator = postAdder;
@@ -63,18 +61,6 @@ namespace Updog.Api {
         public async Task<ActionResult> GetComments(int postId) {
             IEnumerable<CommentView> comments = await commentFinderByPost.Handle(new CommentFinderByPostParams(postId));
             return Ok(comments);
-        }
-
-        /// <summary>
-        /// Get new posts based on when they were made.
-        /// </summary>
-        /// <returns></returns>
-        [AllowAnonymous]
-        [HttpGet("new")]
-        public async Task<ActionResult> FindByNew([FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            PagedResultSet<PostView> posts = await postFinderByNew.Handle(new PostFinderByNewParams(pageNumber, pageSize));
-            SetContentRangeHeader(posts.Pagination);
-            return Ok(posts);
         }
 
         [AllowAnonymous]

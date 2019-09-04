@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Updog.Application.Paging;
 using Updog.Domain;
 
 namespace Updog.Application {
@@ -7,6 +8,14 @@ namespace Updog.Application {
     /// </summary>
     public interface ISpaceRepo : IRepo<Space> {
         #region Publics
+        /// <summary>
+        /// Get a list of spaces.
+        /// </summary>
+        /// <param name="pageNumber">The 0 based index of the page.</param>
+        /// <param name="pageSize">The page size.</param>
+        /// <returns>The pages found.</returns>
+        Task<PagedResultSet<Space>> Find(int pageNumber, int pageSize);
+
         /// <summary>
         /// Find a space via it's unique name.
         /// </summary>

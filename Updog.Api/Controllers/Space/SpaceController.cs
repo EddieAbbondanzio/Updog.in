@@ -6,6 +6,7 @@ using System;
 using FluentValidation;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using Updog.Application.Paging;
 
 namespace Updog.Api {
     /// <summary>
@@ -16,22 +17,37 @@ namespace Updog.Api {
     [ApiController]
     public sealed class SpaceController : ApiController {
         #region Fields
+        private SpaceFinder spaceFinder;
+
         private SpaceFinderByName spaceFinderByName;
 
         private SpaceCreator spaceCreator;
 
         private SpaceUpdater spaceUpdater;
+
+        private PostFinderBySpace postFinderBySpace;
         #endregion
 
         #region Constructor(s)
-        public SpaceController(SpaceFinderByName spaceFinderByName, SpaceCreator spaceCreator, SpaceUpdater spaceUpdater) {
+        public SpaceController(SpaceFinder spaceFinder, SpaceFinderByName spaceFinderByName, SpaceCreator spaceCreator, SpaceUpdater spaceUpdater, PostFinderBySpace postFinderBySpace) {
+            this.spaceFinder = spaceFinder;
             this.spaceFinderByName = spaceFinderByName;
             this.spaceCreator = spaceCreator;
             this.spaceUpdater = spaceUpdater;
+            this.postFinderBySpace = postFinderBySpace;
         }
         #endregion
 
         #region Publics
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult> Find([FromQuery]int pageNumber, [FromQuery] int pageSize = Space.PageSize) {
+            PagedResultSet<SpaceView> spaces = await this.spaceFinder.Handle(new SpaceFindParams(pageNumber, pageSize));
+            SetContentRangeHeader(spaces.Pagination);
+            return Ok(spaces);
+        }
+
+
         /// <summary>
         /// Get a space via it's name.
         /// </summary>
@@ -92,6 +108,20 @@ namespace Updog.Api {
         [HttpDelete("{name}/subscribe")]
         public async Task<ActionResult> DesubscribeFromSpace(string name) {
             throw new Exception();
+        }
+
+        /// <summary>
+        /// Find the posts for a specific space.
+        /// </summary>
+        /// <param name="name">The name of the space.</param>
+        /// <param name="pageNumber">0-index of the page.</param>
+        /// <param name="pageSize">Size of the page.</param>
+        /// <returns>The posts found.</returns>
+        [HttpGet("{name}/post/new")]
+        public async Task<ActionResult> FindPosts(string name, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
+            PagedResultSet<PostView> posts = await this.postFinderBySpace.Handle(new PostFindBySpaceParams(name, pageNumber, pageSize));
+            SetContentRangeHeader(posts.Pagination);
+            return Ok(posts);
         }
         #endregion
     }

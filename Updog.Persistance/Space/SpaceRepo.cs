@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Updog.Application;
+using Updog.Application.Paging;
 using Updog.Domain;
 
 namespace Updog.Persistance {
@@ -49,6 +51,28 @@ namespace Updog.Persistance {
                     (SpaceRecord s, UserRecord u) => mapper.Map(Tuple.Create(s, u)),
                     new { Name = name }
                 )).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Get a list of spaces.
+        /// </summary>
+        /// <param name="pageNumber">The 0 based index of the page.</param>
+        /// <param name="pageSize">The page size.</param>
+        /// <returns>The pages found.</returns>
+        public async Task<PagedResultSet<Space>> Find(int pageNumber, int pageSize) {
+            using (DbConnection connection = GetConnection()) {
+                IEnumerable<Space> spaces = await connection.QueryAsync<SpaceRecord, UserRecord, Space>(
+                    @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id LIMIT @Limit OFFSET @Offset",
+                    (SpaceRecord s, UserRecord u) => mapper.Map(Tuple.Create(s, u)),
+                    BuildPaginationParams(pageNumber, pageSize)
+                );
+
+                int totalCount = await connection.ExecuteScalarAsync<int>(
+                    "SELECT COUNT(*) FROM Space"
+                );
+
+                return new PagedResultSet<Space>(spaces, new PaginationInfo(pageNumber, Math.Min(spaces.Count(), pageSize), totalCount));
             }
         }
 

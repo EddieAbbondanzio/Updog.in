@@ -103,7 +103,7 @@ namespace Updog.Api {
             services.AddTransient<IPostRepo, PostRepo>();
             services.AddTransient<PostCreator>();
             services.AddTransient<PostFinderById>();
-            services.AddTransient<PostFinderByNew>();
+            services.AddTransient<PostFinderBySpace>();
             services.AddTransient<PostFinderByUser>();
             services.AddTransient<PostDeleter>();
             services.AddTransient<PostUpdater>();
@@ -131,6 +131,7 @@ namespace Updog.Api {
             services.AddTransient<ISpaceRepo, SpaceRepo>();
             services.AddTransient<ISpaceRecordMapper, SpaceRecordMapper>();
             services.AddTransient<SpaceFinderByName>();
+            services.AddTransient<SpaceFinder>();
             services.AddTransient<SpaceCreator>();
             services.AddTransient<SpaceUpdater>();
             services.AddTransient<AbstractValidator<SpaceCreateParams>, SpaceCreateValidator>();
@@ -152,6 +153,7 @@ namespace Updog.Api {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             } else {
+                app.UseMiddleware<ExceptionHandler>();
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }

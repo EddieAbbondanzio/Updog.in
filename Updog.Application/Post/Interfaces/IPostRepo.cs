@@ -9,14 +9,6 @@ namespace Updog.Application {
     /// </summary>
     public interface IPostRepo : IRepo<Post> {
         /// <summary>
-        /// Find the newest posts by their creation date.
-        /// </summary>
-        /// <param name="pageNumber">Index of the page.</param>
-        /// <param name="pageSize">Size of the page.</param>
-        /// <returns>The newest new posts.</returns>
-        Task<PagedResultSet<Post>> FindNewest(int pageNumber, int pageSize);
-
-        /// <summary>
         /// Find posts for a specific user.
         /// </summary>
         /// <param name="username">THe username to look for.</param>
@@ -24,5 +16,14 @@ namespace Updog.Application {
         /// <param name="pageSize">Size of the page.</param>
         /// <returns>The collection of their posts (if any).</returns>
         Task<PagedResultSet<Post>> FindByUser(string username, int pageNumber, int pageSize);
+
+        /// <summary>
+        /// Find posts for a specific space.
+        /// </summary>
+        /// <param name="space">The space to get posts for.</param>
+        /// <param name="pageNumber">Index of the page.</param>
+        /// <param name="pageSize">Size of the page.</param>
+        /// <returns>The collection of posts.</returns>
+        Task<PagedResultSet<Post>> FindBySpace(string space, int pageNumber, int pageSize);
     }
 }
