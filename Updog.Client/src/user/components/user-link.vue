@@ -1,5 +1,7 @@
 <template>
-    <router-link :to="`/user/${user.username}`">{{ user.username }}&nbsp;</router-link>
+    <span>
+        <router-link :to="`/user/${user.username}`">{{ user.username }}</router-link>&nbsp;
+    </span>
 </template>
 
 <script lang="ts">

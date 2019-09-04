@@ -13,8 +13,6 @@ import { getModule } from 'vuex-module-decorators';
  */
 @Mixin
 export class PostUpdaterMixin extends Vue {
-    private postModule: PostModule = getModule(PostModule, this.$store);
-
     /**
      * Reirect to the post topic page.
      * @param id The ID of the new post.
@@ -28,6 +26,7 @@ export class PostUpdaterMixin extends Vue {
      * @param request The post update params.
      */
     public async $updatePost(request: PostUpdateParams): Promise<Post> {
-        return this.postModule.update(request);
+        const postModule: PostModule = getModule(PostModule, this.$store);
+        return postModule.update(request);
     }
 }

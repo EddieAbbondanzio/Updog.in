@@ -11,8 +11,6 @@ import { getModule } from 'vuex-module-decorators';
  */
 @Mixin
 export class PostCreatorMixin extends Vue {
-    private postModule: PostModule = getModule(PostModule, this.$store);
-
     /**
      * Reirect to the post topic page.
      * @param id The ID of the new post.
@@ -26,6 +24,7 @@ export class PostCreatorMixin extends Vue {
      * @param request The post creation details.
      */
     public async $createPost(request: PostCreateParams): Promise<Post> {
-        return this.postModule.create(request);
+        const postModule: PostModule = getModule(PostModule, this.$store);
+        return postModule.create(request);
     }
 }

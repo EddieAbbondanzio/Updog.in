@@ -13,6 +13,7 @@ import { CommentUpdateParams } from '../use-cases/update/comment-update-params';
 import { CommentUpdater } from '../use-cases/update/comment-updater';
 import { CommentFinderByPostParams } from '../use-cases/find-by-post/comment-finder-by-post-params';
 import Vue from 'vue';
+import { PostMutation } from '@/post/store/post-mutation';
 /**
  * Cache module for comments.
  */
@@ -74,6 +75,7 @@ export default class CommentModule extends VuexModule {
         const c = await new CommentCreator(this.context.rootGetters['user/authToken']).handle(params);
         const all = [c, ...this.comments!];
         this.context.commit(CommentMutation.SetComments, all);
+        this.context.commit(`post/${PostMutation.IncrementCommentCount}`, params.postId, { root: true });
         return c;
     }
 

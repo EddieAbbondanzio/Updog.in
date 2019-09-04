@@ -19,4 +19,11 @@ export class PagedResultSet<T> extends Array<T> {
         items.forEach(i => this.push(i));
         this.pagination = pagination;
     }
+
+    /**
+     * Create a new empty pagination result set.
+     */
+    public static Empty<T>(): PagedResultSet<T> {
+        return new PagedResultSet([], new PaginationInfo(0, 0, 0));
+    }
 }

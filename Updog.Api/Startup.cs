@@ -126,6 +126,13 @@ namespace Updog.Api {
             services.AddTransient<AbstractValidator<CommentUpdateParams>, CommentUpdateValidator>();
             services.AddTransient<AbstractValidator<CommentDeleteParams>, CommentDeleteValidator>();
 
+            services.AddSingleton<IPermissionHandler<Space>, SpacePermissionHandler>();
+            services.AddSingleton<IMapper<Space, SpaceView>, SpaceViewMapper>();
+            services.AddTransient<ISpaceRepo, SpaceRepo>();
+            services.AddTransient<SpaceFinderByName>();
+            services.AddTransient<SpaceCreator>();
+            services.AddTransient<SpaceUpdater>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

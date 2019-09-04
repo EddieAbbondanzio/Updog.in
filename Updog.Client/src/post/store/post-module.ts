@@ -35,6 +35,15 @@ export default class PostModule extends VuexModule {
         this.posts = null;
     }
 
+    @Mutation
+    public [PostMutation.IncrementCommentCount](postId: number) {
+        const post = this.posts!.find(p => p.id === postId);
+
+        if (post != null) {
+            post.commentCount++;
+        }
+    }
+
     /**
      * Create a new post.
      * @param params The post creation parameters.
@@ -59,7 +68,8 @@ export default class PostModule extends VuexModule {
      */
     @Action
     public async findById(id: number) {
-        return new PostFinderById(this.context.rootGetters['user/authToken']).handle(id);
+        const p = await new PostFinderById(this.context.rootGetters['user/authToken']).handle(id);
+        this.context.commit(PostMutation.SetPosts, new PagedResultSet([p], new PaginationInfo(0, 1, 1)));
     }
 
     /**

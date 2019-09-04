@@ -8,13 +8,12 @@ import { PaginationParams } from '@/core/pagination/pagination-params';
 
 @Mixin
 export class PostFinderMixin extends Vue {
-    private postModule: PostModule = getModule(PostModule, this.$store);
-
     /**
      * The currently loaded posts.
      */
     get $posts() {
-        return this.postModule.posts;
+        const postModule: PostModule = getModule(PostModule, this.$store);
+        return postModule.posts;
     }
 
     /**
@@ -22,7 +21,8 @@ export class PostFinderMixin extends Vue {
      * @param id The post to look for.
      */
     public async $findPostById(id: number) {
-        return this.postModule.findById(id);
+        const postModule: PostModule = getModule(PostModule, this.$store);
+        return postModule.findById(id);
     }
 
     /**
@@ -30,7 +30,8 @@ export class PostFinderMixin extends Vue {
      * @param paging The paging info.
      */
     public async $findPostsByNew(paging: PaginationParams) {
-        return this.postModule.findByNew(paging);
+        const postModule: PostModule = getModule(PostModule, this.$store);
+        return postModule.findByNew(paging);
     }
 
     /**
@@ -38,6 +39,7 @@ export class PostFinderMixin extends Vue {
      * @param params The input parameters.
      */
     public async $findPostsByUser(params: PostFinderByUserParams) {
-        return this.postModule.findByUser(params);
+        const postModule: PostModule = getModule(PostModule, this.$store);
+        return postModule.findByUser(params);
     }
 }

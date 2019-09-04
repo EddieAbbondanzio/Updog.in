@@ -84,7 +84,7 @@ namespace Updog.Api {
         [HttpPatch("{commentId}")]
         public async Task<ActionResult> Update(int commentId, [FromBody]CommentUpdateRequest request) {
             try {
-                Comment c = await commentUpdater.Handle(new CommentUpdateParams(User, commentId, request.Body));
+                CommentView c = await commentUpdater.Handle(new CommentUpdateParams(User, commentId, request.Body));
                 return Ok(c);
             } catch (ValidationException ex) {
                 return BadRequest(ex.Message);
@@ -99,7 +99,7 @@ namespace Updog.Api {
         [HttpDelete("{commentId}")]
         public async Task<ActionResult> DeleteComment(int commentId) {
             try {
-                Comment c = await commentDeleter.Handle(new CommentDeleteParams(User, commentId));
+                CommentView c = await commentDeleter.Handle(new CommentDeleteParams(User, commentId));
                 return Ok(c);
             } catch (ValidationException ex) {
                 return BadRequest(ex.Message);

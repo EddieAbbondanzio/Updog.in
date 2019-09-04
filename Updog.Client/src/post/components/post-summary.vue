@@ -160,7 +160,9 @@ export default class PostSummary extends mixins(UserAuthMixin, PostUpdaterMixin)
         }
 
         const params = new PostUpdateParams(this.post.id, this.edittedBody);
-        this.post = await this.$updatePost(params);
+        await this.$updatePost(params);
+
+        this.isEditting = false;
     }
 
     public onEditCancel() {

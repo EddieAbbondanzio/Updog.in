@@ -10,6 +10,10 @@ namespace Updog.Application {
         CreateComment,
         ReadComment,
         UpdateComment,
-        DeleteComment
+        DeleteComment,
+        CreateSpace,
+        ReadSpace,
+        UpdateSpace,
+        DeleteSpace,
     }
 }

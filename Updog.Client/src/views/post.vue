@@ -1,8 +1,8 @@
 <template>
     <layout>
         <template>
-            <div v-if="post != null">
-                <post-summary :post="post" :showEdit="true" :showToggle="false" expand="true" />
+            <div v-if="isLoaded">
+                <post-summary :post="$posts[0]" :showEdit="true" :showToggle="false" expand="true" />
 
                 <!-- Comments! -->
                 <router-view></router-view>
@@ -45,39 +45,19 @@ import PaginationNavigation from '@/core/components/pagination-navigation.vue';
         PostSummary,
         CommentSummary,
         PaginationNavigation
-    },
-    mixins: [UserAuthMixin, PostFinderMixin, CommentFinderMixin]
+    }
 })
-export default class Post extends Mixins(UserAuthMixin, PostFinderMixin, CommentFinderMixin) {
-    /**
-     * The post being displayed.
-     */
-    public post: PostEntity | null = null;
+export default class Post extends PostFinderMixin {
+    public isLoaded = false;
 
-    public async created() {
-        const postId = Number.parseInt(this.$route.params.postId, 10);
-        this.post = await this.$findPostById(postId);
+    get postId() {
+        return Number.parseInt(this.$route.params.postId, 10);
     }
 
-    /**
-     * Event handler for when a comment is created.
-     */
-    public async onCommentCreate(comment: string) {
-        // Redirect to login if no user present.
-        if (!this.$isLoggedIn()) {
-            this.$redirectToLogin();
-            return;
-        }
-
-        if (this.post == null) {
-            throw new Error();
-        }
-
-        // const c = await this.$createComment(new CommentCreateParams(comment, this.post!.id, 0));
-        // this.$refs.commentCreateForm.clear();
-
-        // Hack...
-        // this.post.commentCount++;
+    public async created() {
+        const p = await this.$findPostById(this.postId);
+        this.isLoaded = true;
+        console.log(this.$posts);
     }
 }
 </script>

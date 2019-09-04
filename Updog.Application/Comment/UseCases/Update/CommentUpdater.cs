@@ -8,25 +8,31 @@ namespace Updog.Application {
     /// <summary>
     /// Updater to handler updating comments.
     /// </summary>
-    public sealed class CommentUpdater : IInteractor<CommentUpdateParams, Comment> {
+    public sealed class CommentUpdater : IInteractor<CommentUpdateParams, CommentView> {
         #region Fields
         private IPermissionHandler<Comment> commentPermissionHandler;
 
         private ICommentRepo commentRepo;
 
         private AbstractValidator<CommentUpdateParams> commentValidator;
+
+        /// <summary>
+        /// Mapper to convert the comment into its DTO.
+        /// </summary>
+        private IMapper<Comment, CommentView> commentMapper;
         #endregion
 
         #region Constructor(s)
-        public CommentUpdater(IPermissionHandler<Comment> commentPermissionHandler, ICommentRepo commentRepo, AbstractValidator<CommentUpdateParams> commentValidator) {
+        public CommentUpdater(IPermissionHandler<Comment> commentPermissionHandler, ICommentRepo commentRepo, AbstractValidator<CommentUpdateParams> commentValidator, IMapper<Comment, CommentView> commentMapper) {
             this.commentPermissionHandler = commentPermissionHandler;
             this.commentRepo = commentRepo;
             this.commentValidator = commentValidator;
+            this.commentMapper = commentMapper;
         }
         #endregion
 
         #region Publics
-        public async Task<Comment> Handle(CommentUpdateParams input) {
+        public async Task<CommentView> Handle(CommentUpdateParams input) {
             Comment comment = await commentRepo.FindById(input.CommentId);
 
             if (comment == null) {
@@ -42,7 +48,8 @@ namespace Updog.Application {
             comment.Body = input.Body;
             comment.WasUpdated = true;
             await commentRepo.Update(comment);
-            return comment;
+
+            return commentMapper.Map(comment);
         }
         #endregion
     }

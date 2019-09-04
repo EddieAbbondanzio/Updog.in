@@ -14,8 +14,6 @@ namespace Updog.Persistance {
     /// </summary>
     public sealed class PostRepo : DatabaseRepo<Post>, IPostRepo {
         #region Fields
-        private IUserRepo userRepo;
-
         /// <summary>
         /// Mapper to convert the post record into its entity.
         /// </summary>
@@ -27,10 +25,8 @@ namespace Updog.Persistance {
         /// Create a new post repo.
         /// </summary>
         /// <param name="database">The active database.</param>
-        /// <param name="userRepo">The user repo.</param>
         /// <param name="postMapper">The post entity mapper</param>
-        public PostRepo(IDatabase database, IUserRepo userRepo, IPostRecordMapper postMapper) : base(database) {
-            this.userRepo = userRepo;
+        public PostRepo(IDatabase database, IPostRecordMapper postMapper) : base(database) {
             this.postMapper = postMapper;
         }
         #endregion
