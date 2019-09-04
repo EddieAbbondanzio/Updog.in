@@ -30,7 +30,8 @@ public sealed class SpaceRecordMapper : ISpaceRecordMapper {
             Description = source.Item1.Description,
             User = userRecordMapper.Map(source.Item2),
             CreationDate = source.Item1.CreationDate,
-            SubscriptionCount = source.Item1.SubscriptionCount
+            SubscriptionCount = source.Item1.SubscriptionCount,
+            IsDefault = source.Item1.IsDefault
         };
     }
 
@@ -45,7 +46,9 @@ public sealed class SpaceRecordMapper : ISpaceRecordMapper {
             Name = destination.Name,
             Description = destination.Description,
             CreationDate = destination.CreationDate,
-            SubscriptionCount = destination.SubscriptionCount
+            SubscriptionCount = destination.SubscriptionCount,
+            IsDefault = destination.IsDefault,
+            UserId = destination.User.Id
         };
 
         UserRecord u = userRecordMapper.Reverse(destination.User);

@@ -54,13 +54,9 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("user/{username}")]
         public async Task<ActionResult> GetCommentsByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery]int pageSize = Post.PageSize) {
-            // try {
             PagedResultSet<CommentView> comments = await commentFinderByUser.Handle(new CommentFinderByUserParams(username, pageNumber, pageSize));
             SetContentRangeHeader(comments.Pagination);
             return Ok(comments);
-            // } catch {
-            // return InternalServerError();
-            // }
         }
 
         /// <summary>
@@ -73,8 +69,6 @@ namespace Updog.Api {
                 return Ok(comment);
             } catch (ValidationException ex) {
                 return BadRequest(ex.Message);
-            } catch {
-                return InternalServerError("An unknown error occured.");
             }
         }
 
@@ -88,8 +82,6 @@ namespace Updog.Api {
                 return Ok(c);
             } catch (ValidationException ex) {
                 return BadRequest(ex.Message);
-            } catch {
-                return InternalServerError("An unknown error occured.");
             }
         }
 
@@ -103,8 +95,6 @@ namespace Updog.Api {
                 return Ok(c);
             } catch (ValidationException ex) {
                 return BadRequest(ex.Message);
-            } catch {
-                return InternalServerError("An unknown error occured.");
             }
         }
         #endregion

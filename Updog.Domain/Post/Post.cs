@@ -34,6 +34,11 @@ namespace Updog.Domain {
         public User User { get; set; }
 
         /// <summary>
+        /// The sub space it was submitted to.
+        /// </summary>
+        public Space Space { get; set; }
+
+        /// <summary>
         /// The content type of the post.
         /// </summary>
         public PostType Type { get; set; }

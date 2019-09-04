@@ -17,7 +17,7 @@ namespace Updog.Application {
 
         #region Publics
         public SpaceView Map(Space source) {
-            return new SpaceView(source.Name, source.Description, source.SubscriptionCount, source.CreationDate, userMapper.Map(source.User));
+            return new SpaceView(source.Id, source.Name, source.Description, source.SubscriptionCount, source.CreationDate, userMapper.Map(source.User));
         }
         #endregion
     }

@@ -11,6 +11,8 @@ namespace Updog.Persistance {
 
         public int UserId { get; set; }
 
+        public int SpaceId { get; set; }
+
         public PostType Type { get; set; }
 
         public string Title { get; set; }

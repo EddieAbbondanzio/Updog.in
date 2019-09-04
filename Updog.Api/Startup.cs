@@ -129,9 +129,12 @@ namespace Updog.Api {
             services.AddSingleton<IPermissionHandler<Space>, SpacePermissionHandler>();
             services.AddSingleton<IMapper<Space, SpaceView>, SpaceViewMapper>();
             services.AddTransient<ISpaceRepo, SpaceRepo>();
+            services.AddTransient<ISpaceRecordMapper, SpaceRecordMapper>();
             services.AddTransient<SpaceFinderByName>();
             services.AddTransient<SpaceCreator>();
             services.AddTransient<SpaceUpdater>();
+            services.AddTransient<AbstractValidator<SpaceCreateParams>, SpaceCreateValidator>();
+            services.AddTransient<AbstractValidator<SpaceUpdateParams>, SpaceUpdateValidator>();
 
         }
 

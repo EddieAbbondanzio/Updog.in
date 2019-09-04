@@ -57,9 +57,6 @@ namespace Updog.Api {
                 return login != null ? Ok(login) : BadRequest("Registration failed.") as ActionResult;
             } catch (ValidationException ex) {
                 return BadRequest(new ValidationError(ex));
-            } catch (Exception ex) {
-                Console.WriteLine(ex.Message);
-                return BadRequest("Error, please try again later");
             }
         }
         #endregion

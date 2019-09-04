@@ -13,6 +13,8 @@ namespace Updog.Persistance {
         public DateTime CreationDate { get; set; }
         public int SubscriptionCount { get; set; }
         public int UserId { get; set; }
+
+        public bool IsDefault { get; set; }
         #endregion
     }
 }

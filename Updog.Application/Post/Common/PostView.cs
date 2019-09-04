@@ -34,6 +34,11 @@ namespace Updog.Application {
         public UserView User { get; }
 
         /// <summary>
+        /// The space it was submitted to.
+        /// </summary>
+        public SpaceView Space { get; }
+
+        /// <summary>
         /// The date it was created.
         /// </summary>
         public DateTime CreationDate { get; }
@@ -64,16 +69,18 @@ namespace Updog.Application {
         /// <param name="title">The title of the post.</param>
         /// <param name="body">The body of the post.</param>
         /// <param name="user">The OP.</param>
+        /// <param name="space">The space it was submitted to..</param>
         /// <param name="creationDate">The date the post was created on.</param>
         /// <param name="commentCount">The comment countof the post</param>
         /// <param name="wasEditted">If the post has been editted</param>
         /// <param name="wasDeleted">If the post has been deleted.</param>
-        public PostView(int id, PostType type, string title, string body, UserView user, DateTime creationDate, int commentCount, bool wasEditted, bool wasDeleted) {
+        public PostView(int id, PostType type, string title, string body, UserView user, SpaceView space, DateTime creationDate, int commentCount, bool wasEditted, bool wasDeleted) {
             Id = id;
             Type = type;
             Title = title;
             Body = body;
             User = user;
+            Space = space;
             CreationDate = creationDate;
             CommentCount = commentCount;
             WasUpdated = wasEditted;

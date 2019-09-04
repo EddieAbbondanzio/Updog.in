@@ -12,11 +12,11 @@ namespace Updog.Persistance {
     /// </summary>
     public sealed class SpaceRepo : DatabaseRepo<Space>, ISpaceRepo {
         #region Fields
-        private SpaceRecordMapper mapper;
+        private ISpaceRecordMapper mapper;
         #endregion
 
         #region Constructor(s)
-        public SpaceRepo(IDatabase database, SpaceRecordMapper mapper) : base(database) {
+        public SpaceRepo(IDatabase database, ISpaceRecordMapper mapper) : base(database) {
             this.mapper = mapper;
         }
         #endregion
@@ -57,6 +57,8 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="entity">The space to add.</param>
         public async Task Add(Space entity) {
+            SpaceRecord rec = mapper.Reverse(entity).Item1;
+
             using (DbConnection connection = GetConnection()) {
                 entity.Id = await connection.QueryFirstOrDefaultAsync<int>(
                     @"INSERT INTO Space(
@@ -65,13 +67,15 @@ namespace Updog.Persistance {
                         CreationDate,
                         SubscriptionCount,
                         UserId,
+                        IsDefault
                         ) VALUES (
                         @Name,
                         @Description,
                         @CreationDate,
                         @SubscriptionCount,
-                        @UserId
-                        ) RETURNING Id;", mapper.Reverse(entity).Item1
+                        @UserId,
+                        @IsDefault
+                        ) RETURNING Id;", rec
                 );
             }
         }

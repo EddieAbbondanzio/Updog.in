@@ -7,6 +7,11 @@ namespace Updog.Application {
     public sealed class SpaceView {
         #region Properties
         /// <summary>
+        /// The unique ID of the view.
+        /// </summary>
+        public int Id { get; }
+
+        /// <summary>
         /// The unique name of the space.
         /// </summary>
         /// <value></value>
@@ -34,7 +39,8 @@ namespace Updog.Application {
         #endregion
 
         #region Constructor(s)
-        public SpaceView(string name, string description, int subscriptionCount, DateTime creationDate, UserView user) {
+        public SpaceView(int id, string name, string description, int subscriptionCount, DateTime creationDate, UserView user) {
+            Id = id;
             Name = name;
             Description = description;
             SubscriptionCount = subscriptionCount;

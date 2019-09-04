@@ -13,6 +13,11 @@ namespace Updog.Persistance {
         /// Mapper to convert user records to entities and back.
         /// </summary>
         private IUserRecordMapper userMapper;
+
+        /// <summary>
+        /// Mapper to convert space records to entities and back.
+        /// </summary>
+        private ISpaceRecordMapper spaceMapper;
         #endregion
 
         #region Constructor(s)
@@ -20,8 +25,10 @@ namespace Updog.Persistance {
         /// Create a new post record mapper.
         /// </summary>
         /// <param name="userMapper">The user record mapper.</param>
-        public PostRecordMapper(IUserRecordMapper userMapper) {
+        /// <param name="spaceMapper">The space record mapper.</param>
+        public PostRecordMapper(IUserRecordMapper userMapper, ISpaceRecordMapper spaceMapper) {
             this.userMapper = userMapper;
+            this.spaceMapper = spaceMapper;
         }
         #endregion
 
@@ -31,7 +38,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="source">The source record.</param>
         /// <returns>The entity.</returns>
-        public Post Map(Tuple<PostRecord, UserRecord> source) {
+        public Post Map(Tuple<PostRecord, UserRecord, Tuple<SpaceRecord, UserRecord>> source) {
             return new Post() {
                 Id = source.Item1.Id,
                 User = userMapper.Map(source.Item2),
@@ -41,7 +48,8 @@ namespace Updog.Persistance {
                 CreationDate = source.Item1.CreationDate,
                 WasUpdated = source.Item1.WasUpdated,
                 WasDeleted = source.Item1.WasDeleted,
-                CommentCount = source.Item1.CommentCount
+                CommentCount = source.Item1.CommentCount,
+                Space = spaceMapper.Map(source.Item3)
             };
         }
         /// <summary>
@@ -49,7 +57,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="destination">The entity/</param>
         /// <returns>The rebuilt record.</returns>
-        public Tuple<PostRecord, UserRecord> Reverse(Post destination) {
+        public Tuple<PostRecord, UserRecord, Tuple<SpaceRecord, UserRecord>> Reverse(Post destination) {
             PostRecord p = new PostRecord {
                 Id = destination.Id,
                 UserId = destination.User.Id,
@@ -63,7 +71,8 @@ namespace Updog.Persistance {
             };
 
             UserRecord u = userMapper.Reverse(destination.User);
-            return Tuple.Create(p, u);
+            Tuple<SpaceRecord, UserRecord> s = spaceMapper.Reverse(destination.Space);
+            return Tuple.Create(p, u, s);
         }
         #endregion
     }

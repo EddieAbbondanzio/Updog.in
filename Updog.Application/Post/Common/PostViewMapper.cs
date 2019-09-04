@@ -11,6 +11,8 @@ namespace Updog.Application {
         /// Mapper to convert a user to its DTO.
         /// </summary>
         private IMapper<User, UserView> userMapper;
+
+        private IMapper<Space, SpaceView> spaceMapper;
         #endregion
 
         #region Constructor(s)
@@ -18,15 +20,18 @@ namespace Updog.Application {
         /// Create a new post view mapper.
         /// </summary>
         /// <param name="userMapper">The mapper to convert users to user views.</param>
-        public PostViewMapper(IMapper<User, UserView> userMapper) {
+        /// <param name="spaceMapper">The mapper to convert space entities</param>
+        public PostViewMapper(IMapper<User, UserView> userMapper, IMapper<Space, SpaceView> spaceMapper) {
             this.userMapper = userMapper;
+            this.spaceMapper = spaceMapper;
         }
         #endregion
 
         #region Publics
         public PostView Map(Post post) {
             UserView userView = userMapper.Map(post.User);
-            return new PostView(post.Id, post.Type, post.Title, post.Body, userView, post.CreationDate, post.CommentCount, post.WasUpdated, post.WasDeleted);
+            SpaceView spaceView = spaceMapper.Map(post.Space);
+            return new PostView(post.Id, post.Type, post.Title, post.Body, userView, spaceView, post.CreationDate, post.CommentCount, post.WasUpdated, post.WasDeleted);
         }
         #endregion
     }

@@ -61,12 +61,8 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{postId}/comment")]
         public async Task<ActionResult> GetComments(int postId) {
-            try {
-                IEnumerable<CommentView> comments = await commentFinderByPost.Handle(new CommentFinderByPostParams(postId));
-                return Ok(comments);
-            } catch {
-                return InternalServerError();
-            }
+            IEnumerable<CommentView> comments = await commentFinderByPost.Handle(new CommentFinderByPostParams(postId));
+            return Ok(comments);
         }
 
         /// <summary>
@@ -95,12 +91,10 @@ namespace Updog.Api {
         [HttpPost]
         public async Task<ActionResult> Create([FromBody]PostCreateRequest payload) {
             try {
-                PostView post = await postCreator.Handle(new PostCreateParams(payload.Type, payload.Title, payload.Body, User));
+                PostView post = await postCreator.Handle(new PostCreateParams(payload.Type, payload.Title, payload.Body, payload.Space, User));
                 return Ok(post);
             } catch (ValidationException ex) {
                 return BadRequest(ex.Message);
-            } catch {
-                return InternalServerError("An unknown error occured.");
             }
         }
 
@@ -114,8 +108,6 @@ namespace Updog.Api {
                 return Ok(p);
             } catch (ValidationException ex) {
                 return BadRequest(ex.Message);
-            } catch {
-                return InternalServerError("An unknown error occured.");
             }
         }
 
@@ -129,8 +121,6 @@ namespace Updog.Api {
                 return Ok(p);
             } catch (ValidationException ex) {
                 return BadRequest(ex.Message);
-            } catch {
-                return InternalServerError("An unknown error occured.");
             }
         }
         #endregion

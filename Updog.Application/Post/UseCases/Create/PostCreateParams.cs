@@ -12,14 +12,18 @@ namespace Updog.Application {
 
         public string Body { get; }
 
+        public string SpaceName { get; }
+
         public User User { get; }
+
         #endregion
 
         #region Constructor(s)
-        public PostCreateParams(PostType type, string title, string body, User user) {
+        public PostCreateParams(PostType type, string title, string body, string spaceName, User user) {
             Type = type;
             Title = title;
             Body = body;
+            SpaceName = spaceName;
             User = user;
         }
         #endregion

@@ -60,8 +60,6 @@ namespace Updog.Api {
                 return Ok(s);
             } catch (ValidationException ex) {
                 return BadRequest(ex.Message);
-            } catch {
-                return InternalServerError("An unknown error occured.");
             }
         }
 
@@ -75,8 +73,6 @@ namespace Updog.Api {
                 return Ok(s);
             } catch (ValidationException ex) {
                 return BadRequest(ex.Message);
-            } catch {
-                return InternalServerError("An unknown error occured.");
             }
         }
 
