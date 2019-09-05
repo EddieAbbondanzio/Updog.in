@@ -8,24 +8,24 @@ namespace Updog.Application {
     /// </summary>
     public sealed class SpaceCreator : IInteractor<SpaceCreateParams, SpaceView> {
         #region Fields
-        private ISpaceRepo spaceRepo;
+        private ISpaceRepo _spaceRepo;
 
-        private AbstractValidator<SpaceCreateParams> spaceValidator;
+        private AbstractValidator<SpaceCreateParams> _spaceValidator;
 
-        private IMapper<Space, SpaceView> spaceMapper;
+        private ISpaceViewMapper _spaceMapper;
         #endregion
 
         #region Constructor(s)
-        public SpaceCreator(ISpaceRepo spaceRepo, AbstractValidator<SpaceCreateParams> spaceValidator, IMapper<Space, SpaceView> spaceMapper) {
-            this.spaceRepo = spaceRepo;
-            this.spaceValidator = spaceValidator;
-            this.spaceMapper = spaceMapper;
+        public SpaceCreator(ISpaceRepo spaceRepo, AbstractValidator<SpaceCreateParams> spaceValidator, ISpaceViewMapper spaceMapper) {
+            _spaceRepo = spaceRepo;
+            _spaceValidator = spaceValidator;
+            _spaceMapper = spaceMapper;
         }
         #endregion
 
         #region Publics
         public async Task<SpaceView> Handle(SpaceCreateParams input) {
-            await spaceValidator.ValidateAndThrowAsync(input);
+            await _spaceValidator.ValidateAndThrowAsync(input);
 
             Space s = new Space() {
                 Name = input.Name,
@@ -33,8 +33,8 @@ namespace Updog.Application {
                 User = input.User
             };
 
-            await spaceRepo.Add(s);
-            return spaceMapper.Map(s);
+            await _spaceRepo.Add(s);
+            return _spaceMapper.Map(s);
         }
         #endregion
     }

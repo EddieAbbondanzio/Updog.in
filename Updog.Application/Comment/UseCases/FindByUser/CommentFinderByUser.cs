@@ -14,12 +14,12 @@ namespace Updog.Application {
         /// <summary>
         /// The underlying repo for finding comments in the database.
         /// </summary>
-        private ICommentRepo commentRepo;
+        private ICommentRepo _commentRepo;
 
         /// <summary>
         /// Mapper to convert a comment into it's DTO.
         /// </summary>
-        private IMapper<Comment, CommentView> commentMapper;
+        private ICommentViewMapper _commentMapper;
         #endregion
 
         #region Constructor(s)
@@ -28,19 +28,19 @@ namespace Updog.Application {
         /// </summary>
         /// <param name="commentRepo">The CRUD interface for comments.</param>
         /// <param name="commentMapper">DTO mapper.</param>
-        public CommentFinderByUser(ICommentRepo commentRepo, IMapper<Comment, CommentView> commentMapper) {
-            this.commentRepo = commentRepo;
-            this.commentMapper = commentMapper;
+        public CommentFinderByUser(ICommentRepo commentRepo, ICommentViewMapper commentMapper) {
+            _commentRepo = commentRepo;
+            _commentMapper = commentMapper;
         }
         #endregion
 
         #region Publics
         public async Task<PagedResultSet<CommentView>> Handle(CommentFinderByUserParams input) {
-            PagedResultSet<Comment> comments = await commentRepo.FindByUser(input.Username, input.PageNumber, input.PageSize);
+            PagedResultSet<Comment> comments = await _commentRepo.FindByUser(input.Username, input.PageNumber, input.PageSize);
             List<CommentView> views = new List<CommentView>();
 
             foreach (Comment c in comments) {
-                views.Add(commentMapper.Map(c));
+                views.Add(_commentMapper.Map(c));
             }
 
             return new PagedResultSet<CommentView>(views, comments.Pagination);

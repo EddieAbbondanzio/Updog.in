@@ -7,22 +7,22 @@ namespace Updog.Application {
     /// </summary>
     public sealed class SpaceFinderByName : IInteractor<string, SpaceView> {
         #region Fields
-        private ISpaceRepo spaceRepo;
+        private ISpaceRepo _spaceRepo;
 
-        private IMapper<Space, SpaceView> spaceMapper;
+        private ISpaceViewMapper _spaceMapper;
         #endregion
 
         #region Constructor(s)
-        public SpaceFinderByName(ISpaceRepo spaceRepo, IMapper<Space, SpaceView> spaceMapper) {
-            this.spaceRepo = spaceRepo;
-            this.spaceMapper = spaceMapper;
+        public SpaceFinderByName(ISpaceRepo spaceRepo, ISpaceViewMapper spaceMapper) {
+            _spaceRepo = spaceRepo;
+            _spaceMapper = spaceMapper;
         }
         #endregion
 
         #region Publics
         public async Task<SpaceView> Handle(string input) {
-            Space s = await spaceRepo.FindByName(input);
-            return s != null ? spaceMapper.Map(s) : null;
+            Space s = await _spaceRepo.FindByName(input);
+            return s != null ? _spaceMapper.Map(s) : null;
         }
         #endregion
     }

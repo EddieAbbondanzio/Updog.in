@@ -97,7 +97,7 @@ namespace Updog.Api {
             services.AddTransient<AbstractValidator<UpdateUserParams>, UserUpdateValidator>();
             services.AddTransient<AbstractValidator<UserPasswordUpdateParams>, UserPasswordUpdateValidator>();
 
-            services.AddSingleton<IMapper<Post, PostView>, PostViewMapper>();
+            services.AddSingleton<IPostViewMapper, PostViewMapper>();
             services.AddSingleton<IPermissionHandler<Post>, PostPermissionHandler>();
             services.AddSingleton<IPostRecordMapper, PostRecordMapper>();
             services.AddTransient<IPostRepo, PostRepo>();
@@ -113,7 +113,7 @@ namespace Updog.Api {
             services.AddTransient<AbstractValidator<PostDeleteParams>, PostDeleteValidator>();
 
             services.AddSingleton<IPermissionHandler<Comment>, CommentPermissionHandler>();
-            services.AddSingleton<IMapper<Comment, CommentView>, CommentViewMapper>();
+            services.AddSingleton<ICommentViewMapper, CommentViewMapper>();
             services.AddSingleton<ICommentRecordMapper, CommentRecordMapper>();
             services.AddTransient<ICommentRepo, CommentRepo>();
             services.AddTransient<CommentCreator>();
@@ -127,7 +127,7 @@ namespace Updog.Api {
             services.AddTransient<AbstractValidator<CommentDeleteParams>, CommentDeleteValidator>();
 
             services.AddSingleton<IPermissionHandler<Space>, SpacePermissionHandler>();
-            services.AddSingleton<IMapper<Space, SpaceView>, SpaceViewMapper>();
+            services.AddSingleton<ISpaceViewMapper, SpaceViewMapper>();
             services.AddTransient<ISpaceRepo, SpaceRepo>();
             services.AddTransient<ISpaceRecordMapper, SpaceRecordMapper>();
             services.AddTransient<SpaceFinderByName>();

@@ -9,32 +9,32 @@ namespace Updog.Application {
     /// </summary>
     public sealed class PostCreator : IInteractor<PostCreateParams, PostView> {
         #region Fields
-        private IPostRepo postRepo;
+        private IPostRepo _postRepo;
 
-        private ISpaceRepo spaceRepo;
+        private ISpaceRepo _spaceRepo;
 
-        private AbstractValidator<PostCreateParams> postValidator;
+        private AbstractValidator<PostCreateParams> _postValidator;
 
-        private IMapper<Post, PostView> postMapper;
+        private IPostViewMapper _postMapper;
         #endregion
 
         #region Constructor(s)
-        public PostCreator(IPostRepo postRepo, ISpaceRepo spaceRepo, AbstractValidator<PostCreateParams> postValidator, IMapper<Post, PostView> postMapper) {
-            this.postRepo = postRepo;
-            this.spaceRepo = spaceRepo;
-            this.postValidator = postValidator;
-            this.postMapper = postMapper;
+        public PostCreator(IPostRepo postRepo, ISpaceRepo spaceRepo, AbstractValidator<PostCreateParams> postValidator, IPostViewMapper postMapper) {
+            _postRepo = postRepo;
+            _spaceRepo = spaceRepo;
+            _postValidator = postValidator;
+            _postMapper = postMapper;
         }
         #endregion
 
         #region Publics
         public async Task<PostView> Handle(PostCreateParams input) {
-            await postValidator.ValidateAndThrowAsync(input);
+            await _postValidator.ValidateAndThrowAsync(input);
 
-            Space s = await spaceRepo.FindByName(input.SpaceName);
+            Space s = await _spaceRepo.FindByName(input.Space);
 
             if (s == null) {
-                throw new NotFoundException($"No space with name ${input.SpaceName} found.");
+                throw new NotFoundException($"No space with name ${input.Space} found.");
             }
 
             Post post = new Post() {
@@ -46,8 +46,8 @@ namespace Updog.Application {
                 Space = s
             };
 
-            await postRepo.Add(post);
-            return postMapper.Map(post);
+            await _postRepo.Add(post);
+            return _postMapper.Map(post);
         }
         #endregion
     }

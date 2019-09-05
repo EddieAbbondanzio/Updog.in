@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Mapper to convert a space into it's view.
     /// </summary>
-    public sealed class SpaceViewMapper : IMapper<Space, SpaceView> {
+    public sealed class SpaceViewMapper : ISpaceViewMapper {
         #region Fields
         public IMapper<User, UserView> userMapper;
         #endregion

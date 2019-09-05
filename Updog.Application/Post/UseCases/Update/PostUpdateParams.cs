@@ -7,6 +7,11 @@ namespace Updog.Application {
     public sealed class PostUpdateParams {
         #region Properties
         /// <summary>
+        /// The user doing the update.
+        /// </summary>
+        public User User { get; }
+
+        /// <summary>
         /// The ID of the post to update.
         /// </summary>
         public int PostId { get; }
@@ -15,11 +20,6 @@ namespace Updog.Application {
         /// The new text of the post.
         /// </summary>
         public string Body { get; }
-
-        /// <summary>
-        /// The user doing the update.
-        /// </summary>
-        public User User { get; }
         #endregion
 
         #region Constructor(s)

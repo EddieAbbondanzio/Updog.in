@@ -7,9 +7,9 @@ namespace Updog.Application {
     /// </summary>
     public sealed class PostFinderById : IInteractor<int, PostView> {
         #region Fields
-        private IPostRepo postRepo;
+        private IPostRepo _postRepo;
 
-        private IMapper<Post, PostView> postMapper;
+        private IPostViewMapper _postMapper;
         #endregion
 
         #region Constructor(s)
@@ -18,9 +18,9 @@ namespace Updog.Application {
         /// </summary>
         /// <param name="postRepo">CRUD post repo.</param>
         /// <param name="postMapper">Mapper to convert posts to view</param>
-        public PostFinderById(IPostRepo postRepo, IMapper<Post, PostView> postMapper) {
-            this.postRepo = postRepo;
-            this.postMapper = postMapper;
+        public PostFinderById(IPostRepo postRepo, IPostViewMapper postMapper) {
+            _postRepo = postRepo;
+            _postMapper = postMapper;
         }
         #endregion
 
@@ -30,13 +30,13 @@ namespace Updog.Application {
         /// <param name="input">The ID to look for.</param>
         /// <returns>The matching post found.</returns>
         public async Task<PostView> Handle(int input) {
-            Post p = await postRepo.FindById(input);
+            Post p = await _postRepo.FindById(input);
 
             if (p == null) {
                 return null;
             }
 
-            return postMapper.Map(p);
+            return _postMapper.Map(p);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Updog.Application {
     public sealed class SpaceCreateValidator : AbstractValidator<SpaceCreateParams> {
         #region Constructor(s)
         public SpaceCreateValidator(ISpaceRepo spaceRepo) {
-            RuleFor(pars => pars.Name).NotNull().NotEmpty().MaximumLength(Space.NameMaxLength).Matches(@"^[\w\s-]+$").MustAsync(async (name, cancellationToken) => {
+            RuleFor(pars => pars.Name).NotNull().NotEmpty().MaximumLength(Space.NameMaxLength).Matches(Regex.UrlSafe).MustAsync(async (name, cancellationToken) => {
                 Space existingSpace = await spaceRepo.FindByName(name);
                 return existingSpace == null;
             });

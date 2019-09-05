@@ -13,13 +13,13 @@ namespace Updog.Api {
     [ApiController]
     public sealed class MeController : ApiController {
         #region Fields
-        public UpdateUserInteractor userUpdater;
+        public UserUpdater userUpdater;
 
         public UserPasswordUpdater passwordUpdater;
         #endregion
 
         #region Constructor(s)
-        public MeController(UpdateUserInteractor userUpdater, UserPasswordUpdater passwordUpdater) {
+        public MeController(UserUpdater userUpdater, UserPasswordUpdater passwordUpdater) {
             this.userUpdater = userUpdater;
             this.passwordUpdater = passwordUpdater;
         }

@@ -8,8 +8,18 @@ namespace Updog.Application {
     public sealed class PostCreateValidator : AbstractValidator<PostCreateParams> {
         #region Constructor(s)
         public PostCreateValidator() {
-            RuleFor(reg => reg.Title).NotNull().NotEmpty().MaximumLength(Post.TitleMaxLength);
-            RuleFor(reg => reg.Body).NotNull().NotEmpty().MaximumLength(Post.BodyMaxLength);
+            RuleFor(p => p.Type).IsInEnum().WithMessage("Type must be link, or text.");
+
+            RuleFor(p => p.Title).NotNull().WithMessage("Title is required.");
+            RuleFor(p => p.Title).NotEmpty().WithMessage("Title is required.");
+            RuleFor(p => p.Title).MaximumLength(Post.TitleMaxLength).WithMessage($"Title must be {Post.TitleMaxLength} characters or less.");
+
+            RuleFor(p => p.Body).NotNull().WithMessage("Body is required.");
+            RuleFor(p => p.Body).NotEmpty().WithMessage("Body is required.");
+            RuleFor(p => p.Body).MaximumLength(Post.BodyMaxLength).WithMessage($"Body must be {Post.BodyMaxLength} characters or less.");
+
+            RuleFor(p => p.Space).NotNull().WithMessage("Space is required.");
+            RuleFor(p => p.Space).NotEmpty().WithMessage("Space is required.");
         }
         #endregion
     }

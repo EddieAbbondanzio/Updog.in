@@ -8,45 +8,45 @@ namespace Updog.Application {
     /// </summary>
     public sealed class CommentDeleter : IInteractor<CommentDeleteParams, CommentView> {
         #region Fields
-        private IPermissionHandler<Comment> permissionHandler;
+        private IPermissionHandler<Comment> _permissionHandler;
 
-        private ICommentRepo repo;
+        private ICommentRepo _repo;
 
-        private AbstractValidator<CommentDeleteParams> validator;
+        private AbstractValidator<CommentDeleteParams> _validator;
 
         /// <summary>
         /// Mapper to convert the comment into its DTO.
         /// </summary>
-        private IMapper<Comment, CommentView> commentMapper;
+        private ICommentViewMapper _commentMapper;
         #endregion
 
         #region Constructor(s)
-        public CommentDeleter(IPermissionHandler<Comment> permissionHandler, ICommentRepo repo, AbstractValidator<CommentDeleteParams> validator, IMapper<Comment, CommentView> commentMapper) {
-            this.permissionHandler = permissionHandler;
-            this.repo = repo;
-            this.validator = validator;
-            this.commentMapper = commentMapper;
+        public CommentDeleter(IPermissionHandler<Comment> permissionHandler, ICommentRepo repo, AbstractValidator<CommentDeleteParams> validator, ICommentViewMapper commentMapper) {
+            _permissionHandler = permissionHandler;
+            _repo = repo;
+            _validator = validator;
+            _commentMapper = commentMapper;
         }
         #endregion
 
         #region Publics
         public async Task<CommentView> Handle(CommentDeleteParams input) {
-            Comment c = await repo.FindById(input.CommentId);
+            Comment c = await _repo.FindById(input.CommentId);
 
             if (c == null) {
                 throw new NotFoundException();
             }
 
-            if (!(await this.permissionHandler.HasPermission(input.User, PermissionAction.DeleteComment, c))) {
+            if (!(await this._permissionHandler.HasPermission(input.User, PermissionAction.DeleteComment, c))) {
                 throw new AuthorizationException();
             }
 
-            await validator.ValidateAndThrowAsync(input);
+            await _validator.ValidateAndThrowAsync(input);
 
             c.WasDeleted = true;
-            await repo.Update(c);
+            await _repo.Update(c);
 
-            return commentMapper.Map(c);
+            return _commentMapper.Map(c);
         }
         #endregion
     }

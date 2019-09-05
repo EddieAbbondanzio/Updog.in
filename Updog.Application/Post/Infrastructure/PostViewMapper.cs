@@ -5,14 +5,14 @@ namespace Updog.Application {
     /// <summary>
     /// Mapper to convert a post into it's data transfer object.
     /// </summary>
-    public sealed class PostViewMapper : IMapper<Post, PostView> {
+    public sealed class PostViewMapper : IPostViewMapper {
         #region Fields
         /// <summary>
         /// Mapper to convert a user to its DTO.
         /// </summary>
-        private IMapper<User, UserView> userMapper;
+        private IUserViewMapper userMapper;
 
-        private IMapper<Space, SpaceView> spaceMapper;
+        private ISpaceViewMapper spaceMapper;
         #endregion
 
         #region Constructor(s)
@@ -21,7 +21,7 @@ namespace Updog.Application {
         /// </summary>
         /// <param name="userMapper">The mapper to convert users to user views.</param>
         /// <param name="spaceMapper">The mapper to convert space entities</param>
-        public PostViewMapper(IMapper<User, UserView> userMapper, IMapper<Space, SpaceView> spaceMapper) {
+        public PostViewMapper(IUserViewMapper userMapper, ISpaceViewMapper spaceMapper) {
             this.userMapper = userMapper;
             this.spaceMapper = spaceMapper;
         }

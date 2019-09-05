@@ -9,43 +9,43 @@ namespace Updog.Application {
     /// </summary>
     public sealed class SpaceUpdater : IInteractor<SpaceUpdateParams, SpaceView> {
         #region Fields
-        private ISpaceRepo spaceRepo;
+        private ISpaceRepo _spaceRepo;
 
-        private IPermissionHandler<Space> spacePermissionHandler;
+        private IPermissionHandler<Space> _spacePermissionHandler;
 
-        private AbstractValidator<SpaceUpdateParams> spaceValidator;
+        private AbstractValidator<SpaceUpdateParams> _spaceValidator;
 
-        private IMapper<Space, SpaceView> spaceMapper;
+        private ISpaceViewMapper _spaceMapper;
         #endregion
 
         #region Constructor(s)
-        public SpaceUpdater(ISpaceRepo spaceRepo, IPermissionHandler<Space> spacePermissionHandler, AbstractValidator<SpaceUpdateParams> spaceValidator, IMapper<Space, SpaceView> spaceMapper) {
-            this.spaceRepo = spaceRepo;
-            this.spacePermissionHandler = spacePermissionHandler;
-            this.spaceValidator = spaceValidator;
-            this.spaceMapper = spaceMapper;
+        public SpaceUpdater(ISpaceRepo spaceRepo, IPermissionHandler<Space> spacePermissionHandler, AbstractValidator<SpaceUpdateParams> spaceValidator, ISpaceViewMapper spaceMapper) {
+            _spaceRepo = spaceRepo;
+            _spacePermissionHandler = spacePermissionHandler;
+            _spaceValidator = spaceValidator;
+            _spaceMapper = spaceMapper;
         }
         #endregion
 
         #region Publics
         public async Task<SpaceView> Handle(SpaceUpdateParams input) {
-            Space s = await this.spaceRepo.FindByName(input.Name);
+            Space s = await this._spaceRepo.FindByName(input.Name);
 
             if (s == null) {
                 throw new NotFoundException();
             }
 
-            if (!(await this.spacePermissionHandler.HasPermission(input.User, PermissionAction.UpdateSpace, s))) {
+            if (!(await this._spacePermissionHandler.HasPermission(input.User, PermissionAction.UpdateSpace, s))) {
                 throw new AuthorizationException();
             }
 
-            await spaceValidator.ValidateAndThrowAsync(input);
+            await _spaceValidator.ValidateAndThrowAsync(input);
 
             s.Description = input.Description;
-            await spaceRepo.Update(s);
+            await _spaceRepo.Update(s);
 
 
-            return spaceMapper.Map(s);
+            return _spaceMapper.Map(s);
         }
         #endregion
     }

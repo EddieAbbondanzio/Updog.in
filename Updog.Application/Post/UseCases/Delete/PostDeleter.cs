@@ -8,13 +8,13 @@ namespace Updog.Application {
     /// </summary>
     public sealed class PostDeleter : IInteractor<PostDeleteParams, PostView> {
         #region Fields
-        private IPermissionHandler<Post> permissionHandler;
+        private IPermissionHandler<Post> _permissionHandler;
 
-        private IPostRepo postRepo;
+        private IPostRepo _postRepo;
 
-        private AbstractValidator<PostDeleteParams> postValidator;
+        private AbstractValidator<PostDeleteParams> _postValidator;
 
-        private IMapper<Post, PostView> postMapper;
+        private IPostViewMapper _postMapper;
         #endregion
 
         #region Constructor(s)
@@ -25,32 +25,32 @@ namespace Updog.Application {
         /// <param name="postRepo">CRUD interface for the posts in the DB.</param>
         /// <param name="postValidator">Validator for data.</param>
         /// <param name="postMapper">Mapper to convert post to DTO.</param>
-        public PostDeleter(IPermissionHandler<Post> postPermissionHandler, IPostRepo postRepo, AbstractValidator<PostDeleteParams> postValidator, IMapper<Post, PostView> postMapper) {
-            this.permissionHandler = postPermissionHandler;
-            this.postRepo = postRepo;
-            this.postValidator = postValidator;
-            this.postMapper = postMapper;
+        public PostDeleter(IPermissionHandler<Post> postPermissionHandler, IPostRepo postRepo, AbstractValidator<PostDeleteParams> postValidator, IPostViewMapper postMapper) {
+            _permissionHandler = postPermissionHandler;
+            _postRepo = postRepo;
+            _postValidator = postValidator;
+            _postMapper = postMapper;
         }
         #endregion
 
         #region Publics
         public async Task<PostView> Handle(PostDeleteParams input) {
-            Post p = await postRepo.FindById(input.PostId);
+            Post p = await _postRepo.FindById(input.PostId);
 
             if (p == null) {
                 throw new NotFoundException();
             }
 
-            if (!(await this.permissionHandler.HasPermission(input.User, PermissionAction.DeletePost, p))) {
+            if (!(await this._permissionHandler.HasPermission(input.User, PermissionAction.DeletePost, p))) {
                 throw new AuthorizationException();
             }
 
-            await postValidator.ValidateAndThrowAsync(input);
+            await _postValidator.ValidateAndThrowAsync(input);
 
             p.WasDeleted = true;
-            await postRepo.Update(p);
+            await _postRepo.Update(p);
 
-            return postMapper.Map(p);
+            return _postMapper.Map(p);
         }
         #endregion
     }

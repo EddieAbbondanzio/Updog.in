@@ -6,11 +6,11 @@ namespace Updog.Application {
     /// </summary>
     public sealed class CommentUpdateParams {
         #region Properties
+        public User User { get; }
+
         public int CommentId { get; }
 
         public string Body { get; }
-
-        public User User { get; }
         #endregion
 
         #region Constructor(s)

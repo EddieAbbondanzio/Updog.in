@@ -10,13 +10,13 @@ namespace Updog.Application {
     /// </summary>
     public sealed class PostUpdater : IInteractor<PostUpdateParams, PostView> {
         #region Fields
-        private IPermissionHandler<Post> postPermissionHandler;
+        private IPermissionHandler<Post> _postPermissionHandler;
 
-        private IPostRepo postRepo;
+        private IPostRepo _postRepo;
 
-        private AbstractValidator<PostUpdateParams> postValidator;
+        private AbstractValidator<PostUpdateParams> _postValidator;
 
-        private IMapper<Post, PostView> postMapper;
+        private IPostViewMapper _postMapper;
         #endregion
 
         #region Constructor(s)
@@ -27,37 +27,41 @@ namespace Updog.Application {
         /// <param name="postRepo">CRUD interface for posts.</param>
         /// <param name="postValidator">Data validator.</param>
         /// <param name="postMapper">Mapper to convert post to a post DTO.</param>
-        public PostUpdater(IPermissionHandler<Post> postPermissionHandler, IPostRepo postRepo, AbstractValidator<PostUpdateParams> postValidator, IMapper<Post, PostView> postMapper) {
-            this.postPermissionHandler = postPermissionHandler;
-            this.postRepo = postRepo;
-            this.postValidator = postValidator;
-            this.postMapper = postMapper;
+        public PostUpdater(IPermissionHandler<Post> postPermissionHandler, IPostRepo postRepo, AbstractValidator<PostUpdateParams> postValidator, IPostViewMapper postMapper) {
+            _postPermissionHandler = postPermissionHandler;
+            _postRepo = postRepo;
+            _postValidator = postValidator;
+            _postMapper = postMapper;
         }
         #endregion
 
         #region Publics
         public async Task<PostView> Handle(PostUpdateParams input) {
-            Post post = await postRepo.FindById(input.PostId);
+            Post post = await _postRepo.FindById(input.PostId);
 
             if (post == null) {
                 throw new NotFoundException();
+            }
+
+            if (!(await this._postPermissionHandler.HasPermission(input.User, PermissionAction.UpdatePost, post))) {
+                throw new AuthorizationException();
             }
 
             if (post.Type == PostType.Link) {
                 throw new InvalidOperationException("Link posts can't be updated.");
             }
 
-            if (!(await this.postPermissionHandler.HasPermission(input.User, PermissionAction.UpdatePost, post))) {
-                throw new AuthorizationException();
+            if (post.WasDeleted) {
+                throw new InvalidOperationException("Post has already been deleted.");
             }
 
-            await postValidator.ValidateAndThrowAsync(input);
+            await _postValidator.ValidateAndThrowAsync(input);
 
             post.Body = input.Body;
             post.WasUpdated = true;
-            await postRepo.Update(post);
+            await _postRepo.Update(post);
 
-            return postMapper.Map(post);
+            return _postMapper.Map(post);
         }
         #endregion
     }

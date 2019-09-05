@@ -14,17 +14,17 @@ namespace Updog.Application {
         /// <summary>
         /// The underlying repo for finding comments in the database.
         /// </summary>
-        private ICommentRepo commentRepo;
+        private ICommentRepo _commentRepo;
 
         /// <summary>
         /// Mapper to convert a comment into it's DTO.
         /// </summary>
-        private IMapper<Comment, CommentView> commentMapper;
+        private ICommentViewMapper _commentMapper;
 
         /// <summary>
         /// CRUD interface for posts in the DB.
         /// </summary>
-        private IPostRepo postRepo;
+        private IPostRepo _postRepo;
         #endregion
 
         #region Constructor(s)
@@ -34,21 +34,21 @@ namespace Updog.Application {
         /// <param name="commentRepo">The CRUD interface for comments.</param>
         /// <param name="commentMapper">DTO mapper.</param>
         /// <param name="postRepo">CRUD interface for posts</param>
-        public CommentFinderByPost(ICommentRepo commentRepo, IMapper<Comment, CommentView> commentMapper, IPostRepo postRepo) {
-            this.commentRepo = commentRepo;
-            this.commentMapper = commentMapper;
-            this.postRepo = postRepo;
+        public CommentFinderByPost(ICommentRepo commentRepo, ICommentViewMapper commentMapper, IPostRepo postRepo) {
+            _commentRepo = commentRepo;
+            _commentMapper = commentMapper;
+            _postRepo = postRepo;
         }
         #endregion
 
         #region Publics
         public async Task<IEnumerable<CommentView>> Handle(CommentFinderByPostParams p) {
-            Post post = await postRepo.FindById(p.PostId);
-            IEnumerable<Comment> comments = await commentRepo.FindByPost(p.PostId);
+            Post post = await _postRepo.FindById(p.PostId);
+            IEnumerable<Comment> comments = await _commentRepo.FindByPost(p.PostId);
             List<CommentView> views = new List<CommentView>();
 
             foreach (Comment c in comments) {
-                views.Add(commentMapper.Map(c));
+                views.Add(_commentMapper.Map(c));
             }
 
             return views;

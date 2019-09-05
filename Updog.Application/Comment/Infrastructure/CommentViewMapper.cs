@@ -4,12 +4,12 @@ namespace Updog.Application {
     /// <summary>
     /// Mapper to convert a comment to a comment view.
     /// </summary>
-    public sealed class CommentViewMapper : IMapper<Comment, CommentView> {
+    public sealed class CommentViewMapper : ICommentViewMapper {
         #region Fields
         /// <summary>
         /// Mapper to convert a user to a user view.
         /// </summary>
-        private IMapper<User, UserView> userMapper;
+        private IUserViewMapper userMapper;
         #endregion
 
         #region Constructor(s)
@@ -17,7 +17,7 @@ namespace Updog.Application {
         /// Create a new comment view mapper.
         /// </summary>
         /// <param name="userMapper">The user mapper.</param>
-        public CommentViewMapper(IMapper<User, UserView> userMapper) {
+        public CommentViewMapper(IUserViewMapper userMapper) {
             this.userMapper = userMapper;
         }
         #endregion
