@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Updog.Application.Paging;
 using Updog.Domain;
@@ -22,6 +23,12 @@ namespace Updog.Application {
         /// <param name="name">The name of the space.</param>
         /// <returns>The found space. (if any)</returns>
         Task<Space?> FindByName(string name);
+
+        /// <summary>
+        /// Get all of the default spaces.
+        /// </summary>
+        /// <returns>The list of default spaces.</returns>
+        Task<IEnumerable<Space>> FindDefault();
         #endregion
     }
 }

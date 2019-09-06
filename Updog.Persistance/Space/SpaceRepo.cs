@@ -77,6 +77,20 @@ namespace Updog.Persistance {
         }
 
         /// <summary>
+        /// Find all of the default spaces.
+        /// </summary>
+        /// <returns>The default spaces.</returns>
+        public async Task<IEnumerable<Space>> FindDefault() {
+            using (DbConnection connection = GetConnection()) {
+                return await connection.QueryAsync<SpaceRecord, UserRecord, Space>(
+                    @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id WHERE IsDefault = TRUE",
+                    (SpaceRecord s, UserRecord u) => mapper.Map(Tuple.Create(s, u))
+                );
+
+            }
+        }
+
+        /// <summary>
         /// Add a new space to the database.
         /// </summary>
         /// <param name="entity">The space to add.</param>
