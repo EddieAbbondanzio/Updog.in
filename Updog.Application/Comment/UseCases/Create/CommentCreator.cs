@@ -42,7 +42,7 @@ namespace Updog.Application {
         #region Publics
         public async Task<CommentView> Handle(CommentCreateParams input) {
             await _commentValidator.ValidateAndThrowAsync(input);
-            Comment parent = input.ParentId != 0 ? (await _commentRepo.FindById(input.ParentId)) : null;
+            Comment? parent = input.ParentId != 0 ? (await _commentRepo.FindById(input.ParentId)) : null;
 
             Comment comment = new Comment() {
                 User = input.User,

@@ -7,7 +7,7 @@ namespace Updog.Api {
         /// <summary>
         /// The new description of the space.
         /// </summary>
-        public string Description { get; set; }
+        public string Description { get; set; } = "";
         #endregion
     }
 }

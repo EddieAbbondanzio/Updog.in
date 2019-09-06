@@ -14,13 +14,13 @@ namespace Updog.Application.Tests {
 
         [TestMethod]
         public async Task ReturnsNullIfNoUserFound() {
-            UserView u = await this.userFinder.Handle("null");
+            UserView? u = await this.userFinder.Handle("null");
             Assert.IsNull(u);
         }
 
         [TestMethod]
         public async Task ReturnsUserIfFound() {
-            UserView u = await this.userFinder.Handle("bert");
+            UserView? u = await this.userFinder.Handle("bert");
             Assert.IsNotNull(u);
         }
     }

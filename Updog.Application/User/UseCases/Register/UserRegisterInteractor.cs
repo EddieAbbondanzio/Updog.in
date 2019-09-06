@@ -35,7 +35,7 @@ namespace Updog.Application {
             await _validator.ValidateAndThrowAsync(input);
 
             // Check that the email is free first.
-            User existing = await _userRepo.FindByEmail(input.Email);
+            User? existing = await _userRepo.FindByEmail(input.Email);
             if (existing != null) {
                 throw new CollisionException("Email is already in use");
             }

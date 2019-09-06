@@ -6,7 +6,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to handler a login user use case.
     /// </summary>
-    public sealed class UserLoginInteractor : IInteractor<UserLoginParams, UserLogin> {
+    public sealed class UserLoginInteractor : IInteractor<UserLoginParams, UserLogin?> {
         #region Fields
         private IUserRepo _userRepo;
 
@@ -27,8 +27,8 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<UserLogin> Handle(UserLoginParams input) {
-            User user = await _userRepo.FindByUsername(input.Username);
+        public async Task<UserLogin?> Handle(UserLoginParams input) {
+            User? user = await _userRepo.FindByUsername(input.Username);
 
             if (user == null) {
                 return null;

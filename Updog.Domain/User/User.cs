@@ -26,17 +26,17 @@ namespace Updog.Domain {
         /// <summary>
         /// The unique display name of the user.
         /// </summary>
-        public string Username { get; set; }
+        public string Username { get; set; } = "";
 
         /// <summary>
         /// Contact email (if any)
         /// </summary>
-        public string Email { get; set; }
+        public string Email { get; set; } = "";
 
         /// <summary>
         /// Super secret hash of the password.
         /// </summary>
-        public string PasswordHash { get; set; }
+        public string PasswordHash { get; set; } = "";
 
         /// <summary>
         /// Date the user registered.
@@ -51,7 +51,7 @@ namespace Updog.Domain {
         /// <param name="obj">The other object to check.</param>
         /// <returns>True if the user matches the object.</returns>
         public override bool Equals(object obj) {
-            User u = obj as User;
+            User? u = obj as User;
 
             if (u == null) {
                 return false;

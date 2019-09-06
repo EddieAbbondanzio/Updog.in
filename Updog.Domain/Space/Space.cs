@@ -32,7 +32,7 @@ namespace Updog.Domain {
         /// <summary>
         /// The name of the subspace.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
         /// <summary>
         /// Date and time the space was created.
@@ -42,7 +42,7 @@ namespace Updog.Domain {
         /// <summary>
         /// The user that created the space.
         /// </summary>
-        public User User { get; set; }
+        public User User { get; set; } = null!;
 
         /// <summary>
         /// The number of subscribers the space has.
@@ -55,7 +55,7 @@ namespace Updog.Domain {
         /// </summary>
         public bool IsDefault { get; set; }
 
-        public string Description { get; set; }
+        public string Description { get; set; } = "";
         #endregion
 
         #region Publics
@@ -65,7 +65,7 @@ namespace Updog.Domain {
         /// <param name="obj">The other object to check.</param>
         /// <returns>True if the space matches the object.</returns>
         public override bool Equals(object obj) {
-            Space s = obj as Space;
+            Space? s = obj as Space;
 
             if (s == null) {
                 return false;

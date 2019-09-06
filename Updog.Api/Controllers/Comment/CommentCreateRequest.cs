@@ -19,7 +19,7 @@ namespace Updog.Application {
         /// <summary>
         /// The text of the comment.
         /// </summary>
-        public string Body { get; set; }
+        public string Body { get; set; } = "";
         #endregion
     }
 }

@@ -7,7 +7,7 @@ namespace Updog.Api {
         /// <summary>
         /// The new body of the post.
         /// </summary>
-        public string Body { get; set; }
+        public string Body { get; set; } = "";
         #endregion
     }
 }

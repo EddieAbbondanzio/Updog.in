@@ -31,7 +31,7 @@ namespace Updog.Application {
 
         #region Publics
         public async Task<CommentView> Handle(CommentDeleteParams input) {
-            Comment c = await _repo.FindById(input.CommentId);
+            Comment? c = await _repo.FindById(input.CommentId);
 
             if (c == null) {
                 throw new NotFoundException();

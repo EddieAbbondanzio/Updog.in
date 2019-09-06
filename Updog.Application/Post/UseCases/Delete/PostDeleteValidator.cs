@@ -7,6 +7,8 @@ namespace Updog.Application {
     public sealed class PostDeleteValidator : AbstractValidator<PostDeleteParams> {
         #region Constructor(s)
         public PostDeleteValidator() {
+            RuleFor(p => p.User).NotNull().WithMessage("User performing the action is null.");
+
             RuleFor(p => p.PostId).GreaterThan(0).WithMessage("Id to delete is required.");
         }
         #endregion

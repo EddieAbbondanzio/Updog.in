@@ -7,9 +7,13 @@ namespace Updog.Application {
     /// </summary>
     public sealed class CommentUpdateValidator : AbstractValidator<CommentUpdateParams> {
         public CommentUpdateValidator() {
-            RuleFor(p => p.User).NotNull();
-            RuleFor(p => p.CommentId).NotEqual(0);
-            RuleFor(update => update.Body).NotNull().NotEmpty().MaximumLength(Comment.BodyMaxLength);
+            RuleFor(c => c.User).NotNull().WithMessage("User performing the action is null.");
+
+            RuleFor(c => c.CommentId).GreaterThan(0).WithMessage("Id of comment to update is required.");
+
+            RuleFor(c => c.Body).NotNull().WithMessage("Body is required.");
+            RuleFor(c => c.Body).NotEmpty().WithMessage("Body is required.");
+            RuleFor(c => c.Body).MaximumLength(Comment.BodyMaxLength).WithMessage($"Body must be {Comment.BodyMaxLength} characters or less.");
         }
     }
 }

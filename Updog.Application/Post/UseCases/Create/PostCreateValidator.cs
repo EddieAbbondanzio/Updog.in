@@ -8,6 +8,8 @@ namespace Updog.Application {
     public sealed class PostCreateValidator : AbstractValidator<PostCreateParams> {
         #region Constructor(s)
         public PostCreateValidator() {
+            RuleFor(p => p.User).NotNull().WithMessage("User performing the action is null.");
+
             RuleFor(p => p.Type).IsInEnum().WithMessage("Type must be link, or text.");
 
             RuleFor(p => p.Title).NotNull().WithMessage("Title is required.");

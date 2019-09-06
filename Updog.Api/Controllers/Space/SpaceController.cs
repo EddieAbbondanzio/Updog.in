@@ -17,24 +17,24 @@ namespace Updog.Api {
     [ApiController]
     public sealed class SpaceController : ApiController {
         #region Fields
-        private SpaceFinder spaceFinder;
+        private SpaceFinder _spaceFinder;
 
-        private SpaceFinderByName spaceFinderByName;
+        private SpaceFinderByName _spaceFinderByName;
 
-        private SpaceCreator spaceCreator;
+        private SpaceCreator _spaceCreator;
 
-        private SpaceUpdater spaceUpdater;
+        private SpaceUpdater _spaceUpdater;
 
-        private PostFinderBySpace postFinderBySpace;
+        private PostFinderBySpace _postFinderBySpace;
         #endregion
 
         #region Constructor(s)
         public SpaceController(SpaceFinder spaceFinder, SpaceFinderByName spaceFinderByName, SpaceCreator spaceCreator, SpaceUpdater spaceUpdater, PostFinderBySpace postFinderBySpace) {
-            this.spaceFinder = spaceFinder;
-            this.spaceFinderByName = spaceFinderByName;
-            this.spaceCreator = spaceCreator;
-            this.spaceUpdater = spaceUpdater;
-            this.postFinderBySpace = postFinderBySpace;
+            this._spaceFinder = spaceFinder;
+            this._spaceFinderByName = spaceFinderByName;
+            this._spaceCreator = spaceCreator;
+            this._spaceUpdater = spaceUpdater;
+            this._postFinderBySpace = postFinderBySpace;
         }
         #endregion
 
@@ -42,7 +42,7 @@ namespace Updog.Api {
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult> Find([FromQuery]int pageNumber, [FromQuery] int pageSize = Space.PageSize) {
-            PagedResultSet<SpaceView> spaces = await this.spaceFinder.Handle(new SpaceFindParams(pageNumber, pageSize));
+            PagedResultSet<SpaceView> spaces = await this._spaceFinder.Handle(new SpaceFindParams(pageNumber, pageSize));
             SetContentRangeHeader(spaces.Pagination);
             return Ok(spaces);
         }
@@ -56,7 +56,7 @@ namespace Updog.Api {
         [HttpGet("{name}")]
         [AllowAnonymous]
         public async Task<ActionResult> FindByName(string name) {
-            SpaceView s = await this.spaceFinderByName.Handle(name);
+            SpaceView? s = await this._spaceFinderByName.Handle(name);
 
             if (s != null) {
                 return Ok(s);
@@ -71,12 +71,8 @@ namespace Updog.Api {
         /// <param name="request">The incoming reuqest</param>
         [HttpPost]
         public async Task<ActionResult> CreateSpace(SpaceCreateRequest request) {
-            try {
-                SpaceView s = await this.spaceCreator.Handle(new SpaceCreateParams(request.Name, request.Description, User));
-                return Ok(s);
-            } catch (ValidationException ex) {
-                return BadRequest(ex.Message);
-            }
+            SpaceView s = await this._spaceCreator.Handle(new SpaceCreateParams(request.Name, request.Description, User!));
+            return Ok(s);
         }
 
         /// <summary>
@@ -84,30 +80,8 @@ namespace Updog.Api {
         /// </summary>
         [HttpPatch("{name}")]
         public async Task<ActionResult> UpdateSpace(string name, SpaceUpdateRequest request) {
-            try {
-                SpaceView s = await this.spaceUpdater.Handle(new SpaceUpdateParams(name, request.Description, User));
-                return Ok(s);
-            } catch (ValidationException ex) {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Subscribe to a sub space.
-        /// </summary>
-        /// <param name="name">The name of the space.</param>
-        [HttpPost("{name}/subscribe")]
-        public async Task<ActionResult> SubscribeToSpace(string name) {
-            throw new Exception();
-        }
-
-        /// <summary>
-        /// Cancel a subscription to a space.
-        /// </summary>
-        /// <param name="name">The name of the space to cancel.</param>
-        [HttpDelete("{name}/subscribe")]
-        public async Task<ActionResult> DesubscribeFromSpace(string name) {
-            throw new Exception();
+            SpaceView s = await this._spaceUpdater.Handle(new SpaceUpdateParams(name, request.Description, User!));
+            return Ok(s);
         }
 
         /// <summary>
@@ -119,7 +93,7 @@ namespace Updog.Api {
         /// <returns>The posts found.</returns>
         [HttpGet("{name}/post/new")]
         public async Task<ActionResult> FindPosts(string name, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            PagedResultSet<PostView> posts = await this.postFinderBySpace.Handle(new PostFindBySpaceParams(name, pageNumber, pageSize));
+            PagedResultSet<PostView> posts = await this._postFinderBySpace.Handle(new PostFindBySpaceParams(name, pageNumber, pageSize));
             SetContentRangeHeader(posts.Pagination);
             return Ok(posts);
         }

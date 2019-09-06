@@ -6,7 +6,7 @@ namespace Updog.Application {
     /// </summary>
     public sealed class CollisionException : Exception {
         #region Constructor(s)
-        public CollisionException(string message = null) : base(message) { }
+        public CollisionException(string message = "") : base(message) { }
         #endregion
     }
 }

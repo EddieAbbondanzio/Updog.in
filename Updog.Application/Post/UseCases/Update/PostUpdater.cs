@@ -37,7 +37,7 @@ namespace Updog.Application {
 
         #region Publics
         public async Task<PostView> Handle(PostUpdateParams input) {
-            Post post = await _postRepo.FindById(input.PostId);
+            Post? post = await _postRepo.FindById(input.PostId);
 
             if (post == null) {
                 throw new NotFoundException();

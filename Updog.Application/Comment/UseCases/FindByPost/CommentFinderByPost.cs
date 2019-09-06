@@ -43,7 +43,13 @@ namespace Updog.Application {
 
         #region Publics
         public async Task<IEnumerable<CommentView>> Handle(CommentFinderByPostParams p) {
-            Post post = await _postRepo.FindById(p.PostId);
+            Post? post = await _postRepo.FindById(p.PostId);
+
+            if (post == null) {
+                throw new NotFoundException();
+            }
+
+
             IEnumerable<Comment> comments = await _commentRepo.FindByPost(p.PostId);
             List<CommentView> views = new List<CommentView>();
 

@@ -9,19 +9,20 @@ namespace Updog.Api {
     /// <summary>
     /// End point for managing the logged in user.
     /// </summary>
+    [Authorize]
     [Route("api/me")]
     [ApiController]
     public sealed class MeController : ApiController {
         #region Fields
-        public UserUpdater userUpdater;
+        public UserUpdater _userUpdater;
 
-        public UserPasswordUpdater passwordUpdater;
+        public UserPasswordUpdater _passwordUpdater;
         #endregion
 
         #region Constructor(s)
         public MeController(UserUpdater userUpdater, UserPasswordUpdater passwordUpdater) {
-            this.userUpdater = userUpdater;
-            this.passwordUpdater = passwordUpdater;
+            this._userUpdater = userUpdater;
+            this._passwordUpdater = passwordUpdater;
         }
         #endregion
 
@@ -30,9 +31,8 @@ namespace Updog.Api {
         /// Get the email of the user.
         /// </summary>
         [HttpGet("email")]
-        [Authorize]
         public ActionResult GetEmail() {
-            return Ok(User.Email);
+            return Ok(User!.Email);
         }
 
         /// <summary>
@@ -40,9 +40,8 @@ namespace Updog.Api {
         /// </summary>
         /// <param name="updateRequest">The new user info.</param>
         [HttpPut]
-        [Authorize]
         public async Task<ActionResult> Update([FromBody] MeUpdateRequest updateRequest) {
-            await userUpdater.Handle(new UpdateUserParams(User, updateRequest.Email));
+            await _userUpdater.Handle(new UpdateUserParams(User!, updateRequest.Email));
             return Ok();
         }
 
@@ -50,10 +49,9 @@ namespace Updog.Api {
         /// Update the password of the logged in user.
         /// </summary>
         /// <param name="updatePasswordRequest">The new password.</param>
-        [Authorize]
         [HttpPut("password")]
-        public async Task<ActionResult> UpdatePassword([FromBody] MeUpdatePasswordReqest updatePasswordRequest) {
-            await passwordUpdater.Handle(new UserPasswordUpdateParams(User, updatePasswordRequest.Password));
+        public async Task<ActionResult> UpdatePassword([FromBody] MeUpdatePasswordRequest updatePasswordRequest) {
+            await _passwordUpdater.Handle(new UserPasswordUpdateParams(User!, updatePasswordRequest.Password));
             return Ok();
         }
         #endregion

@@ -8,11 +8,11 @@ namespace Updog.Application {
         #region Properties
         public PostType Type { get; set; }
 
-        public string Title { get; set; }
+        public string Title { get; set; } = "";
 
-        public string Body { get; set; }
+        public string Body { get; set; } = "";
 
-        public string Space { get; set; }
+        public string Space { get; set; } = "";
         #endregion
     }
 }

@@ -12,12 +12,12 @@ namespace Updog.Domain {
         /// <summary>
         /// The space the subscription is for.
         /// </summary>
-        public Space Space { get; set; }
+        public Space Space { get; set; } = null!;
 
         /// <summary>
         /// The user it belongs to.
         /// </summary>
-        public User User { get; set; }
+        public User User { get; set; } = null!;
         #endregion
 
         #region Publics
@@ -27,7 +27,7 @@ namespace Updog.Domain {
         /// <param name="obj">The other object to check.</param>
         /// <returns>True if the user matches the object.</returns>
         public override bool Equals(object obj) {
-            Subscription s = obj as Subscription;
+            Subscription? s = obj as Subscription;
 
             if (s == null) {
                 return false;

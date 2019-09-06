@@ -28,7 +28,7 @@ namespace Updog.Application {
         /// <param name="username">The username they want.</param>
         /// <param name="password">The password they want to use.</param>
         /// <param name="email">The contact email (if any).</param>
-        public UserRegisterParams(string username, string password, string email = null) {
+        public UserRegisterParams(string username, string password, string email = "") {
             Username = username;
             Password = password;
             Email = email;

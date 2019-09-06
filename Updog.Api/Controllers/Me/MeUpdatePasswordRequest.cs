@@ -1,7 +1,14 @@
 namespace Updog.Api {
-    public sealed class MeUpdatePasswordReqest {
+    /// <summary>
+    /// Request in the "Me" controller to update a password.
+    /// </summary>
+    public sealed class MeUpdatePasswordRequest {
         #region Properties
-        public string Password { get; set; }
+        /// <summary>
+        /// The new password the user wants to use.
+        /// </summary>
+        /// <value></value>
+        public string Password { get; set; } = "";
         #endregion
     }
 }

@@ -8,12 +8,17 @@ namespace Updog.Application {
     public sealed class SpaceCreateValidator : AbstractValidator<SpaceCreateParams> {
         #region Constructor(s)
         public SpaceCreateValidator(ISpaceRepo spaceRepo) {
-            RuleFor(pars => pars.Name).NotNull().NotEmpty().MaximumLength(Space.NameMaxLength).Matches(Regex.UrlSafe).MustAsync(async (name, cancellationToken) => {
-                Space existingSpace = await spaceRepo.FindByName(name);
-                return existingSpace == null;
-            });
-            RuleFor(pars => pars.Description).NotNull().MaximumLength(Space.DescriptionMaxLength);
-            RuleFor(pars => pars.User).NotNull();
+            RuleFor(s => s.User).NotNull().WithMessage("User performing the action is null.");
+
+            RuleFor(s => s.Name).NotNull().WithMessage("Name is required.");
+            RuleFor(s => s.Name).NotEmpty().WithMessage("Name is required.");
+            RuleFor(s => s.Name).MaximumLength(Space.NameMaxLength).WithMessage($"Name must be {Space.NameMaxLength} characters or less.");
+            RuleFor(s => s.Name).Matches(Regex.UrlSafe).WithMessage("Name may only contain letters, numbers, underscores, or hypens.");
+
+            RuleFor(s => s.Description).NotNull().WithMessage("Description is required.");
+            RuleFor(s => s.Description).NotEmpty().WithMessage("Description is required.");
+            RuleFor(s => s.Description).MaximumLength(Space.DescriptionMaxLength).WithMessage($"Description must be {Space.DescriptionMaxLength} characters or less.");
+
         }
         #endregion
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
@@ -18,6 +19,9 @@ public class ExceptionHandler {
     public async Task Invoke(HttpContext context) {
         try {
             await next.Invoke(context);
+        } catch (ValidationException ex) {
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(ex.Message));
         } catch (Exception ex) {
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             await context.Response.WriteAsync(JsonConvert.SerializeObject("Something went horribly wrong."));

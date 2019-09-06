@@ -15,11 +15,11 @@ namespace Updog.Application.Tests {
             throw new System.NotImplementedException();
         }
 
-        public Task<User> FindById(int id) {
+        public Task<User?> FindById(int id) {
             throw new System.NotImplementedException();
         }
 
-        public async Task<User> FindByUsername(string username) {
+        public async Task<User?> FindByUsername(string username) {
             if (username == "bert") {
                 return new User() {
                     Id = 100,
@@ -32,7 +32,7 @@ namespace Updog.Application.Tests {
             }
         }
 
-        public async Task<User> FindByEmail(string email) {
+        public async Task<User?> FindByEmail(string email) {
             if (email == "bert@fake.com") {
                 return new User() {
                     Id = 100,

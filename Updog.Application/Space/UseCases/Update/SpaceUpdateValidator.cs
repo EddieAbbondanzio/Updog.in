@@ -7,7 +7,11 @@ namespace Updog.Application {
     /// </summary>
     public sealed class SpaceUpdateValidator : AbstractValidator<SpaceUpdateParams> {
         public SpaceUpdateValidator() {
-            RuleFor(update => update.Description).NotNull().NotEmpty().MaximumLength(Space.DescriptionMaxLength);
+            RuleFor(s => s.User).NotNull().WithMessage("User performing the action is null.");
+
+            RuleFor(s => s.Description).NotNull().WithMessage("Description is required.");
+            RuleFor(s => s.Description).NotEmpty().WithMessage("Description is required.");
+            RuleFor(s => s.Description).MaximumLength(Space.DescriptionMaxLength).WithMessage($"Description must be {Space.DescriptionMaxLength} characters or less.");
         }
     }
 }

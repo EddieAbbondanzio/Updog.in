@@ -8,12 +8,12 @@ namespace Updog.Api {
         /// The desired name of the space.
         /// </summary>
         /// <value></value>
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
         /// <summary>
         /// The text description of the space to create.
         /// </summary>
-        public string Description { get; set; }
+        public string Description { get; set; } = "";
         #endregion
     }
 }

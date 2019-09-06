@@ -5,7 +5,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to find a user by their username.
     /// </summary>
-    public sealed class UserFinderByUsername : IInteractor<string, UserView> {
+    public sealed class UserFinderByUsername : IInteractor<string, UserView?> {
         #region Fields
         private IUserRepo _userRepo;
 
@@ -25,8 +25,8 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<UserView> Handle(string username) {
-            User user = await _userRepo.FindByUsername(username);
+        public async Task<UserView?> Handle(string username) {
+            User? user = await _userRepo.FindByUsername(username);
 
             if (user == null) {
                 return null;

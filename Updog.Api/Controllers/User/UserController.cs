@@ -14,9 +14,9 @@ namespace Updog.Api {
     [ApiController]
     public sealed class UserController : ApiController {
         #region Fields
-        private UserFinderByUsername userFinder;
+        private UserFinderByUsername _userFinder;
 
-        private UserRegisterInteractor userRegistrar;
+        private UserRegisterInteractor _userRegistrar;
         #endregion
 
         #region Constructor(s)
@@ -27,8 +27,8 @@ namespace Updog.Api {
                 UserFinderByUsername userFinder,
                 UserRegisterInteractor userRegistrar
             ) {
-            this.userFinder = userFinder;
-            this.userRegistrar = userRegistrar;
+            this._userFinder = userFinder;
+            this._userRegistrar = userRegistrar;
         }
         #endregion
 
@@ -40,7 +40,7 @@ namespace Updog.Api {
         [HttpGet("{username}")]
         [HttpHead("{username}")]
         public async Task<ActionResult> FindByUsername(string username) {
-            UserView user = await userFinder.Handle(username);
+            UserView? user = await _userFinder.Handle(username);
             return user != null ? Ok(user) : NotFound() as ActionResult;
         }
 
@@ -52,12 +52,8 @@ namespace Updog.Api {
         public async Task<ActionResult> Register([FromBody] UserRegisterRequest req) {
             UserRegisterParams registration = new UserRegisterParams(req.Username, req.Password, req.Email);
 
-            try {
-                UserLogin login = await userRegistrar.Handle(registration);
-                return login != null ? Ok(login) : BadRequest("Registration failed.") as ActionResult;
-            } catch (ValidationException ex) {
-                return BadRequest(new ValidationError(ex));
-            }
+            UserLogin login = await _userRegistrar.Handle(registration);
+            return login != null ? Ok(login) : BadRequest("Registration failed.") as ActionResult;
         }
         #endregion
     }

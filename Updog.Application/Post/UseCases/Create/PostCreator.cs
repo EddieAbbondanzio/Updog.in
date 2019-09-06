@@ -7,7 +7,7 @@ namespace Updog.Application {
     /// <summary>
     /// Adds new posts to the system.
     /// </summary>
-    public sealed class PostCreator : IInteractor<PostCreateParams, PostView> {
+    public sealed class PostCreator : IInteractor<PostCreateParams, PostView?> {
         #region Fields
         private IPostRepo _postRepo;
 
@@ -28,10 +28,10 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<PostView> Handle(PostCreateParams input) {
+        public async Task<PostView?> Handle(PostCreateParams input) {
             await _postValidator.ValidateAndThrowAsync(input);
 
-            Space s = await _spaceRepo.FindByName(input.Space);
+            Space? s = await _spaceRepo.FindByName(input.Space);
 
             if (s == null) {
                 throw new NotFoundException($"No space with name ${input.Space} found.");

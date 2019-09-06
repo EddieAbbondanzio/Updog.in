@@ -31,12 +31,12 @@ namespace Updog.Domain {
         /// <summary>
         /// OP of the post.
         /// </summary>
-        public User User { get; set; }
+        public User User { get; set; } = null!;
 
         /// <summary>
         /// The sub space it was submitted to.
         /// </summary>
-        public Space Space { get; set; }
+        public Space Space { get; set; } = null!;
 
         /// <summary>
         /// The content type of the post.
@@ -47,12 +47,12 @@ namespace Updog.Domain {
         /// The title of the post.
         /// </summary>
         /// <value></value>
-        public string Title { get; set; }
+        public string Title { get; set; } = "";
 
         /// <summary>
         /// The body of the post. Either a URL or text body.
         /// </summary>
-        public string Body { get; set; }
+        public string Body { get; set; } = "";
 
         /// <summary>
         /// When the post was created.
@@ -85,7 +85,7 @@ namespace Updog.Domain {
         /// <param name="obj">The other object to check.</param>
         /// <returns>True if the post matches</returns>
         public override bool Equals(object obj) {
-            Post p = obj as Post;
+            Post? p = obj as Post;
 
             if (p == null) {
                 return false;

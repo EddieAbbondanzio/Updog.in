@@ -17,7 +17,7 @@ namespace Updog.Persistance {
         /// <summary>
         /// Mapper to convert the post record into its entity.
         /// </summary>
-        private IPostRecordMapper postMapper;
+        private IPostRecordMapper _postMapper;
         #endregion
 
         #region Constructor(s)
@@ -27,7 +27,7 @@ namespace Updog.Persistance {
         /// <param name="database">The active database.</param>
         /// <param name="postMapper">The post entity mapper</param>
         public PostRepo(IDatabase database, IPostRecordMapper postMapper) : base(database) {
-            this.postMapper = postMapper;
+            this._postMapper = postMapper;
         }
         #endregion
 
@@ -49,7 +49,7 @@ namespace Updog.Persistance {
                     LIMIT @Limit
                     OFFSET @Offset",
                     (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
-                        return postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                        return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
                     },
                     BuildPaginationParams(pageNumber, pageSize)
                 );
@@ -83,7 +83,7 @@ namespace Updog.Persistance {
                     LIMIT @Limit
                     OFFSET @Offset",
                     (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
-                        return postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                        return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
                     },
                     BuildPaginationParams(new { Username = username }, pageNumber, pageSize)
                 );
@@ -118,7 +118,7 @@ namespace Updog.Persistance {
                     LIMIT @Limit
                     OFFSET @Offset",
                     (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
-                        return postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                        return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
                     },
                     BuildPaginationParams(new { Name = space }, pageNumber, pageSize)
                 );
@@ -137,7 +137,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="id">The ID of the post.</param>
         /// <returns>The post (if found).</returns>
-        public async Task<Post> FindById(int id) {
+        public async Task<Post?> FindById(int id) {
             using (DbConnection connection = GetConnection()) {
                 return (await connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, UserRecord, Post>(
                     @"SELECT * FROM Post 
@@ -146,7 +146,7 @@ namespace Updog.Persistance {
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     WHERE Post.Id = @Id;",
                     (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
-                        return postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                        return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
                     },
                     new { Id = id }
                 )).FirstOrDefault();
@@ -164,7 +164,7 @@ namespace Updog.Persistance {
                     (Title, Body, Type, CreationDate, UserId, WasUpdated, WasDeleted, CommentCount) 
                     VALUES 
                     (@Title, @Body, @Type, @CreationDate, @UserId, @WasUpdated, @WasDeleted, @CommentCount) RETURNING Id;",
-                    postMapper.Reverse(post).Item1
+                    _postMapper.Reverse(post).Item1
                 );
             }
         }
@@ -186,7 +186,7 @@ namespace Updog.Persistance {
                     WasDeleted = @WasDeleted, 
                     CommentCount = @CommentCount 
                     WHERE Id = @Id",
-                    postMapper.Reverse(post).Item1
+                    _postMapper.Reverse(post).Item1
                 );
             }
         }
@@ -199,7 +199,7 @@ namespace Updog.Persistance {
             using (DbConnection connection = GetConnection()) {
                 await connection.ExecuteAsync(
                     @"UPDATE Post SET WasDeleted = TRUE WHERE Id = @Id",
-                    postMapper.Reverse(post).Item1
+                    _postMapper.Reverse(post).Item1
                 );
             }
         }

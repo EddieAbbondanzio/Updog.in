@@ -13,7 +13,7 @@ namespace Updog.Application.Tests {
 
         [TestMethod]
         public async Task FailsUsernameIfNull() {
-            UserRegisterParams reg = new UserRegisterParams(null, "password");
+            UserRegisterParams reg = new UserRegisterParams(null!, "password");
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }
@@ -48,7 +48,7 @@ namespace Updog.Application.Tests {
 
         [TestMethod]
         public async Task FailsPasswordWhenNull() {
-            UserRegisterParams reg = new UserRegisterParams("bert", null);
+            UserRegisterParams reg = new UserRegisterParams("bert", null!);
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }
@@ -69,7 +69,7 @@ namespace Updog.Application.Tests {
 
         [TestMethod]
         public async Task PassesEmailIfNull() {
-            UserRegisterParams reg = new UserRegisterParams("bert", "password", null);
+            UserRegisterParams reg = new UserRegisterParams("bert", "password", null!);
             var result = await validator.ValidateAsync(reg);
             Assert.IsFalse(result.IsValid);
         }

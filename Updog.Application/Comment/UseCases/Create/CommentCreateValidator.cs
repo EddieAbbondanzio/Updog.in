@@ -8,7 +8,15 @@ namespace Updog.Application {
     public sealed class CommentCreateValidator : AbstractValidator<CommentCreateParams> {
         #region Constructor(s)
         public CommentCreateValidator() {
-            RuleFor(reg => reg.Body).NotNull().NotEmpty().MaximumLength(Comment.BodyMaxLength);
+            RuleFor(c => c.User).NotNull().WithMessage("User performing the action is null.");
+
+            RuleFor(c => c.PostId).GreaterThan(0).WithMessage("Post Id is required.");
+
+            RuleFor(c => c.Body).NotNull().WithMessage("Body is required.");
+
+            RuleFor(c => c.Body).NotNull().WithMessage("Body is required.");
+            RuleFor(c => c.Body).NotEmpty().WithMessage("Body is required.");
+            RuleFor(c => c.Body).MaximumLength(Comment.BodyMaxLength).WithMessage($"Body must be {Comment.BodyMaxLength} characters or less.");
         }
         #endregion
     }

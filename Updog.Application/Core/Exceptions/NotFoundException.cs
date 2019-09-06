@@ -6,7 +6,7 @@ namespace Updog.Application {
     /// </summary>
     public sealed class NotFoundException : Exception {
         #region Constructor(s)
-        public NotFoundException(string message = null) : base(message) { }
+        public NotFoundException(string message = "") : base(message) { }
         #endregion
     }
 }

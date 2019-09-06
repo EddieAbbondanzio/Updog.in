@@ -5,7 +5,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to find a comment by it's ID.
     /// </summary>
-    public sealed class CommentFinderById : IInteractor<int, CommentView> {
+    public sealed class CommentFinderById : IInteractor<int, CommentView?> {
         #region Fields
         /// <summary>
         /// CRUD interface for managing comments in the database.
@@ -31,8 +31,8 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<CommentView> Handle(int input) {
-            Comment comment = await _commentRepo.FindById(input);
+        public async Task<CommentView?> Handle(int input) {
+            Comment? comment = await _commentRepo.FindById(input);
 
             if (comment == null) {
                 return null;

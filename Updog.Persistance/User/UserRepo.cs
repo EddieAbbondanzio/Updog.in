@@ -34,7 +34,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="id">The id to look for.</param>
         /// <returns>The user with the id.</returns>
-        public async Task<User> FindById(int id) {
+        public async Task<User?> FindById(int id) {
             using (DbConnection connection = GetConnection()) {
                 return await connection.QuerySingleOrDefaultAsync<User>(
                     @"SELECT * FROM ""User"" WHERE Id = @Id;",
@@ -48,7 +48,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="username">The username to look for.</param>
         /// <returns>The user with the username.</returns>
-        public async Task<User> FindByUsername(string username) {
+        public async Task<User?> FindByUsername(string username) {
             using (DbConnection connection = GetConnection()) {
                 return await connection.QueryFirstOrDefaultAsync<User>(
                     @"SELECT * FROM ""User"" WHERE Username = @Username;",
@@ -62,7 +62,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="email">The email to look for.</param>
         /// <returns>The user found (if any).</returns>
-        public async Task<User> FindByEmail(string email) {
+        public async Task<User?> FindByEmail(string email) {
             using (DbConnection connection = GetConnection()) {
                 return await connection.QueryFirstOrDefaultAsync<User>(
                     @"SELECT * FROM ""User"" WHERE Email = @Email;",

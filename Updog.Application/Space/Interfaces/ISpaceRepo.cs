@@ -21,7 +21,7 @@ namespace Updog.Application {
         /// </summary>
         /// <param name="name">The name of the space.</param>
         /// <returns>The found space. (if any)</returns>
-        Task<Space> FindByName(string name);
+        Task<Space?> FindByName(string name);
         #endregion
     }
 }

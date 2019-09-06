@@ -27,6 +27,11 @@ namespace Updog.Application {
         public async Task<SpaceView> Handle(SpaceCreateParams input) {
             await _spaceValidator.ValidateAndThrowAsync(input);
 
+            Space? existing = await _spaceRepo.FindByName(input.Name);
+            if (existing != null) {
+                throw new CollisionException();
+            }
+
             Space s = new Space() {
                 Name = input.Name,
                 Description = input.Description,

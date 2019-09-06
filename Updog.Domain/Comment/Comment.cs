@@ -24,27 +24,27 @@ namespace Updog.Domain {
         /// <summary>
         /// The ID of the user that made the comment.
         /// </summary>
-        public User User { get; set; }
+        public User User { get; set; } = null!;
 
         /// <summary>
         /// The parent post.
         /// </summary>
-        public Post Post { get; set; }
+        public Post Post { get; set; } = null!;
 
         /// <summary>
         /// The parent comment (if null it is a top level comment).
         /// </summary>
-        public Comment Parent { get; set; }
+        public Comment? Parent { get; set; }
 
         /// <summary>
         /// The comment children.
         /// </summary>
-        public List<Comment> Children { get; set; }
+        public List<Comment> Children { get; set; } = new List<Comment>();
 
         /// <summary>
         /// The text of the comment.
         /// </summary>
-        public string Body { get; set; }
+        public string Body { get; set; } = "";
 
         /// <summary>
         /// The date the comment was made.
@@ -63,12 +63,6 @@ namespace Updog.Domain {
         public bool WasDeleted { get; set; }
         #endregion
 
-        #region Constructor(s)
-        public Comment() {
-            Children = new List<Comment>();
-        }
-        #endregion
-
         #region Publics
         /// <summary>
         /// Check to see if the comment is equal to another object.
@@ -76,7 +70,7 @@ namespace Updog.Domain {
         /// <param name="obj">The other object to check.</param>
         /// <returns>True if the other object matches the comment.</returns>
         public override bool Equals(object obj) {
-            Comment c = obj as Comment;
+            Comment? c = obj as Comment;
 
             if (c == null) {
                 return false;

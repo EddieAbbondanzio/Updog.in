@@ -33,7 +33,7 @@ namespace Updog.Application {
 
         #region Publics
         public async Task<CommentView> Handle(CommentUpdateParams input) {
-            Comment comment = await _commentRepo.FindById(input.CommentId);
+            Comment? comment = await _commentRepo.FindById(input.CommentId);
 
             if (comment == null) {
                 throw new NotFoundException();

@@ -44,7 +44,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="commentId">The ID of the comment.</param>
         /// <returns>The comment found.</returns>
-        public async Task<Comment> FindById(int commentId) {
+        public async Task<Comment?> FindById(int commentId) {
             // This doesn't pull in comment children and it should.
             using (DbConnection connection = GetConnection()) {
                 IEnumerable<Comment> comments = await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
@@ -65,14 +65,6 @@ namespace Updog.Persistance {
                     return null;
                 }
 
-                //Wipe out parent. We don't care about it.
-                // foreach (Comment c in comments) {
-                //     if (c.Id == commentId) {
-                //         c.Parent = null;
-                //     }
-                // }
-
-                // return comment;
                 return BuildCommentTree(comments, commentId)[0];
             }
         }
@@ -83,10 +75,10 @@ namespace Updog.Persistance {
         /// <param name="postId">The ID of the post.</param>
         /// <returns>It's children comments.</returns>
         public async Task<IEnumerable<Comment>> FindByPost(int postId) {
-            Post p = await postRepo.FindById(postId);
+            Post? p = await postRepo.FindById(postId);
 
             if (p == null) {
-                return null;
+                return Enumerable.Empty<Comment>();
             }
 
             using (DbConnection connection = GetConnection()) {

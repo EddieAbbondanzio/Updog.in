@@ -51,15 +51,34 @@ namespace Updog.Application {
         /// <param name="creationDate">The time of commenting</param>
         /// <param name="wasUpdated">If the comment was modified</param>
         /// <param name="wasDeleted">If the comment was deleted</param>
-        /// <param name="children">The children comments</param>
-        public CommentView(int id, UserView user, string body, DateTime creationDate, bool wasUpdated, bool wasDeleted, List<CommentView> children = null) {
+        public CommentView(int id, UserView user, string body, DateTime creationDate, bool wasUpdated, bool wasDeleted) {
             Id = id;
             User = user;
             Body = body;
             CreationDate = creationDate;
             WasUpdated = wasUpdated;
             WasDeleted = wasDeleted;
-            Children = children ?? new List<CommentView>();
+            Children = new List<CommentView>();
+        }
+
+        /// <summary>
+        /// Create a new comment view.
+        /// </summary>
+        /// <param name="id">The ID of the comment.</param>
+        /// <param name="user">The user that made the comment.</param>
+        /// <param name="body">The text of the comment.</param>
+        /// <param name="creationDate">The time of commenting</param>
+        /// <param name="wasUpdated">If the comment was modified</param>
+        /// <param name="wasDeleted">If the comment was deleted</param>
+        /// <param name="children">The children comments</param>
+        public CommentView(int id, UserView user, string body, DateTime creationDate, bool wasUpdated, bool wasDeleted, List<CommentView> children) {
+            Id = id;
+            User = user;
+            Body = body;
+            CreationDate = creationDate;
+            WasUpdated = wasUpdated;
+            WasDeleted = wasDeleted;
+            Children = children;
         }
         #endregion
     }

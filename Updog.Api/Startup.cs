@@ -58,7 +58,7 @@ namespace Updog.Api {
                         IUserRepo userRepo = c.HttpContext.RequestServices.GetService<IUserRepo>();
                         IIdentity identity = c.Principal.Identity;
 
-                        User u = await userRepo.FindById(userId);
+                        User? u = await userRepo.FindById(userId);
 
                         if (u != null) {
                             u.AddIdentity(identity as ClaimsIdentity);
@@ -136,6 +136,10 @@ namespace Updog.Api {
             services.AddTransient<SpaceUpdater>();
             services.AddTransient<AbstractValidator<SpaceCreateParams>, SpaceCreateValidator>();
             services.AddTransient<AbstractValidator<SpaceUpdateParams>, SpaceUpdateValidator>();
+
+            services.AddSingleton<ISubscriptionViewMapper, SubscriptionViewMapper>();
+            services.AddSingleton<ISubscriptionRecordMapper, SubscriptionRecordMapper>();
+            services.AddTransient<ISubscriptionRepo, SubscriptionRepo>();
 
         }
 

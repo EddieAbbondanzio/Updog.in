@@ -7,8 +7,9 @@ namespace Updog.Application {
     public sealed class CommentDeleteValidator : AbstractValidator<CommentDeleteParams> {
         #region Constructor(s)
         public CommentDeleteValidator() {
-            RuleFor(p => p.User).NotNull();
-            RuleFor(p => p.CommentId).NotEqual(0);
+            RuleFor(c => c.User).NotNull().WithMessage("User performing the action is null.");
+
+            RuleFor(c => c.CommentId).GreaterThan(0).WithMessage("Id of comment to delete is required.");
         }
         #endregion
     }

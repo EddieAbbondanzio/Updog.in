@@ -29,7 +29,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="id">The ID to look for.</param>
         /// <returns>The space found (if any).</returns>
-        public async Task<Space> FindById(int id) {
+        public async Task<Space?> FindById(int id) {
             using (DbConnection connection = GetConnection()) {
                 return (await connection.QueryAsync<SpaceRecord, UserRecord, Space>(
                     @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id WHERE Space.Id = @Id",
@@ -44,7 +44,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="name">The name of the space to look for.</param>
         /// <returns>The space found (if any).</returns>
-        public async Task<Space> FindByName(string name) {
+        public async Task<Space?> FindByName(string name) {
             using (DbConnection connection = GetConnection()) {
                 return (await connection.QueryAsync<SpaceRecord, UserRecord, Space>(
                     @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id WHERE Space.Name = @Name",

@@ -29,7 +29,7 @@ namespace Updog.Application {
 
         #region Publics
         public async Task<SpaceView> Handle(SpaceUpdateParams input) {
-            Space s = await this._spaceRepo.FindByName(input.Name);
+            Space? s = await this._spaceRepo.FindByName(input.Name);
 
             if (s == null) {
                 throw new NotFoundException();

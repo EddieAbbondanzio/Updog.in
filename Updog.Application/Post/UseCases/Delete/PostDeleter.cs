@@ -6,7 +6,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to handle deleting posts.
     /// </summary>
-    public sealed class PostDeleter : IInteractor<PostDeleteParams, PostView> {
+    public sealed class PostDeleter : IInteractor<PostDeleteParams, PostView?> {
         #region Fields
         private IPermissionHandler<Post> _permissionHandler;
 
@@ -34,8 +34,8 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<PostView> Handle(PostDeleteParams input) {
-            Post p = await _postRepo.FindById(input.PostId);
+        public async Task<PostView?> Handle(PostDeleteParams input) {
+            Post? p = await _postRepo.FindById(input.PostId);
 
             if (p == null) {
                 throw new NotFoundException();

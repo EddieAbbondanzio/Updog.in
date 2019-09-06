@@ -27,9 +27,9 @@ namespace Updog.Application {
             await _validator.ValidateAndThrowAsync(input);
 
             //Is the email already in use?
-            User existing = await _repo.FindByEmail(input.Email);
+            User? existing = await _repo.FindByEmail(input.Email);
 
-            if (!existing.Equals(input.User)) {
+            if (!existing?.Equals(input.User) ?? false) {
                 throw new CollisionException("Email is already in use.");
             }
 

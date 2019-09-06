@@ -16,7 +16,7 @@ namespace Updog.Application.Tests {
 
         [TestMethod]
         public async Task FailsIfPasswordIsNull() {
-            var result = await validator.ValidateAsync(new UserPasswordUpdateParams(user, null));
+            var result = await validator.ValidateAsync(new UserPasswordUpdateParams(user, null!));
             Assert.IsFalse(result.IsValid);
         }
 

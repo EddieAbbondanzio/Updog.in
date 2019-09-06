@@ -5,7 +5,7 @@ namespace Updog.Application {
     /// <summary>
     /// Use case handler to find a post by it's unique ID.
     /// </summary>
-    public sealed class PostFinderById : IInteractor<int, PostView> {
+    public sealed class PostFinderById : IInteractor<int, PostView?> {
         #region Fields
         private IPostRepo _postRepo;
 
@@ -29,8 +29,8 @@ namespace Updog.Application {
         /// </summary>
         /// <param name="input">The ID to look for.</param>
         /// <returns>The matching post found.</returns>
-        public async Task<PostView> Handle(int input) {
-            Post p = await _postRepo.FindById(input);
+        public async Task<PostView?> Handle(int input) {
+            Post? p = await _postRepo.FindById(input);
 
             if (p == null) {
                 return null;
