@@ -46,6 +46,7 @@ namespace Updog.Persistance {
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     ORDER BY Post.CreationDate DESC
+                    WHERE IsDeleted = FALSE
                     LIMIT @Limit
                     OFFSET @Offset",
                     (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
@@ -79,6 +80,7 @@ namespace Updog.Persistance {
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     WHERE ""User"".Username = @Username
+                    AND IsDeleted = FALSE
                     ORDER BY Post.CreationDate ASC
                     LIMIT @Limit
                     OFFSET @Offset",
@@ -114,6 +116,7 @@ namespace Updog.Persistance {
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     WHERE Space.Name = @Name
+                    AND IsDeleted = FALSE
                     ORDER BY Post.CreationDate DESC
                     LIMIT @Limit
                     OFFSET @Offset",

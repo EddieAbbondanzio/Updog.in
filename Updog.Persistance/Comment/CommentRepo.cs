@@ -86,7 +86,7 @@ namespace Updog.Persistance {
                 IEnumerable<Comment> comments = (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
                     @"
                     WITH RECURSIVE commenttree AS (
-                    SELECT r.* FROM Comment r WHERE PostId = @PostId AND ParentId = 0 
+                    SELECT r.* FROM Comment r WHERE PostId = @PostId AND ParentId = 0 AND IsDeleted = FALSE 
                     UNION ALL
                     SELECT c.* FROM Comment c
                     INNER JOIN commenttree ct ON ct.Id = c.ParentId
@@ -119,7 +119,7 @@ namespace Updog.Persistance {
         public async Task<PagedResultSet<Comment>> FindByUser(string username, int pageNumber, int pageSize) {
             using (DbConnection connection = GetConnection()) {
                 IEnumerable<Comment> comments = await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
-                    @"SELECT * FROM Comment LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id WHERE ""User"".Username = @Username ORDER BY CreationDate DESC LIMIT @Limit OFFSET @Offset ",
+                    @"SELECT * FROM Comment LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id WHERE ""User"".Username = @Username AND IsDeleted = FALSE ORDER BY CreationDate DESC LIMIT @Limit OFFSET @Offset ",
                     (commentRec, userRec) => {
                         return commentMapper.Map(Tuple.Create(commentRec, userRec));
                     },
@@ -132,7 +132,7 @@ namespace Updog.Persistance {
 
                 //Get total count
                 int totalCount = await connection.ExecuteScalarAsync<int>(
-                    @"SELECT COUNT(*) FROM Comment LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id WHERE ""User"".Username = @Username",
+                    @"SELECT COUNT(*) FROM Comment LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id WHERE ""User"".Username = @Username AND IsDeleted = FALSE",
                     new { Username = username }
                 );
 
