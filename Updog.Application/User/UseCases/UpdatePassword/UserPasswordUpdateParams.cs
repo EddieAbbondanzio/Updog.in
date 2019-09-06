@@ -1,17 +1,34 @@
 using Updog.Domain;
 
 namespace Updog.Application {
+    /// <summary>
+    /// Parameters to update a user's password.
+    /// </summary>
     public sealed class UserPasswordUpdateParams {
         #region Properties
+        /// <summary>
+        /// The user that wants to update their password.
+        /// </summary>
+        /// <value></value>
         public User User { get; }
 
-        public string Password { get; }
+        /// <summary>
+        /// The old password they already have in use.
+        /// </summary>
+        /// <value></value>
+        public string CurrentPassword { get; }
+
+        /// <summary>
+        /// The new password they want to use.
+        /// </summary>
+        public string NewPassword { get; }
         #endregion
 
         #region Constructor(s)
-        public UserPasswordUpdateParams(User user, string password) {
+        public UserPasswordUpdateParams(User user, string currentPassword, string newPassword) {
             User = user;
-            Password = password;
+            CurrentPassword = currentPassword;
+            NewPassword = newPassword;
         }
         #endregion
     }

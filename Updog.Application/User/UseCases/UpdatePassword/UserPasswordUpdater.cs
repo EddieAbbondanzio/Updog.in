@@ -23,8 +23,15 @@ namespace Updog.Application {
         public async Task Handle(UserPasswordUpdateParams input) {
             await this.validator.ValidateAndThrowAsync(input);
 
-            input.User.PasswordHash = passwordHasher.Hash(input.Password);
-            await userRepo.Update(input.User);
+            //Verify the old password is a match first
+            bool isMatch = passwordHasher.Verify(input.CurrentPassword, input.User.PasswordHash);
+
+            if (isMatch) {
+                input.User.PasswordHash = passwordHasher.Hash(input.NewPassword);
+                await userRepo.Update(input.User);
+            } else {
+                throw new AuthorizationException();
+            }
         }
     }
 }

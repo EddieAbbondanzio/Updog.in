@@ -16,32 +16,32 @@ namespace Updog.Application.Tests {
 
         [TestMethod]
         public async Task FailsIfPasswordIsNull() {
-            var result = await validator.ValidateAsync(new UserPasswordUpdateParams(user, null!));
+            var result = await validator.ValidateAsync(new UserPasswordUpdateParams(user, null!, null!));
             Assert.IsFalse(result.IsValid);
         }
 
         [TestMethod]
         public async Task FailsIfPasswordIsEmpty() {
-            var result = await validator.ValidateAsync(new UserPasswordUpdateParams(user, ""));
+            var result = await validator.ValidateAsync(new UserPasswordUpdateParams(user, "", ""));
             Assert.IsFalse(result.IsValid);
         }
 
         [TestMethod]
         public async Task FailsIfPasswordIsWhiteSpace() {
-            var result = await validator.ValidateAsync(new UserPasswordUpdateParams(user, "         "));
+            var result = await validator.ValidateAsync(new UserPasswordUpdateParams(user, "", "         "));
             Assert.IsFalse(result.IsValid);
         }
 
 
         [TestMethod]
         public async Task FailsIfPasswordIsBelowMinLength() {
-            var result = await validator.ValidateAsync(new UserPasswordUpdateParams(user, "1"));
+            var result = await validator.ValidateAsync(new UserPasswordUpdateParams(user, "", "1"));
             Assert.IsFalse(result.IsValid);
         }
 
         [TestMethod]
         public async Task PassesValidPassword() {
-            var result = await validator.ValidateAsync(new UserPasswordUpdateParams(user, "password2"));
+            var result = await validator.ValidateAsync(new UserPasswordUpdateParams(user, "", "password2"));
             Assert.IsTrue(result.IsValid);
         }
     }
