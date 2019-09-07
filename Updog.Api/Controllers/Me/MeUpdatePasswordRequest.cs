@@ -5,10 +5,16 @@ namespace Updog.Api {
     public sealed class MeUpdatePasswordRequest {
         #region Properties
         /// <summary>
+        /// The current password the user is using.
+        /// </summary>
+        /// <value></value>
+        public string CurrentPassword { get; set; } = "";
+
+        /// <summary>
         /// The new password the user wants to use.
         /// </summary>
         /// <value></value>
-        public string Password { get; set; } = "";
+        public string NewPassword { get; set; } = "";
         #endregion
     }
 }

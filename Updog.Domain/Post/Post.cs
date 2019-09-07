@@ -76,6 +76,16 @@ namespace Updog.Domain {
         /// </summary>
         /// <value></value>
         public int CommentCount { get; set; }
+
+        /// <summary>
+        /// How many upvotes the post has recieved.
+        /// </summary>
+        public int Upvotes { get; set; }
+
+        /// <summary>
+        /// How many downvotes the post has recieved.
+        /// </summary>
+        public int Downvotes { get; set; }
         #endregion
 
         #region Publics

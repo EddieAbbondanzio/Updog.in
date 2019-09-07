@@ -8,6 +8,8 @@ CREATE TABLE Post (
     CreationDate TIMESTAMP NOT NULL,
     WasUpdated BOOLEAN,
     WasDeleted BOOLEAN,
+    Upvotes INT,
+    Downvotes INT,
     CommentCount INT NOT NULL,
     FOREIGN KEY (UserId) REFERENCES "User"(Id)
     FOREIGN KEY (SpaceId) REFERENCES Space(Id)

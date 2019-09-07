@@ -152,7 +152,7 @@ namespace Updog.Persistance {
 
                 using (DbTransaction transaction = connection.BeginTransaction()) {
                     entity.Id = await connection.QueryFirstOrDefaultAsync<int>(
-                        @"INSERT INTO Comment (UserId, PostId, ParentId, Body, CreationDate, WasUpdated, WasDeleted) VALUES (@UserId, @PostId, @ParentId, @Body, @CreationDate, @WasUpdated, @WasDeleted) RETURNING Id;",
+                        @"INSERT INTO Comment (UserId, PostId, ParentId, Body, CreationDate, WasUpdated, WasDeleted, Upvotes, Downvotes) VALUES (@UserId, @PostId, @ParentId, @Body, @CreationDate, @WasUpdated, @WasDeleted, @Upvotes, @Downvotes) RETURNING Id;",
                         commentRec, transaction
                     );
 
@@ -180,7 +180,9 @@ namespace Updog.Persistance {
                     Body = @Body, 
                     CreationDate = @CreationDate, 
                     WasUpdated = @WasUpdated, 
-                    WasDeleted = @WasDeleted 
+                    WasDeleted = @WasDeleted,
+                    Upvotes = @Upvotes,
+                    Downvotes = @Downvotes
                     WHERE Id = @Id",
                     commentRec
                 );

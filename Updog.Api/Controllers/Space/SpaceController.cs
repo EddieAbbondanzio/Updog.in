@@ -91,6 +91,7 @@ namespace Updog.Api {
         /// <param name="pageNumber">0-index of the page.</param>
         /// <param name="pageSize">Size of the page.</param>
         /// <returns>The posts found.</returns>
+        [AllowAnonymous]
         [HttpGet("{name}/post/new")]
         public async Task<ActionResult> FindPosts(string name, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
             PagedResultSet<PostView> posts = await this._postFinderBySpace.Handle(new PostFindBySpaceParams(name, pageNumber, pageSize));

@@ -51,7 +51,7 @@ namespace Updog.Api {
         /// <param name="updatePasswordRequest">The new password.</param>
         [HttpPut("password")]
         public async Task<ActionResult> UpdatePassword([FromBody] MeUpdatePasswordRequest updatePasswordRequest) {
-            await _passwordUpdater.Handle(new UserPasswordUpdateParams(User!, updatePasswordRequest.Password));
+            await _passwordUpdater.Handle(new UserPasswordUpdateParams(User!, updatePasswordRequest.CurrentPassword, updatePasswordRequest.NewPassword));
             return Ok();
         }
         #endregion

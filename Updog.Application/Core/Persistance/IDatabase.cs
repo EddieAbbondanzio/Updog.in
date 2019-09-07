@@ -1,6 +1,6 @@
 using System.Data.Common;
 
-namespace Updog.Persistance {
+namespace Updog.Application {
     /// <summary>
     /// Database for data persistance.
     /// </summary>
@@ -11,6 +11,11 @@ namespace Updog.Persistance {
         /// </summary>
         /// <returns>The new connection.</returns>
         DbConnection GetConnection();
+
+        /// <summary>
+        /// Start a new unit of work.
+        /// </summary>
+        IUnitOfWork CreateUnitOfWork();
         #endregion
     }
 }

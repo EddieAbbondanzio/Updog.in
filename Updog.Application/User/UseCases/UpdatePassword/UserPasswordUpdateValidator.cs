@@ -7,9 +7,9 @@ namespace Updog.Application {
     /// </summary>
     public sealed class UserPasswordUpdateValidator : AbstractValidator<UserPasswordUpdateParams> {
         public UserPasswordUpdateValidator() {
-            RuleFor(reg => reg.Password).NotNull().WithMessage("Password is required.");
-            RuleFor(reg => reg.Password).NotEmpty().WithMessage("Password is required.");
-            RuleFor(reg => reg.Password).MinimumLength(User.PasswordMinLength).WithMessage($"Password must be at least {User.PasswordMinLength} characters.");
+            RuleFor(reg => reg.NewPassword).NotNull().WithMessage("Password is required.");
+            RuleFor(reg => reg.NewPassword).NotEmpty().WithMessage("Password is required.");
+            RuleFor(reg => reg.NewPassword).MinimumLength(User.PasswordMinLength).WithMessage($"Password must be at least {User.PasswordMinLength} characters.");
         }
     }
 }

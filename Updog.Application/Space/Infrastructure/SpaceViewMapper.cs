@@ -6,18 +6,18 @@ namespace Updog.Application {
     /// </summary>
     public sealed class SpaceViewMapper : ISpaceViewMapper {
         #region Fields
-        public IMapper<User, UserView> userMapper;
+        public IUserViewMapper _userMapper;
         #endregion
 
         #region Constructor(s)
-        public SpaceViewMapper(IMapper<User, UserView> userMapper) {
-            this.userMapper = userMapper;
+        public SpaceViewMapper(IUserViewMapper userMapper) {
+            this._userMapper = userMapper;
         }
         #endregion
 
         #region Publics
         public SpaceView Map(Space source) {
-            return new SpaceView(source.Id, source.Name, source.Description, source.SubscriptionCount, source.CreationDate, userMapper.Map(source.User));
+            return new SpaceView(source.Id, source.Name, source.Description, source.SubscriptionCount, source.CreationDate, _userMapper.Map(source.User));
         }
         #endregion
     }

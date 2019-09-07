@@ -36,6 +36,16 @@ namespace Updog.Application {
         public bool WasDeleted { get; }
 
         /// <summary>
+        /// How many upvotes the comment has recieved.
+        /// </summary>
+        public int Upvotes { get; set; }
+
+        /// <summary>
+        /// How many downvotes the comment has recieved.
+        /// </summary>
+        public int Downvotes { get; set; }
+
+        /// <summary>
         /// The nested comments of this comment.
         /// </summary>
         public List<CommentView> Children { get; }
@@ -51,13 +61,17 @@ namespace Updog.Application {
         /// <param name="creationDate">The time of commenting</param>
         /// <param name="wasUpdated">If the comment was modified</param>
         /// <param name="wasDeleted">If the comment was deleted</param>
-        public CommentView(int id, UserView user, string body, DateTime creationDate, bool wasUpdated, bool wasDeleted) {
+        /// <param name="upvotes">The number of upvotes.</param>
+        /// <param name="downvotes">The number of downvotes.</param>
+        public CommentView(int id, UserView user, string body, DateTime creationDate, bool wasUpdated, bool wasDeleted, int upvotes, int downvotes) {
             Id = id;
             User = user;
             Body = body;
             CreationDate = creationDate;
             WasUpdated = wasUpdated;
             WasDeleted = wasDeleted;
+            Upvotes = upvotes;
+            Downvotes = downvotes;
             Children = new List<CommentView>();
         }
 
@@ -70,14 +84,18 @@ namespace Updog.Application {
         /// <param name="creationDate">The time of commenting</param>
         /// <param name="wasUpdated">If the comment was modified</param>
         /// <param name="wasDeleted">If the comment was deleted</param>
+        /// <param name="upvotes">The number of upvotes.</param>
+        /// <param name="downvotes">The number of downvotes.</param>
         /// <param name="children">The children comments</param>
-        public CommentView(int id, UserView user, string body, DateTime creationDate, bool wasUpdated, bool wasDeleted, List<CommentView> children) {
+        public CommentView(int id, UserView user, string body, DateTime creationDate, bool wasUpdated, bool wasDeleted, int upvotes, int downvotes, List<CommentView> children) {
             Id = id;
             User = user;
             Body = body;
             CreationDate = creationDate;
             WasUpdated = wasUpdated;
             WasDeleted = wasDeleted;
+            Upvotes = upvotes;
+            Downvotes = downvotes;
             Children = children;
         }
         #endregion

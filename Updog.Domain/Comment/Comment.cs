@@ -61,6 +61,17 @@ namespace Updog.Domain {
         /// Soft delete flag.
         /// </summary>
         public bool WasDeleted { get; set; }
+
+        /// <summary>
+        /// The upvote count of the comment.
+        /// </summary>
+        /// <value></value>
+        public int Upvotes { get; set; }
+
+        /// <summary>
+        /// The downvote count of the comment.
+        /// </summary>
+        public int Downvotes { get; set; }
         #endregion
 
         #region Publics

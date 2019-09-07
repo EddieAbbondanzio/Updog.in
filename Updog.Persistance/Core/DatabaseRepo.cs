@@ -2,6 +2,7 @@ using System.Data.Common;
 using System.Dynamic;
 using System.Transactions;
 using Dapper;
+using Updog.Application;
 using Updog.Domain;
 
 namespace Updog.Persistance {

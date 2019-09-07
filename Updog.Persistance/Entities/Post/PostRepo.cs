@@ -164,9 +164,9 @@ namespace Updog.Persistance {
             using (DbConnection connection = GetConnection()) {
                 post.Id = await connection.QueryFirstOrDefaultAsync<int>(
                     @"INSERT INTO Post 
-                    (Title, Body, Type, CreationDate, UserId, WasUpdated, WasDeleted, CommentCount) 
+                    (Title, Body, Type, CreationDate, UserId, WasUpdated, WasDeleted, CommentCount, Upvotes, Downvotes) 
                     VALUES 
-                    (@Title, @Body, @Type, @CreationDate, @UserId, @WasUpdated, @WasDeleted, @CommentCount) RETURNING Id;",
+                    (@Title, @Body, @Type, @CreationDate, @UserId, @WasUpdated, @WasDeleted, @CommentCount, @Upvotes, @Downvotes) RETURNING Id;",
                     _postMapper.Reverse(post).Item1
                 );
             }
@@ -187,7 +187,9 @@ namespace Updog.Persistance {
                     CreationDate = @CreationDate, 
                     WasUpdated = @WasUpdated, 
                     WasDeleted = @WasDeleted, 
-                    CommentCount = @CommentCount 
+                    CommentCount = @CommentCount,
+                    Upvotes = @Upvotes,
+                    Downvotes = @Downvotes
                     WHERE Id = @Id",
                     _postMapper.Reverse(post).Item1
                 );

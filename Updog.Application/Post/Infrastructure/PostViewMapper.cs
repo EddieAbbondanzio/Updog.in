@@ -31,7 +31,7 @@ namespace Updog.Application {
         public PostView Map(Post post) {
             UserView userView = userMapper.Map(post.User);
             SpaceView spaceView = spaceMapper.Map(post.Space);
-            return new PostView(post.Id, post.Type, post.Title, post.Body, userView, spaceView, post.CreationDate, post.CommentCount, post.WasUpdated, post.WasDeleted);
+            return new PostView(post.Id, post.Type, post.Title, post.Body, userView, spaceView, post.CreationDate, post.CommentCount, post.WasUpdated, post.WasDeleted, post.Upvotes, post.Downvotes);
         }
         #endregion
     }

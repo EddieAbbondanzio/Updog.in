@@ -7,6 +7,8 @@ CREATE TABLE Comment (
     CreationDate TIMESTAMP NOT NULL,
     WasUpdated BOOLEAN,
     WasDeleted BOOLEAN,
+    Upvotes INT,
+    Downvotes INT,
     FOREIGN KEY (UserId) REFERENCES "User"(Id),
     FOREIGN KEY (PostId) REFERENCES Post(Id)
 );

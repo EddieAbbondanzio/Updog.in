@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.Common;
+using System.Transactions;
 using Npgsql;
+using Updog.Application;
 
 namespace Updog.Persistance {
     /// <summary>
@@ -29,6 +31,7 @@ namespace Updog.Persistance {
             };
 
             Connection = connBuilder.ToString();
+
         }
         #endregion
 
@@ -37,9 +40,13 @@ namespace Updog.Persistance {
         /// Get a new connection with the database.
         /// </summary>
         /// <returns>A new pooled connection.</returns>
-        public DbConnection GetConnection() {
-            return new NpgsqlConnection(Connection);
-        }
+        public DbConnection GetConnection() => new NpgsqlConnection(Connection);
+
+        /// <summary>
+        /// Start a new unit of work with the database.
+        /// </summary>
+        /// <returns>The newly created UoW.</returns>
+        public IUnitOfWork CreateUnitOfWork() => new UnitOfWork();
         #endregion
     }
 }
