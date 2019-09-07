@@ -26,7 +26,7 @@ namespace Updog.Persistance {
         /// <summary>
         /// Save the changes made.
         /// </summary>
-        public void Commit() => _transactionScope.Complete();
+        public void Save() => _transactionScope.Complete();
 
         /// <summary>
         /// Undo the work done.

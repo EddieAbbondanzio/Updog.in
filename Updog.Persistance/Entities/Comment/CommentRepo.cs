@@ -148,19 +148,10 @@ namespace Updog.Persistance {
             CommentRecord commentRec = this.commentMapper.Reverse(entity).Item1;
 
             using (DbConnection connection = GetConnection()) {
-                await connection.OpenAsync();
-
-                using (DbTransaction transaction = connection.BeginTransaction()) {
-                    entity.Id = await connection.QueryFirstOrDefaultAsync<int>(
-                        @"INSERT INTO Comment (UserId, PostId, ParentId, Body, CreationDate, WasUpdated, WasDeleted, Upvotes, Downvotes) VALUES (@UserId, @PostId, @ParentId, @Body, @CreationDate, @WasUpdated, @WasDeleted, @Upvotes, @Downvotes) RETURNING Id;",
-                        commentRec, transaction
-                    );
-
-                    //Update post comment count.
-                    await connection.ExecuteAsync(@"UPDATE Post SET CommentCount = CommentCount + 1 WHERE Id = @Id", new { Id = entity.Post.Id }, transaction);
-
-                    transaction.Commit();
-                }
+                entity.Id = await connection.QueryFirstOrDefaultAsync<int>(
+                    @"INSERT INTO Comment (UserId, PostId, ParentId, Body, CreationDate, WasUpdated, WasDeleted, Upvotes, Downvotes) VALUES (@UserId, @PostId, @ParentId, @Body, @CreationDate, @WasUpdated, @WasDeleted, @Upvotes, @Downvotes) RETURNING Id;",
+                    commentRec
+                );
             }
         }
 
