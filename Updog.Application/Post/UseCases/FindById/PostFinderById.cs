@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Updog.Domain;
 
@@ -7,19 +8,14 @@ namespace Updog.Application {
     /// </summary>
     public sealed class PostFinderById : IInteractor<int, PostView?> {
         #region Fields
-        private IPostRepo _postRepo;
+        private IDatabase _database;
 
         private IPostViewMapper _postMapper;
         #endregion
 
         #region Constructor(s)
-        /// <summary>
-        /// Create a new post find by ID interactor.
-        /// </summary>
-        /// <param name="postRepo">CRUD post repo.</param>
-        /// <param name="postMapper">Mapper to convert posts to view</param>
-        public PostFinderById(IPostRepo postRepo, IPostViewMapper postMapper) {
-            _postRepo = postRepo;
+        public PostFinderById(IDatabase database, IPostViewMapper postMapper) {
+            _database = database;
             _postMapper = postMapper;
         }
         #endregion
@@ -30,7 +26,11 @@ namespace Updog.Application {
         /// <param name="input">The ID to look for.</param>
         /// <returns>The matching post found.</returns>
         public async Task<PostView?> Handle(int input) {
-            Post? p = await _postRepo.FindById(input);
+            throw new Exception();
+            Post? p = null;
+            // IPostRepo postRepo = _database.CreateRepo<IPostRepo>();
+            // 
+            // Post? p = await postRepo.FindById(input);
 
             if (p == null) {
                 return null;

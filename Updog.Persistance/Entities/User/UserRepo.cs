@@ -18,13 +18,8 @@ namespace Updog.Persistance {
         #endregion
 
         #region Constructor(s)
-        /// <summary>
-        /// Create a new user repo.
-        /// </summary>
-        /// <param name="database">The database to query off.</param>
-        /// <param name="userMapper">Mapper to convert user entities<</param>
-        public UserRepo(IDatabase database, IUserRecordMapper userMapper) : base(database) {
-            this.userMapper = userMapper;
+        public UserRepo(DbConnection connection) : base(connection) {
+            this.userMapper = new UserRecordMapper();
         }
         #endregion
 
@@ -35,12 +30,10 @@ namespace Updog.Persistance {
         /// <param name="id">The id to look for.</param>
         /// <returns>The user with the id.</returns>
         public async Task<User?> FindById(int id) {
-            using (DbConnection connection = GetConnection()) {
-                return await connection.QuerySingleOrDefaultAsync<User>(
-                    @"SELECT * FROM ""User"" WHERE Id = @Id;",
-                    new { Id = id }
-                );
-            }
+            return await Connection.QuerySingleOrDefaultAsync<User>(
+                @"SELECT * FROM ""User"" WHERE Id = @Id;",
+                new { Id = id }
+            );
         }
 
         /// <summary>
@@ -49,12 +42,10 @@ namespace Updog.Persistance {
         /// <param name="username">The username to look for.</param>
         /// <returns>The user with the username.</returns>
         public async Task<User?> FindByUsername(string username) {
-            using (DbConnection connection = GetConnection()) {
-                return await connection.QueryFirstOrDefaultAsync<User>(
-                    @"SELECT * FROM ""User"" WHERE Username = @Username;",
-                    new { Username = username }
-                );
-            }
+            return await Connection.QueryFirstOrDefaultAsync<User>(
+                @"SELECT * FROM ""User"" WHERE Username = @Username;",
+                new { Username = username }
+            );
         }
 
         /// <summary>
@@ -63,12 +54,10 @@ namespace Updog.Persistance {
         /// <param name="email">The email to look for.</param>
         /// <returns>The user found (if any).</returns>
         public async Task<User?> FindByEmail(string email) {
-            using (DbConnection connection = GetConnection()) {
-                return await connection.QueryFirstOrDefaultAsync<User>(
-                    @"SELECT * FROM ""User"" WHERE Email = @Email;",
-                    new { Email = email }
-                );
-            }
+            return await Connection.QueryFirstOrDefaultAsync<User>(
+                @"SELECT * FROM ""User"" WHERE Email = @Email;",
+                new { Email = email }
+            );
         }
 
         /// <summary>
@@ -76,12 +65,10 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="user">The user to add.</param>
         public async Task Add(User user) {
-            using (DbConnection connection = GetConnection()) {
-                user.Id = await connection.QueryFirstOrDefaultAsync<int>(
-                    @"INSERT INTO ""User"" (Username, Email, PasswordHash, JoinedDate) VALUES (@Username, @Email, @PasswordHash, @JoinedDate) RETURNING Id;",
-                    userMapper.Reverse(user)
-                );
-            }
+            user.Id = await Connection.QueryFirstOrDefaultAsync<int>(
+                @"INSERT INTO ""User"" (Username, Email, PasswordHash, JoinedDate) VALUES (@Username, @Email, @PasswordHash, @JoinedDate) RETURNING Id;",
+                userMapper.Reverse(user)
+            );
         }
 
         /// <summary>
@@ -89,12 +76,10 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="user">The user to update.</param>
         public async Task Update(User user) {
-            using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync(
-                    @"UPDATE ""User"" SET Username = @Username, Email = @Email, PasswordHash = @PasswordHash, JoinedDate = @JoinedDate WHERE Id = @Id;",
-                    userMapper.Reverse(user)
-                );
-            }
+            await Connection.ExecuteAsync(
+                @"UPDATE ""User"" SET Username = @Username, Email = @Email, PasswordHash = @PasswordHash, JoinedDate = @JoinedDate WHERE Id = @Id;",
+                userMapper.Reverse(user)
+            );
         }
 
         /// <summary>
@@ -102,12 +87,10 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="user">The user to delete.</param>
         public async Task Delete(User user) {
-            using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync(
-                    @"DELETE FROM ""User"" WHERE Id = @Id;",
-                    userMapper.Reverse(user)
-                );
-            }
+            await Connection.ExecuteAsync(
+                @"DELETE FROM ""User"" WHERE Id = @Id;",
+                userMapper.Reverse(user)
+            );
         }
         #endregion
     }

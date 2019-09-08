@@ -1,3 +1,4 @@
+using System;
 using System.Data.Common;
 
 namespace Updog.Application {
@@ -16,6 +17,10 @@ namespace Updog.Application {
         /// Start a new unit of work.
         /// </summary>
         IUnitOfWork CreateUnitOfWork();
+
+        void RegisterRepo<TResolve, TRepo>() where TResolve : class, IRepo where TRepo : class, IRepo;
+
+        TRepo GetRepo<TRepo>(DbConnection? connection = null) where TRepo : class, IRepo;
         #endregion
     }
 }

@@ -17,8 +17,8 @@ namespace Updog.Persistance {
         #endregion
 
         #region Constructor(s)
-        public SubscriptionRepo(IDatabase database, ISubscriptionRecordMapper mapper) : base(database) {
-            _mapper = mapper;
+        public SubscriptionRepo(DbConnection connection) : base(connection) {
+            _mapper = new SubscriptionRecordMapper(new SpaceRecordMapper(new UserRecordMapper()), new UserRecordMapper());
         }
         #endregion
 
@@ -29,19 +29,17 @@ namespace Updog.Persistance {
         /// <param name="id">The ID to look for.</param>
         /// <returns>The subscription found.</returns>
         public async Task<Subscription?> FindById(int id) {
-            using (DbConnection connection = GetConnection()) {
-                return (await connection.QueryAsync<SubscriptionRecord, UserRecord, SpaceRecord, UserRecord, Subscription>(
-                    @"SELECT * FROM Subscription 
+            return (await Connection.QueryAsync<SubscriptionRecord, UserRecord, SpaceRecord, UserRecord, Subscription>(
+                @"SELECT * FROM Subscription 
                     LEFT JOIN ""User"" u1 ON u1.Id = Subscription.UserId
                     LEFT JOIN Subscription ON Space.Id = Subscription.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     WHERE Subscription.Id = @Id;",
-                    (SubscriptionRecord subRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
-                        return _mapper.Map(Tuple.Create(subRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
-                    },
-                    new { Id = id }
-                )).FirstOrDefault();
-            }
+                (SubscriptionRecord subRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
+                    return _mapper.Map(Tuple.Create(subRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                },
+                new { Id = id }
+            )).FirstOrDefault();
         }
 
         /// <summary>
@@ -50,19 +48,17 @@ namespace Updog.Persistance {
         /// <param name="username">The user that they belong to..</param>
         /// <returns>The subscriptions found (if any)</returns>
         public async Task<IEnumerable<Subscription>> FindByUser(string username) {
-            using (DbConnection connection = GetConnection()) {
-                return await connection.QueryAsync<SubscriptionRecord, UserRecord, SpaceRecord, UserRecord, Subscription>(
-                    @"SELECT * FROM Subscription 
+            return await Connection.QueryAsync<SubscriptionRecord, UserRecord, SpaceRecord, UserRecord, Subscription>(
+                @"SELECT * FROM Subscription 
                     LEFT JOIN ""User"" u1 ON u1.Id = Subscription.UserId
                     LEFT JOIN Subscription ON Space.Id = Subscription.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     WHERE u1.Username = @Username;",
-                    (SubscriptionRecord subRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
-                        return _mapper.Map(Tuple.Create(subRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
-                    },
-                    new { Username = username }
-                );
-            }
+                (SubscriptionRecord subRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
+                    return _mapper.Map(Tuple.Create(subRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                },
+                new { Username = username }
+            );
         }
 
         /// <summary>
@@ -72,19 +68,17 @@ namespace Updog.Persistance {
         /// <param name="space">The space it's for.</param>
         /// <returns>The subscription found (if any).</returns>
         public async Task<Subscription?> FindByUserAndSpace(string username, string spaceName) {
-            using (DbConnection connection = GetConnection()) {
-                return (await connection.QueryAsync<SubscriptionRecord, UserRecord, SpaceRecord, UserRecord, Subscription>(
-                    @"SELECT * FROM Subscription 
+            return (await Connection.QueryAsync<SubscriptionRecord, UserRecord, SpaceRecord, UserRecord, Subscription>(
+                @"SELECT * FROM Subscription 
                     LEFT JOIN ""User"" u1 ON u1.Id = Subscription.UserId
                     LEFT JOIN Subscription ON Space.Id = Subscription.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     WHERE u1.Username = @Username AND Space.Name = @Name;",
-                    (SubscriptionRecord subRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
-                        return _mapper.Map(Tuple.Create(subRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
-                    },
-                    new { Username = username, Name = spaceName }
-                )).FirstOrDefault();
-            }
+                (SubscriptionRecord subRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
+                    return _mapper.Map(Tuple.Create(subRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                },
+                new { Username = username, Name = spaceName }
+            )).FirstOrDefault();
         }
 
         /// <summary>
@@ -92,14 +86,12 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="entity">The subscription to add.</param>
         public async Task Add(Subscription entity) {
-            using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync(
-                    @"INSERT INTO Subscription 
+            await Connection.ExecuteAsync(
+                @"INSERT INTO Subscription 
                         (Id, SpaceId, UserId) 
                         VALUES(@Id, @SpaceId, @UserId)",
-                    _mapper.Reverse(entity).Item1
-                );
-            }
+                _mapper.Reverse(entity).Item1
+            );
         }
 
         /// <summary>
@@ -107,16 +99,14 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="entity">The subscription to update.</param>
         public async Task Update(Subscription entity) {
-            using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync(
-                    @"UPDATE Subscription SET
+            await Connection.ExecuteAsync(
+                @"UPDATE Subscription SET
                         Id = @Id,
                         SpaceId = @SpaceId,
                         UserId = @UserId
                         WHERE Id = @Id",
-                    _mapper.Reverse(entity).Item1
-                );
-            }
+                _mapper.Reverse(entity).Item1
+            );
         }
 
         /// <summary>
@@ -124,12 +114,10 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="entity">The subscription to delete.</param>
         public async Task Delete(Subscription entity) {
-            using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync(
-                    @"DELETE FROM Subscription WHERE Id = @Id",
-                    _mapper.Reverse(entity).Item1
-                );
-            }
+            await Connection.ExecuteAsync(
+                @"DELETE FROM Subscription WHERE Id = @Id",
+                _mapper.Reverse(entity).Item1
+            );
         }
         #endregion
     }

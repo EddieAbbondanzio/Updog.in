@@ -21,13 +21,8 @@ namespace Updog.Persistance {
         #endregion
 
         #region Constructor(s)
-        /// <summary>
-        /// Create a new post repo.
-        /// </summary>
-        /// <param name="database">The active database.</param>
-        /// <param name="postMapper">The post entity mapper</param>
-        public PostRepo(IDatabase database, IPostRecordMapper postMapper) : base(database) {
-            this._postMapper = postMapper;
+        public PostRepo(DbConnection connection) : base(connection) {
+            this._postMapper = new PostRecordMapper(new UserRecordMapper(), new SpaceRecordMapper(new UserRecordMapper()));
         }
         #endregion
 
@@ -39,9 +34,8 @@ namespace Updog.Persistance {
         /// <param name="pageSize">Page size.</param>
         /// <returns>The result set.</returns>
         public async Task<PagedResultSet<Post>> FindNewest(int pageNumber, int pageSize) {
-            using (DbConnection connection = GetConnection()) {
-                IEnumerable<Post> posts = await connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, UserRecord, Post>(
-                    @"SELECT * FROM Post
+            IEnumerable<Post> posts = await Connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, UserRecord, Post>(
+                @"SELECT * FROM Post
                     LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
@@ -49,19 +43,18 @@ namespace Updog.Persistance {
                     WHERE IsDeleted = FALSE
                     LIMIT @Limit
                     OFFSET @Offset",
-                    (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
-                        return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
-                    },
-                    BuildPaginationParams(pageNumber, pageSize)
-                );
+                (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
+                    return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                },
+                BuildPaginationParams(pageNumber, pageSize)
+            );
 
-                //Get total count
-                int totalCount = await connection.ExecuteScalarAsync<int>(
-                    "SELECT COUNT(*) FROM Post;"
-                );
+            //Get total count
+            int totalCount = await Connection.ExecuteScalarAsync<int>(
+                "SELECT COUNT(*) FROM Post;"
+            );
 
-                return new PagedResultSet<Post>(posts, new PaginationInfo(pageNumber, pageSize, totalCount));
-            }
+            return new PagedResultSet<Post>(posts, new PaginationInfo(pageNumber, pageSize, totalCount));
         }
 
         /// <summary>
@@ -73,9 +66,8 @@ namespace Updog.Persistance {
         /// <returns>The collection of their posts (if any).</returns>
 
         public async Task<PagedResultSet<Post>> FindByUser(string username, int pageNumber, int pageSize) {
-            using (DbConnection connection = GetConnection()) {
-                IEnumerable<Post> posts = await connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, UserRecord, Post>(
-                    @"SELECT * FROM Post
+            IEnumerable<Post> posts = await Connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, UserRecord, Post>(
+                @"SELECT * FROM Post
                     LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
@@ -84,21 +76,20 @@ namespace Updog.Persistance {
                     ORDER BY Post.CreationDate ASC
                     LIMIT @Limit
                     OFFSET @Offset",
-                    (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
-                        return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
-                    },
-                    BuildPaginationParams(new { Username = username }, pageNumber, pageSize)
-                );
+                (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
+                    return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                },
+                BuildPaginationParams(new { Username = username }, pageNumber, pageSize)
+            );
 
-                //Get total count
-                int totalCount = await connection.ExecuteScalarAsync<int>(
-                    @"SELECT COUNT(*) FROM Post LEFT JOIN ""User"" ON Post.UserId = ""User"".Id WHERE ""User"".Username = @Username",
-                    new { Username = username }
-                );
+            //Get total count
+            int totalCount = await Connection.ExecuteScalarAsync<int>(
+                @"SELECT COUNT(*) FROM Post LEFT JOIN ""User"" ON Post.UserId = ""User"".Id WHERE ""User"".Username = @Username",
+                new { Username = username }
+            );
 
-                return new PagedResultSet<Post>(posts, new PaginationInfo(pageNumber, pageSize, totalCount));
+            return new PagedResultSet<Post>(posts, new PaginationInfo(pageNumber, pageSize, totalCount));
 
-            }
         }
 
         /// <summary>
@@ -109,9 +100,8 @@ namespace Updog.Persistance {
         /// <param name="pageSize">Page size.</param>
         /// <returns>The result set.</returns>
         public async Task<PagedResultSet<Post>> FindBySpace(string space, int pageNumber, int pageSize) {
-            using (DbConnection connection = GetConnection()) {
-                IEnumerable<Post> posts = await connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, UserRecord, Post>(
-                    @"SELECT * FROM Post
+            IEnumerable<Post> posts = await Connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, UserRecord, Post>(
+                @"SELECT * FROM Post
                     LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
@@ -120,19 +110,18 @@ namespace Updog.Persistance {
                     ORDER BY Post.CreationDate DESC
                     LIMIT @Limit
                     OFFSET @Offset",
-                    (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
-                        return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
-                    },
-                    BuildPaginationParams(new { Name = space }, pageNumber, pageSize)
-                );
+                (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
+                    return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                },
+                BuildPaginationParams(new { Name = space }, pageNumber, pageSize)
+            );
 
-                //Get total count
-                int totalCount = await connection.ExecuteScalarAsync<int>(
-                    "SELECT COUNT(*) FROM Post LEFT JOIN Space ON Post.SpaceId = Space.Id WHERE Space.Name = @Name;", new { Name = space }
-                );
+            //Get total count
+            int totalCount = await Connection.ExecuteScalarAsync<int>(
+                "SELECT COUNT(*) FROM Post LEFT JOIN Space ON Post.SpaceId = Space.Id WHERE Space.Name = @Name;", new { Name = space }
+            );
 
-                return new PagedResultSet<Post>(posts, new PaginationInfo(pageNumber, pageSize, totalCount));
-            }
+            return new PagedResultSet<Post>(posts, new PaginationInfo(pageNumber, pageSize, totalCount));
         }
 
         /// <summary>
@@ -141,19 +130,17 @@ namespace Updog.Persistance {
         /// <param name="id">The ID of the post.</param>
         /// <returns>The post (if found).</returns>
         public async Task<Post?> FindById(int id) {
-            using (DbConnection connection = GetConnection()) {
-                return (await connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, UserRecord, Post>(
-                    @"SELECT * FROM Post 
+            return (await Connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, UserRecord, Post>(
+                @"SELECT * FROM Post 
                     LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     WHERE Post.Id = @Id;",
-                    (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
-                        return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
-                    },
-                    new { Id = id }
-                )).FirstOrDefault();
-            }
+                (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
+                    return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                },
+                new { Id = id }
+            )).FirstOrDefault();
         }
 
         /// <summary>
@@ -161,15 +148,13 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="post">The post to add.</param>
         public async Task Add(Post post) {
-            using (DbConnection connection = GetConnection()) {
-                post.Id = await connection.QueryFirstOrDefaultAsync<int>(
-                    @"INSERT INTO Post 
+            post.Id = await Connection.QueryFirstOrDefaultAsync<int>(
+                @"INSERT INTO Post 
                     (Title, Body, Type, CreationDate, UserId, WasUpdated, WasDeleted, CommentCount, Upvotes, Downvotes) 
                     VALUES 
                     (@Title, @Body, @Type, @CreationDate, @UserId, @WasUpdated, @WasDeleted, @CommentCount, @Upvotes, @Downvotes) RETURNING Id;",
-                    _postMapper.Reverse(post).Item1
-                );
-            }
+                _postMapper.Reverse(post).Item1
+            );
         }
 
         /// <summary>
@@ -177,9 +162,8 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="post">The post to update.</param>
         public async Task Update(Post post) {
-            using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync(
-                    @"UPDATE Post SET 
+            await Connection.ExecuteAsync(
+                @"UPDATE Post SET 
                     UserId = @UserId, 
                     Type = @Type, 
                     Title = @Title, 
@@ -191,9 +175,8 @@ namespace Updog.Persistance {
                     Upvotes = @Upvotes,
                     Downvotes = @Downvotes
                     WHERE Id = @Id",
-                    _postMapper.Reverse(post).Item1
-                );
-            }
+                _postMapper.Reverse(post).Item1
+            );
         }
 
         /// <summary>
@@ -201,12 +184,10 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="post">The post to delete.</param>
         public async Task Delete(Post post) {
-            using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync(
-                    @"UPDATE Post SET WasDeleted = TRUE WHERE Id = @Id",
-                    _postMapper.Reverse(post).Item1
-                );
-            }
+            await Connection.ExecuteAsync(
+                @"UPDATE Post SET WasDeleted = TRUE WHERE Id = @Id",
+                _postMapper.Reverse(post).Item1
+            );
         }
         #endregion
     }

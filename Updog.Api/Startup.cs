@@ -72,6 +72,14 @@ namespace Updog.Api {
                 };
             });
 
+            IDatabase db = new PostgresDatabase(Configuration.GetSection("Database").Get<DatabaseConfig>());
+            db.RegisterRepo<IUserRepo, UserRepo>();
+            db.RegisterRepo<IPostRepo, PostRepo>();
+            db.RegisterRepo<ICommentRepo, CommentRepo>();
+            db.RegisterRepo<ISpaceRepo, SpaceRepo>();
+            db.RegisterRepo<ISubscriptionRepo, SubscriptionRepo>();
+
+            services.AddSingleton<IDatabase>(db);
 
             services.ConfigurePoco<IDatabaseConfig, DatabaseConfig>(Configuration.GetSection("Database"));
             services.ConfigurePoco<IAuthenticationTokenConfig, AuthenticationTokenConfig>(Configuration.GetSection("AuthenticationToken"));
@@ -79,9 +87,7 @@ namespace Updog.Api {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSingleton<IAuthenticationTokenHandler, JsonWebTokenHandler>();
-            services.AddSingleton<IDatabase, PostgresDatabase>();
-            services.AddTransient<IUserRepo, UserRepo>();
-            services.AddTransient<IPostRepo, PostRepo>();
+            // services.AddSingleton<IDatabase, PostgresDatabase>();
 
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
 
@@ -100,7 +106,6 @@ namespace Updog.Api {
             services.AddSingleton<IPostViewMapper, PostViewMapper>();
             services.AddSingleton<IPermissionHandler<Post>, PostPermissionHandler>();
             services.AddSingleton<IPostRecordMapper, PostRecordMapper>();
-            services.AddTransient<IPostRepo, PostRepo>();
             services.AddTransient<PostCreator>();
             services.AddTransient<PostFinderById>();
             services.AddTransient<PostFinderBySpace>();
@@ -115,7 +120,6 @@ namespace Updog.Api {
             services.AddSingleton<IPermissionHandler<Comment>, CommentPermissionHandler>();
             services.AddSingleton<ICommentViewMapper, CommentViewMapper>();
             services.AddSingleton<ICommentRecordMapper, CommentRecordMapper>();
-            services.AddTransient<ICommentRepo, CommentRepo>();
             services.AddTransient<CommentCreator>();
             services.AddTransient<CommentFinderById>();
             services.AddTransient<CommentFinderByPost>();
@@ -128,7 +132,6 @@ namespace Updog.Api {
 
             services.AddSingleton<IPermissionHandler<Space>, SpacePermissionHandler>();
             services.AddSingleton<ISpaceViewMapper, SpaceViewMapper>();
-            services.AddTransient<ISpaceRepo, SpaceRepo>();
             services.AddTransient<ISpaceRecordMapper, SpaceRecordMapper>();
             services.AddTransient<SpaceFinderByName>();
             services.AddTransient<SpaceFinder>();
@@ -139,7 +142,6 @@ namespace Updog.Api {
 
             services.AddSingleton<ISubscriptionViewMapper, SubscriptionViewMapper>();
             services.AddSingleton<ISubscriptionRecordMapper, SubscriptionRecordMapper>();
-            services.AddTransient<ISubscriptionRepo, SubscriptionRepo>();
 
         }
 

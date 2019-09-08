@@ -15,26 +15,14 @@ namespace Updog.Persistance {
     public sealed class CommentRepo : DatabaseRepo<Comment>, ICommentRepo {
         #region Fields
         /// <summary>
-        /// The post repo.
-        /// </summary>
-        private IPostRepo postRepo;
-
-        /// <summary>
         /// Mapper to convert comments into their record and back to entity.
         /// </summary>
         private ICommentRecordMapper commentMapper;
         #endregion
 
         #region Constructor(s)
-        /// <summary>
-        /// Create a new comment repo.
-        /// </summary>
-        /// <param name="database">The active database.</param>
-        /// <param name="postRepo">The post repo</param>
-        /// <param name="commentMaper">Mapper to build comment entities.</param>
-        public CommentRepo(IDatabase database, IPostRepo postRepo, ICommentRecordMapper commentMapper) : base(database) {
-            this.postRepo = postRepo;
-            this.commentMapper = commentMapper;
+        public CommentRepo(DbConnection connection) : base(connection) {
+            this.commentMapper = new CommentRecordMapper(new UserRecordMapper());
         }
         #endregion
 
@@ -46,27 +34,25 @@ namespace Updog.Persistance {
         /// <returns>The comment found.</returns>
         public async Task<Comment?> FindById(int commentId) {
             // This doesn't pull in comment children and it should.
-            using (DbConnection connection = GetConnection()) {
-                IEnumerable<Comment> comments = await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
-                    @"WITH RECURSIVE commenttree AS (
+            IEnumerable<Comment> comments = await Connection.QueryAsync<CommentRecord, UserRecord, Comment>(
+                @"WITH RECURSIVE commenttree AS (
                     SELECT r.* FROM Comment r WHERE Id = @Id 
                     UNION ALL
                     SELECT c.* FROM Comment c
                     INNER JOIN commenttree ct ON ct.Id = c.ParentId
                     ) SELECT * FROM commenttree
                     LEFT JOIN ""User"" ON UserId = ""User"".Id ORDER BY ParentId, CreationDate ASC;",
-                    (CommentRecord rec, UserRecord u) => {
-                        return this.commentMapper.Map(Tuple.Create(rec, u));
-                    },
-                    new { Id = commentId }
-                );
+                (CommentRecord rec, UserRecord u) => {
+                    return this.commentMapper.Map(Tuple.Create(rec, u));
+                },
+                new { Id = commentId }
+            );
 
-                if (comments.Count() == 0) {
-                    return null;
-                }
-
-                return BuildCommentTree(comments, commentId)[0];
+            if (comments.Count() == 0) {
+                return null;
             }
+
+            return BuildCommentTree(comments, commentId)[0];
         }
 
         /// <summary>
@@ -75,16 +61,16 @@ namespace Updog.Persistance {
         /// <param name="postId">The ID of the post.</param>
         /// <returns>It's children comments.</returns>
         public async Task<IEnumerable<Comment>> FindByPost(int postId) {
-            Post? p = await postRepo.FindById(postId);
 
-            if (p == null) {
-                return Enumerable.Empty<Comment>();
-            }
+            // Post? p = await postRepo.FindById(postId);
 
-            using (DbConnection connection = GetConnection()) {
-                // Pull in every relevant comment first. This will be flat so we'll have to do some work.
-                IEnumerable<Comment> comments = (await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
-                    @"
+            // if (p == null) {
+            //     return Enumerable.Empty<Comment>();
+            // }
+
+            // Pull in every relevant comment first. This will be flat so we'll have to do some work.
+            IEnumerable<Comment> comments = (await Connection.QueryAsync<CommentRecord, UserRecord, Comment>(
+                @"
                     WITH RECURSIVE commenttree AS (
                     SELECT r.* FROM Comment r WHERE PostId = @PostId AND ParentId = 0 AND IsDeleted = FALSE 
                     UNION ALL
@@ -92,21 +78,20 @@ namespace Updog.Persistance {
                     INNER JOIN commenttree ct ON ct.Id = c.ParentId
                     ) SELECT * FROM commenttree
                     LEFT JOIN ""User"" ON UserId = ""User"".Id ORDER BY ParentId, CreationDate ASC;",
-                    // SELECT * FROM Comment LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id WHERE PostId = @PostId ORDER BY CreationDate DESC LIMIT @Limit OFFSET @Offset",
-                    (CommentRecord commentRec, UserRecord userRec) => {
-                        Comment c = this.commentMapper.Map(Tuple.Create(commentRec, userRec));
+                // SELECT * FROM Comment LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id WHERE PostId = @PostId ORDER BY CreationDate DESC LIMIT @Limit OFFSET @Offset",
+                (CommentRecord commentRec, UserRecord userRec) => {
+                    Comment c = this.commentMapper.Map(Tuple.Create(commentRec, userRec));
 
-                        //Set the parent post ref
-                        c.Post = p;
+                    //Set the parent post ref
+                    // c.Post = p;
 
-                        return c;
-                    },
-                    new { PostId = postId }
-                ));
+                    return c;
+                },
+                new { PostId = postId }
+            ));
 
-                List<Comment> tree = BuildCommentTree(comments);
-                return tree;
-            }
+            List<Comment> tree = BuildCommentTree(comments);
+            return tree;
         }
 
         /// <summary>
@@ -117,27 +102,25 @@ namespace Updog.Persistance {
         /// <param name="pageSize">Page size</param>
         /// <returns>The comments found.</returns>
         public async Task<PagedResultSet<Comment>> FindByUser(string username, int pageNumber, int pageSize) {
-            using (DbConnection connection = GetConnection()) {
-                IEnumerable<Comment> comments = await connection.QueryAsync<CommentRecord, UserRecord, Comment>(
-                    @"SELECT * FROM Comment LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id WHERE ""User"".Username = @Username AND IsDeleted = FALSE ORDER BY CreationDate DESC LIMIT @Limit OFFSET @Offset ",
-                    (commentRec, userRec) => {
-                        return commentMapper.Map(Tuple.Create(commentRec, userRec));
-                    },
-                    BuildPaginationParams(
-                        new { Username = username },
-                        pageNumber,
-                        pageSize
-                    )
-                );
+            IEnumerable<Comment> comments = await Connection.QueryAsync<CommentRecord, UserRecord, Comment>(
+                @"SELECT * FROM Comment LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id WHERE ""User"".Username = @Username AND IsDeleted = FALSE ORDER BY CreationDate DESC LIMIT @Limit OFFSET @Offset ",
+                (commentRec, userRec) => {
+                    return commentMapper.Map(Tuple.Create(commentRec, userRec));
+                },
+                BuildPaginationParams(
+                    new { Username = username },
+                    pageNumber,
+                    pageSize
+                )
+            );
 
-                //Get total count
-                int totalCount = await connection.ExecuteScalarAsync<int>(
-                    @"SELECT COUNT(*) FROM Comment LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id WHERE ""User"".Username = @Username AND IsDeleted = FALSE",
-                    new { Username = username }
-                );
+            //Get total count
+            int totalCount = await Connection.ExecuteScalarAsync<int>(
+                @"SELECT COUNT(*) FROM Comment LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id WHERE ""User"".Username = @Username AND IsDeleted = FALSE",
+                new { Username = username }
+            );
 
-                return new PagedResultSet<Comment>(comments, new PaginationInfo(pageNumber, pageSize, totalCount));
-            }
+            return new PagedResultSet<Comment>(comments, new PaginationInfo(pageNumber, pageSize, totalCount));
         }
 
         /// <summary>
@@ -147,12 +130,10 @@ namespace Updog.Persistance {
         public async Task Add(Comment entity) {
             CommentRecord commentRec = this.commentMapper.Reverse(entity).Item1;
 
-            using (DbConnection connection = GetConnection()) {
-                entity.Id = await connection.QueryFirstOrDefaultAsync<int>(
-                    @"INSERT INTO Comment (UserId, PostId, ParentId, Body, CreationDate, WasUpdated, WasDeleted, Upvotes, Downvotes) VALUES (@UserId, @PostId, @ParentId, @Body, @CreationDate, @WasUpdated, @WasDeleted, @Upvotes, @Downvotes) RETURNING Id;",
-                    commentRec
-                );
-            }
+            entity.Id = await Connection.QueryFirstOrDefaultAsync<int>(
+                @"INSERT INTO Comment (UserId, PostId, ParentId, Body, CreationDate, WasUpdated, WasDeleted, Upvotes, Downvotes) VALUES (@UserId, @PostId, @ParentId, @Body, @CreationDate, @WasUpdated, @WasDeleted, @Upvotes, @Downvotes) RETURNING Id;",
+                commentRec
+            );
         }
 
         /// <summary>
@@ -162,9 +143,8 @@ namespace Updog.Persistance {
         public async Task Update(Comment entity) {
             CommentRecord commentRec = this.commentMapper.Reverse(entity).Item1;
 
-            using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync(
-                    @"UPDATE Comment SET 
+            await Connection.ExecuteAsync(
+                @"UPDATE Comment SET 
                     UserId = @UserId, 
                     PostId = @PostId, 
                     ParentId = @ParentId, 
@@ -175,9 +155,8 @@ namespace Updog.Persistance {
                     Upvotes = @Upvotes,
                     Downvotes = @Downvotes
                     WHERE Id = @Id",
-                    commentRec
-                );
-            }
+                commentRec
+            );
         }
 
         /// <summary>
@@ -187,9 +166,7 @@ namespace Updog.Persistance {
         public async Task Delete(Comment entity) {
             CommentRecord commentRec = this.commentMapper.Reverse(entity).Item1;
 
-            using (DbConnection connection = GetConnection()) {
-                await connection.ExecuteAsync(@"UPDATE Comment SET WasDeleted = TRUE Where Id = @Id", commentRec);
-            }
+            await Connection.ExecuteAsync(@"UPDATE Comment SET WasDeleted = TRUE Where Id = @Id", commentRec);
         }
         #endregion
 

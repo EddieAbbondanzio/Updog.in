@@ -2,11 +2,13 @@ using System.Threading.Tasks;
 using Updog.Domain;
 
 namespace Updog.Application {
+    public interface IRepo { }
+
     /// <summary>
     /// CRUD interface for managing users.
     /// </summary>
     /// <typeparam name="TEntity">The type of entity stored.</typeparam>
-    public interface IRepo<TEntity> where TEntity : class, IEntity {
+    public interface IRepo<TEntity> : IRepo where TEntity : class, IEntity {
         #region Publics
         /// <summary>
         /// Find an entity by it's unique Id.

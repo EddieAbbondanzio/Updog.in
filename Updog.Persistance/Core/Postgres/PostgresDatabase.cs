@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data.Common;
-using System.Transactions;
+﻿using System.Data.Common;
 using Npgsql;
 using Updog.Application;
 
@@ -8,12 +6,12 @@ namespace Updog.Persistance {
     /// <summary>
     /// A database for data persistance that runs PostgreSQL.
     /// </summary>
-    public sealed class PostgresDatabase : IDatabase {
-        #region Properties
+    public sealed class PostgresDatabase : Database {
+        #region Fields
         /// <summary>
         /// The connection string for initiating new connections.
         /// </summary>
-        public string Connection { get; }
+        private string _connection;
         #endregion
 
         #region Constructor(s)
@@ -30,8 +28,7 @@ namespace Updog.Persistance {
                 Database = config.Database
             };
 
-            Connection = connBuilder.ToString();
-
+            _connection = connBuilder.ToString();
         }
         #endregion
 
@@ -40,13 +37,13 @@ namespace Updog.Persistance {
         /// Get a new connection with the database.
         /// </summary>
         /// <returns>A new pooled connection.</returns>
-        public DbConnection GetConnection() => new NpgsqlConnection(Connection);
+        public override DbConnection GetConnection() => new NpgsqlConnection(_connection);
 
         /// <summary>
         /// Start a new unit of work with the database.
         /// </summary>
         /// <returns>The newly created UoW.</returns>
-        public IUnitOfWork CreateUnitOfWork() => new UnitOfWork();
+        public override IUnitOfWork CreateUnitOfWork() => new UnitOfWork();
         #endregion
     }
 }

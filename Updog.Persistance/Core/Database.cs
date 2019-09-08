@@ -1,0 +1,60 @@
+using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq;
+using System.Reflection;
+using Updog.Application;
+
+namespace Updog.Persistance {
+    /// <summary>
+    /// Base class for databases to implement.
+    /// </summary>
+    public abstract class Database : IDatabase {
+        #region Fields
+        private Dictionary<Type, Type> _repoMap;
+        #endregion
+
+        #region Constructor(s)
+        public Database() {
+            _repoMap = new Dictionary<Type, Type>();
+        }
+        #endregion
+
+        #region Publics
+        /// <summary>
+        /// Start a new unit of work with the database.
+        /// </summary>
+        /// <returns>The new unit of work.</returns>
+        public abstract IUnitOfWork CreateUnitOfWork();
+
+        /// <summary>
+        /// Get a new active connection with the database.
+        /// </summary>
+        /// <returns>The new connection.</returns>
+        public abstract DbConnection GetConnection();
+
+        /// <summary>
+        /// Register a repo with the database.
+        /// </summary>
+        /// <typeparam name="TResolve">The type it resolves as.</typeparam>
+        /// <typeparam name="TRepo">The implementation type.</typeparam>
+        public void RegisterRepo<TResolve, TRepo>() where TResolve : class, IRepo where TRepo : class, IRepo => _repoMap.Add(typeof(TResolve), typeof(TRepo));
+
+
+        /// <summary>
+        /// Resolve a repo.
+        /// </summary>
+        /// <typeparam name="TRepo">The repo type to resolve.</typeparam>
+        public TRepo GetRepo<TRepo>(DbConnection? connection = null) where TRepo : class, IRepo {
+            Type resolveType = typeof(TRepo);
+
+            if (!_repoMap.ContainsKey(resolveType)) {
+                throw new NotFoundException($"No repo found for type {typeof(TRepo).Name}. Did you correctly register it?");
+            }
+
+            Type repoType = _repoMap[resolveType];
+            return (TRepo)Activator.CreateInstance(repoType, connection ?? GetConnection()) as TRepo;
+        }
+        #endregion
+    }
+}
