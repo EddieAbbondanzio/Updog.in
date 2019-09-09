@@ -10,32 +10,35 @@ namespace Updog.Application {
     /// </summary>
     public sealed class UserUpdater : IInteractor<UpdateUserParams> {
         #region Fields
-        private IUserRepo _repo;
-
-        private AbstractValidator<UpdateUserParams> _validator;
+        private IDatabase database;
+        private AbstractValidator<UpdateUserParams> validator;
         #endregion
 
         #region Constructor(s)
-        public UserUpdater(IUserRepo userRepo, AbstractValidator<UpdateUserParams> userValidator) {
-            _repo = userRepo;
-            _validator = userValidator;
+        public UserUpdater(IDatabase database, AbstractValidator<UpdateUserParams> userValidator) {
+            this.database = database;
+            validator = userValidator;
         }
         #endregion
 
         #region Publics
         public async Task Handle(UpdateUserParams input) {
-            await _validator.ValidateAndThrowAsync(input);
+            await validator.ValidateAndThrowAsync(input);
 
-            //Is the email already in use?
-            User? existing = await _repo.FindByEmail(input.Email);
+            using (var connection = database.GetConnection()) {
+                IUserRepo userRepo = database.GetRepo<IUserRepo>(connection);
 
-            if (!existing?.Equals(input.User) ?? false) {
-                throw new CollisionException("Email is already in use.");
+                //Is the email already in use?
+                User? existing = await userRepo.FindByEmail(input.Email);
+
+                if (!existing?.Equals(input.User) ?? false) {
+                    throw new CollisionException("Email is already in use.");
+                }
+
+                // Good to go, update and save off the change.
+                input.User.Email = input.Email;
+                await userRepo.Update(input.User);
             }
-
-            // Good to go, update and save off the change.
-            input.User.Email = input.Email;
-            await _repo.Update(input.User);
         }
         #endregion
     }
