@@ -43,7 +43,7 @@ namespace Updog.Persistance {
         /// <returns>The user with the username.</returns>
         public async Task<User?> FindByUsername(string username) {
             return await Connection.QueryFirstOrDefaultAsync<User>(
-                @"SELECT * FROM ""User"" WHERE Username = @Username;",
+                @"SELECT * FROM ""User"" WHERE LOWER(Username) = LOWER(@Username);",
                 new { Username = username }
             );
         }
@@ -55,7 +55,7 @@ namespace Updog.Persistance {
         /// <returns>The user found (if any).</returns>
         public async Task<User?> FindByEmail(string email) {
             return await Connection.QueryFirstOrDefaultAsync<User>(
-                @"SELECT * FROM ""User"" WHERE Email = @Email;",
+                @"SELECT * FROM ""User"" WHERE LOWER(Email) = LOWER(@Email);",
                 new { Email = email }
             );
         }

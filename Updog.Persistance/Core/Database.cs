@@ -26,7 +26,7 @@ namespace Updog.Persistance {
         /// Get a new active connection with the database.
         /// </summary>
         /// <returns>The new connection.</returns>
-        public abstract DbConnection GetConnection();
+        public abstract IDbConnection GetConnection();
 
         /// <summary>
         /// Register a repo with the database.
@@ -54,14 +54,6 @@ namespace Updog.Persistance {
              * a parameter of a db connection. Address this down the road? Or never...
              */
             return (TRepo)Activator.CreateInstance(repoType, connection) as TRepo;
-        }
-
-        IDbConnection IDatabase.GetConnection() {
-            throw new NotImplementedException();
-        }
-
-        TRepo IDatabase.GetRepo<TRepo>(IDbConnection? connection) {
-            throw new NotImplementedException();
         }
         #endregion
     }

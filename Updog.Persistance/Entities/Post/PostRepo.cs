@@ -105,7 +105,7 @@ namespace Updog.Persistance {
                     LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
-                    WHERE Space.Name = @Name
+                    WHERE LOWER(Space.Name) = LOWER(@Name)
                     AND IsDeleted = FALSE
                     ORDER BY Post.CreationDate DESC
                     LIMIT @Limit
@@ -118,7 +118,7 @@ namespace Updog.Persistance {
 
             //Get total count
             int totalCount = await Connection.ExecuteScalarAsync<int>(
-                "SELECT COUNT(*) FROM Post LEFT JOIN Space ON Post.SpaceId = Space.Id WHERE Space.Name = @Name;", new { Name = space }
+                "SELECT COUNT(*) FROM Post LEFT JOIN Space ON Post.SpaceId = Space.Id WHERE LOWER(Space.Name) = LOWER(@Name);", new { Name = space }
             );
 
             return new PagedResultSet<Post>(posts, new PaginationInfo(pageNumber, pageSize, totalCount));

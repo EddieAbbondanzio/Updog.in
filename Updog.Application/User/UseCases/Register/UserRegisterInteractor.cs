@@ -34,9 +34,14 @@ namespace Updog.Application {
                 IUserRepo userRepo = database.GetRepo<IUserRepo>(connection);
 
                 // Check that the email is free first.
-                User? existing = await userRepo.FindByEmail(input.Email);
-                if (existing != null) {
+                User? emailInUse = await userRepo.FindByEmail(input.Email);
+                if (emailInUse != null) {
                     throw new CollisionException("Email is already in use");
+                }
+
+                User? usernameInUse = await userRepo.FindByUsername(input.Username);
+                if (usernameInUse != null) {
+                    throw new CollisionException("Username is unavailable");
                 }
 
                 User user = new User() {

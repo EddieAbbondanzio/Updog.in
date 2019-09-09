@@ -44,7 +44,7 @@ namespace Updog.Persistance {
         /// <returns>The space found (if any).</returns>
         public async Task<Space?> FindByName(string name) {
             return (await Connection.QueryAsync<SpaceRecord, UserRecord, Space>(
-                @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id WHERE Space.Name = @Name",
+                @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id WHERE LOWER(Space.Name) = LOWER(@Name)",
                 (SpaceRecord s, UserRecord u) => mapper.Map(Tuple.Create(s, u)),
                 new { Name = name }
             )).FirstOrDefault();

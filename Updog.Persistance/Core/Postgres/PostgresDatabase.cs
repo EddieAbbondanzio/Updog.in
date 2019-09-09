@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿using System.Data;
+using System.Data.Common;
 using Npgsql;
 using Updog.Application;
 
@@ -11,7 +12,7 @@ namespace Updog.Persistance {
         /// <summary>
         /// The connection string for initiating new connections.
         /// </summary>
-        private string _connection;
+        private string connection;
         #endregion
 
         #region Constructor(s)
@@ -28,7 +29,7 @@ namespace Updog.Persistance {
                 Database = config.Database
             };
 
-            _connection = connBuilder.ToString();
+            connection = connBuilder.ToString();
         }
         #endregion
 
@@ -37,7 +38,7 @@ namespace Updog.Persistance {
         /// Get a new connection with the database.
         /// </summary>
         /// <returns>A new pooled connection.</returns>
-        public override DbConnection GetConnection() => new NpgsqlConnection(_connection);
+        public override IDbConnection GetConnection() => new NpgsqlConnection(connection);
         #endregion
     }
 }

@@ -10,7 +10,7 @@ namespace Updog.Application {
     /// </summary>
     public sealed class UserRegisterValidator : AbstractValidator<UserRegisterParams> {
         #region Constructor(s)
-        public UserRegisterValidator(IUserRepo userRepo) {
+        public UserRegisterValidator() {
             //Username
             RuleFor(reg => reg.Username).NotNull().WithMessage("Username is required.");
             RuleFor(reg => reg.Username).MinimumLength(User.UsernameMinLength).WithMessage($"Username must be at least {User.UsernameMinLength} characters.");
