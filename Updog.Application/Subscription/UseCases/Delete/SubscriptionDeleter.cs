@@ -8,38 +8,39 @@ namespace Updog.Application {
     /// </summary>
     public sealed class SubscriptionDeleter : IInteractor<SubscriptionDeleteParams> {
         #region Fields
-        private ISpaceRepo _spaceRepo;
-
-        private ISubscriptionRepo _subscriptionRepo;
-
-        private ISubscriptionViewMapper _subscriptionMapper;
+        private IDatabase database;
+        private ISubscriptionViewMapper subscriptionMapper;
         #endregion
 
         #region Constructor(s)
-        public SubscriptionDeleter(ISpaceRepo spaceRepo, ISubscriptionRepo subscriptionRepo, ISubscriptionViewMapper subscriptionMapper) {
-            _spaceRepo = spaceRepo;
-            _subscriptionRepo = subscriptionRepo;
-            _subscriptionMapper = subscriptionMapper;
+        public SubscriptionDeleter(IDatabase database, ISubscriptionViewMapper subscriptionMapper) {
+            this.database = database;
+            this.subscriptionMapper = subscriptionMapper;
         }
         #endregion
 
         #region Publics
         public async Task Handle(SubscriptionDeleteParams input) {
-            //Pull in the space first
-            Space? s = await _spaceRepo.FindByName(input.Space);
+            using (var conenction = database.GetConnection()) {
+                ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(conenction);
+                ISubscriptionRepo subRepo = database.GetRepo<ISubscriptionRepo>(conenction);
 
-            if (s == null) {
-                throw new NotFoundException($"No space with name {input.Space} exists.");
+                //Pull in the space first
+                Space? s = await spaceRepo.FindByName(input.Space);
+
+                if (s == null) {
+                    throw new InvalidOperationException($"No space with name {input.Space} exists.");
+                }
+
+                //Try to pull in the subscription
+                Subscription? sub = await subRepo.FindByUserAndSpace(input.User.Username, input.Space);
+
+                if (sub == null) {
+                    throw new InvalidOperationException("Subscription does not exist");
+                }
+
+                await subRepo.Delete(sub);
             }
-
-            //Try to pull in the subscription
-            Subscription? sub = await _subscriptionRepo.FindByUserAndSpace(input.User.Username, input.Space);
-
-            if (sub == null) {
-                throw new InvalidOperationException("Subscription does not exist");
-            }
-
-            await _subscriptionRepo.Delete(sub);
         }
         #endregion
     }

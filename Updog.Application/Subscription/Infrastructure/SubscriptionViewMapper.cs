@@ -7,15 +7,15 @@ namespace Updog.Application {
     /// </summary>
     public sealed class SubscriptionViewMapper : ISubscriptionViewMapper {
         #region Properties
-        private IUserViewMapper _userViewMapper;
+        private IUserViewMapper userViewMapper;
 
-        private ISpaceViewMapper _spaceViewMapper;
+        private ISpaceViewMapper spaceViewMapper;
         #endregion
 
         #region Constructor(s)
         public SubscriptionViewMapper(IUserViewMapper userViewMapper, ISpaceViewMapper spaceViewMapper) {
-            _userViewMapper = userViewMapper;
-            _spaceViewMapper = spaceViewMapper;
+            this.userViewMapper = userViewMapper;
+            this.spaceViewMapper = spaceViewMapper;
         }
         #endregion
 
@@ -23,8 +23,8 @@ namespace Updog.Application {
         public SubscriptionView Map(Subscription source) {
             return new SubscriptionView(
                 source.Id,
-                _userViewMapper.Map(source.User),
-                _spaceViewMapper.Map(source.Space)
+                userViewMapper.Map(source.User),
+                spaceViewMapper.Map(source.Space)
             );
         }
         #endregion
