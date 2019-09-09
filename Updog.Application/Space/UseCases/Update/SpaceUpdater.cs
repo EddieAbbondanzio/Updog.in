@@ -1,4 +1,5 @@
 
+using System;
 using System.Threading.Tasks;
 using FluentValidation;
 using Updog.Domain;
@@ -9,43 +10,43 @@ namespace Updog.Application {
     /// </summary>
     public sealed class SpaceUpdater : IInteractor<SpaceUpdateParams, SpaceView> {
         #region Fields
-        private ISpaceRepo _spaceRepo;
-
-        private IPermissionHandler<Space> _spacePermissionHandler;
-
-        private AbstractValidator<SpaceUpdateParams> _spaceValidator;
-
-        private ISpaceViewMapper _spaceMapper;
+        private IDatabase database;
+        private IPermissionHandler<Space> spacePermissionHandler;
+        private AbstractValidator<SpaceUpdateParams> spaceValidator;
+        private ISpaceViewMapper spaceMapper;
         #endregion
 
         #region Constructor(s)
-        public SpaceUpdater(ISpaceRepo spaceRepo, IPermissionHandler<Space> spacePermissionHandler, AbstractValidator<SpaceUpdateParams> spaceValidator, ISpaceViewMapper spaceMapper) {
-            _spaceRepo = spaceRepo;
-            _spacePermissionHandler = spacePermissionHandler;
-            _spaceValidator = spaceValidator;
-            _spaceMapper = spaceMapper;
+        public SpaceUpdater(IDatabase database, IPermissionHandler<Space> spacePermissionHandler, AbstractValidator<SpaceUpdateParams> spaceValidator, ISpaceViewMapper spaceMapper) {
+            this.database = database;
+            this.spacePermissionHandler = spacePermissionHandler;
+            this.spaceValidator = spaceValidator;
+            this.spaceMapper = spaceMapper;
         }
         #endregion
 
         #region Publics
         public async Task<SpaceView> Handle(SpaceUpdateParams input) {
-            Space? s = await this._spaceRepo.FindByName(input.Name);
+            await spaceValidator.ValidateAndThrowAsync(input);
 
-            if (s == null) {
-                throw new NotFoundException();
+            using (var connection = database.GetConnection()) {
+                ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(connection);
+
+                Space? s = await spaceRepo.FindByName(input.Name);
+
+                if (s == null) {
+                    throw new InvalidOperationException();
+                }
+
+                if (!(await this.spacePermissionHandler.HasPermission(input.User, PermissionAction.UpdateSpace, s))) {
+                    throw new AuthorizationException();
+                }
+
+                s.Description = input.Description;
+                await spaceRepo.Update(s);
+
+                return spaceMapper.Map(s);
             }
-
-            if (!(await this._spacePermissionHandler.HasPermission(input.User, PermissionAction.UpdateSpace, s))) {
-                throw new AuthorizationException();
-            }
-
-            await _spaceValidator.ValidateAndThrowAsync(input);
-
-            s.Description = input.Description;
-            await _spaceRepo.Update(s);
-
-
-            return _spaceMapper.Map(s);
         }
         #endregion
     }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Updog.Domain;
 
@@ -8,28 +9,24 @@ namespace Updog.Application {
     /// </summary>
     public sealed class SpaceFinderDefault : IInteractor<object, IEnumerable<SpaceView>> {
         #region Fields
-        private ISpaceRepo _spaceRepo;
-
-        private ISpaceViewMapper _spaceMapper;
+        private IDatabase database;
+        private ISpaceViewMapper spaceMapper;
         #endregion
 
         #region Constructor(s)
-        public SpaceFinderDefault(ISpaceRepo spaceRepo, ISpaceViewMapper spaceMapper) {
-            _spaceRepo = spaceRepo;
-            _spaceMapper = spaceMapper;
+        public SpaceFinderDefault(IDatabase database, ISpaceViewMapper spaceMapper) {
+            this.database = database;
+            this.spaceMapper = spaceMapper;
         }
         #endregion
 
         public async Task<IEnumerable<SpaceView>> Handle(object input) {
-            IEnumerable<Space> spaces = await _spaceRepo.FindDefault();
+            using (var connection = database.GetConnection()) {
+                ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(connection);
 
-            List<SpaceView> views = new List<SpaceView>();
-
-            foreach (Space s in spaces) {
-                views.Add(_spaceMapper.Map(s));
+                IEnumerable<Space> spaces = await spaceRepo.FindDefault();
+                return spaces.Select(s => spaceMapper.Map(s));
             }
-
-            return views;
         }
     }
 }

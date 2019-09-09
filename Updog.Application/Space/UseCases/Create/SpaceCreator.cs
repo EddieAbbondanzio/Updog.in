@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using FluentValidation;
 using Updog.Domain;
@@ -8,38 +9,40 @@ namespace Updog.Application {
     /// </summary>
     public sealed class SpaceCreator : IInteractor<SpaceCreateParams, SpaceView> {
         #region Fields
-        private ISpaceRepo _spaceRepo;
-
-        private AbstractValidator<SpaceCreateParams> _spaceValidator;
-
-        private ISpaceViewMapper _spaceMapper;
+        private IDatabase database;
+        private AbstractValidator<SpaceCreateParams> spaceValidator;
+        private ISpaceViewMapper spaceMapper;
         #endregion
 
         #region Constructor(s)
-        public SpaceCreator(ISpaceRepo spaceRepo, AbstractValidator<SpaceCreateParams> spaceValidator, ISpaceViewMapper spaceMapper) {
-            _spaceRepo = spaceRepo;
-            _spaceValidator = spaceValidator;
-            _spaceMapper = spaceMapper;
+        public SpaceCreator(IDatabase database, AbstractValidator<SpaceCreateParams> spaceValidator, ISpaceViewMapper spaceMapper) {
+            this.database = database;
+            this.spaceValidator = spaceValidator;
+            this.spaceMapper = spaceMapper;
         }
         #endregion
 
         #region Publics
         public async Task<SpaceView> Handle(SpaceCreateParams input) {
-            await _spaceValidator.ValidateAndThrowAsync(input);
+            await spaceValidator.ValidateAndThrowAsync(input);
 
-            Space? existing = await _spaceRepo.FindByName(input.Name);
-            if (existing != null) {
-                throw new CollisionException();
+            using (var connection = database.GetConnection()) {
+                ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(connection);
+                Space? existing = await spaceRepo.FindByName(input.Name);
+
+                if (existing != null) {
+                    throw new InvalidOperationException($"Space name {input.Name} is already taken.");
+                }
+
+                Space s = new Space() {
+                    Name = input.Name,
+                    Description = input.Description,
+                    User = input.User
+                };
+
+                await spaceRepo.Add(s);
+                return spaceMapper.Map(s);
             }
-
-            Space s = new Space() {
-                Name = input.Name,
-                Description = input.Description,
-                User = input.User
-            };
-
-            await _spaceRepo.Add(s);
-            return _spaceMapper.Map(s);
         }
         #endregion
     }
