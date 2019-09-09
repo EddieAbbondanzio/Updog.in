@@ -9,45 +9,45 @@ namespace Updog.Application {
     /// </summary>
     public sealed class PostCreator : IInteractor<PostCreateParams, PostView?> {
         #region Fields
-        private IPostRepo _postRepo;
-
-        private ISpaceRepo _spaceRepo;
-
-        private AbstractValidator<PostCreateParams> _postValidator;
-
-        private IPostViewMapper _postMapper;
+        private IDatabase database;
+        private AbstractValidator<PostCreateParams> postValidator;
+        private IPostViewMapper postMapper;
         #endregion
 
         #region Constructor(s)
-        public PostCreator(IPostRepo postRepo, ISpaceRepo spaceRepo, AbstractValidator<PostCreateParams> postValidator, IPostViewMapper postMapper) {
-            _postRepo = postRepo;
-            _spaceRepo = spaceRepo;
-            _postValidator = postValidator;
-            _postMapper = postMapper;
+        public PostCreator(IDatabase database, AbstractValidator<PostCreateParams> postValidator, IPostViewMapper postMapper) {
+            this.database = database;
+            this.postValidator = postValidator;
+            this.postMapper = postMapper;
         }
         #endregion
 
         #region Publics
         public async Task<PostView?> Handle(PostCreateParams input) {
-            await _postValidator.ValidateAndThrowAsync(input);
+            await postValidator.ValidateAndThrowAsync(input);
 
-            Space? s = await _spaceRepo.FindByName(input.Space);
+            using (var connection = database.GetConnection()) {
+                ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(connection);
+                IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);
 
-            if (s == null) {
-                throw new NotFoundException($"No space with name ${input.Space} found.");
+                Space? space = await spaceRepo.FindByName(input.Space);
+                if (space == null) {
+                    throw new InvalidOperationException($"No space with name ${input.Space} found.");
+                }
+
+                Post post = new Post() {
+                    Type = input.Type,
+                    Title = input.Title,
+                    Body = input.Body,
+                    User = input.User,
+                    CreationDate = DateTime.UtcNow,
+                    Space = space
+                };
+
+                await postRepo.Add(post);
+                return postMapper.Map(post);
             }
 
-            Post post = new Post() {
-                Type = input.Type,
-                Title = input.Title,
-                Body = input.Body,
-                User = input.User,
-                CreationDate = DateTime.UtcNow,
-                Space = s
-            };
-
-            await _postRepo.Add(post);
-            return _postMapper.Map(post);
         }
         #endregion
     }

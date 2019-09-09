@@ -10,34 +10,26 @@ namespace Updog.Application {
     /// </summary>
     public sealed class PostFinderByUser : IInteractor<PostFinderByUserParam, PagedResultSet<PostView>> {
         #region Fields
-        private IPostRepo _postRepo;
-
-        private IPostViewMapper _postMapper;
+        private IDatabase database;
+        private IPostViewMapper postMapper;
         #endregion
 
         #region Constructor(s)
-        /// <summary>
-        /// Create a new post find by user interactor.
-        /// </summary>
-        /// <param name="postRepo">CRUD post repo.</param>
-        /// <param name="postMapper">Mapper to convert post to DTO..</param>
-        public PostFinderByUser(IPostRepo postRepo, IPostViewMapper postMapper) {
-            _postRepo = postRepo;
-            _postMapper = postMapper;
+        public PostFinderByUser(IDatabase database, IPostViewMapper postMapper) {
+            this.database = database;
+            this.postMapper = postMapper;
         }
         #endregion
 
 
         #region Publics
         public async Task<PagedResultSet<PostView>> Handle(PostFinderByUserParam input) {
-            PagedResultSet<Post> posts = await _postRepo.FindByUser(input.Username, input.PageNumber, input.PageSize);
-            List<PostView> views = new List<PostView>();
+            using (var connection = database.GetConnection()) {
+                IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);
 
-            foreach (Post p in posts) {
-                views.Add(_postMapper.Map(p));
+                PagedResultSet<Post> posts = await postRepo.FindByUser(input.Username, input.PageNumber, input.PageSize);
+                return new PagedResultSet<PostView>(posts.Items.Select(p => postMapper.Map(p)), posts.Pagination);
             }
-
-            return new PagedResultSet<PostView>(views, posts.Pagination);
         }
     }
     #endregion

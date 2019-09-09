@@ -36,7 +36,7 @@ namespace Updog.Persistance {
             // This doesn't pull in comment children and it should.
             IEnumerable<Comment> comments = await Connection.QueryAsync<CommentRecord, UserRecord, Comment>(
                 @"WITH RECURSIVE commenttree AS (
-                    SELECT r.* FROM Comment r WHERE Id = @Id 
+                    SELECT r.* FROM Comment r WHERE Id = @Id AND IsDeleted = FALSE
                     UNION ALL
                     SELECT c.* FROM Comment c
                     INNER JOIN commenttree ct ON ct.Id = c.ParentId

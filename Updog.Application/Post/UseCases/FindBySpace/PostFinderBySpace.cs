@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Updog.Application.Paging;
 using Updog.Domain;
@@ -9,28 +10,25 @@ namespace Updog.Application {
     /// </summary>
     public sealed class PostFinderBySpace : IInteractor<PostFindBySpaceParams, PagedResultSet<PostView>> {
         #region Fields
-        private IPostRepo _repo;
-
-        private IPostViewMapper _mapper;
+        private IDatabase database;
+        private IPostViewMapper mapper;
         #endregion
 
         #region Constructor(s)
-        public PostFinderBySpace(IPostRepo repo, IPostViewMapper mapper) {
-            _repo = repo;
-            _mapper = mapper;
+        public PostFinderBySpace(IDatabase database, IPostViewMapper mapper) {
+            this.database = database;
+            this.mapper = mapper;
         }
         #endregion
 
         public async Task<PagedResultSet<PostView>> Handle(PostFindBySpaceParams input) {
-            PagedResultSet<Post> posts = await _repo.FindBySpace(input.Space, input.PageNumber, input.PageSize);
+            using (var connection = database.GetConnection()) {
+                IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);
 
-            List<PostView> views = new List<PostView>();
+                PagedResultSet<Post> posts = await postRepo.FindBySpace(input.Space, input.PageNumber, input.PageSize);
 
-            foreach (Post p in posts) {
-                views.Add(_mapper.Map(p));
+                return new PagedResultSet<PostView>(posts.Items.Select(p => mapper.Map(p)), posts.Pagination);
             }
-
-            return new PagedResultSet<PostView>(views, posts.Pagination);
         }
     }
 }
