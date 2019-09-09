@@ -177,6 +177,8 @@ namespace Updog.Persistance {
                     WHERE Id = @Id",
                 _postMapper.Reverse(post).Item1
             );
+
+            post.WasUpdated = true;
         }
 
         /// <summary>
@@ -188,6 +190,8 @@ namespace Updog.Persistance {
                 @"UPDATE Post SET WasDeleted = TRUE WHERE Id = @Id",
                 _postMapper.Reverse(post).Item1
             );
+
+            post.WasDeleted = true;
         }
         #endregion
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Reflection;
@@ -22,12 +23,6 @@ namespace Updog.Persistance {
 
         #region Publics
         /// <summary>
-        /// Start a new unit of work with the database.
-        /// </summary>
-        /// <returns>The new unit of work.</returns>
-        public abstract IUnitOfWork CreateUnitOfWork();
-
-        /// <summary>
         /// Get a new active connection with the database.
         /// </summary>
         /// <returns>The new connection.</returns>
@@ -45,7 +40,7 @@ namespace Updog.Persistance {
         /// Resolve a repo.
         /// </summary>
         /// <typeparam name="TRepo">The repo type to resolve.</typeparam>
-        public TRepo GetRepo<TRepo>(DbConnection? connection = null) where TRepo : class, IRepo {
+        public TRepo GetRepo<TRepo>(IDbConnection connection) where TRepo : class, IRepo {
             Type resolveType = typeof(TRepo);
 
             if (!_repoMap.ContainsKey(resolveType)) {
@@ -53,7 +48,20 @@ namespace Updog.Persistance {
             }
 
             Type repoType = _repoMap[resolveType];
-            return (TRepo)Activator.CreateInstance(repoType, connection ?? GetConnection()) as TRepo;
+
+            /*
+             * This is a poor design decision. It assumes the IRepo is always a DatabaseRepo that needs
+             * a parameter of a db connection. Address this down the road? Or never...
+             */
+            return (TRepo)Activator.CreateInstance(repoType, connection) as TRepo;
+        }
+
+        IDbConnection IDatabase.GetConnection() {
+            throw new NotImplementedException();
+        }
+
+        TRepo IDatabase.GetRepo<TRepo>(IDbConnection? connection) {
+            throw new NotImplementedException();
         }
         #endregion
     }

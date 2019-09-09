@@ -11,39 +11,29 @@ namespace Updog.Application {
     /// </summary>
     public sealed class CommentFinderByUser : IInteractor<CommentFinderByUserParams, PagedResultSet<CommentView>> {
         #region Fields
-        /// <summary>
-        /// The underlying repo for finding comments in the database.
-        /// </summary>
-        private ICommentRepo _commentRepo;
-
-        /// <summary>
-        /// Mapper to convert a comment into it's DTO.
-        /// </summary>
-        private ICommentViewMapper _commentMapper;
+        private IDatabase database;
+        private ICommentViewMapper commentMapper;
         #endregion
 
         #region Constructor(s)
-        /// <summary>
-        /// Create a new comment finder by post.
-        /// </summary>
-        /// <param name="commentRepo">The CRUD interface for comments.</param>
-        /// <param name="commentMapper">DTO mapper.</param>
-        public CommentFinderByUser(ICommentRepo commentRepo, ICommentViewMapper commentMapper) {
-            _commentRepo = commentRepo;
-            _commentMapper = commentMapper;
+        public CommentFinderByUser(IDatabase database, ICommentViewMapper commentMapper) {
+            this.database = database;
+            this.commentMapper = commentMapper;
         }
         #endregion
 
         #region Publics
         public async Task<PagedResultSet<CommentView>> Handle(CommentFinderByUserParams input) {
-            PagedResultSet<Comment> comments = await _commentRepo.FindByUser(input.Username, input.PageNumber, input.PageSize);
-            List<CommentView> views = new List<CommentView>();
+            using (var connection = database.GetConnection()) {
+                ICommentRepo commentRepo = database.GetRepo<ICommentRepo>(connection);
 
-            foreach (Comment c in comments) {
-                views.Add(_commentMapper.Map(c));
+                PagedResultSet<Comment> comments = await commentRepo.FindByUser(input.Username, input.PageNumber, input.PageSize);
+
+                return new PagedResultSet<CommentView>(
+                    comments.Select(c => commentMapper.Map(c)),
+                    comments.Pagination
+                );
             }
-
-            return new PagedResultSet<CommentView>(views, comments.Pagination);
         }
         #endregion
     }

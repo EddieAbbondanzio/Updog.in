@@ -34,7 +34,7 @@ namespace Updog.Persistance {
             Comment comment = new Comment() {
                 Id = source.Item1.Id,
                 User = this.userMapper.Map(source.Item2),
-                Post = new Post() { Id = source.Item1.PostId },
+                PostId = source.Item1.PostId,
                 Body = source.Item1.Body,
                 CreationDate = source.Item1.CreationDate,
                 WasUpdated = source.Item1.WasUpdated,
@@ -57,7 +57,7 @@ namespace Updog.Persistance {
             CommentRecord commentRec = new CommentRecord() {
                 Id = destination.Id,
                 UserId = destination.User.Id,
-                PostId = destination.Post.Id,
+                PostId = destination.PostId,
                 Body = destination.Body,
                 CreationDate = destination.CreationDate,
                 WasUpdated = destination.WasUpdated,

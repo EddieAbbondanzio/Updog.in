@@ -1,4 +1,5 @@
 using System;
+using System.Data.Common;
 using System.Threading.Tasks;
 using FluentValidation;
 using Updog.Domain;
@@ -9,72 +10,60 @@ namespace Updog.Application {
     /// </summary>
     public sealed class CommentCreator : IInteractor<CommentCreateParams, CommentView> {
         #region Fields
-        private IDatabase _database;
-
-        private ICommentRepo _commentRepo;
-
-        private AbstractValidator<CommentCreateParams> _commentValidator;
-
-        /// <summary>
-        /// Mapper to convert the comment into its DTO.
-        /// </summary>
-        private ICommentViewMapper _commentMapper;
-
-        /// <summary>
-        /// CRUD interface for posts.
-        /// </summary>
-        private IPostRepo _postRepo;
+        private IDatabase database;
+        private AbstractValidator<CommentCreateParams> commentValidator;
+        private ICommentViewMapper commentMapper;
         #endregion
 
         #region Constructor(s)
-        /// <summary>
-        /// Create a new comment creator.
-        /// </summary>
-        /// <param name="database">The data store</param>
-        /// <param name="commentRepo">The CRUD interface for the DB.</param>
-        /// <param name="commentValidator">Validator for verifying comments are good.</param>
-        /// <param name="commentMapper">The mapper to build DTOs.</param>
-        public CommentCreator(IDatabase database, ICommentRepo commentRepo, AbstractValidator<CommentCreateParams> commentValidator, ICommentViewMapper commentMapper, IPostRepo postRepo) {
-            _database = database;
-            _commentRepo = commentRepo;
-            _commentValidator = commentValidator;
-            _commentMapper = commentMapper;
-            _postRepo = postRepo;
+        public CommentCreator(IDatabase database, AbstractValidator<CommentCreateParams> commentValidator, ICommentViewMapper commentMapper) {
+            this.database = database;
+            this.commentValidator = commentValidator;
+            this.commentMapper = commentMapper;
         }
         #endregion
 
         #region Publics
         public async Task<CommentView> Handle(CommentCreateParams input) {
-            await _commentValidator.ValidateAndThrowAsync(input);
+            await commentValidator.ValidateAndThrowAsync(input);
 
-            Post? p = await _postRepo.FindById(input.PostId);
+            using (var connection = database.GetConnection()) {
+                IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);
+                ICommentRepo commentRepo = database.GetRepo<ICommentRepo>(connection);
 
-            if (p == null) {
-                throw new InvalidOperationException();
+                // Locate the post to ensure it actually exists.
+                Post? post = await postRepo.FindById(input.PostId);
+
+                if (post == null) {
+                    throw new InvalidOperationException();
+                }
+
+                Comment comment = new Comment() {
+                    User = input.User,
+                    PostId = post.Id,
+                    Body = input.Body,
+                    CreationDate = DateTime.UtcNow
+                };
+
+                // Set the parent comment if needed.
+                if (input.ParentId != 0) {
+                    comment.Parent = await commentRepo.FindById(input.ParentId);
+                }
+
+                // Update the comment count cache on the post.
+                post.CommentCount++;
+
+                using (var transaction = connection.BeginTransaction()) {
+                    await Task.WhenAll(
+                        commentRepo.Add(comment),
+                        postRepo.Update(post)
+                    );
+
+                    transaction.Commit();
+                }
+
+                return commentMapper.Map(comment);
             }
-
-            Comment? parent = input.ParentId != 0 ? (await _commentRepo.FindById(input.ParentId)) : null;
-
-            Comment comment = new Comment() {
-                User = input.User,
-                Post = p,
-                Parent = parent,
-                Body = input.Body,
-                CreationDate = DateTime.UtcNow
-            };
-
-            p.CommentCount++;
-
-            using (var unitOfWork = _database.CreateUnitOfWork()) {
-                Task.WaitAll(
-                    _commentRepo.Add(comment),
-                    _postRepo.Update(p)
-                );
-
-                unitOfWork.Save();
-            }
-
-            return _commentMapper.Map(comment);
         }
         #endregion
     }

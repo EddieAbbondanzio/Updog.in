@@ -29,7 +29,7 @@ namespace Updog.Domain {
         /// <summary>
         /// The parent post.
         /// </summary>
-        public Post Post { get; set; } = null!;
+        public int PostId { get; set; }
 
         /// <summary>
         /// The parent comment (if null it is a top level comment).

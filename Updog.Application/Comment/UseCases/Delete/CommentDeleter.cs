@@ -9,59 +9,56 @@ namespace Updog.Application {
     /// </summary>
     public sealed class CommentDeleter : IInteractor<CommentDeleteParams, CommentView> {
         #region Fields
-        private IPostRepo _postRepo;
-
-        private ICommentRepo _commentRepo;
-
-        private IPermissionHandler<Comment> _permissionHandler;
-
-        private AbstractValidator<CommentDeleteParams> _validator;
-
-        /// <summary>
-        /// Mapper to convert the comment into its DTO.
-        /// </summary>
-        private ICommentViewMapper _commentMapper;
+        private IDatabase database;
+        private IPermissionHandler<Comment> permissionHandler;
+        private AbstractValidator<CommentDeleteParams> validator;
+        private ICommentViewMapper commentMapper;
         #endregion
 
         #region Constructor(s)
-        public CommentDeleter(IPostRepo postRepo, ICommentRepo commentRepo, IPermissionHandler<Comment> permissionHandler, AbstractValidator<CommentDeleteParams> validator, ICommentViewMapper commentMapper) {
-            _postRepo = postRepo;
-            _commentRepo = commentRepo;
-            _permissionHandler = permissionHandler;
-            _validator = validator;
-            _commentMapper = commentMapper;
+        public CommentDeleter(IDatabase database, IPermissionHandler<Comment> permissionHandler, AbstractValidator<CommentDeleteParams> validator, ICommentViewMapper commentMapper) {
+            this.database = database;
+            this.permissionHandler = permissionHandler;
+            this.validator = validator;
+            this.commentMapper = commentMapper;
         }
         #endregion
 
         #region Publics
         public async Task<CommentView> Handle(CommentDeleteParams input) {
-            throw new Exception();
-            // Comment? c = await commentRepo.FindById(input.CommentId);
-            Comment? c = null;
+            await validator.ValidateAndThrowAsync(input);
 
-            if (c == null) {
-                throw new InvalidOperationException();
+            using (var connection = database.GetConnection()) {
+                ICommentRepo commentRepo = database.GetRepo<ICommentRepo>(connection);
+                IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);
+
+                Comment? comment = await commentRepo.FindById(input.CommentId);
+
+                if (comment == null) {
+                    throw new InvalidOperationException();
+                }
+
+                // Check to see if they have permission first.
+                if (!(await this.permissionHandler.HasPermission(input.User, PermissionAction.DeleteComment, comment))) {
+                    throw new AuthorizationException();
+                }
+
+                // (Hopefully) it would be impossible for post to be null if a comment exists...
+                Post post = (await postRepo.FindById(comment.PostId))!;
+
+                post.CommentCount--;
+
+                using (var transaction = connection.BeginTransaction()) {
+                    await Task.WhenAll(
+                        commentRepo.Delete(comment),
+                        postRepo.Update(post)
+                    );
+
+                    transaction.Commit();
+                }
+
+                return commentMapper.Map(comment);
             }
-
-            if (!(await this._permissionHandler.HasPermission(input.User, PermissionAction.DeleteComment, c))) {
-                throw new AuthorizationException();
-            }
-
-            await _validator.ValidateAndThrowAsync(input);
-
-            c.WasDeleted = true;
-
-            // using (var unitOfWork = CreateUnitOfWork()) {
-            c.Post.CommentCount--;
-
-            Task.WaitAll(
-            // commentRepo.Update(c),
-            // postRepo.Update(c.Post)
-            );
-
-            // }
-
-            return _commentMapper.Map(c);
         }
         #endregion
     }

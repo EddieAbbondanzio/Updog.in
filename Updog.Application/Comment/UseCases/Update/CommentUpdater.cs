@@ -10,46 +10,43 @@ namespace Updog.Application {
     /// </summary>
     public sealed class CommentUpdater : IInteractor<CommentUpdateParams, CommentView> {
         #region Fields
-        private IPermissionHandler<Comment> _commentPermissionHandler;
-
-        private ICommentRepo _commentRepo;
-
-        private AbstractValidator<CommentUpdateParams> _commentValidator;
-
-        /// <summary>
-        /// Mapper to convert the comment into its DTO.
-        /// </summary>
-        private ICommentViewMapper _commentMapper;
+        private IDatabase database;
+        private IPermissionHandler<Comment> commentPermissionHandler;
+        private AbstractValidator<CommentUpdateParams> commentValidator;
+        private ICommentViewMapper commentMapper;
         #endregion
 
         #region Constructor(s)
-        public CommentUpdater(IPermissionHandler<Comment> commentPermissionHandler, ICommentRepo commentRepo, AbstractValidator<CommentUpdateParams> commentValidator, ICommentViewMapper commentMapper) {
-            _commentPermissionHandler = commentPermissionHandler;
-            _commentRepo = commentRepo;
-            _commentValidator = commentValidator;
-            _commentMapper = commentMapper;
+        public CommentUpdater(IDatabase database, IPermissionHandler<Comment> commentPermissionHandler, AbstractValidator<CommentUpdateParams> commentValidator, ICommentViewMapper commentMapper) {
+            this.database = database;
+            this.commentPermissionHandler = commentPermissionHandler;
+            this.commentValidator = commentValidator;
+            this.commentMapper = commentMapper;
         }
         #endregion
 
         #region Publics
         public async Task<CommentView> Handle(CommentUpdateParams input) {
-            Comment? comment = await _commentRepo.FindById(input.CommentId);
+            await commentValidator.ValidateAndThrowAsync(input);
 
-            if (comment == null) {
-                throw new NotFoundException();
+            using (var connection = database.GetConnection()) {
+                ICommentRepo commentRepo = database.GetRepo<ICommentRepo>(connection);
+                Comment? comment = await commentRepo.FindById(input.CommentId);
+
+                if (comment == null) {
+                    throw new NotFoundException();
+                }
+
+                if (!(await this.commentPermissionHandler.HasPermission(input.User, PermissionAction.UpdateComment, comment))) {
+                    throw new AuthorizationException();
+                }
+
+                comment.Body = input.Body;
+                comment.WasUpdated = true;
+
+                await commentRepo.Update(comment);
+                return commentMapper.Map(comment);
             }
-
-            if (!(await this._commentPermissionHandler.HasPermission(input.User, PermissionAction.UpdateComment, comment))) {
-                throw new AuthorizationException();
-            }
-
-            await _commentValidator.ValidateAndThrowAsync(input);
-
-            comment.Body = input.Body;
-            comment.WasUpdated = true;
-            await _commentRepo.Update(comment);
-
-            return _commentMapper.Map(comment);
         }
         #endregion
     }

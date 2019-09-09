@@ -38,12 +38,6 @@ namespace Updog.Persistance {
         /// </summary>
         /// <returns>A new pooled connection.</returns>
         public override DbConnection GetConnection() => new NpgsqlConnection(_connection);
-
-        /// <summary>
-        /// Start a new unit of work with the database.
-        /// </summary>
-        /// <returns>The newly created UoW.</returns>
-        public override IUnitOfWork CreateUnitOfWork() => new UnitOfWork();
         #endregion
     }
 }
