@@ -45,7 +45,7 @@ namespace Updog.Api {
         [AllowAnonymous]
         public async Task<ActionResult> GetSubscriptions() {
             if (User != null) {
-                IEnumerable<SubscriptionView> subs = await _subsriptionFinderByUser.Handle(User);
+                IEnumerable<SubscriptionView> subs = await _subsriptionFinderByUser.Handle(new SubscriptionFindByUserParams(User));
                 return Ok(subs.Select(s => s.Space));
             } else {
                 IEnumerable<SpaceView> spaces = await _spaceFinderDefault.Handle(null!);

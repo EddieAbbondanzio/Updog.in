@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters to update a comment.
     /// </summary>
-    public sealed class CommentUpdateParams {
+    public sealed class CommentUpdateParams : IAuthenticatedActionParams {
         #region Properties
         public User User { get; }
 

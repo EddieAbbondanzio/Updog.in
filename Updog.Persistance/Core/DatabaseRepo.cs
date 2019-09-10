@@ -14,7 +14,7 @@ namespace Updog.Persistance {
     /// <typeparam name="TEntity">The type of entity.</typeparam>
     public abstract class DatabaseRepo<TEntity> : DatabaseRepo where TEntity : IEntity {
         #region Properties
-        protected DbConnection Connection;
+        protected DbConnection Connection { get; }
         #endregion
 
         #region Constructor(s)

@@ -5,7 +5,7 @@ namespace Updog.Domain {
     /// <summary>
     /// A comment associated with a post.
     /// </summary>
-    public sealed class Comment : IEntity {
+    public sealed class Comment : VotableEntity, ISoftDeletable {
         #region Constants
         /// <summary>
         /// The maximum number of characters in a comment body.
@@ -16,10 +16,7 @@ namespace Updog.Domain {
         #endregion
 
         #region Properties
-        /// <summary>
-        /// The ID of the comment.
-        /// </summary>
-        public int Id { get; set; }
+        public override VoteResourceType ResourceType => VoteResourceType.Comment;
 
         /// <summary>
         /// The ID of the user that made the comment.
@@ -61,50 +58,9 @@ namespace Updog.Domain {
         /// Soft delete flag.
         /// </summary>
         public bool WasDeleted { get; set; }
-
-        /// <summary>
-        /// The upvote count of the comment.
-        /// </summary>
-        /// <value></value>
-        public int Upvotes { get; set; }
-
-        /// <summary>
-        /// The downvote count of the comment.
-        /// </summary>
-        public int Downvotes { get; set; }
         #endregion
 
         #region Publics
-        /// <summary>
-        /// Add a new vote to the counts.
-        /// </summary>
-        /// <param name="vote">The type of vote to add.</param>
-        public void AddVote(VoteDirection vote) {
-            switch (vote) {
-                case VoteDirection.Up:
-                    Upvotes++;
-                    break;
-                case VoteDirection.Down:
-                    Downvotes++;
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Remove a vote from the couns.
-        /// </summary>
-        /// <param name="vote">The vote to remove.</param>
-        public void RemoveVote(VoteDirection vote) {
-            switch (vote) {
-                case VoteDirection.Up:
-                    Upvotes--;
-                    break;
-                case VoteDirection.Down:
-                    Downvotes--;
-                    break;
-            }
-        }
-
         /// <summary>
         /// Check to see if the comment is equal to another object.
         /// </summary>

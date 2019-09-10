@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters to create a new subscription for a space.
     /// </summary>
-    public sealed class SubscriptionCreateParams {
+    public sealed class SubscriptionCreateParams : IAuthenticatedActionParams {
         #region Properties
         /// <summary>
         /// The name of the space.

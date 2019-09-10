@@ -56,7 +56,7 @@ namespace Updog.Api {
         [HttpGet("{name}")]
         [AllowAnonymous]
         public async Task<ActionResult> FindByName(string name) {
-            SpaceView? s = await this._spaceFinderByName.Handle(name);
+            SpaceView? s = await this._spaceFinderByName.Handle(new SpaceFindByNameParams(name, User));
 
             if (s != null) {
                 return Ok(s);

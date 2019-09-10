@@ -40,7 +40,7 @@ namespace Updog.Api {
         [HttpGet("{username}")]
         [HttpHead("{username}")]
         public async Task<ActionResult> FindByUsername(string username) {
-            UserView? user = await _userFinder.Handle(username);
+            UserView? user = await _userFinder.Handle(new UserFindByUsernameParams(username, User));
             return user != null ? Ok(user) : NotFound() as ActionResult;
         }
 

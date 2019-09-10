@@ -1,8 +1,11 @@
+using Updog.Application.Paging;
+using Updog.Domain;
+
 namespace Updog.Application {
     /// <summary>
     /// Parameters for the pot finder by user interactor.
     /// </summary>
-    public sealed class PostFinderByUserParam : IPagable {
+    public sealed class PostFinderByUserParam : IAnonymousActionParams, IPagable {
         #region Properties
         /// <summary>
         /// The username of the user to look for.
@@ -12,19 +15,19 @@ namespace Updog.Application {
         public int PageNumber { get; }
 
         public int PageSize { get; }
+
+        /// <summary>
+        /// The user performing the action.
+        /// </summary>
+        public User? User { get; }
         #endregion
 
         #region Constructor(s)
-        /// <summary>
-        /// Create a new set of post finder by user params.
-        /// </summary>
-        /// <param name="userId">The user ID to look for.</param>
-        /// <param name="pageNumber">Page index</param>
-        /// <param name="pageSize">Page size</param>
-        public PostFinderByUserParam(string username, int pageNumber, int pageSize) {
+        public PostFinderByUserParam(string username, int pageNumber, int pageSize, User? user = null) {
             Username = username;
             PageNumber = pageNumber;
             PageSize = pageSize;
+            User = user;
         }
         #endregion
     }

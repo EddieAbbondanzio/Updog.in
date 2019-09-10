@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters to create a new sub space.
     /// </summary>
-    public sealed class SpaceCreateParams {
+    public sealed class SpaceCreateParams : IAuthenticatedActionParams {
         #region Properties
         /// <summary>
         /// The desired name of the subspace.

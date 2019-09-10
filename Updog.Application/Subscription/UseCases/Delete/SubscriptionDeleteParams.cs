@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters to delete a new subscription for a space.
     /// </summary>
-    public sealed class SubscriptionDeleteParams {
+    public sealed class SubscriptionDeleteParams : IAuthenticatedActionParams {
         #region Properties
         /// <summary>
         /// The name of the space.

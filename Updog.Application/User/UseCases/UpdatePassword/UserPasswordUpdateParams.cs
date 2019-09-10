@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters to update a user's password.
     /// </summary>
-    public sealed class UserPasswordUpdateParams {
+    public sealed class UserPasswordUpdateParams : IAuthenticatedActionParams {
         #region Properties
         /// <summary>
         /// The user that wants to update their password.

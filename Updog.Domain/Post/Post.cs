@@ -4,7 +4,7 @@ namespace Updog.Domain {
     /// <summary>
     /// A post of the website.
     /// </summary>
-    public sealed class Post : IEntity {
+    public sealed class Post : VotableEntity, ISoftDeletable {
         #region Constants
         /// <summary>
         /// The max # of characters allowed in a post title.
@@ -23,10 +23,7 @@ namespace Updog.Domain {
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Unique numeric Id.
-        /// </summary>
-        public int Id { get; set; }
+        public override VoteResourceType ResourceType => VoteResourceType.Post;
 
         /// <summary>
         /// OP of the post.
@@ -76,49 +73,9 @@ namespace Updog.Domain {
         /// </summary>
         /// <value></value>
         public int CommentCount { get; set; }
-
-        /// <summary>
-        /// How many upvotes the post has recieved.
-        /// </summary>
-        public int Upvotes { get; set; }
-
-        /// <summary>
-        /// How many downvotes the post has recieved.
-        /// </summary>
-        public int Downvotes { get; set; }
         #endregion
 
         #region Publics
-        /// <summary>
-        /// Add a new vote to the counts.
-        /// </summary>
-        /// <param name="vote">The type of vote to add.</param>
-        public void AddVote(VoteDirection vote) {
-            switch (vote) {
-                case VoteDirection.Up:
-                    Upvotes++;
-                    break;
-                case VoteDirection.Down:
-                    Downvotes++;
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Remove a vote from the couns.
-        /// </summary>
-        /// <param name="vote">The vote to remove.</param>
-        public void RemoveVote(VoteDirection vote) {
-            switch (vote) {
-                case VoteDirection.Up:
-                    Upvotes--;
-                    break;
-                case VoteDirection.Down:
-                    Downvotes--;
-                    break;
-            }
-        }
-
         /// <summary>
         /// Check t osee if the post matches another object.
         /// </summary>

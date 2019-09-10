@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters to delete a post.
     /// </summary>
-    public sealed class PostDeleteParams {
+    public sealed class PostDeleteParams : IAuthenticatedActionParams {
         #region Properties
         /// <summary>
         /// The user that wants to delete the post.

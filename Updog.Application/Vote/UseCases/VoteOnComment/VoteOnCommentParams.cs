@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters to vote on a comment.
     /// </summary>
-    public sealed class VoteOnCommentParams {
+    public sealed class VoteOnCommentParams : IAuthenticatedActionParams {
         #region Properties
         /// <summary>
         /// The comment ID to vote on.

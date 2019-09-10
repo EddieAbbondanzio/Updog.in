@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters to update a post.
     /// </summary>
-    public sealed class PostUpdateParams {
+    public sealed class PostUpdateParams : IAuthenticatedActionParams {
         #region Properties
         /// <summary>
         /// The user doing the update.

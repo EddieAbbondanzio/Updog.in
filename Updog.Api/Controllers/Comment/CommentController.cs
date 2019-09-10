@@ -47,7 +47,7 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{commentId}")]
         public async Task<ActionResult> GetComment(int commentId) {
-            CommentView? c = await _commentFinderById.Handle(commentId);
+            CommentView? c = await _commentFinderById.Handle(new CommentFindByIdParams(commentId, User));
             return c != null ? Ok(c) : NotFound() as ActionResult;
         }
 

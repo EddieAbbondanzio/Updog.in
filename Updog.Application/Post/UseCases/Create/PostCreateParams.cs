@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters to add a new post.
     /// </summary>
-    public sealed class PostCreateParams {
+    public sealed class PostCreateParams : IAuthenticatedActionParams {
         #region Properties
         public PostType Type { get; }
 

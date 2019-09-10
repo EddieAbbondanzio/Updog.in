@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters to add a new comment.
     /// </summary>
-    public sealed class CommentCreateParams {
+    public sealed class CommentCreateParams : IAuthenticatedActionParams {
         #region Properties
         /// <summary>
         /// The ID of the post it belongs to.

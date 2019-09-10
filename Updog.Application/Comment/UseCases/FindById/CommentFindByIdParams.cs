@@ -2,14 +2,14 @@ using Updog.Domain;
 
 namespace Updog.Application {
     /// <summary>
-    /// Params to find a page of comments for a post.
+    /// Parameters to find a comment by it's unique ID.
     /// </summary>
-    public sealed class CommentFinderByPostParams : IAnonymousActionParams {
+    public sealed class CommentFindByIdParams : IAnonymousActionParams {
         #region Properties
         /// <summary>
-        /// The ID of the post to look for.
+        /// The ID of the comment to look for.
         /// </summary>
-        public int PostId { get; }
+        public int CommentId { get; }
 
         /// <summary>
         /// The user performing the look up.
@@ -18,8 +18,8 @@ namespace Updog.Application {
         #endregion
 
         #region Constructor(s)
-        public CommentFinderByPostParams(int postId, User? user = null) {
-            PostId = postId;
+        public CommentFindByIdParams(int commentId, User? user = null) {
+            CommentId = commentId;
             User = user;
         }
         #endregion

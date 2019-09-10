@@ -10,6 +10,8 @@ namespace Updog.Application {
         /// Mapper to convert a user to a user view.
         /// </summary>
         private IUserViewMapper userMapper;
+
+        private IVoteViewMapper voteMapper;
         #endregion
 
         #region Constructor(s)
@@ -17,15 +19,18 @@ namespace Updog.Application {
         /// Create a new comment view mapper.
         /// </summary>
         /// <param name="userMapper">The user mapper.</param>
-        public CommentViewMapper(IUserViewMapper userMapper) {
+        /// <param name="voteMapper">The vote mapper</param>
+        public CommentViewMapper(IUserViewMapper userMapper, IVoteViewMapper voteMapper) {
             this.userMapper = userMapper;
+            this.voteMapper = voteMapper;
         }
         #endregion
 
         #region Publics2
         public CommentView Map(Comment comment) {
             UserView u = userMapper.Map(comment.User);
-            CommentView cv = new CommentView(comment.Id, u, comment.Body, comment.CreationDate, comment.WasUpdated, comment.WasDeleted, comment.Upvotes, comment.Downvotes);
+            VoteView v = voteMapper.Map(comment.Vote);
+            CommentView cv = new CommentView(comment.Id, u, comment.Body, comment.CreationDate, comment.WasUpdated, comment.WasDeleted, comment.Upvotes, comment.Downvotes, v);
 
             if (comment.Children.Count > 0) {
                 foreach (Comment c in comment.Children) {

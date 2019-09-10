@@ -26,8 +26,16 @@ namespace Updog.Application {
         public async Task<PagedResultSet<PostView>> Handle(PostFinderByUserParam input) {
             using (var connection = database.GetConnection()) {
                 IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);
+                IVoteRepo voteRepo = database.GetRepo<IVoteRepo>(connection);
 
                 PagedResultSet<Post> posts = await postRepo.FindByUser(input.Username, input.PageNumber, input.PageSize);
+
+                if (input.User != null) {
+                    foreach (Post p in posts) {
+                        p.Vote = await voteRepo.FindByUserAndPost(input.User.Username, p.Id);
+                    }
+                }
+
                 return new PagedResultSet<PostView>(posts.Items.Select(p => postMapper.Map(p)), posts.Pagination);
             }
         }

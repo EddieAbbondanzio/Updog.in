@@ -68,6 +68,8 @@ namespace Updog.Application {
         /// How many downvotes the post has recieved.
         /// </summary>
         public int Downvotes { get; }
+
+        public VoteView Vote { get; }
         #endregion
 
         #region Constructor(s)
@@ -84,7 +86,8 @@ namespace Updog.Application {
         /// <param name="commentCount">The comment countof the post</param>
         /// <param name="wasEditted">If the post has been editted</param>
         /// <param name="wasDeleted">If the post has been deleted.</param>
-        public PostView(int id, PostType type, string title, string body, UserView user, SpaceView space, DateTime creationDate, int commentCount, bool wasEditted, bool wasDeleted, int upvotes, int downvotes) {
+        /// <param name="vote">The vote of the user viewing it</param>
+        public PostView(int id, PostType type, string title, string body, UserView user, SpaceView space, DateTime creationDate, int commentCount, bool wasEditted, bool wasDeleted, int upvotes, int downvotes, VoteView vote) {
             Id = id;
             Type = type;
             Title = title;
@@ -97,6 +100,7 @@ namespace Updog.Application {
             WasDeleted = wasDeleted;
             Upvotes = upvotes;
             Downvotes = downvotes;
+            Vote = vote;
         }
         #endregion
     }

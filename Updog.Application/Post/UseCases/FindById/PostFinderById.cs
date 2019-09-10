@@ -6,7 +6,7 @@ namespace Updog.Application {
     /// <summary>
     /// Use case handler to find a post by it's unique ID.
     /// </summary>
-    public sealed class PostFinderById : IInteractor<int, PostView?> {
+    public sealed class PostFinderById : IInteractor<PostFindByIdParams, PostView?> {
         #region Fields
         private IDatabase database;
 
@@ -19,18 +19,23 @@ namespace Updog.Application {
             this.postMapper = postMapper;
         }
         #endregion
-
-        /// <summary>
-        /// Find a post by it's unique ID.
-        /// </summary>
-        /// <param name="postId">The ID to look for.</param>
-        /// <returns>The matching post found.</returns>
-        public async Task<PostView?> Handle(int postId) {
+        public async Task<PostView?> Handle(PostFindByIdParams input) {
             using (var connection = database.GetConnection()) {
                 IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);
+                IVoteRepo voteRepo = database.GetRepo<IVoteRepo>(connection);
 
-                Post? post = await postRepo.FindById(postId);
-                return post != null ? postMapper.Map(post) : null;
+                Post? post = await postRepo.FindById(input.PostId);
+
+                if (post == null) {
+                    return null;
+                }
+
+                //Pull in the vote if needed.
+                if (input.User != null) {
+                    post.Vote = await voteRepo.FindByUserAndPost(input.User.Username, input.PostId);
+                }
+
+                return postMapper.Map(post);
             }
         }
     }

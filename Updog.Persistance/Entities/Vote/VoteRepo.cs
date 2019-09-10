@@ -28,11 +28,11 @@ namespace Updog.Persistance {
         /// <returns>The matching vote found.</returns>
         public async Task<Vote?> FindById(int id) {
             return (await Connection.QueryAsync<VoteRecord, UserRecord, Vote>(
-            @"SELECT * FROM Vote 
-            LEFT JOIN ""User"" u ON u.Id = Vote.UserId 
-            WHERE Vote.Id = @Id",
-            (VoteRecord voteRec, UserRecord userRec) => voteMapper.Map(Tuple.Create(voteRec, userRec)),
-            new { Id = id }
+                @"SELECT * FROM Vote 
+                    JOIN ""User"" u ON u.Id = Vote.UserId 
+                    WHERE Vote.Id = @Id",
+                (VoteRecord voteRec, UserRecord userRec) => voteMapper.Map(Tuple.Create(voteRec, userRec)),
+                new { Id = id }
             )).FirstOrDefault();
         }
 
@@ -44,11 +44,11 @@ namespace Updog.Persistance {
         /// <returns>The vote found (if any).</returns>
         public async Task<Vote?> FindByUserAndComment(string username, int commentId) {
             return (await Connection.QueryAsync<VoteRecord, UserRecord, Vote>(
-            @"SELECT * FROM Vote 
-            LEFT JOIN ""User"" u ON u.Id = Vote.UserId 
-            WHERE u.Username = @Username AND Vote.ResourceType = @ResourceType AND Vote.ResourceId = @CommentId",
-            (VoteRecord voteRec, UserRecord userRec) => voteMapper.Map(Tuple.Create(voteRec, userRec)),
-            new { Username = username, CommentId = commentId, ResourceType = VoteResourceType.Comment }
+                @"SELECT * FROM Vote 
+                    JOIN ""User"" u ON u.Id = Vote.UserId 
+                    WHERE u.Username = @Username AND Vote.ResourceType = @ResourceType AND Vote.ResourceId = @CommentId",
+                (VoteRecord voteRec, UserRecord userRec) => voteMapper.Map(Tuple.Create(voteRec, userRec)),
+                new { Username = username, CommentId = commentId, ResourceType = VoteResourceType.Comment }
             )).FirstOrDefault();
         }
 
@@ -60,11 +60,11 @@ namespace Updog.Persistance {
         /// <returns>The vote found (if any).</returns>
         public async Task<Vote?> FindByUserAndPost(string username, int postId) {
             return (await Connection.QueryAsync<VoteRecord, UserRecord, Vote>(
-            @"SELECT * FROM Vote 
-            LEFT JOIN ""User"" U ON U.Id = Vote.UserId 
-            WHERE u.Username = @Username AND Vote.ResourceType = @ResourceType AND Vote.ResourceId = @PostId",
-            (VoteRecord voteRec, UserRecord userRec) => voteMapper.Map(Tuple.Create(voteRec, userRec)),
-            new { Username = username, PostId = postId, ResourceType = VoteResourceType.Post }
+                @"SELECT * FROM Vote 
+                    JOIN ""User"" U ON U.Id = Vote.UserId 
+                    WHERE u.Username = @Username AND Vote.ResourceType = @ResourceType AND Vote.ResourceId = @PostId",
+                (VoteRecord voteRec, UserRecord userRec) => voteMapper.Map(Tuple.Create(voteRec, userRec)),
+                new { Username = username, PostId = postId, ResourceType = VoteResourceType.Post }
             )).FirstOrDefault();
         }
 

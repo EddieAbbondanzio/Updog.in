@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters to update a space.
     /// </summary>
-    public sealed class SpaceUpdateParams {
+    public sealed class SpaceUpdateParams : IAuthenticatedActionParams {
         #region Properties
         /// <summary>
         /// The name of the space to update.

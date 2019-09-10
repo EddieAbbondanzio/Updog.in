@@ -5,7 +5,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to find a space via it's name.
     /// </summary>
-    public sealed class SpaceFinderByName : IInteractor<string, SpaceView?> {
+    public sealed class SpaceFinderByName : IInteractor<SpaceFindByNameParams, SpaceView?> {
         #region Fields
         private IDatabase database;
         private ISpaceViewMapper spaceMapper;
@@ -19,11 +19,11 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<SpaceView?> Handle(string input) {
+        public async Task<SpaceView?> Handle(SpaceFindByNameParams input) {
             using (var connection = database.GetConnection()) {
                 ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(connection);
 
-                Space? s = await spaceRepo.FindByName(input);
+                Space? s = await spaceRepo.FindByName(input.Name);
                 return s != null ? spaceMapper.Map(s) : null;
             }
         }

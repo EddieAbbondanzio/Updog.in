@@ -38,12 +38,18 @@ namespace Updog.Application {
         /// <summary>
         /// How many upvotes the comment has recieved.
         /// </summary>
-        public int Upvotes { get; set; }
+        public int Upvotes { get; }
 
         /// <summary>
         /// How many downvotes the comment has recieved.
         /// </summary>
-        public int Downvotes { get; set; }
+        public int Downvotes { get; }
+
+        /// <summary>
+        /// The vote of the user viewing it.
+        /// </summary>
+        /// <value></value>
+        public VoteView Vote { get; }
 
         /// <summary>
         /// The nested comments of this comment.
@@ -63,7 +69,8 @@ namespace Updog.Application {
         /// <param name="wasDeleted">If the comment was deleted</param>
         /// <param name="upvotes">The number of upvotes.</param>
         /// <param name="downvotes">The number of downvotes.</param>
-        public CommentView(int id, UserView user, string body, DateTime creationDate, bool wasUpdated, bool wasDeleted, int upvotes, int downvotes) {
+        /// <param name="vote">The vote of the user viewing it</param>
+        public CommentView(int id, UserView user, string body, DateTime creationDate, bool wasUpdated, bool wasDeleted, int upvotes, int downvotes, VoteView vote) {
             Id = id;
             User = user;
             Body = body;
@@ -72,6 +79,7 @@ namespace Updog.Application {
             WasDeleted = wasDeleted;
             Upvotes = upvotes;
             Downvotes = downvotes;
+            Vote = vote;
             Children = new List<CommentView>();
         }
 
@@ -86,8 +94,9 @@ namespace Updog.Application {
         /// <param name="wasDeleted">If the comment was deleted</param>
         /// <param name="upvotes">The number of upvotes.</param>
         /// <param name="downvotes">The number of downvotes.</param>
+        /// <param name="vote">The vote of the user viewing it</param>
         /// <param name="children">The children comments</param>
-        public CommentView(int id, UserView user, string body, DateTime creationDate, bool wasUpdated, bool wasDeleted, int upvotes, int downvotes, List<CommentView> children) {
+        public CommentView(int id, UserView user, string body, DateTime creationDate, bool wasUpdated, bool wasDeleted, int upvotes, int downvotes, VoteView vote, List<CommentView> children) {
             Id = id;
             User = user;
             Body = body;
@@ -96,6 +105,7 @@ namespace Updog.Application {
             WasDeleted = wasDeleted;
             Upvotes = upvotes;
             Downvotes = downvotes;
+            Vote = vote;
             Children = children;
         }
         #endregion
