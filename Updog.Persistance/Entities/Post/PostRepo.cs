@@ -40,7 +40,7 @@ namespace Updog.Persistance {
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     ORDER BY Post.CreationDate DESC
-                    WHERE IsDeleted = FALSE
+                    WHERE WasDeleted = FALSE
                     LIMIT @Limit
                     OFFSET @Offset",
                 (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
@@ -71,8 +71,7 @@ namespace Updog.Persistance {
                     LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
-                    WHERE ""User"".Username = @Username
-                    AND IsDeleted = FALSE
+                    WHERE ""User"".Username = @Username AND WasDeleted = FALSE
                     ORDER BY Post.CreationDate ASC
                     LIMIT @Limit
                     OFFSET @Offset",
@@ -84,7 +83,7 @@ namespace Updog.Persistance {
 
             //Get total count
             int totalCount = await Connection.ExecuteScalarAsync<int>(
-                @"SELECT COUNT(*) FROM Post LEFT JOIN ""User"" ON Post.UserId = ""User"".Id WHERE ""User"".Username = @Username",
+                @"SELECT COUNT(*) FROM Post LEFT JOIN ""User"" ON Post.UserId = ""User"".Id WHERE ""User"".Username = @Username AND Post.WasDeleted = FALSE",
                 new { Username = username }
             );
 
@@ -105,8 +104,7 @@ namespace Updog.Persistance {
                     LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
-                    WHERE LOWER(Space.Name) = LOWER(@Name)
-                    AND IsDeleted = FALSE
+                    WHERE LOWER(Space.Name) = LOWER(@Name) AND Post.WasDeleted = FALSE
                     ORDER BY Post.CreationDate DESC
                     LIMIT @Limit
                     OFFSET @Offset",
@@ -118,7 +116,7 @@ namespace Updog.Persistance {
 
             //Get total count
             int totalCount = await Connection.ExecuteScalarAsync<int>(
-                "SELECT COUNT(*) FROM Post LEFT JOIN Space ON Post.SpaceId = Space.Id WHERE LOWER(Space.Name) = LOWER(@Name);", new { Name = space }
+                "SELECT COUNT(*) FROM Post LEFT JOIN Space ON Post.SpaceId = Space.Id WHERE LOWER(Space.Name) = LOWER(@Name) AND Post.WasDeleted = FALSE;", new { Name = space }
             );
 
             return new PagedResultSet<Post>(posts, new PaginationInfo(pageNumber, pageSize, totalCount));
@@ -135,7 +133,7 @@ namespace Updog.Persistance {
                     LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
-                    WHERE Post.Id = @Id;",
+                    WHERE Post.Id = @Id AND Post.WasDeleted = FALSE;",
                 (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
                     return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
                 },

@@ -3,9 +3,9 @@ using Updog.Domain;
 
 namespace Updog.Application {
     /// <summary>
-    /// Interactor to vote on a comment.
+    /// Interactor to vote on a post.
     /// </summary>
-    public sealed class CommentVoter : IInteractor<VoteOnCommentParams, VoteView> {
+    public sealed class PostVoter : IInteractor<VoteOnPostParams, VoteView> {
         #region Fields
         private IDatabase database;
 
@@ -13,41 +13,41 @@ namespace Updog.Application {
         #endregion
 
         #region Constructor(s)
-        public CommentVoter(IDatabase database, IVoteViewMapper voteViewMapper) {
+        public PostVoter(IDatabase database, IVoteViewMapper voteViewMapper) {
             this.database = database;
             this.voteViewMapper = voteViewMapper;
         }
         #endregion
 
         #region Publics
-        public async Task<VoteView> Handle(VoteOnCommentParams input) {
+        public async Task<VoteView> Handle(VoteOnPostParams input) {
             using (var connection = database.GetConnection()) {
                 IVoteRepo voteRepo = database.GetRepo<IVoteRepo>(connection);
-                ICommentRepo commentRepo = database.GetRepo<ICommentRepo>(connection);
+                IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);
 
                 using (var transaction = connection.BeginTransaction()) {
-                    Comment comment = (await commentRepo.FindById(input.CommentId))!;
-                    Vote? oldVote = await voteRepo.FindByUserAndComment(input.User.Username, input.CommentId);
+                    Post post = (await postRepo.FindById(input.PostId))!;
+                    Vote? oldVote = await voteRepo.FindByUserAndPost(input.User.Username, input.PostId);
 
 
                     // Wipe out the old one...
                     if (oldVote != null) {
-                        comment.RemoveVote(oldVote.Direction);
+                        post.RemoveVote(oldVote.Direction);
                         await voteRepo.Delete(oldVote);
                     }
 
                     // Create the new vote, and update the comment's karma cache.
                     Vote newVote = new Vote() {
                         User = input.User,
-                        ResourceType = VoteResourceType.Comment,
-                        ResourceId = input.CommentId,
+                        ResourceType = VoteResourceType.Post,
+                        ResourceId = input.PostId,
                         Direction = input.Vote
                     };
 
-                    comment.AddVote(newVote.Direction);
+                    post.AddVote(newVote.Direction);
 
                     await voteRepo.Add(newVote);
-                    await commentRepo.Update(comment);
+                    await postRepo.Update(post);
 
                     transaction.Commit();
                     return voteViewMapper.Map(newVote);

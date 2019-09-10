@@ -36,7 +36,7 @@ namespace Updog.Persistance {
             // This doesn't pull in comment children and it should.
             IEnumerable<Comment> comments = await Connection.QueryAsync<CommentRecord, UserRecord, Comment>(
                 @"WITH RECURSIVE commenttree AS (
-                    SELECT r.* FROM Comment r WHERE Id = @Id AND IsDeleted = FALSE
+                    SELECT r.* FROM Comment r WHERE Id = @Id AND WasDeleted = FALSE
                     UNION ALL
                     SELECT c.* FROM Comment c
                     INNER JOIN commenttree ct ON ct.Id = c.ParentId
@@ -63,7 +63,7 @@ namespace Updog.Persistance {
             IEnumerable<Comment> comments = (await Connection.QueryAsync<CommentRecord, UserRecord, Comment>(
                 @"
                     WITH RECURSIVE commenttree AS (
-                    SELECT r.* FROM Comment r WHERE PostId = @PostId AND ParentId = 0 AND IsDeleted = FALSE 
+                    SELECT r.* FROM Comment r WHERE PostId = @PostId AND ParentId = 0 AND WasDeleted = FALSE 
                     UNION ALL
                     SELECT c.* FROM Comment c
                     INNER JOIN commenttree ct ON ct.Id = c.ParentId
@@ -89,7 +89,7 @@ namespace Updog.Persistance {
             IEnumerable<Comment> comments = await Connection.QueryAsync<CommentRecord, UserRecord, Comment>(
                 @"SELECT * FROM Comment 
                     LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id 
-                    WHERE ""User"".Username = @Username AND IsDeleted = FALSE 
+                    WHERE ""User"".Username = @Username AND WasDeleted = FALSE 
                     ORDER BY CreationDate DESC 
                     LIMIT @Limit 
                     OFFSET @Offset ",
@@ -105,7 +105,7 @@ namespace Updog.Persistance {
             int totalCount = await Connection.ExecuteScalarAsync<int>(
                 @"SELECT COUNT(*) FROM Comment 
                     LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id 
-                    WHERE ""User"".Username = @Username AND IsDeleted = FALSE",
+                    WHERE ""User"".Username = @Username AND WasDeleted = FALSE",
                 new { Username = username }
             );
 

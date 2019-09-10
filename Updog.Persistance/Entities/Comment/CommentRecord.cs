@@ -46,6 +46,16 @@ namespace Updog.Persistance {
         /// If the post was deleted.
         /// </summary>
         public bool WasDeleted { get; set; }
+
+        /// <summary>
+        /// The number of upvotes it's recieved.
+        /// </summary>
+        public int Upvotes { get; set; }
+
+        /// <summary>
+        /// The number of downvotes it's recieved.
+        /// </summary>
+        public int Downvotes { get; set; }
         #endregion
     }
 }

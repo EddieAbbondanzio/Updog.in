@@ -3,5 +3,7 @@ CREATE TABLE User (
     Username VARCHAR(24) NOT NULL UNIQUE INDEX,
     Email VARCHAR(64) UNIQUE,
     PasswordHash CHAR(60) NOT NULL,
-    JoinedDate TIMESTAMP
+    JoinedDate TIMESTAMP,
+    PostKarma INT,
+    CommentKarma INT
 );

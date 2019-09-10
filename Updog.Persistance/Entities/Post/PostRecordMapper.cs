@@ -49,7 +49,9 @@ namespace Updog.Persistance {
                 WasUpdated = source.Item1.WasUpdated,
                 WasDeleted = source.Item1.WasDeleted,
                 CommentCount = source.Item1.CommentCount,
-                Space = spaceMapper.Map(source.Item3)
+                Space = spaceMapper.Map(source.Item3),
+                Upvotes = source.Item1.Upvotes,
+                Downvotes = source.Item1.Downvotes
             };
         }
         /// <summary>
@@ -67,7 +69,9 @@ namespace Updog.Persistance {
                 CreationDate = destination.CreationDate,
                 WasUpdated = destination.WasUpdated,
                 WasDeleted = destination.WasDeleted,
-                CommentCount = destination.CommentCount
+                CommentCount = destination.CommentCount,
+                Upvotes = destination.Upvotes,
+                Downvotes = destination.Downvotes
             };
 
             UserRecord u = userMapper.Reverse(destination.User);

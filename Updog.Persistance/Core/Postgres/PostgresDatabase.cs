@@ -38,7 +38,12 @@ namespace Updog.Persistance {
         /// Get a new connection with the database.
         /// </summary>
         /// <returns>A new pooled connection.</returns>
-        public override IDbConnection GetConnection() => new NpgsqlConnection(connection);
+        public override IDbConnection GetConnection() {
+            var connection = new NpgsqlConnection(this.connection);
+            connection.Open();
+
+            return connection;
+        }
         #endregion
     }
 }

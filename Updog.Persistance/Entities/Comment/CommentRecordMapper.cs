@@ -38,7 +38,9 @@ namespace Updog.Persistance {
                 Body = source.Item1.Body,
                 CreationDate = source.Item1.CreationDate,
                 WasUpdated = source.Item1.WasUpdated,
-                WasDeleted = source.Item1.WasDeleted
+                WasDeleted = source.Item1.WasDeleted,
+                Upvotes = source.Item1.Upvotes,
+                Downvotes = source.Item1.Downvotes
             };
 
             if (source.Item1.ParentId != 0) {
@@ -61,7 +63,9 @@ namespace Updog.Persistance {
                 Body = destination.Body,
                 CreationDate = destination.CreationDate,
                 WasUpdated = destination.WasUpdated,
-                WasDeleted = destination.WasDeleted
+                WasDeleted = destination.WasDeleted,
+                Upvotes = destination.Upvotes,
+                Downvotes = destination.Downvotes
             };
 
             //Comments dont always have a parent.

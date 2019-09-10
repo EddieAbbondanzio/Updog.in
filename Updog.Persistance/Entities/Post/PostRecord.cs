@@ -56,6 +56,16 @@ namespace Updog.Persistance {
         /// How many comments have been made on the post.
         /// </summary>
         public int CommentCount { get; set; }
+
+        /// <summary>
+        /// The number of upvotes it's recieved.
+        /// </summary>
+        public int Upvotes { get; set; }
+
+        /// <summary>
+        /// The number of downvotes it's recieved.
+        /// </summary>
+        public int Downvotes { get; set; }
         #endregion
     }
 }

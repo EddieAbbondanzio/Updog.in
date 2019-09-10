@@ -90,6 +90,36 @@ namespace Updog.Domain {
 
         #region Publics
         /// <summary>
+        /// Add a new vote to the counts.
+        /// </summary>
+        /// <param name="vote">The type of vote to add.</param>
+        public void AddVote(VoteDirection vote) {
+            switch (vote) {
+                case VoteDirection.Up:
+                    Upvotes++;
+                    break;
+                case VoteDirection.Down:
+                    Downvotes++;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Remove a vote from the couns.
+        /// </summary>
+        /// <param name="vote">The vote to remove.</param>
+        public void RemoveVote(VoteDirection vote) {
+            switch (vote) {
+                case VoteDirection.Up:
+                    Upvotes--;
+                    break;
+                case VoteDirection.Down:
+                    Downvotes--;
+                    break;
+            }
+        }
+
+        /// <summary>
         /// Check t osee if the post matches another object.
         /// </summary>
         /// <param name="obj">The other object to check.</param>

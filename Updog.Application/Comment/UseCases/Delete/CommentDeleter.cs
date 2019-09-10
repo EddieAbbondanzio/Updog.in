@@ -49,10 +49,8 @@ namespace Updog.Application {
                 post.CommentCount--;
 
                 using (var transaction = connection.BeginTransaction()) {
-                    await Task.WhenAll(
-                        commentRepo.Delete(comment),
-                        postRepo.Update(post)
-                    );
+                    await commentRepo.Delete(comment);
+                    await postRepo.Update(post);
 
                     transaction.Commit();
                 }

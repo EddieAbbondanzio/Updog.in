@@ -40,7 +40,7 @@ namespace Updog.Api {
                 opts.TokenValidationParameters = new TokenValidationParameters() {
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidateIssuer = true,
+                    ValidateIssuer = false,
                     ValidateAudience = false,
                     RequireSignedTokens = true,
                     ValidIssuer = Configuration["AuthenticationToken:Issuer"],
@@ -55,18 +55,22 @@ namespace Updog.Api {
                         int userId = Convert.ToInt32(subjectClaim.Value);
 
                         // Retrieve the user, and cache the identity.
-                        IUserRepo userRepo = c.HttpContext.RequestServices.GetService<IUserRepo>();
-                        IIdentity identity = c.Principal.Identity;
+                        IDatabase db = c.HttpContext.RequestServices.GetService<IDatabase>();
 
-                        User? u = await userRepo.FindById(userId);
+                        using (var connection = db.GetConnection()) {
+                            IUserRepo userRepo = db.GetRepo<IUserRepo>(connection);
 
-                        if (u != null) {
-                            u.AddIdentity(identity as ClaimsIdentity);
+                            IIdentity identity = c.Principal.Identity;
+                            User? u = await userRepo.FindById(userId);
 
-                            /*
-                             * Don't attempt to set this via c.HttpContext.Principal, ASP.NET seems to overwrite this later on...
-                             */
-                            c.Principal = u;
+                            if (u != null) {
+                                u.AddIdentity(identity as ClaimsIdentity);
+
+                                /*
+                                 * Don't attempt to set this via c.HttpContext.Principal, ASP.NET seems to overwrite this later on...
+                                 */
+                                c.Principal = u;
+                            }
                         }
                     }
                 };
@@ -78,6 +82,7 @@ namespace Updog.Api {
             db.RegisterRepo<ICommentRepo, CommentRepo>();
             db.RegisterRepo<ISpaceRepo, SpaceRepo>();
             db.RegisterRepo<ISubscriptionRepo, SubscriptionRepo>();
+            db.RegisterRepo<IVoteRepo, VoteRepo>();
 
             services.AddSingleton<IDatabase>(db);
 
@@ -142,6 +147,10 @@ namespace Updog.Api {
 
             services.AddSingleton<ISubscriptionViewMapper, SubscriptionViewMapper>();
             services.AddSingleton<ISubscriptionRecordMapper, SubscriptionRecordMapper>();
+
+            services.AddSingleton<IVoteViewMapper, VoteViewMapper>();
+            services.AddTransient<PostVoter>();
+            services.AddTransient<CommentVoter>();
 
         }
 
