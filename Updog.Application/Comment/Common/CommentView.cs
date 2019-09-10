@@ -49,7 +49,7 @@ namespace Updog.Application {
         /// The vote of the user viewing it.
         /// </summary>
         /// <value></value>
-        public VoteView Vote { get; }
+        public VoteView? Vote { get; }
 
         /// <summary>
         /// The nested comments of this comment.
@@ -70,7 +70,7 @@ namespace Updog.Application {
         /// <param name="upvotes">The number of upvotes.</param>
         /// <param name="downvotes">The number of downvotes.</param>
         /// <param name="vote">The vote of the user viewing it</param>
-        public CommentView(int id, UserView user, string body, DateTime creationDate, bool wasUpdated, bool wasDeleted, int upvotes, int downvotes, VoteView vote) {
+        public CommentView(int id, UserView user, string body, DateTime creationDate, bool wasUpdated, bool wasDeleted, int upvotes, int downvotes, VoteView? vote = null) {
             Id = id;
             User = user;
             Body = body;
@@ -81,32 +81,6 @@ namespace Updog.Application {
             Downvotes = downvotes;
             Vote = vote;
             Children = new List<CommentView>();
-        }
-
-        /// <summary>
-        /// Create a new comment view.
-        /// </summary>
-        /// <param name="id">The ID of the comment.</param>
-        /// <param name="user">The user that made the comment.</param>
-        /// <param name="body">The text of the comment.</param>
-        /// <param name="creationDate">The time of commenting</param>
-        /// <param name="wasUpdated">If the comment was modified</param>
-        /// <param name="wasDeleted">If the comment was deleted</param>
-        /// <param name="upvotes">The number of upvotes.</param>
-        /// <param name="downvotes">The number of downvotes.</param>
-        /// <param name="vote">The vote of the user viewing it</param>
-        /// <param name="children">The children comments</param>
-        public CommentView(int id, UserView user, string body, DateTime creationDate, bool wasUpdated, bool wasDeleted, int upvotes, int downvotes, VoteView vote, List<CommentView> children) {
-            Id = id;
-            User = user;
-            Body = body;
-            CreationDate = creationDate;
-            WasUpdated = wasUpdated;
-            WasDeleted = wasDeleted;
-            Upvotes = upvotes;
-            Downvotes = downvotes;
-            Vote = vote;
-            Children = children;
         }
         #endregion
     }

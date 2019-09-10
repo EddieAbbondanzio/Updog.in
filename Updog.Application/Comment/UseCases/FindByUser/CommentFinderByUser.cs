@@ -29,10 +29,31 @@ namespace Updog.Application {
 
                 PagedResultSet<Comment> comments = await commentRepo.FindByUser(input.Username, input.PageNumber, input.PageSize);
 
+                if (input.User != null) {
+                    foreach (Comment c in comments) {
+                        IVoteRepo voteRepo = database.GetRepo<IVoteRepo>(connection);
+                        await GetVotes(voteRepo, c, input.User);
+                    }
+                }
+
                 return new PagedResultSet<CommentView>(
                     comments.Select(c => commentMapper.Map(c)),
                     comments.Pagination
                 );
+            }
+        }
+        #endregion
+
+        #region Helpers
+
+        /// <summary>
+        /// Recursive helper to get the votes for all children.
+        /// </summary>
+        private async Task GetVotes(IVoteRepo voteRepo, Comment comment, User user) {
+            comment.Vote = await voteRepo.FindByUserAndComment(user.Username, comment.Id);
+
+            foreach (Comment child in comment.Children) {
+                await GetVotes(voteRepo, child, user);
             }
         }
         #endregion

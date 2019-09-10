@@ -24,9 +24,31 @@ namespace Updog.Application {
                 ICommentRepo commentRepo = database.GetRepo<ICommentRepo>(connection);
 
                 Comment? c = await commentRepo.FindById(input.CommentId);
-                return c != null ? commentMapper.Map(c) : null;
+
+                if (c == null) {
+                    return null;
+                }
+
+                if (input.User != null) {
+                    IVoteRepo voteRepo = database.GetRepo<IVoteRepo>(connection);
+                    await GetVotes(voteRepo, c, input.User);
+                }
+
+                return commentMapper.Map(c);
+            }
+        }
+
+        /// <summary>
+        /// Recursive helper to get the votes for all children.
+        /// </summary>
+        private async Task GetVotes(IVoteRepo voteRepo, Comment comment, User user) {
+            comment.Vote = await voteRepo.FindByUserAndComment(user.Username, comment.Id);
+
+            foreach (Comment child in comment.Children) {
+                await GetVotes(voteRepo, child, user);
             }
         }
         #endregion
+
     }
 }
