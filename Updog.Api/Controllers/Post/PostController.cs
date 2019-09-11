@@ -18,27 +18,37 @@ namespace Updog.Api {
     [ApiController]
     public sealed class PostController : ApiController {
         #region Fields
-        private PostFinderById _postFinderById;
-        private PostFinderByUser _postFinderByUser;
-        private CommentFinderByPost _commentFinderByPost;
-        private PostCreator _postCreator;
-        private PostUpdater _postUpdater;
+        private PostFinderByNew postFinderByNew;
+        private PostFinderById postFinderById;
+        private PostFinderByUser postFinderByUser;
+        private CommentFinderByPost commentFinderByPost;
+        private PostCreator postCreator;
+        private PostUpdater postUpdater;
 
-        private PostDeleter _postDeleter;
+        private PostDeleter postDeleter;
         #endregion
 
         #region Constructor(s)
-        public PostController(PostFinderById postFinderById, PostFinderByUser postFinderByUser, CommentFinderByPost commentFinderByPost, PostCreator postAdder, PostUpdater postUpdater, PostDeleter postDeleter) {
-            this._postFinderById = postFinderById;
-            this._postFinderByUser = postFinderByUser;
-            this._commentFinderByPost = commentFinderByPost;
-            this._postCreator = postAdder;
-            this._postUpdater = postUpdater;
-            this._postDeleter = postDeleter;
+        public PostController(PostFinderByNew postFinderByNew, PostFinderById postFinderById, PostFinderByUser postFinderByUser, CommentFinderByPost commentFinderByPost, PostCreator postAdder, PostUpdater postUpdater, PostDeleter postDeleter) {
+            this.postFinderByNew = postFinderByNew;
+            this.postFinderById = postFinderById;
+            this.postFinderByUser = postFinderByUser;
+            this.commentFinderByPost = commentFinderByPost;
+            this.postCreator = postAdder;
+            this.postUpdater = postUpdater;
+            this.postDeleter = postDeleter;
         }
         #endregion
 
         #region Publics
+        [AllowAnonymous]
+        [HttpGet("new")]
+        public async Task<ActionResult> FindByNew([FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
+            PagedResultSet<PostView> posts = await postFinderByNew.Handle(new PostFindByNewParams(pageSize, pageNumber, User));
+            SetContentRangeHeader(posts.Pagination);
+            return Ok(posts);
+        }
+
         /// <summary>
         /// Find a post via it's ID.
         /// </summary>
@@ -47,7 +57,7 @@ namespace Updog.Api {
         [HttpGet("{id}")]
         [HttpHead("{id}")]
         public async Task<ActionResult> FindById(int id) {
-            PostView? p = await _postFinderById.Handle(new PostFindByIdParams(id, User));
+            PostView? p = await postFinderById.Handle(new PostFindByIdParams(id, User));
             return p != null ? Ok(p) : NotFound() as ActionResult;
         }
 
@@ -59,14 +69,14 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{postId}/comment")]
         public async Task<ActionResult> GetComments(int postId) {
-            IEnumerable<CommentView> comments = await _commentFinderByPost.Handle(new CommentFinderByPostParams(postId));
+            IEnumerable<CommentView> comments = await commentFinderByPost.Handle(new CommentFinderByPostParams(postId));
             return Ok(comments);
         }
 
         [AllowAnonymous]
         [HttpGet("user/{username}")]
         public async Task<ActionResult> FindByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            PagedResultSet<PostView> posts = await _postFinderByUser.Handle(new PostFinderByUserParam(username, pageNumber, pageSize));
+            PagedResultSet<PostView> posts = await postFinderByUser.Handle(new PostFinderByUserParam(username, pageNumber, pageSize));
             SetContentRangeHeader(posts.Pagination);
             return Ok(posts);
         }
@@ -76,7 +86,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpPost]
         public async Task<ActionResult> Create([FromBody]PostCreateRequest payload) {
-            PostView? post = await _postCreator.Handle(new PostCreateParams(payload.Type, payload.Title, payload.Body, payload.Space, User!));
+            PostView? post = await postCreator.Handle(new PostCreateParams(payload.Type, payload.Title, payload.Body, payload.Space, User!));
             return Ok(post);
 
         }
@@ -86,7 +96,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpPatch("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody]PostUpdateRequest payload) {
-            PostView p = await _postUpdater.Handle(new PostUpdateParams(User!, id, payload.Body));
+            PostView p = await postUpdater.Handle(new PostUpdateParams(User!, id, payload.Body));
             return Ok(p);
 
         }
@@ -96,7 +106,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id) {
-            PostView? p = await _postDeleter.Handle(new PostDeleteParams(User!, id));
+            PostView? p = await postDeleter.Handle(new PostDeleteParams(User!, id));
             return Ok(p);
         }
         #endregion

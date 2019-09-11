@@ -25,5 +25,13 @@ namespace Updog.Application {
         /// <param name="pageSize">Size of the page.</param>
         /// <returns>The collection of posts.</returns>
         Task<PagedResultSet<Post>> FindBySpace(string space, int pageNumber, int pageSize);
+
+        /// <summary>
+        /// Find posts by new for the front page.
+        /// </summary>
+        /// <param name="pageNumber">Index of the page.</param>
+        /// <param name="pageSize">Size of the page.</param>
+        /// <returns>The collection of posts.</returns>
+        Task<PagedResultSet<Post>> FindByNew(int pageNumber, int pageSize);
     }
 }

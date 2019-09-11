@@ -123,6 +123,36 @@ namespace Updog.Persistance {
         }
 
         /// <summary>
+        /// Find the newest posts by their creation date.
+        /// </summary>
+        /// <param name="pageNumber">Index of the page..</param>
+        /// <param name="pageSize">Page size.</param>
+        /// <returns>The result set.</returns>
+        public async Task<PagedResultSet<Post>> FindByNew(int pageNumber, int pageSize) {
+            IEnumerable<Post> posts = await Connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, UserRecord, Post>(
+                @"SELECT * FROM Post
+                    LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
+                    LEFT JOIN Space ON Space.Id = Post.SpaceId
+                    LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
+                    WHERE Post.WasDeleted = FALSE
+                    ORDER BY Post.CreationDate DESC
+                    LIMIT @Limit
+                    OFFSET @Offset",
+                (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
+                    return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                },
+                BuildPaginationParams(pageNumber, pageSize)
+            );
+
+            //Get total count
+            int totalCount = await Connection.ExecuteScalarAsync<int>(
+                "SELECT COUNT(*) FROM Post LEFT JOIN Space ON Post.SpaceId = Space.Id WHERE Post.WasDeleted = FALSE;"
+            );
+
+            return new PagedResultSet<Post>(posts, new PaginationInfo(pageNumber, pageSize, totalCount));
+        }
+
+        /// <summary>
         /// Find a post via it's unique ID.
         /// </summary>
         /// <param name="id">The ID of the post.</param>

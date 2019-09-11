@@ -115,6 +115,7 @@ namespace Updog.Api {
             services.AddTransient<PostFinderById>();
             services.AddTransient<PostFinderBySpace>();
             services.AddTransient<PostFinderByUser>();
+            services.AddTransient<PostFinderByNew>();
             services.AddTransient<PostDeleter>();
             services.AddTransient<PostUpdater>();
 
