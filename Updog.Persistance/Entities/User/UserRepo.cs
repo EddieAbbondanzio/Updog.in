@@ -66,7 +66,7 @@ namespace Updog.Persistance {
         /// <param name="user">The user to add.</param>
         public async Task Add(User user) {
             user.Id = await Connection.QueryFirstOrDefaultAsync<int>(
-                @"INSERT INTO ""User"" (Username, Email, PasswordHash, JoinedDate) VALUES (@Username, @Email, @PasswordHash, @JoinedDate) RETURNING Id;",
+                @"INSERT INTO ""User"" (Username, Email, PasswordHash, JoinedDate, PostKarma, CommentKarma) VALUES (@Username, @Email, @PasswordHash, @JoinedDate, @PostKarma, @CommentKarma) RETURNING Id;",
                 userMapper.Reverse(user)
             );
         }
@@ -77,7 +77,7 @@ namespace Updog.Persistance {
         /// <param name="user">The user to update.</param>
         public async Task Update(User user) {
             await Connection.ExecuteAsync(
-                @"UPDATE ""User"" SET Username = @Username, Email = @Email, PasswordHash = @PasswordHash, JoinedDate = @JoinedDate WHERE Id = @Id;",
+                @"UPDATE ""User"" SET Username = @Username, Email = @Email, PasswordHash = @PasswordHash, JoinedDate = @JoinedDate, PostKarma = @PostKarma, CommentKarma = @CommentKarma WHERE Id = @Id;",
                 userMapper.Reverse(user)
             );
         }

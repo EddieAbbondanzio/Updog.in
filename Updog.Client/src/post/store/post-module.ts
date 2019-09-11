@@ -79,6 +79,8 @@ export default class PostModule extends VuexModule {
     @Action
     public async findByNew(paging: PaginationParams) {
         this.context.commit(PostMutation.ClearPosts);
+        console.log('REEE');
+        console.log(this.context.rootGetters['user/authToken']);
         const posts = await new PostFinderByNew(this.context.rootGetters['user/authToken']).handle(paging);
         this.context.commit(PostMutation.SetPosts, posts);
 

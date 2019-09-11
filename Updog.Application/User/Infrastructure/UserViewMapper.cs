@@ -12,7 +12,7 @@ namespace Updog.Application {
         /// <param name="user">The user to map.</param>
         /// <returns>The resulting user view.</returns>
         public UserView Map(User user) {
-            return new UserView(user.Id, user.Username, user.JoinedDate);
+            return new UserView(user.Id, user.Username, user.JoinedDate, user.PostKarma, user.CommentKarma);
         }
         #endregion
     }

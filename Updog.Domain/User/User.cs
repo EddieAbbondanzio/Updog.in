@@ -42,6 +42,16 @@ namespace Updog.Domain {
         /// Date the user registered.
         /// </summary>
         public DateTime JoinedDate { get; set; }
+
+        /// <summary>
+        /// The karma count for posts.
+        /// </summary>
+        public int PostKarma { get; set; }
+
+        /// <summary>
+        /// The karma count for comments.
+        /// </summary>
+        public int CommentKarma { get; set; }
         #endregion
 
         #region Publics
