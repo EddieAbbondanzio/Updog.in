@@ -1,6 +1,6 @@
 import { Mapper } from '@/core/mapper';
-import { Comment } from '@/comment/common/comment';
-import { UserMapper } from '@/user/common/user-mapper';
+import { Comment } from '@/comment/domain/comment';
+import { UserMapper } from '@/user/infrastructure/user-mapper';
 
 /**
  * Mapper to convert a comment into it's entity.
@@ -34,14 +34,19 @@ export class CommentMapper implements Mapper<{ [key: string]: any }, Comment> {
         }
 
         const user = this.userMapper.map(source.user);
-        return new Comment(
+        const comment = new Comment(
             source.id,
             user,
             source.body,
             new Date(source.creationDate),
             source.wasUpdated,
             source.wasDeleted,
-            source.children.map(c => this.map(c))
+            source.upvotes,
+            source.downvotes
         );
+
+        comment.children = source.children.map(c => this.map(c));
+
+        return comment;
     }
 }

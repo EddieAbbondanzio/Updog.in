@@ -1,6 +1,6 @@
 import { ApiInteractor } from '@/core/api-interactor';
-import { Post } from '../../common/post';
-import { PostApiInteractor } from '@/post/common/post-api-interactor';
+import { Post } from '../../domain/post';
+import { PostApiInteractor } from '@/post/infrastructure/post-api-interactor';
 
 /**
  * Interactor to find a post by it's ID.

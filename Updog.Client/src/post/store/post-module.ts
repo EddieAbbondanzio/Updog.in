@@ -1,6 +1,6 @@
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import { PostCreateParams } from '../use-cases/create/post-create-params';
-import { User } from '@/user/common/user';
+import { User } from '@/user/domain/user';
 import { PostFinderById } from '../use-cases/find-by-id/post-finder-by-id';
 import { PostFinderByNew } from '../use-cases/find-by-new/post-finder-by-new';
 import { PaginationInfo } from '@/core/pagination/pagination-info';
@@ -8,7 +8,7 @@ import { PostFinderByUser } from '../use-cases/find-by-user/post-finder-by-user'
 import { PostFinderByUserParams } from '../use-cases/find-by-user/post-finder-by-user-params';
 import { PostCreator } from '../use-cases/create/post-creator';
 import UserModule from '@/user/store/user-module';
-import { Post } from '../common/post';
+import { Post } from '../domain/post';
 import { PagedResultSet } from '@/core/pagination/paged-result-set';
 import { PaginationParams } from '@/core/pagination/pagination-params';
 import { PostMutation } from './post-mutation';
@@ -79,8 +79,6 @@ export default class PostModule extends VuexModule {
     @Action
     public async findByNew(paging: PaginationParams) {
         this.context.commit(PostMutation.ClearPosts);
-        console.log('REEE');
-        console.log(this.context.rootGetters['user/authToken']);
         const posts = await new PostFinderByNew(this.context.rootGetters['user/authToken']).handle(paging);
         this.context.commit(PostMutation.SetPosts, posts);
 

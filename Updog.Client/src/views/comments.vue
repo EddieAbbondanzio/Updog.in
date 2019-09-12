@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Mixins } from 'vue-property-decorator';
-import { Comment } from '../comment/common/comment';
+import { Comment } from '../comment/domain/comment';
 import { CommentFinderMixin } from '../comment/mixins/comment-finder-mixin';
 import { CommentFinderByPostParams } from '../comment/use-cases/find-by-post/comment-finder-by-post-params';
 import CommentSummary from '@/comment/components/comment-summary.vue';

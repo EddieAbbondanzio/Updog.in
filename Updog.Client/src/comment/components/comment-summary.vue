@@ -70,7 +70,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Mixins } from 'vue-property-decorator';
-import { Comment } from '../common/comment';
+import { Comment } from '../domain/comment';
 import DateTimeStamp from '@/core/components/date-time-stamp.vue';
 import UserLink from '@/user/components/user-link.vue';
 import MaterialIcon from '@/core/components/material-icon.vue';

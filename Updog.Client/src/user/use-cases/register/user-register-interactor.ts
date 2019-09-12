@@ -1,9 +1,9 @@
 import { ApiInteractor } from '@/core/api-interactor';
-import { UserLogin } from '../../common/user-login';
-import { User } from '../../common/user';
-import { UserMapper } from '@/user/common/user-mapper';
-import { UserApiInteractor } from '@/user/common/user-api-interactor';
-import { UserRegistration } from '@/user/common/user-registration';
+import { UserLogin } from '../../domain/user-login';
+import { User } from '../../domain/user';
+import { UserMapper } from '@/user/infrastructure/user-mapper';
+import { UserApiInteractor } from '@/user/infrastructure/user-api-interactor';
+import { UserRegistration } from '@/user/domain/user-registration';
 
 /**
  * Interactor to handle registering a user with the back end.

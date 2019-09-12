@@ -17,8 +17,8 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import UserWidget from '@/user/components/user-widget.vue';
-import { User } from '@/user/common/user';
-import { UserLogin } from '@/user/common/user-login';
+import { User } from '@/user/domain/user';
+import { UserLogin } from '@/user/domain/user-login';
 
 /**
  * Nav bar atop the page. Shows the logged in user and brand image / name.

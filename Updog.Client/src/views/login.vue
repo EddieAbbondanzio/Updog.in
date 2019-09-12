@@ -13,10 +13,10 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import UserLoginForm from '@/user/components/user-login-form.vue';
-import { UserLogin } from '../user/common/user-login';
-import { User } from '../user/common/user';
+import { UserLogin } from '../user/domain/user-login';
+import { User } from '../user/domain/user';
 import Layout from '@/core/components/layout.vue';
-import { UserCredentials } from '../user/common/user-credentials';
+import { UserCredentials } from '../user/domain/user-credentials';
 
 @Component({
     components: {

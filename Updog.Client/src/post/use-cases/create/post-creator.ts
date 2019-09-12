@@ -1,9 +1,9 @@
 import { ApiInteractor } from '@/core/api-interactor';
 import { PostCreateParams } from './post-create-params';
-import { Post } from '@/post/common/post';
-import { PostMapper } from '@/post/common/post-mapper';
-import { UserMapper } from '@/user/common/user-mapper';
-import { PostApiInteractor } from '@/post/common/post-api-interactor';
+import { Post } from '@/post/domain/post';
+import { PostMapper } from '@/post/infrastructure/post-mapper';
+import { UserMapper } from '@/user/infrastructure/user-mapper';
+import { PostApiInteractor } from '@/post/infrastructure/post-api-interactor';
 
 /**
  * Interactor to create a new post.

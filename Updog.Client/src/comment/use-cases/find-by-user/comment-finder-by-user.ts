@@ -1,11 +1,11 @@
 import { ApiInteractor } from '@/core/api-interactor';
 import { PaginationParams } from '@/core/pagination/pagination-params';
-import { Post } from '@/post/common/post';
-import { PostMapper } from '@/post/common/post-mapper';
-import { PostApiInteractor } from '@/post/common/post-api-interactor';
+import { Post } from '@/post/domain/post';
+import { PostMapper } from '@/post/infrastructure/post-mapper';
+import { PostApiInteractor } from '@/post/infrastructure/post-api-interactor';
 import { CommentFinderByUserParams } from './comment-finder-by-user-params';
-import { Comment } from '@/comment/common/comment';
-import { CommentApiInteractor } from '@/comment/common/comment-api-interactor';
+import { Comment } from '@/comment/domain/comment';
+import { CommentApiInteractor } from '@/comment/infrastructure/comment-api-interactor';
 import { PagedResultSet } from '@/core/pagination/paged-result-set';
 
 /**

@@ -1,11 +1,11 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
-import { User } from '../common/user';
-import { UserCredentials } from '../common/user-credentials';
+import { User } from '../domain/user';
+import { UserCredentials } from '../domain/user-credentials';
 import { UserLoginInteractor } from '../use-cases/login/user-login-interactor';
-import { UserLogin } from '../common/user-login';
+import { UserLogin } from '../domain/user-login';
 import { UserRegisterInteractor } from '../use-cases/register/user-register-interactor';
 import { UserFinderByUsername } from '../use-cases/find-by-username/user-finder-by-username';
-import { UserRegistration } from '../common/user-registration';
+import { UserRegistration } from '../domain/user-registration';
 import { UserMutation } from './user-mutation';
 
 /**

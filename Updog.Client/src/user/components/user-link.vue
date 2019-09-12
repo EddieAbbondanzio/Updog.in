@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { User } from '../common/user';
+import { User } from '../domain/user';
 
 /**
  * Link to a user's profile page.

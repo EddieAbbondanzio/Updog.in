@@ -40,16 +40,16 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Mixins } from 'vue-property-decorator';
-import { Post } from '../post/common/post';
+import { Post } from '../post/domain/post';
 import { PostFinderMixin } from '../post/mixins/post-finder-mixin';
 import { PaginationParams } from '../core/pagination/pagination-params';
 import Layout from '@/core/components/layout.vue';
-import { User as UserEntity } from '@/user/common/user';
+import { User as UserEntity } from '@/user/domain/user';
 import UserSummary from '@/user/components/user-summary.vue';
 import PostSummary from '@/post/components/post-summary.vue';
 import CommentSummary from '@/comment/components/comment-summary.vue';
 import { CommentFinderMixin } from '../comment/mixins/comment-finder-mixin';
-import { Comment } from '../comment/common/comment';
+import { Comment } from '../comment/domain/comment';
 import PaginationNavigation from '@/core/components/pagination-navigation.vue';
 import { PagedResultSet } from '../core/pagination/paged-result-set';
 import { UserFinderMixin } from '@/user/mixins/user-finder-mixin';

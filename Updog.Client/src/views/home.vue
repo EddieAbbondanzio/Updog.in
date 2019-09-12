@@ -23,16 +23,16 @@ import Layout from '@/core/components/layout.vue';
 import { PostFinderMixin } from '../post/mixins/post-finder-mixin';
 import { PaginationParams } from '../core/pagination/pagination-params';
 import PostSummary from '@/post/components/post-summary.vue';
-import { Post } from '../post/common/post';
+import { Post } from '../post/domain/post';
 import { PagedResultSet } from '../core/pagination/paged-result-set';
 import PaginationNavigation from '@/core/components/pagination-navigation.vue';
-import { UserCredentials } from '../user/common/user-credentials';
+import { UserCredentials } from '../user/domain/user-credentials';
 import { getModule } from 'vuex-module-decorators';
 import UserModule from '../user/store/user-module';
-import { UserLogin } from '../user/common/user-login';
+import { UserLogin } from '../user/domain/user-login';
 import PostModule from '../post/store/post-module';
 import { PostCreateParams } from '../post/use-cases/create/post-create-params';
-import { PostType } from '../post/common/post-type';
+import { PostType } from '../post/domain/post-type';
 import { PaginationInfo } from '../core/pagination/pagination-info';
 
 /**

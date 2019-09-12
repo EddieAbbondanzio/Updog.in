@@ -1,7 +1,8 @@
 import { PostType } from './post-type';
-import { User } from '@/user/common/user';
+import { User } from '@/user/domain/user';
 import { PaginationParams } from '@/core/pagination/pagination-params';
 import { UserEntity } from '@/core/common/user-entity';
+import { Vote } from '@/vote/domain/vote';
 
 /**
  * Post made by a user. Probably a repost...
@@ -33,6 +34,9 @@ export class Post extends UserEntity {
      * @param commentCount The number of comments on it.
      * @param wasUpdated If the post was editted.
      * @param wasDeleted If the post was deleted.
+     * @param upvotes The number of upvotes it go.
+     * @param downvotes The number of downvotes it has.
+     * @param vote The vote cast by the current user.
      */
     constructor(
         public id: number,
@@ -43,7 +47,10 @@ export class Post extends UserEntity {
         public creationDate: Date,
         public commentCount: number,
         public wasUpdated: boolean,
-        public wasDeleted: boolean
+        public wasDeleted: boolean,
+        public upvotes: number,
+        public downotes: number,
+        public vote: Vote | null = null
     ) {
         super();
     }

@@ -1,5 +1,5 @@
-import { Post } from '@/post/common/post';
-import { UserLogin } from '@/user/common/user-login';
+import { Post } from '@/post/domain/post';
+import { UserLogin } from '@/user/domain/user-login';
 
 /**
  * Information to create a new comment.

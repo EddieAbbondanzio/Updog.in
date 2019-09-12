@@ -1,4 +1,4 @@
-import { User } from '@/user/common/user';
+import { User } from '@/user/domain/user';
 
 /**
  * An entity owned by a user.

@@ -1,6 +1,6 @@
 import { ApiInteractor } from '@/core/api-interactor';
 import { CommentMapper } from './comment-mapper';
-import { UserMapper } from '@/user/common/user-mapper';
+import { UserMapper } from '@/user/infrastructure/user-mapper';
 
 /**
  * Interactor for working with the comment portion of the API.

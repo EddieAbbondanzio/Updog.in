@@ -1,6 +1,6 @@
 import { ApiInteractor } from '@/core/api-interactor';
-import { Comment } from '@/comment/common/comment';
-import { CommentApiInteractor } from '@/comment/common/comment-api-interactor';
+import { Comment } from '@/comment/domain/comment';
+import { CommentApiInteractor } from '@/comment/infrastructure/comment-api-interactor';
 import { CommentFinderByPostParams } from './comment-finder-by-post-params';
 import { PagedResultSet } from '@/core/pagination/paged-result-set';
 

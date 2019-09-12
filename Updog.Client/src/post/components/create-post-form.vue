@@ -90,8 +90,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { PostType } from '../common/post-type';
-import { Post } from '../common/post';
+import { PostType } from '../domain/post-type';
+import { Post } from '../domain/post';
 import { PostCreateParams } from '../use-cases/create/post-create-params';
 
 /**

@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { User } from '../common/user';
+import { User } from '../domain/user';
 import { DateUtils } from '../../core/utils/date-utils';
 /**
  * Component to show the details of a user on screen.

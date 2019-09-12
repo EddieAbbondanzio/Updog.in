@@ -1,4 +1,4 @@
-import { PostType } from '@/post/common/post-type';
+import { PostType } from '@/post/domain/post-type';
 
 /**
  * Request to create a new post.

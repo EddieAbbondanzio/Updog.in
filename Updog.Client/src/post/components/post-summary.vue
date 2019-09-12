@@ -74,9 +74,9 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { PostType } from '../common/post-type';
+import { PostType } from '../domain/post-type';
 import MaterialIcon from '@/core/components/material-icon.vue';
-import { Post } from '../common/post';
+import { Post } from '../domain/post';
 import DateTimeStamp from '@/core/components/date-time-stamp.vue';
 import UserLink from '@/user/components/user-link.vue';
 import { PostUpdaterMixin } from '../mixins/post-updater-mixin';

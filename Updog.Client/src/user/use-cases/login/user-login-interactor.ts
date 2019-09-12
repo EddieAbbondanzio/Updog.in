@@ -1,9 +1,9 @@
 import { ApiInteractor } from '@/core/api-interactor';
-import { UserCredentials } from '../../common/user-credentials';
-import { UserLogin } from '../../common/user-login';
-import { User } from '../../common/user';
-import { UserMapper } from '@/user/common/user-mapper';
-import { UserApiInteractor } from '@/user/common/user-api-interactor';
+import { UserCredentials } from '../../domain/user-credentials';
+import { UserLogin } from '../../domain/user-login';
+import { User } from '../../domain/user';
+import { UserMapper } from '@/user/infrastructure/user-mapper';
+import { UserApiInteractor } from '@/user/infrastructure/user-api-interactor';
 
 /**
  * Interactor to handle logging in a user.

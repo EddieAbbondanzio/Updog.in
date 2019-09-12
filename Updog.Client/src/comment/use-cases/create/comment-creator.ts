@@ -1,7 +1,7 @@
 import { ApiInteractor } from '@/core/api-interactor';
 import { CommentCreateParams } from './comment-create-params';
-import { Comment } from '@/comment/common/comment';
-import { CommentApiInteractor } from '@/comment/common/comment-api-interactor';
+import { Comment } from '@/comment/domain/comment';
+import { CommentApiInteractor } from '@/comment/infrastructure/comment-api-interactor';
 
 /**
  * Interactor to create a new comment.

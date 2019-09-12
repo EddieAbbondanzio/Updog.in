@@ -8,7 +8,7 @@ import { CommentCreator } from '../use-cases/create/comment-creator';
 import { PagedResultSet } from '@/core/pagination/paged-result-set';
 import { CommentMutation } from './comment-mutation';
 import { PaginationInfo } from '@/core/pagination/pagination-info';
-import { Comment } from '@/comment/common/comment';
+import { Comment } from '@/comment/domain/comment';
 import { CommentUpdateParams } from '../use-cases/update/comment-update-params';
 import { CommentUpdater } from '../use-cases/update/comment-updater';
 import { CommentFinderByPostParams } from '../use-cases/find-by-post/comment-finder-by-post-params';

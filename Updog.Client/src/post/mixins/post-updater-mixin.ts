@@ -1,7 +1,7 @@
 import Mixin from 'vue-class-component';
 import Vue from 'vue';
 import { PostCreateParams } from '../use-cases/create/post-create-params';
-import { Post } from '../common/post';
+import { Post } from '../domain/post';
 import { PostCreator } from '../use-cases/create/post-creator';
 import { PostUpdateParams } from '../use-cases/update/post-update-params';
 import { PostUpdater } from '../use-cases/update/post-updater';

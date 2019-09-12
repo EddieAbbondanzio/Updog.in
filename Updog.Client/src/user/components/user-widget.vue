@@ -24,8 +24,8 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import MaterialIcon from '@/core/components/material-icon.vue';
-import { User } from '../common/user';
-import { UserLogin } from '../common/user-login';
+import { User } from '../domain/user';
+import { UserLogin } from '../domain/user-login';
 import UserLink from '@/user/components/user-link.vue';
 import { UserAuthMixin } from '../mixins/user-auth-mixin';
 

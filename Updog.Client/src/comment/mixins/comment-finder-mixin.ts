@@ -4,7 +4,7 @@ import { CommentFinderById } from '../use-cases/find-by-id/comment-finder-by-id'
 import { CommentFinderByPost } from '../use-cases/find-by-post/comment-finder-by-post';
 import { CommentCreateParams } from '../use-cases/create/comment-create-params';
 import { CommentCreator } from '../use-cases/create/comment-creator';
-import { Comment } from '@/comment/common/comment';
+import { Comment } from '@/comment/domain/comment';
 import { PaginationParams } from '@/core/pagination/pagination-params';
 import { CommentFinderByUser } from '../use-cases/find-by-user/comment-finder-by-user';
 import { CommentFinderByUserParams } from '../use-cases/find-by-user/comment-finder-by-user-params';

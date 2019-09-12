@@ -1,6 +1,6 @@
-import { CommentApiInteractor } from '@/comment/common/comment-api-interactor';
+import { CommentApiInteractor } from '@/comment/infrastructure/comment-api-interactor';
 import { CommentUpdateParams } from './comment-update-params';
-import { Comment } from '@/comment/common/comment';
+import { Comment } from '@/comment/domain/comment';
 
 /**
  * Interactor to update an existing post.

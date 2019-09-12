@@ -1,6 +1,6 @@
-import { PostApiInteractor } from '@/post/common/post-api-interactor';
+import { PostApiInteractor } from '@/post/infrastructure/post-api-interactor';
 import { PostUpdateParams } from './post-update-params';
-import { Post } from '@/post/common/post';
+import { Post } from '@/post/domain/post';
 
 /**
  * Interactor to update an existing post.

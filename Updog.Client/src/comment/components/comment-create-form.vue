@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Comment } from '@/comment/common/comment';
+import { Comment } from '@/comment/domain/comment';
 
 /**
  * Form to create a new comment.

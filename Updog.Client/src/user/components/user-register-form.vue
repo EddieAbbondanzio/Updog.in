@@ -78,7 +78,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { UserRegistration } from '@/user/common/user-registration';
+import { UserRegistration } from '@/user/domain/user-registration';
 import { UserAuthMixin } from '../mixins/user-auth-mixin';
 
 /**

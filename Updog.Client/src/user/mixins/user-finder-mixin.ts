@@ -1,10 +1,10 @@
 import Mixin from 'vue-class-component';
 import UserModule from '../store/user-module';
 import { getModule } from 'vuex-module-decorators';
-import { UserCredentials } from '../common/user-credentials';
-import { UserLogin } from '../common/user-login';
+import { UserCredentials } from '../domain/user-credentials';
+import { UserLogin } from '../domain/user-login';
 import Vue from 'vue';
-import { User } from '../common/user';
+import { User } from '../domain/user';
 
 /**
  * Mixin to find users in the backend.

@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { User } from './user/common/user';
+import { User } from './user/domain/user';
 
 @Component({
     name: 'app'

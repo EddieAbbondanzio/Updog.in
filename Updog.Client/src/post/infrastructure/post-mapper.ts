@@ -1,6 +1,7 @@
 import { Mapper } from '@/core/mapper';
-import { Post } from './post';
-import { UserMapper } from '@/user/common/user-mapper';
+import { Post } from '../domain/post';
+import { UserMapper } from '@/user/infrastructure/user-mapper';
+import { VoteMapper } from '@/vote/infrastructure/vote-mapper';
 
 /**
  * Mapper to convert a post into it's entity form from a raw
@@ -11,7 +12,7 @@ export class PostMapper implements Mapper<{ [key: string]: any }, Post> {
      * Create a new post mapper.
      * @param userMapper The user mapper for converting user entities.
      */
-    constructor(private userMapper: UserMapper) {}
+    constructor(private userMapper: UserMapper, private voteMapper: VoteMapper) {}
 
     /**
      * Convert an object literal into it's post entity.
@@ -46,8 +47,17 @@ export class PostMapper implements Mapper<{ [key: string]: any }, Post> {
             throw new TypeError('commentCount must be an integer');
         }
 
+        if (typeof source.upvotes !== 'number') {
+            throw new TypeError('upvotes must be an integer');
+        }
+
+        if (typeof source.downvotes !== 'number') {
+            throw new TypeError('downvotes must be an integer');
+        }
+
         const user = this.userMapper.map(source.user);
-        return new Post(
+
+        const p = new Post(
             source.id,
             source.type,
             source.title,
@@ -56,7 +66,16 @@ export class PostMapper implements Mapper<{ [key: string]: any }, Post> {
             new Date(source.creationDate),
             source.commentCount,
             source.wasUpdated,
-            source.wasDeleted
+            source.wasDeleted,
+            source.upvotes,
+            source.downvotes,
+            source.vote
         );
+
+        if (source.vote != null) {
+            p.vote = this.voteMapper.map(source.vote);
+        }
+
+        return p;
     }
 }

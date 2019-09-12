@@ -24,9 +24,9 @@ import PostSummary from '@/post/components/post-summary.vue';
 import { CommentFinderMixin } from '@/comment/mixins/comment-finder-mixin';
 import { CommentCreatorMixin } from '@/comment/mixins/comment-creator-mixin';
 import { mixins } from 'vue-class-component/lib/util';
-import { Post as PostEntity } from '@/post/common/post';
+import { Post as PostEntity } from '@/post/domain/post';
 import CommentSummary from '@/comment/components/comment-summary.vue';
-import { Comment } from '../comment/common/comment';
+import { Comment } from '../comment/domain/comment';
 import User from './user.vue';
 import { UserAuthMixin } from '@/user/mixins/user-auth-mixin';
 import { CommentCreateParams } from '../comment/use-cases/create/comment-create-params';
@@ -57,7 +57,6 @@ export default class Post extends PostFinderMixin {
     public async created() {
         const p = await this.$findPostById(this.postId);
         this.isLoaded = true;
-        console.log(this.$posts);
     }
 }
 </script>

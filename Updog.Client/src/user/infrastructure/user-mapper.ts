@@ -1,5 +1,5 @@
 import { Mapper } from '@/core/mapper';
-import { User } from './user';
+import { User } from '../domain/user';
 
 /**
  * Mapper to convert a user from it's raw object to an
@@ -23,6 +23,6 @@ export class UserMapper implements Mapper<{ [key: string]: any }, User> {
             throw new TypeError('joinedDate must be a date string');
         }
 
-        return new User(source.id, source.username, new Date(source.joinedDate));
+        return new User(source.id, source.username, new Date(source.joinedDate), source.postKarma, source.commentKarma);
     }
 }

@@ -1,5 +1,5 @@
-import { User } from '@/user/common/user';
-import { UserLogin } from '@/user/common/user-login';
+import { User } from '@/user/domain/user';
+import { UserLogin } from '@/user/domain/user-login';
 
 /**
  * Parameters to update a post.

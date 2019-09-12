@@ -55,7 +55,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { UserCredentials } from '../common/user-credentials';
+import { UserCredentials } from '../domain/user-credentials';
 import { UserAuthMixin } from '../mixins/user-auth-mixin';
 
 /**
