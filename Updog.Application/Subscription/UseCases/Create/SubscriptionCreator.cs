@@ -26,9 +26,9 @@ namespace Updog.Application {
                 ISubscriptionRepo subRepo = database.GetRepo<ISubscriptionRepo>(connection);
 
                 //Check to see if the Space exists first
-                Space? s = await spaceRepo.FindByName(input.Space);
+                Space? space = await spaceRepo.FindByName(input.Space);
 
-                if (s == null) {
+                if (space == null) {
                     throw new InvalidOperationException($"No space with name {input.Space} exists.");
                 }
 
@@ -41,11 +41,17 @@ namespace Updog.Application {
 
                 //Create the subscription
                 Subscription sub = new Subscription() {
-                    Space = s,
+                    Space = space,
                     User = input.User
                 };
 
                 await subRepo.Add(sub);
+
+                //Update sub count
+                space.SubscriptionCount++;
+
+                await spaceRepo.Update(space);
+
                 return subscriptionMapper.Map(sub);
             }
 
