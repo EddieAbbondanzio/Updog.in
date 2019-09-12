@@ -1,5 +1,5 @@
 import { UserEntity } from '@/core/common/user-entity';
-import { User } from '@/user/common/user';
+import { User } from '@/user/domain/user';
 
 /**
  * Space (sub forum).

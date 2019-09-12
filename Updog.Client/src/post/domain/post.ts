@@ -3,6 +3,7 @@ import { User } from '@/user/domain/user';
 import { PaginationParams } from '@/core/pagination/pagination-params';
 import { UserEntity } from '@/core/common/user-entity';
 import { Vote } from '@/vote/domain/vote';
+import { Space } from '@/space/domain/space';
 
 /**
  * Post made by a user. Probably a repost...
@@ -30,6 +31,7 @@ export class Post extends UserEntity {
      * @param title The title of the post.
      * @param body The body of the post.
      * @param user The user that posted the post.
+     * @param space The space it was posted to.
      * @param creationDate Date and time of posting.
      * @param commentCount The number of comments on it.
      * @param wasUpdated If the post was editted.
@@ -44,6 +46,7 @@ export class Post extends UserEntity {
         public title: string,
         public body: string,
         public user: User,
+        public space: Space,
         public creationDate: Date,
         public commentCount: number,
         public wasUpdated: boolean,

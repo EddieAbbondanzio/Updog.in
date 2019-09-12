@@ -1,7 +1,7 @@
 import { Mapper } from '@/core/mapper';
-import { UserMapper } from '@/user/common/user-mapper';
-import { VoteMapper } from '@/vote/common/vote-mapper';
-import { Space } from './space';
+import { UserMapper } from '@/user/infrastructure/user-mapper';
+import { VoteMapper } from '@/vote/infrastructure/vote-mapper';
+import { Space } from '../domain/space';
 
 /**
  * Mapper to convert a space into it's entity form from a raw

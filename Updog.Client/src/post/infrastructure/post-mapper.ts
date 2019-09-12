@@ -2,6 +2,7 @@ import { Mapper } from '@/core/mapper';
 import { Post } from '../domain/post';
 import { UserMapper } from '@/user/infrastructure/user-mapper';
 import { VoteMapper } from '@/vote/infrastructure/vote-mapper';
+import { SpaceMapper } from '@/space/infrastructure/space-mapper';
 
 /**
  * Mapper to convert a post into it's entity form from a raw
@@ -11,8 +12,10 @@ export class PostMapper implements Mapper<{ [key: string]: any }, Post> {
     /**
      * Create a new post mapper.
      * @param userMapper The user mapper for converting user entities.
+     * @param spaceMapper Mapper to convert spaces.
+     * @param voteMapper Mapper to convert votes.
      */
-    constructor(private userMapper: UserMapper, private voteMapper: VoteMapper) {}
+    constructor(private userMapper: UserMapper, private spaceMapper: SpaceMapper, private voteMapper: VoteMapper) {}
 
     /**
      * Convert an object literal into it's post entity.
@@ -39,6 +42,10 @@ export class PostMapper implements Mapper<{ [key: string]: any }, Post> {
             throw new TypeError('user must be an object');
         }
 
+        if (typeof source.space !== 'object') {
+            throw new TypeError('space must be an object');
+        }
+
         if (typeof source.creationDate !== 'string') {
             throw new TypeError('creationDate must be a date string');
         }
@@ -56,6 +63,7 @@ export class PostMapper implements Mapper<{ [key: string]: any }, Post> {
         }
 
         const user = this.userMapper.map(source.user);
+        const space = this.spaceMapper.map(source.space);
 
         const p = new Post(
             source.id,
@@ -63,6 +71,7 @@ export class PostMapper implements Mapper<{ [key: string]: any }, Post> {
             source.title,
             source.body,
             user,
+            space,
             new Date(source.creationDate),
             source.commentCount,
             source.wasUpdated,

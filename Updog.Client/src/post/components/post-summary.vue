@@ -24,6 +24,7 @@
                             Posted
                             <date-time-stamp :date="post.creationDate" :modified="post.wasUpdated" />by
                             <user-link :user="post.user" />
+                            To s/{{ post.space.name}}
                         </p>
                     </div>
 

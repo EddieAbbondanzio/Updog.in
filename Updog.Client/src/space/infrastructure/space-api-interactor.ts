@@ -1,6 +1,6 @@
 import { ApiInteractor } from '@/core/api-interactor';
-import { UserMapper } from '@/user/common/user-mapper';
-import { VoteMapper } from '@/vote/common/vote-mapper';
+import { UserMapper } from '@/user/infrastructure/user-mapper';
+import { VoteMapper } from '@/vote/infrastructure/vote-mapper';
 import { SpaceMapper } from './space-mapper';
 
 /**
