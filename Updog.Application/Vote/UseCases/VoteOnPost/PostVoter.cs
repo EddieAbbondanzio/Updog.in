@@ -24,6 +24,7 @@ namespace Updog.Application {
             using (var connection = database.GetConnection()) {
                 IVoteRepo voteRepo = database.GetRepo<IVoteRepo>(connection);
                 IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);
+                IUserRepo userRepo = database.GetRepo<IUserRepo>(connection);
 
                 using (var transaction = connection.BeginTransaction()) {
                     Post post = (await postRepo.FindById(input.PostId))!;
@@ -34,6 +35,10 @@ namespace Updog.Application {
                     if (oldVote != null) {
                         post.RemoveVote(oldVote.Direction);
                         await voteRepo.Delete(oldVote);
+
+                        if (post.Type != PostType.Text) {
+                            post.User.PostKarma -= (int)oldVote.Direction;
+                        }
                     }
 
                     // Create the new vote, and update the comment's karma cache.
@@ -46,8 +51,13 @@ namespace Updog.Application {
 
                     post.AddVote(newVote.Direction);
 
+                    if (post.Type != PostType.Text) {
+                        post.User.PostKarma += (int)newVote.Direction;
+                    }
+
                     await voteRepo.Add(newVote);
                     await postRepo.Update(post);
+                    await userRepo.Update(post.User);
 
                     transaction.Commit();
                     return voteViewMapper.Map(newVote);

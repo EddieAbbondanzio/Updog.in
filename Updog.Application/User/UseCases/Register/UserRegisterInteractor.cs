@@ -2,6 +2,8 @@ using System;
 using System.Threading.Tasks;
 using Updog.Domain;
 using FluentValidation;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Updog.Application {
     /// <summary>
@@ -32,6 +34,8 @@ namespace Updog.Application {
 
             using (var connection = database.GetConnection()) {
                 IUserRepo userRepo = database.GetRepo<IUserRepo>(connection);
+                ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(connection);
+                ISubscriptionRepo subRepo = database.GetRepo<ISubscriptionRepo>(connection);
 
                 // Check that the email is free first.
                 User? emailInUse = await userRepo.FindByEmail(input.Email);
@@ -52,6 +56,15 @@ namespace Updog.Application {
                 };
 
                 await userRepo.Add(user);
+
+                // Subscribe the user to the default spaces.
+                IEnumerable<Space> defaultSpaces = await spaceRepo.FindDefault();
+                IEnumerable<Subscription> defaultSubscriptions = defaultSpaces.Select(space => new Subscription() { User = user, Space = space });
+
+                foreach (Subscription s in defaultSubscriptions) {
+                    await subRepo.Add(s);
+                }
+
                 UserView userView = userMapper.Map(user);
                 string authToken = tokenHandler.IssueToken(user);
 
