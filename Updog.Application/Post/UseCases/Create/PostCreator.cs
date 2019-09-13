@@ -46,6 +46,7 @@ namespace Updog.Application {
                         Space = space
                     };
 
+                    // Not liking these count caches. Makes no sense?
                     post.Upvotes++;
                     await postRepo.Add(post);
 

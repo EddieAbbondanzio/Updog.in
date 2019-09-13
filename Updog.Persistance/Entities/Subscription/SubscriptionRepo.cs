@@ -32,7 +32,7 @@ namespace Updog.Persistance {
             return (await Connection.QueryAsync<SubscriptionRecord, UserRecord, SpaceRecord, UserRecord, Subscription>(
                 @"SELECT * FROM Subscription 
                     LEFT JOIN ""User"" u1 ON u1.Id = Subscription.UserId
-                    LEFT JOIN Subscription ON Space.Id = Subscription.SpaceId
+                    LEFT JOIN Space ON Space.Id = Subscription.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     WHERE Subscription.Id = @Id;",
                 (SubscriptionRecord subRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
@@ -51,7 +51,7 @@ namespace Updog.Persistance {
             return await Connection.QueryAsync<SubscriptionRecord, UserRecord, SpaceRecord, UserRecord, Subscription>(
                 @"SELECT * FROM Subscription 
                     LEFT JOIN ""User"" u1 ON u1.Id = Subscription.UserId
-                    LEFT JOIN Subscription ON Space.Id = Subscription.SpaceId
+                    LEFT JOIN Space ON Space.Id = Subscription.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     WHERE u1.Username = @Username;",
                 (SubscriptionRecord subRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
@@ -71,7 +71,7 @@ namespace Updog.Persistance {
             return (await Connection.QueryAsync<SubscriptionRecord, UserRecord, SpaceRecord, UserRecord, Subscription>(
                 @"SELECT * FROM Subscription 
                     LEFT JOIN ""User"" u1 ON u1.Id = Subscription.UserId
-                    LEFT JOIN Subscription ON Space.Id = Subscription.SpaceId
+                    LEFT JOIN Space ON Space.Id = Subscription.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     WHERE u1.Username = @Username AND Space.Name = @Name;",
                 (SubscriptionRecord subRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {

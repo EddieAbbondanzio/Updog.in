@@ -48,7 +48,7 @@ namespace Updog.Api {
                 IEnumerable<SubscriptionView> subs = await _subsriptionFinderByUser.Handle(new SubscriptionFindByUserParams(User));
                 return Ok(subs.Select(s => s.Space));
             } else {
-                IEnumerable<SpaceView> spaces = await _spaceFinderDefault.Handle(null!);
+                IEnumerable<SpaceView> spaces = await _spaceFinderDefault.Handle(new SpaceFindByDefaultParams(User));
                 return Ok(spaces);
             }
         }

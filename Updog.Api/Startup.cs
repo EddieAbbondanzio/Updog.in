@@ -139,6 +139,7 @@ namespace Updog.Api {
             services.AddSingleton<IPermissionHandler<Space>, SpacePermissionHandler>();
             services.AddSingleton<ISpaceViewMapper, SpaceViewMapper>();
             services.AddTransient<ISpaceRecordMapper, SpaceRecordMapper>();
+            services.AddTransient<SpaceFinderDefault>();
             services.AddTransient<SpaceFinderByName>();
             services.AddTransient<SpaceFinder>();
             services.AddTransient<SpaceCreator>();
@@ -148,6 +149,9 @@ namespace Updog.Api {
 
             services.AddSingleton<ISubscriptionViewMapper, SubscriptionViewMapper>();
             services.AddSingleton<ISubscriptionRecordMapper, SubscriptionRecordMapper>();
+            services.AddTransient<SubscriptionFinderByUser>();
+            services.AddTransient<SubscriptionCreator>();
+            services.AddTransient<SubscriptionDeleter>();
 
             services.AddSingleton<IVoteViewMapper, VoteViewMapper>();
             services.AddTransient<PostVoter>();
