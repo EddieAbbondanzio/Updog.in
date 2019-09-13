@@ -4,7 +4,7 @@ namespace Updog.Domain {
     /// <summary>
     /// Subforum for collecting similar themed posts.
     /// </summary>
-    public sealed class Space : IEntity {
+    public partial class Space : IEntity {
         #region Constants
         /// <summary>
         /// The number of spaces per page when searching for them.

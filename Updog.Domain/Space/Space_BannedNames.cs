@@ -1,8 +1,7 @@
 namespace Updog.Domain {
-    public partial class User {
-        public static string[] BannedUsernames = new string[]
-            {
-                "account",
+    public partial class Space {
+        public static string[] BannedNames = new string[] {
+                            "account",
                 "accounts",
                 "admin",
                 "administrator",
@@ -163,6 +162,6 @@ namespace Updog.Domain {
                 "websites",
                 "webmaster",
                 "workshop",
-            };
+        };
     }
 }
