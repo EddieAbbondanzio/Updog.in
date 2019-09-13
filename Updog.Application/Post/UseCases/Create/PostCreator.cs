@@ -29,23 +29,39 @@ namespace Updog.Application {
             using (var connection = database.GetConnection()) {
                 ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(connection);
                 IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);
+                IVoteRepo voteRepo = database.GetRepo<IVoteRepo>(connection);
 
                 Space? space = await spaceRepo.FindByName(input.Space);
                 if (space == null) {
                     throw new InvalidOperationException($"No space with name ${input.Space} found.");
                 }
 
-                Post post = new Post() {
-                    Type = input.Type,
-                    Title = input.Title,
-                    Body = input.Body,
-                    User = input.User,
-                    CreationDate = DateTime.UtcNow,
-                    Space = space
-                };
+                using (var transaction = connection.BeginTransaction()) {
+                    Post post = new Post() {
+                        Type = input.Type,
+                        Title = input.Title,
+                        Body = input.Body,
+                        User = input.User,
+                        CreationDate = DateTime.UtcNow,
+                        Space = space
+                    };
 
-                await postRepo.Add(post);
-                return postMapper.Map(post);
+                    post.Upvotes++;
+                    await postRepo.Add(post);
+
+                    Vote upvote = new Vote() {
+                        User = input.User,
+                        ResourceId = post.Id,
+                        ResourceType = VoteResourceType.Post,
+                        Direction = VoteDirection.Up
+                    };
+
+                    await voteRepo.Add(upvote);
+                    post.Vote = upvote;
+
+                    transaction.Commit();
+                    return postMapper.Map(post);
+                }
             }
 
         }

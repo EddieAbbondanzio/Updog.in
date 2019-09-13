@@ -11,7 +11,7 @@ namespace Updog.Application {
         /// The user performing the action.
         /// </summary>
         /// <value></value>
-        User? User { get; }
+        User User { get; }
         #endregion
     }
 }

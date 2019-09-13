@@ -69,14 +69,14 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{postId}/comment")]
         public async Task<ActionResult> GetComments(int postId) {
-            IEnumerable<CommentView> comments = await commentFinderByPost.Handle(new CommentFinderByPostParams(postId));
+            IEnumerable<CommentView> comments = await commentFinderByPost.Handle(new CommentFinderByPostParams(postId, User));
             return Ok(comments);
         }
 
         [AllowAnonymous]
         [HttpGet("user/{username}")]
         public async Task<ActionResult> FindByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            PagedResultSet<PostView> posts = await postFinderByUser.Handle(new PostFinderByUserParam(username, pageNumber, pageSize));
+            PagedResultSet<PostView> posts = await postFinderByUser.Handle(new PostFinderByUserParam(username, pageNumber, pageSize, User));
             SetContentRangeHeader(posts.Pagination);
             return Ok(posts);
         }
