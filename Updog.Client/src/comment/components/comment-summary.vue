@@ -1,60 +1,69 @@
 <template>
     <div class="py-1">
         <!-- Comment -->
-        <div>
-            <!-- Header -->
-            <div class="d-flex flex-row align-items-center">
-                <user-link :user="comment.user" />
-                <date-time-stamp
-                    :date="comment.creationDate"
-                    :modified="comment.wasUpdated"
-                    class="text-muted"
-                />
-            </div>
+        <div class="d-flex flex-row">
+            <comment-vote-controller :comment="comment" />
 
-            <!-- Body -->
-            <div v-if="!isEditing">{{ comment.body}}</div>
-            <div v-else>
-                <textarea
-                    v-model="editedBody"
-                    name="editCommentBody"
-                    v-validate="'required|max:10000'"
-                />
-                <b-form-invalid-feedback
-                    class="d-block"
-                    :state="false"
-                >{{ errors.first('editCommentBody')}}</b-form-invalid-feedback>
-                <b-button variant="primary" @click="onEditSave">Save</b-button>
-                <b-button variant="outline-primary" @click="onEditCancel">Cancel</b-button>
-            </div>
+            <div>
+                <!-- Header -->
+                <div class="d-flex flex-row align-items-center">
+                    <user-link :user="comment.user" />
 
-            <!-- Actions -->
-            <div class="d-flex flex-row">
-                <!-- Permalink -->
-                <b-button
-                    variant="link"
-                    class="text-secondary pl-0 pr-1"
-                    :to="{name: 'comment', params: { commentId: comment.id}}"
-                >permalink</b-button>
+                    <span
+                        class="text-muted pr-1"
+                    >{{ comment.karma}} {{comment.karma === 1 ? 'upvote' : 'upvotes'}}</span>
 
-                <b-button
-                    variant="link"
-                    class="text-secondary pl-0 pr-1"
-                    v-if="canEdit()"
-                    @click="onEditClick"
-                >edit</b-button>
+                    <date-time-stamp
+                        :date="comment.creationDate"
+                        :modified="comment.wasUpdated"
+                        class="text-muted"
+                    />
+                </div>
 
-                <!-- Reply -->
-                <b-button
-                    variant="link"
-                    class="text-secondary pl-0 pr-1"
-                    @click="onReplyClick"
-                >reply</b-button>
-            </div>
+                <!-- Body -->
+                <div v-if="!isEditing">{{ comment.body}}</div>
+                <div v-else>
+                    <textarea
+                        v-model="editedBody"
+                        name="editCommentBody"
+                        v-validate="'required|max:10000'"
+                    />
+                    <b-form-invalid-feedback
+                        class="d-block"
+                        :state="false"
+                    >{{ errors.first('editCommentBody')}}</b-form-invalid-feedback>
+                    <b-button variant="primary" @click="onEditSave">Save</b-button>
+                    <b-button variant="outline-primary" @click="onEditCancel">Cancel</b-button>
+                </div>
 
-            <!-- Reply Box -->
-            <div v-if="isReplying">
-                <comment-create-form @submit="onReplySubmit" />
+                <!-- Actions -->
+                <div class="d-flex flex-row">
+                    <!-- Permalink -->
+                    <b-button
+                        variant="link"
+                        class="text-secondary pl-0 pr-1"
+                        :to="{name: 'comment', params: { commentId: comment.id}}"
+                    >permalink</b-button>
+
+                    <b-button
+                        variant="link"
+                        class="text-secondary pl-0 pr-1"
+                        v-if="canEdit()"
+                        @click="onEditClick"
+                    >edit</b-button>
+
+                    <!-- Reply -->
+                    <b-button
+                        variant="link"
+                        class="text-secondary pl-0 pr-1"
+                        @click="onReplyClick"
+                    >reply</b-button>
+                </div>
+
+                <!-- Reply Box -->
+                <div v-if="isReplying">
+                    <comment-create-form @submit="onReplySubmit" />
+                </div>
             </div>
         </div>
 
@@ -80,6 +89,7 @@ import CommentCreateForm from '@/comment/components/comment-create-form.vue';
 import { CommentCreateParams } from '../use-cases/create/comment-create-params';
 import { CommentUpdaterMixin } from '../mixins/comment-updater-mixin';
 import { CommentUpdateParams } from '../use-cases/update/comment-update-params';
+import CommentVoteController from '@/vote/components/comment-vote-controller.vue';
 
 /**
  * Component to show a comment on screen.
@@ -90,7 +100,8 @@ import { CommentUpdateParams } from '../use-cases/update/comment-update-params';
         UserLink,
         DateTimeStamp,
         MaterialIcon,
-        CommentCreateForm
+        CommentCreateForm,
+        CommentVoteController
     },
     mixins: [UserAuthMixin, CommentCreatorMixin, CommentUpdaterMixin]
 })

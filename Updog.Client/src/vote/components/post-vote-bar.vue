@@ -1,6 +1,6 @@
 <template>
     <div>
-        <span>{{ post.karma}} votes</span>
+        <span>{{ post.karma}} {{post.karma === 1 ? 'vote' : 'votes'}}</span>
         <div
             :title="`${post.upvoteRatio.toFixed(2)}% upvoted`"
             v-if="post.upvotes + post.downvotes != 0"
