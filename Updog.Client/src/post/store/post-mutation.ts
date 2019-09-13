@@ -1,5 +1,6 @@
 export enum PostMutation {
     SetPosts = 'setPosts',
     ClearPosts = 'clearPosts',
-    IncrementCommentCount = 'incrementCommentCount'
+    IncrementCommentCount = 'incrementCommentCount',
+    Vote = 'vote'
 }

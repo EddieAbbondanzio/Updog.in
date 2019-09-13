@@ -4,6 +4,7 @@ import { VoteDirection } from '../domain/vote-direction';
 import { PostVoter } from '../use-cases/vote-on-post/post-voter';
 import { VoteOnPostParams } from '../use-cases/vote-on-post/vote-on-post-params';
 import { CommentVoter } from '../use-cases/vote-on-comment/comment-voter';
+import { PostMutation } from '@/post/store/post-mutation';
 
 /**
  * Module to manage votes.
@@ -12,21 +13,24 @@ import { CommentVoter } from '../use-cases/vote-on-comment/comment-voter';
 export default class VoteModule extends VuexModule {
     /**
      * Vote on a post.
-     * @param postId The ID of the post to vote on.
-     * @param vote The vote type to apply.
+     * @param params The vote type to apply.
      */
     @Action
-    public voteOnPost(postId: number, vote: VoteDirection) {
-        return new PostVoter().handle(new VoteOnPostParams(postId, vote));
+    public async voteOnPost(params: VoteOnPostParams) {
+        const res = await new PostVoter(this.context.rootGetters['user/authToken']).handle(params);
+        this.context.commit(`post/${PostMutation.Vote}`, params, { root: true });
+
+        return res;
     }
 
     /**
      * Vote on a comment.
-     * @param commentId The ID of the comment to vote on.
-     * @param vote The vote type to apply.
+     * @param params The vote params..
      */
     @Action
-    public voteOnComment(commentId: number, vote: VoteDirection) {
-        return new CommentVoter().handle(new VoteOnCommentParams(commentId, vote));
+    public async voteOnComment(params: VoteOnCommentParams) {
+        const res = await new CommentVoter(this.context.rootGetters['user/authToken']).handle(params);
+        this.context.commit(`comment/${PostMutation.Vote}`, params, { root: true });
+        return res;
     }
 }

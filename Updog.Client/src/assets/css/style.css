@@ -1,0 +1,15 @@
+.upvoted {
+    color: red !important;
+}
+
+div.upvoted {
+    background-color: red;
+}
+
+.downvoted {
+    color: blue !important;
+}
+
+div.downvoted {
+    background-color: blue;
+}

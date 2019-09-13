@@ -14,6 +14,8 @@ import { PaginationParams } from '@/core/pagination/pagination-params';
 import { PostMutation } from './post-mutation';
 import { PostUpdateParams } from '../use-cases/update/post-update-params';
 import { PostUpdater } from '../use-cases/update/post-updater';
+import { VoteDirection } from '@/vote/domain/vote-direction';
+import { VoteOnPostParams } from '@/vote/use-cases/vote-on-post/vote-on-post-params';
 
 /**
  * Module for posts
@@ -41,6 +43,15 @@ export default class PostModule extends VuexModule {
 
         if (post != null) {
             post.commentCount++;
+        }
+    }
+
+    @Mutation
+    public [PostMutation.Vote](params: VoteOnPostParams) {
+        const post = this.posts!.find(p => p.id === params.postId);
+
+        if (post != null) {
+            post.applyVote(params.vote);
         }
     }
 

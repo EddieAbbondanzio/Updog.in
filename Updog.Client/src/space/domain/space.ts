@@ -1,4 +1,4 @@
-import { UserEntity } from '@/core/common/user-entity';
+import { UserEntity } from '@/user/common/user-entity';
 import { User } from '@/user/domain/user';
 
 /**

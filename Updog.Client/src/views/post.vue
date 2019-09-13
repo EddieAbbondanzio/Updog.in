@@ -8,8 +8,14 @@
                 <router-view></router-view>
             </div>
         </template>
+
+        <!-- Side Bar -->
         <template slot="side-bar">
             <create-post-buttons />
+
+            <div v-if="isLoaded">
+                <post-vote-bar :post="$posts[0]" />
+            </div>
         </template>
         <template slot="footer">FOOTER!</template>
     </layout>
@@ -34,6 +40,7 @@ import { CommentFinderByPostParams } from '../comment/use-cases/find-by-post/com
 import { PaginationParams } from '../core/pagination/pagination-params';
 import { PagedResultSet } from '../core/pagination/paged-result-set';
 import PaginationNavigation from '@/core/components/pagination-navigation.vue';
+import PostVoteBar from '@/vote/components/post-vote-bar.vue';
 
 /**
  * View a post via it's ID.
@@ -44,7 +51,8 @@ import PaginationNavigation from '@/core/components/pagination-navigation.vue';
         Layout,
         PostSummary,
         CommentSummary,
-        PaginationNavigation
+        PaginationNavigation,
+        PostVoteBar
     }
 })
 export default class Post extends PostFinderMixin {

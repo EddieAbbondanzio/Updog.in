@@ -1,9 +1,10 @@
 import { User } from '@/user/domain/user';
+import { Entity } from '@/core/common/entity';
 
 /**
  * An entity owned by a user.
  */
-export abstract class UserEntity {
+export abstract class UserEntity extends Entity {
     /**
      * The user that owns the entity.
      */

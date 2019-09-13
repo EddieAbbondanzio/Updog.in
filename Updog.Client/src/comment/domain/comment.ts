@@ -1,11 +1,14 @@
 import { User } from '@/user/domain/user';
-import { UserEntity } from '@/core/common/user-entity';
+import { UserEntity } from '@/user/common/user-entity';
 import { Vote } from '@/vote/domain/vote';
+import { VoteDirection } from '@/vote/domain/vote-direction';
+import { VoteResourceType } from '@/vote/domain/vote-resource-type';
+import { VotableEntity } from '@/vote/common/votable-entity';
 
 /**
  * A text comment attached to a post.
  */
-export class Comment extends UserEntity {
+export class Comment extends VotableEntity {
     /**
      * The maximum number of characters allowed in the comment body.
      */
@@ -20,6 +23,11 @@ export class Comment extends UserEntity {
      * The children on the comment.
      */
     public children: Comment[];
+
+    /**
+     * The type of vote resource it is.
+     */
+    public voteResourceType: VoteResourceType = VoteResourceType.Comment;
 
     /**
      *

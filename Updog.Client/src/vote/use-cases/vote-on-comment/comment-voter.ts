@@ -7,7 +7,7 @@ import { Vote } from '@/vote/domain/vote';
  */
 export class CommentVoter extends VoteApiInteractor<VoteOnCommentParams, Vote> {
     public async handle(input: VoteOnCommentParams): Promise<Vote> {
-        const response = await this.http.post(`/vote/${input.commentId}/${input.vote}`);
+        const response = await this.http.post(`/vote/comment/${input.commentId}/${input.vote}`);
         return this.voteMapper.map(response.data);
     }
 }

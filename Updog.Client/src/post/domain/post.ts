@@ -1,14 +1,17 @@
 import { PostType } from './post-type';
 import { User } from '@/user/domain/user';
 import { PaginationParams } from '@/core/pagination/pagination-params';
-import { UserEntity } from '@/core/common/user-entity';
+import { UserEntity } from '@/user/common/user-entity';
 import { Vote } from '@/vote/domain/vote';
 import { Space } from '@/space/domain/space';
+import { VoteDirection } from '@/vote/domain/vote-direction';
+import { VoteResourceType } from '@/vote/domain/vote-resource-type';
+import { VotableEntity } from '@/vote/common/votable-entity';
 
 /**
  * Post made by a user. Probably a repost...
  */
-export class Post extends UserEntity {
+export class Post extends VotableEntity {
     /**
      * Default number of posts in a page.
      */
@@ -23,6 +26,11 @@ export class Post extends UserEntity {
      * Max char count for the body.
      */
     public static BODY_MAX_LENGTH: number = 10_000;
+
+    /**
+     * Flag to indicate what kind of votable entity it is.
+     */
+    public voteResourceType: VoteResourceType = VoteResourceType.Post;
 
     /**
      * Create a new post.
@@ -52,7 +60,7 @@ export class Post extends UserEntity {
         public wasUpdated: boolean,
         public wasDeleted: boolean,
         public upvotes: number,
-        public downotes: number,
+        public downvotes: number,
         public vote: Vote | null = null
     ) {
         super();

@@ -1,71 +1,87 @@
 <template>
     <div class="bg-light border mb-2 px-3 py-1">
         <div class="d-flex flex-row">
-            <div v-if="showToggle">
-                <material-icon
-                    :icon="isExpanded ? 'expand_less' : 'expand_more'"
-                    variant="dark"
-                    size="md"
-                    @click.native="isExpanded = !isExpanded"
-                />
-            </div>
+            <!-- Vote Arrows -->
+            <post-vote-controller :post="post" />
+
+            <!-- Icon -->
+            <post-icon :post="post" />
+
             <div>
+                <!-- Post Title -->
                 <div>
-                    <!-- Post Title -->
-                    <div>
-                        <h4 class="mb-0">
-                            <router-link
-                                :to="{name:'comments', params: { postId: post.id}}"
-                                v-if="isTextPost()"
-                            >{{ post.title }}</router-link>
-                            <a :href="`//${this.post.body}`" v-else>{{ post.title }}</a>
-                        </h4>
-                        <p class="text-muted">
-                            Posted
-                            <date-time-stamp :date="post.creationDate" :modified="post.wasUpdated" />by
-                            <user-link :user="post.user" />
-                            To s/{{ post.space.name}}
-                        </p>
-                    </div>
+                    <span class="mb-0">
+                        <router-link
+                            :to="{name:'comments', params: { postId: post.id}}"
+                            v-if="isTextPost()"
+                        >{{ post.title }}</router-link>
+                        <a :href="`//${this.post.body}`" v-else>{{ post.title }}</a>
+                    </span>
 
-                    <!-- Post Body -->
-                    <div v-if="isExpanded">
-                        <div v-if="!isEditting">{{ post.body }}</div>
-                        <div v-else>
-                            <textarea
-                                v-model.trim="edittedBody"
-                                name="editPostBody"
-                                v-validate="'required|max:10000'"
+                    <div class="d-flex flex-row">
+                        <!-- Expand / Collapse -->
+                        <div v-if="showToggle">
+                            <material-icon
+                                :icon="isExpanded ? 'remove' : 'add_box'"
+                                variant="muted"
+                                style="font-size: 36px;"
+                                @click.native="isExpanded = !isExpanded"
                             />
-                            <b-form-invalid-feedback
-                                class="d-block"
-                                :state="false"
-                            >{{ errors.first('editPostBody')}}</b-form-invalid-feedback>
+                        </div>
 
-                            <b-button variant="primary" @click="onEdittedPost">Save</b-button>
-                            <b-button variant="primary-outline" @click="onEditCancel">Cancel</b-button>
+                        <div class="d-flex flex-column" style="font-size: 14px;">
+                            <!-- Timestamp -->
+                            <div class="text-muted">
+                                Posted
+                                <date-time-stamp
+                                    :date="post.creationDate"
+                                    :modified="post.wasUpdated"
+                                />by
+                                <user-link :user="post.user" />
+                                to s/{{ post.space.name}}
+                            </div>
+
+                            <!-- Footer links -->
+                            <div class="text-muted post-controls">
+                                <b-button
+                                    variant="link"
+                                    class="text-dark pl-0 pr-1 py-0"
+                                    style="font-size: 14px;"
+                                    :to="{name: 'comments', params: {postId: post.id}}"
+                                >{{ post.commentCount == 1 ? `1 comment` : `${post.commentCount} comments` }}</b-button>
+                                <b-button
+                                    variant="link"
+                                    class="text-muted px-1"
+                                    @click="onEditPost"
+                                    v-if="canEdit() && showEdit"
+                                >edit</b-button>
+                                <b-button
+                                    variant="link"
+                                    class="text-muted px-1"
+                                    @click="onDeletePost"
+                                    v-if="canDelete() && showEdit"
+                                >delete</b-button>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Footer links -->
-                    <div class="text-muted post-controls">
-                        <b-button
-                            variant="link"
-                            class="text-muted pl-0 pr-1"
-                            :to="{name: 'comments', params: {postId: post.id}}"
-                        >{{ post.commentCount == 1 ? `1 comment` : `${post.commentCount} comments` }}</b-button>
-                        <b-button
-                            variant="link"
-                            class="text-muted px-1"
-                            @click="onEditPost"
-                            v-if="canEdit() && showEdit"
-                        >edit</b-button>
-                        <b-button
-                            variant="link"
-                            class="text-muted px-1"
-                            @click="onDeletePost"
-                            v-if="canDelete() && showEdit"
-                        >delete</b-button>
+                <!-- Post Body -->
+                <div v-if="isExpanded">
+                    <div v-if="!isEditting">{{ post.body }}</div>
+                    <div v-else>
+                        <textarea
+                            v-model.trim="edittedBody"
+                            name="editPostBody"
+                            v-validate="'required|max:10000'"
+                        />
+                        <b-form-invalid-feedback
+                            class="d-block"
+                            :state="false"
+                        >{{ errors.first('editPostBody')}}</b-form-invalid-feedback>
+
+                        <b-button variant="primary" @click="onEdittedPost">Save</b-button>
+                        <b-button variant="primary-outline" @click="onEditCancel">Cancel</b-button>
                     </div>
                 </div>
             </div>
@@ -84,6 +100,8 @@ import { PostUpdaterMixin } from '../mixins/post-updater-mixin';
 import { UserAuthMixin } from '../../user/mixins/user-auth-mixin';
 import { mixins } from 'vue-class-component';
 import { PostUpdateParams } from '../use-cases/update/post-update-params';
+import PostVoteController from '@/vote/components/post-vote-controller.vue';
+import PostIcon from '@/post/components/post-icon.vue';
 
 /**
  * Summary of information about a post. Used on post lists, and post topic page.
@@ -93,7 +111,9 @@ import { PostUpdateParams } from '../use-cases/update/post-update-params';
     components: {
         MaterialIcon,
         DateTimeStamp,
-        UserLink
+        UserLink,
+        PostVoteController,
+        PostIcon
     },
     mixins: [UserAuthMixin, PostUpdaterMixin]
 })

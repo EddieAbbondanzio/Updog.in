@@ -1,4 +1,5 @@
 export enum CommentMutation {
     SetComments = 'setComments',
-    ClearComments = 'clearComments'
+    ClearComments = 'clearComments',
+    Vote = 'vote'
 }

@@ -14,6 +14,7 @@ import { CommentUpdater } from '../use-cases/update/comment-updater';
 import { CommentFinderByPostParams } from '../use-cases/find-by-post/comment-finder-by-post-params';
 import Vue from 'vue';
 import { PostMutation } from '@/post/store/post-mutation';
+import { VoteOnCommentParams } from '@/vote/use-cases/vote-on-comment/vote-on-comment-params';
 /**
  * Cache module for comments.
  */
@@ -29,6 +30,15 @@ export default class CommentModule extends VuexModule {
     @Mutation
     public [CommentMutation.ClearComments]() {
         Vue.set(this, 'comments', []);
+    }
+
+    @Mutation
+    public [CommentMutation.Vote](params: VoteOnCommentParams) {
+        const comment = this.comments!.find(c => c.id === params.commentId);
+
+        if (comment != null) {
+            comment.applyVote(params.vote);
+        }
     }
 
     /**
