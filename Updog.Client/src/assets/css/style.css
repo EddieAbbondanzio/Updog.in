@@ -6,10 +6,18 @@ div.upvoted {
     background-color: red;
 }
 
+i.upvoted {
+    color: red !important;
+}
+
 .downvoted {
     color: blue !important;
 }
 
 div.downvoted {
     background-color: blue;
+}
+
+i.downvoted {
+    color: blue !important;
 }

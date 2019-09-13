@@ -1,7 +1,12 @@
 <template>
     <div class="d-flex flex-column justify-content-top">
         <b-button variant="link" @click="upvote()" class="p-0 m-0 vote-arrow">
-            <material-icon icon="keyboard_arrow_up" variant="muted" :class="{ upvoted: isUpvoted}" />
+            <material-icon
+                icon="keyboard_arrow_up"
+                variant="muted"
+                :class="{ upvoted: isUpvoted}"
+                color="red"
+            />
         </b-button>
         <b-button variant="link" @click="downvote()" class="p-0 m-0 vote-arrow">
             <material-icon

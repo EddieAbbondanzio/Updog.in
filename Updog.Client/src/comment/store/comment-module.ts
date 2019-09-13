@@ -34,10 +34,20 @@ export default class CommentModule extends VuexModule {
 
     @Mutation
     public [CommentMutation.Vote](params: VoteOnCommentParams) {
-        const comment = this.comments!.find(c => c.id === params.commentId);
+        const rootFound = this.comments!.find(c => c.id === params.commentId);
 
-        if (comment != null) {
-            comment.applyVote(params.vote);
+        if (rootFound != null) {
+            rootFound.applyVote(params.vote);
+        } else {
+            // Gotta go deeper
+            for (const comment of this.comments!) {
+                const found = comment.findChild(params.commentId);
+
+                if (found != null) {
+                    found.applyVote(params.vote);
+                    return;
+                }
+            }
         }
     }
 
@@ -54,7 +64,7 @@ export default class CommentModule extends VuexModule {
      * Find a set of comments for a post.
      * @param params The post info to look for.
      */
-    @Action
+    @Action({ rawError: true })
     public async findByPost(params: CommentFinderByPostParams) {
         this.context.commit(CommentMutation.ClearComments);
         const comments = await new CommentFinderByPost(this.context.rootGetters['user/authToken']).handle(params);

@@ -49,6 +49,7 @@ export default class MaterialIcon extends Vue {
      */
     @Prop({ default: 'light' })
     public variant!: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+
     /**
      * The CSS class list to use.
      */

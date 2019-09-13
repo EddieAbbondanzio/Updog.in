@@ -56,4 +56,26 @@ export class Comment extends VotableEntity {
         super();
         this.children = [];
     }
+
+    /**
+     * Recursive helper to find a child however nested it may be.
+     * @param id The ID of the child comment to look for.
+     */
+    public findChild(id: number): Comment | null {
+        const found = this.children.find(c => c.id === id);
+
+        if (found != null) {
+            return found;
+        }
+
+        for (const c of this.children) {
+            const deeperFind = c.findChild(id);
+
+            if (deeperFind != null) {
+                return deeperFind;
+            }
+        }
+
+        return null;
+    }
 }

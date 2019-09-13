@@ -1,6 +1,7 @@
 import { Mapper } from '@/core/mapper';
 import { Comment } from '@/comment/domain/comment';
 import { UserMapper } from '@/user/infrastructure/user-mapper';
+import { VoteMapper } from '@/vote/infrastructure/vote-mapper';
 
 /**
  * Mapper to convert a comment into it's entity.
@@ -9,8 +10,9 @@ export class CommentMapper implements Mapper<{ [key: string]: any }, Comment> {
     /**
      * Create a new comment mapper.
      * @param userMapper The user mapper.
+     * @param voteMapper Mapper to rebuild vote entities.
      */
-    constructor(private userMapper: UserMapper) {}
+    constructor(private userMapper: UserMapper, private voteMapper: VoteMapper) {}
 
     /**
      * Map an object literal into a comment.
@@ -34,6 +36,8 @@ export class CommentMapper implements Mapper<{ [key: string]: any }, Comment> {
         }
 
         const user = this.userMapper.map(source.user);
+        const vote = source.vote != null ? this.voteMapper.map(source.vote) : null;
+
         const comment = new Comment(
             source.id,
             user,
@@ -42,7 +46,8 @@ export class CommentMapper implements Mapper<{ [key: string]: any }, Comment> {
             source.wasUpdated,
             source.wasDeleted,
             source.upvotes,
-            source.downvotes
+            source.downvotes,
+            vote
         );
 
         comment.children = source.children.map(c => this.map(c));
