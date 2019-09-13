@@ -7,7 +7,7 @@ namespace Updog.Application {
     /// </summary>
     public sealed class SpaceCreateValidator : AbstractValidator<SpaceCreateParams> {
         #region Constructor(s)
-        public SpaceCreateValidator(ISpaceRepo spaceRepo) {
+        public SpaceCreateValidator() {
             RuleFor(s => s.User).NotNull().WithMessage("User performing the action is null.");
 
             RuleFor(s => s.Name).NotNull().WithMessage("Name is required.");

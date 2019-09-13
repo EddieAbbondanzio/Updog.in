@@ -37,7 +37,8 @@ namespace Updog.Application {
                 Space s = new Space() {
                     Name = input.Name,
                     Description = input.Description,
-                    User = input.User
+                    User = input.User,
+                    CreationDate = DateTime.UtcNow
                 };
 
                 await spaceRepo.Add(s);

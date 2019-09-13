@@ -19,40 +19,19 @@ namespace Updog.Api {
     [ApiController]
     public sealed class SubscriptionController : ApiController {
         #region Fields
-        private SubscriptionFinderByUser _subsriptionFinderByUser;
-
-        private SpaceFinderDefault _spaceFinderDefault;
-
         private SubscriptionCreator _subscriptionCreator;
 
         private SubscriptionDeleter _subscriptionDeleter;
         #endregion
 
         #region Constructor(s)
-        public SubscriptionController(SubscriptionFinderByUser subscriptionFinderByUser, SpaceFinderDefault spaceFinderDefault, SubscriptionCreator subscriptionCreator, SubscriptionDeleter subscriptionDeleter) {
-            _subsriptionFinderByUser = subscriptionFinderByUser;
-            _spaceFinderDefault = spaceFinderDefault;
+        public SubscriptionController(SubscriptionCreator subscriptionCreator, SubscriptionDeleter subscriptionDeleter) {
             _subscriptionCreator = subscriptionCreator;
             _subscriptionDeleter = subscriptionDeleter;
         }
         #endregion
 
         #region Publics
-        /// <summary>
-        /// Get the subscriptions of the user, or defaults
-        /// if no user is logged in.
-        /// </summary>
-        [AllowAnonymous]
-        public async Task<ActionResult> GetSubscriptions() {
-            if (User != null) {
-                IEnumerable<SubscriptionView> subs = await _subsriptionFinderByUser.Handle(new SubscriptionFindByUserParams(User));
-                return Ok(subs.Select(s => s.Space));
-            } else {
-                IEnumerable<SpaceView> spaces = await _spaceFinderDefault.Handle(new SpaceFindByDefaultParams(User));
-                return Ok(spaces);
-            }
-        }
-
         /// <summary>
         /// Subscribe to a sub space.
         /// </summary>
