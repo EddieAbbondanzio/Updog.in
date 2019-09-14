@@ -1,4 +1,4 @@
-import { Mapper } from '@/core/mapper';
+import { Mapper } from '@/core/infrastructure/mapper';
 import { User } from '../domain/user';
 
 /**

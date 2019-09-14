@@ -1,4 +1,4 @@
-import { Mapper } from '@/core/mapper';
+import { Mapper } from '@/core/infrastructure/mapper';
 import { UserMapper } from '@/user/infrastructure/user-mapper';
 import { VoteMapper } from '@/vote/infrastructure/vote-mapper';
 import { Space } from '../domain/space';

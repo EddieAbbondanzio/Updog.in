@@ -1,7 +1,7 @@
-import { ApiInteractor } from '@/core/api-interactor';
+import { ApiInteractor } from '@/core';
 import { CommentMapper } from './comment-mapper';
-import { UserMapper } from '@/user/infrastructure/user-mapper';
-import { VoteMapper } from '@/vote/infrastructure/vote-mapper';
+import { UserMapper } from '@/user';
+import { VoteMapper } from '@/vote';
 
 /**
  * Interactor for working with the comment portion of the API.

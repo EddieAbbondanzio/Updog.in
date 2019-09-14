@@ -1,8 +1,8 @@
-import { ApiInteractor } from '@/core/api-interactor';
+import { ApiInteractor } from '@/core/interactors/api-interactor';
 import { PostMapper } from './post-mapper';
-import { UserMapper } from '@/user/infrastructure/user-mapper';
-import { VoteMapper } from '@/vote/infrastructure/vote-mapper';
-import { SpaceMapper } from '@/space/infrastructure/space-mapper';
+import { UserMapper } from '@/user';
+import { VoteMapper } from '@/vote';
+import { SpaceMapper } from '@/space';
 
 /**
  * Interactor to work with the post portion of the API.

@@ -1,4 +1,4 @@
-import { Mapper } from '@/core/mapper';
+import { Mapper } from '@/core/infrastructure/mapper';
 import { Vote } from '../domain/vote';
 
 /**

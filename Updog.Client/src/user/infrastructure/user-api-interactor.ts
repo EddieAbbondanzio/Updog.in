@@ -1,4 +1,4 @@
-import { ApiInteractor } from '@/core/api-interactor';
+import { ApiInteractor } from '@/core/interactors/api-interactor';
 import { UserMapper } from './user-mapper';
 
 /**

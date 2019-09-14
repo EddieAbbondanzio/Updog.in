@@ -1,11 +1,11 @@
 import Mixin from 'vue-class-component';
 import Vue from 'vue';
-import { PostCreateParams } from '../use-cases/create/post-create-params';
+import { PostCreateParams } from '../interactors/create/post-create-params';
 import { Post } from '../domain/post';
-import { PostCreator } from '../use-cases/create/post-creator';
-import { PostUpdateParams } from '../use-cases/update/post-update-params';
-import { PostUpdater } from '../use-cases/update/post-updater';
-import PostModule from '../store/post-module';
+import { PostCreator } from '../interactors/create/post-creator';
+import { PostUpdateParams } from '../interactors/update/post-update-params';
+import { PostUpdater } from '../interactors/update/post-updater';
+import PostModule from '../store/post-store';
 import { getModule } from 'vuex-module-decorators';
 
 /**

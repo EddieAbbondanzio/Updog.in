@@ -1,15 +1,7 @@
 import Mixin from 'vue-class-component';
 import Vue from 'vue';
-import { CommentFinderById } from '../use-cases/find-by-id/comment-finder-by-id';
-import { CommentFinderByPost } from '../use-cases/find-by-post/comment-finder-by-post';
-import { CommentCreateParams } from '../use-cases/create/comment-create-params';
-import { CommentCreator } from '../use-cases/create/comment-creator';
-import { Comment } from '@/comment/domain/comment';
-import { PaginationParams } from '@/core/pagination/pagination-params';
-import { CommentFinderByUser } from '../use-cases/find-by-user/comment-finder-by-user';
-import { CommentFinderByUserParams } from '../use-cases/find-by-user/comment-finder-by-user-params';
-import { PagedResultSet } from '@/core/pagination/paged-result-set';
-import CommentModule from '../store/comment-module';
+import { CommentCreateParams } from '../interactors/create/comment-create-params';
+import CommentStore from '../store/comment-store';
 import { getModule } from 'vuex-module-decorators';
 
 /**
@@ -22,7 +14,7 @@ export class CommentCreatorMixin extends Vue {
      * @param params The new comment info.
      */
     public async $createComment(params: CommentCreateParams) {
-        const commentModule = getModule(CommentModule, this.$store);
+        const commentModule = getModule(CommentStore, this.$store);
         return commentModule.create(params);
     }
 }

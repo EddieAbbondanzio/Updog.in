@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/home.vue';
+import Home from '@/core/ui/views/home.vue';
 import store from '@/core/store/store';
 
 Vue.use(Router);
@@ -15,34 +15,44 @@ const r = new Router({
         {
             path: '/login',
             name: 'login',
-            component: () => import('./views/login.vue')
+            component: () => import('@/user/ui/views/login.vue')
         },
         {
             path: '/signup',
             name: 'signup',
-            component: () => import('./views/sign-up.vue')
+            component: () => import('@/user/ui/views/sign-up.vue')
         },
         {
             path: '/submit',
             name: 'submit',
-            component: () => import('./views/submit.vue'),
+            component: () => import('@/post/ui/views/submit.vue'),
             meta: {
                 authenticate: true
             }
         },
         {
+            path: '/s/:spaceName',
+            name: 'space',
+            component: () => import('@/space/ui/views/space.vue')
+        },
+        {
             name: 'post',
             path: '/post/:postId',
-            component: () => import('./views/post.vue'),
+            component: () => import('@/post/ui/views/post.vue'),
             redirect: '/',
             children: [
-                { name: 'comments', path: 'comments', component: () => import('./views/comments.vue') },
-                { name: 'comment', path: 'comment/:commentId', component: () => import('./views/comment.vue') }
+                { name: 'comments', path: 'comments', component: () => import('@/comment/ui/views/comments.vue') },
+                {
+                    name: 'comment',
+                    path: 'comment/:commentId',
+                    component: () => import('@/comment/ui/views/comment.vue')
+                }
             ]
         },
         {
-            path: '/user/:username',
-            component: () => import('./views/user.vue')
+            name: 'user',
+            path: '/u/:username',
+            component: () => import('@/user/ui/views/user.vue')
         }
     ]
 });

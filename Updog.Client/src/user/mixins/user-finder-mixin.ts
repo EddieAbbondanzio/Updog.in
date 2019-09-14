@@ -1,5 +1,5 @@
 import Mixin from 'vue-class-component';
-import UserModule from '../store/user-module';
+import UserModule from '../store/user-store';
 import { getModule } from 'vuex-module-decorators';
 import { UserCredentials } from '../domain/user-credentials';
 import { UserLogin } from '../domain/user-login';

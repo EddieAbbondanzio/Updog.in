@@ -1,12 +1,9 @@
 import { PostType } from './post-type';
-import { User } from '@/user/domain/user';
-import { PaginationParams } from '@/core/pagination/pagination-params';
-import { UserEntity } from '@/user/common/user-entity';
-import { Vote } from '@/vote/domain/vote';
-import { Space } from '@/space/domain/space';
-import { VoteDirection } from '@/vote/domain/vote-direction';
-import { VoteResourceType } from '@/vote/domain/vote-resource-type';
-import { VotableEntity } from '@/vote/common/votable-entity';
+import { User } from '@/user';
+import { Vote } from '@/vote';
+import { Space } from '@/space';
+import { VoteResourceType } from '@/vote';
+import { VotableEntity } from '@/vote';
 
 /**
  * Post made by a user. Probably a repost...

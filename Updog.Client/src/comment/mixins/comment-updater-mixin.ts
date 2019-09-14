@@ -1,8 +1,8 @@
 import Mixin from 'vue-class-component';
 import Vue from 'vue';
-import CommentModule from '../store/comment-module';
+import CommentModule from '../store/comment-store';
 import { getModule } from 'vuex-module-decorators';
-import { CommentUpdateParams } from '../use-cases/update/comment-update-params';
+import { CommentUpdateParams } from '@/comment';
 
 /**
  * Mixin to handle comment related things.
