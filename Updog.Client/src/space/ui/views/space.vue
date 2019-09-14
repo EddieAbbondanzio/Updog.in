@@ -11,7 +11,7 @@
         <template slot="side-bar">
             <div class="bg-light border p-3" v-if="space != null">
                 <h3>
-                    <space-link :space="space" class="text-dark" />
+                    <space-link :space="space" variant="dark" />
                 </h3>
                 <p>{{ space.description }}</p>
             </div>

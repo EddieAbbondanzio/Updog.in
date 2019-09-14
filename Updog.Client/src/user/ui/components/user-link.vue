@@ -1,12 +1,17 @@
 <template>
     <span>
-        <router-link :to="{ name: 'user', params: { username: user.username}}">{{ formattedName }}</router-link>&nbsp;
+        <router-link
+            :to="{ name: 'user', params: { username: user.username}}"
+            :class="cssClass"
+        >{{ formattedName }}</router-link>&nbsp;
     </span>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { User } from '@/user';
+import { Themeable, ThemeVariant } from '@/core';
+import { ThemeableText } from '@/core/ui/common/themeable/themeable-text';
 
 /**
  * Link to a user's profile page.
@@ -14,7 +19,7 @@ import { User } from '@/user';
 @Component({
     name: 'user-link'
 })
-export default class UserLink extends Vue {
+export default class UserLink extends ThemeableText {
     /**
      * The user it links to.
      */

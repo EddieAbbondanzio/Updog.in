@@ -23,8 +23,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { ThemeVariant } from '@/core/ui/common/theme-variant';
-import { Themeable } from '@/core/ui/common/themeable';
+import { ThemeVariant } from '@/core/ui/common/themeable/theme-variant';
+import { Themeable } from '@/core/ui/common/themeable/themeable';
 import { Size } from '@/core/ui/common/size';
 import { Sizable } from '@/core/ui/common/sizable';
 

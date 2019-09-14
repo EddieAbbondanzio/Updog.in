@@ -1,12 +1,16 @@
 <template>
     <span>
-        <router-link :to="{ name: 'space', params: { spaceName: space.name}}">{{ formattedName }}</router-link>&nbsp;
+        <router-link
+            :to="{ name: 'space', params: { spaceName: space.name}}"
+            :class="cssClass"
+        >{{ formattedName }}</router-link>&nbsp;
     </span>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Space } from '@/space';
+import { ThemeableText } from '../../../core/ui/common/themeable/themeable-text';
 
 /**
  * Link to a space.
@@ -14,7 +18,7 @@ import { Space } from '@/space';
 @Component({
     name: 'user-link'
 })
-export default class SpaceLink extends Vue {
+export default class SpaceLink extends ThemeableText {
     /**
      * If the space name should be prefixed with: /s
      */

@@ -34,7 +34,7 @@
                             <div class="text-muted">
                                 Posted
                                 <time-stamp :date="post.creationDate" :modified="post.wasUpdated" />by
-                                <user-link :user="post.user" />
+                                <user-link :user="post.user" variant="primary" />
 
                                 <span v-if="showSpace">
                                     to
