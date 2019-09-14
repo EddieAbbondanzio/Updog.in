@@ -71,7 +71,7 @@ namespace Updog.Persistance {
                     LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
                     LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
-                    WHERE ""User"".Username = @Username AND WasDeleted = FALSE
+                    WHERE u1.Username = @Username AND Post.WasDeleted = FALSE
                     ORDER BY Post.CreationDate ASC
                     LIMIT @Limit
                     OFFSET @Offset",

@@ -30,6 +30,16 @@ namespace Updog.Persistance {
         /// The date / time of when they created their account.
         /// </summary>
         public DateTime JoinedDate { get; set; }
+
+        /// <summary>
+        /// The post karma the user has acrued.
+        /// </summary>
+        public int PostKarma { get; set; }
+
+        /// <summary>
+        /// The comment karma the user has acrued.
+        /// </summary>
+        public int CommentKarma { get; set; }
         #endregion
     }
 }

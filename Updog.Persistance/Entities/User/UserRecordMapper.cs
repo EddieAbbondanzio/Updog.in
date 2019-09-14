@@ -18,7 +18,9 @@ namespace Updog.Persistance {
                 Username = source.Username,
                 Email = source.Email,
                 PasswordHash = source.PasswordHash,
-                JoinedDate = source.JoinedDate
+                JoinedDate = source.JoinedDate,
+                PostKarma = source.PostKarma,
+                CommentKarma = source.CommentKarma
             };
         }
 
@@ -33,7 +35,9 @@ namespace Updog.Persistance {
                 Username = destination.Username,
                 Email = destination.Email,
                 PasswordHash = destination.PasswordHash,
-                JoinedDate = destination.JoinedDate
+                JoinedDate = destination.JoinedDate,
+                PostKarma = destination.PostKarma,
+                CommentKarma = destination.CommentKarma
             };
         }
         #endregion
