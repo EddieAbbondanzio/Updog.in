@@ -84,7 +84,6 @@ import UserLink from '@/user/ui/components/user-link.vue';
 import CommentCreateForm from '@/comment/ui/components/comment-create-form.vue';
 import CommentVoteController from '@/vote/ui/components/post-vote-controller.vue';
 import { CommentCreatorMixin, CommentCreateParams, CommentUpdateParams } from '@/comment';
-import { UserAuthMixin } from '@/user';
 import { Comment, CommentUpdaterMixin } from '@/comment';
 
 /**
@@ -98,9 +97,9 @@ import { Comment, CommentUpdaterMixin } from '@/comment';
         CommentCreateForm,
         CommentVoteController
     },
-    mixins: [UserAuthMixin, CommentCreatorMixin, CommentUpdaterMixin]
+    mixins: [CommentCreatorMixin, CommentUpdaterMixin]
 })
-export default class CommentSummary extends Mixins(UserAuthMixin, CommentCreatorMixin, CommentUpdaterMixin) {
+export default class CommentSummary extends Mixins(CommentCreatorMixin, CommentUpdaterMixin) {
     @Prop()
     public comment!: Comment;
 

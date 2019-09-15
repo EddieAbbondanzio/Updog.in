@@ -55,7 +55,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { UserAuthMixin, UserCredentials } from '@/user';
+import { UserLoginMixin, UserCredentials } from '@/user';
 
 /**
  * Login form for logging in users via username / password.
@@ -63,7 +63,7 @@ import { UserAuthMixin, UserCredentials } from '@/user';
 @Component({
     name: 'user-login-form'
 })
-export default class UserLoginForm extends UserAuthMixin {
+export default class UserLoginForm extends UserLoginMixin {
     public $refs!: {
         loginUsernameTextbox: HTMLInputElement;
     };

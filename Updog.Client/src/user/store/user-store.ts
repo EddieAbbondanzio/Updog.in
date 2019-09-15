@@ -8,6 +8,7 @@ import { UserFinderByUsername } from '../interactors/find-by-username/user-finde
 import { UserRegistration } from '../domain/user-registration';
 import { UserMutation } from './user-mutation';
 import { StoreName } from '@/core/store/store-name';
+import { UserUsernameAvailableChecker } from '../interactors/is-username-available/user-username-available-checker';
 
 /**
  * Vuex store module for managing user data.
@@ -71,6 +72,15 @@ export default class UserStore extends VuexModule {
     }
 
     /**
+     * Check to see if a username is available.
+     * @param username The username to check.
+     */
+    @Action({ rawError: true })
+    public async isUsernameAvailable(username: string) {
+        return new UserUsernameAvailableChecker().handle(username);
+    }
+
+    /**
      * Log in an existing user with the backend.
      * @param userCreds The username and password to log in with.
      */
@@ -78,6 +88,8 @@ export default class UserStore extends VuexModule {
     public async login(userCreds: UserCredentials) {
         const login = await new UserLoginInteractor().handle(userCreds);
         this.context.commit(UserMutation.SetLogin, login);
+
+        return login;
     }
 
     /**

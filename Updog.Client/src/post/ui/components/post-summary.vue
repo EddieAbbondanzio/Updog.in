@@ -80,7 +80,6 @@ import PostVoteController from '@/vote/ui/components/post-vote-controller.vue';
 import PostIcon from '@/post/ui/components/post-icon.vue';
 import SpaceLink from '@/space/ui/components/space-link.vue';
 import { PostUpdaterMixin, Post, PostUpdateParams, PostType } from '@/post';
-import { UserAuthMixin } from '@/user';
 import PostLink from '@/post/ui/components/post-link.vue';
 import ExpandButton from '@/core/ui/components/expand-button.vue';
 import PostTimeStamp from '@/post/ui/components/post-time-stamp.vue';
@@ -99,10 +98,9 @@ import PostTimeStamp from '@/post/ui/components/post-time-stamp.vue';
         PostLink,
         ExpandButton,
         PostTimeStamp
-    },
-    mixins: [UserAuthMixin, PostUpdaterMixin]
+    }
 })
-export default class PostSummary extends mixins(UserAuthMixin, PostUpdaterMixin) {
+export default class PostSummary extends PostUpdaterMixin {
     /**
      * The post to display.
      */

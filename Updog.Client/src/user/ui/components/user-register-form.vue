@@ -80,18 +80,17 @@
 <script lang="ts">
 import { Component, Vue, Mixins } from 'vue-property-decorator';
 import { UserRegistration } from '@/user/domain/user-registration';
-import { UserAuthMixin } from '@/user/mixins/user-auth-mixin';
 import { UserFinderMixin } from '../../mixins/user-finder-mixin';
 import { mixins } from 'vue-class-component';
+import { UserRegistrarMixin } from '@/user/mixins/user-registrar-mixin';
 
 /**
  * Login form for logging in users via username / password.
  */
 @Component({
-    name: 'user-login-form',
-    mixins: [UserAuthMixin, UserFinderMixin]
+    name: 'user-login-form'
 })
-export default class UserRegisterForm extends Mixins(UserAuthMixin, UserFinderMixin) {
+export default class UserRegisterForm extends UserRegistrarMixin {
     public $refs!: {
         registerUsernameTextbox: HTMLInputElement;
     };
@@ -128,7 +127,7 @@ export default class UserRegisterForm extends Mixins(UserAuthMixin, UserFinderMi
     }
 
     public async onUsernameInput() {
-        console.log(await this.$findUserByUsername(this.username));
+        console.log(await this.$isUsernameAvailable(this.username));
     }
 
     /**

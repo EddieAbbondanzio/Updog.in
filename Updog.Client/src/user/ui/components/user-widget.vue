@@ -24,7 +24,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import UserLink from '@/user/ui/components/user-link.vue';
-import { UserAuthMixin } from '@/user';
+import { AuthenticatedMixin } from '@/user';
 
 /**
  * Component to handle logging in, and signing up new users.
@@ -35,5 +35,5 @@ import { UserAuthMixin } from '@/user';
         UserLink
     }
 })
-export default class UserWidget extends UserAuthMixin {}
+export default class UserWidget extends AuthenticatedMixin {}
 </script>

@@ -35,7 +35,7 @@ export default class PostLink extends ThemeableText {
      * Check to see if the post is a text post.
      */
     get isTextPost() {
-        return this.post.type == PostType.Text;
+        return this.post.type === PostType.Text;
     }
 }
 </script>

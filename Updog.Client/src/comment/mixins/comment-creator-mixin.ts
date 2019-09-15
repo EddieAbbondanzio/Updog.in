@@ -3,12 +3,13 @@ import Vue from 'vue';
 import { CommentCreateParams } from '../interactors/create/comment-create-params';
 import CommentStore from '../store/comment-store';
 import { getModule } from 'vuex-module-decorators';
+import { AuthenticatedMixin } from '@/user';
 
 /**
  * Mixin to handle comment related things.
  */
 @Mixin
-export class CommentCreatorMixin extends Vue {
+export class CommentCreatorMixin extends AuthenticatedMixin {
     /**
      * Create a new comment.
      * @param params The new comment info.

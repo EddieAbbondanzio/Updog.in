@@ -7,12 +7,13 @@ import { PostUpdateParams } from '../interactors/update/post-update-params';
 import { PostUpdater } from '../interactors/update/post-updater';
 import PostModule from '../store/post-store';
 import { getModule } from 'vuex-module-decorators';
+import { AuthenticatedMixin } from '@/user';
 
 /**
  * Mixin to handle updating posts.
  */
 @Mixin
-export class PostUpdaterMixin extends Vue {
+export class PostUpdaterMixin extends AuthenticatedMixin {
     /**
      * Reirect to the post topic page.
      * @param id The ID of the new post.

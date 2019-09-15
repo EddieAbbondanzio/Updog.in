@@ -8,6 +8,7 @@ export { UserMapper } from './infrastructure/user-mapper';
 export { UserFinderByUsername } from './interactors/find-by-username/user-finder-by-username';
 export { UserLoginInteractor } from './interactors/login/user-login-interactor';
 export { UserRegisterInteractor } from './interactors/register/user-register-interactor';
-export { UserAuthMixin } from './mixins/user-auth-mixin';
+export { UserLoginMixin } from './mixins/user-login-mixin';
+export { AuthenticatedMixin } from './mixins/authenticated-mixin';
 export { UserFinderMixin } from './mixins/user-finder-mixin';
 export { default as UserStore } from './store/user-store';

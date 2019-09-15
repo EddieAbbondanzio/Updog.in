@@ -32,7 +32,6 @@ import { mixins } from 'vue-class-component/lib/util';
 import { Post as PostEntity } from '@/post';
 import CommentSummary from '@/comment/ui/components/comment-summary.vue';
 import { User } from '@/user';
-import { UserAuthMixin } from '@/user';
 import PaginationNav from '@/core/ui/components/pagination-nav.vue';
 import PostVoteBar from '@/vote/ui/components/post-vote-bar.vue';
 import { PostFinderMixin } from '@/post';
