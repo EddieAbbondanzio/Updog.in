@@ -12,16 +12,12 @@ import { User } from '../domain/user';
 @Mixin
 export class UserFinderMixin extends Vue {
     /**
-     * The Vuex store module for user data.
-     */
-    private userModule: UserModule = getModule(UserModule, this.$store);
-
-    /**
      * Find a user via their username.
      * @param username The username to look for.
      */
     public async $findUserByUsername(username: string) {
-        await this.userModule.findByUsername(username);
-        return this.userModule.users.find(u => u.username === username);
+        const userModule: UserModule = getModule(UserModule, this.$store);
+        await userModule.findByUsername(username);
+        return userModule.users.find(u => u.username === username);
     }
 }

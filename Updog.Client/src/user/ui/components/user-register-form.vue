@@ -15,6 +15,7 @@
                 ref="registerUsernameTextbox"
                 name="registerUsername"
                 v-validate="'required|min:4'"
+                @input="onUsernameInput"
             />
             <b-form-invalid-feedback
                 class="d-block"
@@ -77,18 +78,20 @@
 </style>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Mixins } from 'vue-property-decorator';
 import { UserRegistration } from '@/user/domain/user-registration';
-import { UserAuthMixin } from '@/user';
+import { UserAuthMixin } from '@/user/mixins/user-auth-mixin';
+import { UserFinderMixin } from '../../mixins/user-finder-mixin';
+import { mixins } from 'vue-class-component';
 
 /**
  * Login form for logging in users via username / password.
  */
 @Component({
     name: 'user-login-form',
-    components: {}
+    mixins: [UserAuthMixin, UserFinderMixin]
 })
-export default class UserRegisterForm extends UserAuthMixin {
+export default class UserRegisterForm extends Mixins(UserAuthMixin, UserFinderMixin) {
     public $refs!: {
         registerUsernameTextbox: HTMLInputElement;
     };
@@ -122,6 +125,10 @@ export default class UserRegisterForm extends UserAuthMixin {
 
     public mounted() {
         this.$refs.registerUsernameTextbox.focus();
+    }
+
+    public async onUsernameInput() {
+        console.log(await this.$findUserByUsername(this.username));
     }
 
     /**

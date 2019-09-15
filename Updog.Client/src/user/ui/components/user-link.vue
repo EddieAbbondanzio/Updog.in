@@ -1,10 +1,8 @@
 <template>
-    <span>
-        <router-link
-            :to="{ name: 'user', params: { username: user.username}}"
-            :class="cssClass"
-        >{{ formattedName }}</router-link>&nbsp;
-    </span>
+    <router-link
+        :to="{ name: 'user', params: { username: user.username}}"
+        :class="cssClass"
+    >{{ formattedName }}</router-link>
 </template>
 
 <script lang="ts">

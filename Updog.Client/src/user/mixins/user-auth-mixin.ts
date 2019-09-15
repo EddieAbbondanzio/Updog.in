@@ -13,15 +13,11 @@ import { UserRegistration } from '../domain/user-registration';
 @Mixin
 export class UserAuthMixin extends Vue {
     /**
-     * The Vuex store module for user data.
-     */
-    private userModule: UserModule = getModule(UserModule, this.$store);
-
-    /**
      * Get the currently logged in user.
      */
     get $login(): UserLogin | null {
-        return this.userModule.userLogin;
+        const userModule: UserModule = getModule(UserModule, this.$store);
+        return userModule.userLogin;
     }
 
     /**
@@ -42,7 +38,8 @@ export class UserAuthMixin extends Vue {
      * Check to see if there is a logged in user.
      */
     public $isLoggedIn(): boolean {
-        return this.userModule.userLogin != null;
+        const userModule: UserModule = getModule(UserModule, this.$store);
+        return userModule.userLogin != null;
     }
 
     /**
@@ -50,7 +47,8 @@ export class UserAuthMixin extends Vue {
      * @param userCreds The username / password combo to log in with.
      */
     public async $loginUser(userCreds: UserCredentials): Promise<UserLogin> {
-        await this.userModule.login(userCreds);
+        const userModule: UserModule = getModule(UserModule, this.$store);
+        await userModule.login(userCreds);
         return this.$login!;
     }
 
@@ -62,7 +60,8 @@ export class UserAuthMixin extends Vue {
             throw new Error('Cannot log out. No logged in user');
         }
 
-        await this.userModule.logout();
+        const userModule: UserModule = getModule(UserModule, this.$store);
+        await userModule.logout();
     }
 
     /**
@@ -70,7 +69,8 @@ export class UserAuthMixin extends Vue {
      * @param userCreds The username / password combo to log in with.
      */
     public async $registerUser(userReg: UserRegistration): Promise<UserLogin> {
-        await this.userModule.register(userReg);
+        const userModule: UserModule = getModule(UserModule, this.$store);
+        await userModule.register(userReg);
         return this.$login!;
     }
 }

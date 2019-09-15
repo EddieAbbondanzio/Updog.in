@@ -4,52 +4,33 @@
             <!-- Vote Arrows -->
             <post-vote-controller :post="post" />
 
-            <!-- Icon -->
             <post-icon :post="post" />
 
             <div>
                 <!-- Post Title -->
                 <div>
-                    <span class="mb-0">
-                        <router-link
-                            :to="{name:'comments', params: { postId: post.id}}"
-                            v-if="isTextPost()"
-                        >{{ post.title }}</router-link>
-                        <a :href="`//${this.post.body}`" v-else>{{ post.title }}</a>
-                    </span>
+                    <post-link :post="post" />
 
                     <div class="d-flex flex-row">
                         <!-- Expand / Collapse -->
                         <div v-if="showToggle">
-                            <material-icon
-                                :icon="isExpanded ? 'remove' : 'add_box'"
-                                variant="muted"
-                                style="font-size: 36px;"
-                                @click.native="isExpanded = !isExpanded"
-                            />
+                            <expand-button @toggle="isExpanded = !isExpanded" />
                         </div>
 
                         <div class="d-flex flex-column" style="font-size: 14px;">
-                            <!-- Timestamp -->
-                            <div class="text-muted">
-                                Posted
-                                <time-stamp :date="post.creationDate" :modified="post.wasUpdated" />by
-                                <user-link :user="post.user" variant="primary" />
-
-                                <span v-if="showSpace">
-                                    to
-                                    <space-link :space="post.space" :showPrefix="true" />
-                                </span>
-                            </div>
+                            <post-time-stamp
+                                :post="post"
+                                class="text-muted"
+                                :showSpace="showSpace"
+                            />
 
                             <!-- Footer links -->
                             <div class="text-muted post-controls">
-                                <b-button
-                                    variant="link"
-                                    class="text-dark pl-0 pr-1 py-0"
-                                    style="font-size: 14px;"
-                                    :to="{name: 'comments', params: {postId: post.id}}"
-                                >{{ post.commentCount == 1 ? `1 comment` : `${post.commentCount} comments` }}</b-button>
+                                <post-link
+                                    :post="post"
+                                    variant="dark"
+                                >{{ post.commentCount == 1 ? `1 comment` : `${post.commentCount} comments` }}</post-link>
+
                                 <b-button
                                     variant="link"
                                     class="text-muted px-1"
@@ -100,6 +81,9 @@ import PostIcon from '@/post/ui/components/post-icon.vue';
 import SpaceLink from '@/space/ui/components/space-link.vue';
 import { PostUpdaterMixin, Post, PostUpdateParams, PostType } from '@/post';
 import { UserAuthMixin } from '@/user';
+import PostLink from '@/post/ui/components/post-link.vue';
+import ExpandButton from '@/core/ui/components/expand-button.vue';
+import PostTimeStamp from '@/post/ui/components/post-time-stamp.vue';
 
 /**
  * Summary of information about a post. Used on post lists, and post topic page.
@@ -111,7 +95,10 @@ import { UserAuthMixin } from '@/user';
         UserLink,
         PostVoteController,
         PostIcon,
-        SpaceLink
+        SpaceLink,
+        PostLink,
+        ExpandButton,
+        PostTimeStamp
     },
     mixins: [UserAuthMixin, PostUpdaterMixin]
 })

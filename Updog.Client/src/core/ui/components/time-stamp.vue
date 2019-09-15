@@ -2,7 +2,6 @@
     <div class="d-inline-block" :title="date">
         <time>{{ humanReadableDifference }} ago</time>
         <span v-if="modified">*</span>
-        <span>&nbsp;</span>
     </div>
 </template>
 

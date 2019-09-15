@@ -51,6 +51,10 @@ export default class UserStore extends VuexModule {
 
     @Mutation
     public [UserMutation.CacheUser](user: User) {
+        if (this.users.length > 50) {
+            this.users.pop();
+        }
+
         if (this.users.findIndex(u => u.id === user.id) === -1) {
             this.users.push(user);
         }
