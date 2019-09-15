@@ -3,6 +3,5 @@
  */
 export enum UserMutation {
     SetLogin = 'setLogin',
-    ClearLogin = 'clearLogin',
-    CacheUser = 'cacheUser'
+    ClearLogin = 'clearLogin'
 }

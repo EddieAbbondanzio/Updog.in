@@ -20,8 +20,6 @@ export default class UserStore extends VuexModule {
      */
     public userLogin: UserLogin | null = null;
 
-    public users: User[] = [];
-
     /**
      * Get the auth token for the currently logged in user.
      */
@@ -50,25 +48,13 @@ export default class UserStore extends VuexModule {
         this.userLogin = null;
     }
 
-    @Mutation
-    public [UserMutation.CacheUser](user: User) {
-        if (this.users.length > 50) {
-            this.users.pop();
-        }
-
-        if (this.users.findIndex(u => u.id === user.id) === -1) {
-            this.users.push(user);
-        }
-    }
-
     /**
      * Find a user via their username.
      * @param username The username to look for.
      */
     @Action({ rawError: true })
     public async findByUsername(username: string) {
-        const u = await new UserFinderByUsername().handle(username);
-        this.context.commit(UserMutation.CacheUser, u);
+        return new UserFinderByUsername().handle(username);
     }
 
     /**
@@ -108,5 +94,7 @@ export default class UserStore extends VuexModule {
     public async register(userReg: UserRegistration) {
         const login = await new UserRegisterInteractor().handle(userReg);
         this.context.commit(UserMutation.SetLogin, login);
+
+        return login;
     }
 }

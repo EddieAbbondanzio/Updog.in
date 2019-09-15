@@ -17,7 +17,6 @@ export class UserFinderMixin extends Vue {
      */
     public async $findUserByUsername(username: string) {
         const userModule: UserModule = getModule(UserModule, this.$store);
-        await userModule.findByUsername(username);
-        return userModule.users.find(u => u.username === username);
+        return userModule.findByUsername(username);
     }
 }
