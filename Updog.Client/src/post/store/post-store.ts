@@ -82,8 +82,10 @@ export default class PostStore extends VuexModule {
      */
     @Action({ rawError: true })
     public async findById(id: number) {
-        const p = await new PostFinderById(this.context.rootGetters['user/authToken']).handle(id);
-        this.context.commit(PostMutation.SetPosts, new PagedResultSet([p], new PaginationInfo(0, 1, 1)));
+        const post = await new PostFinderById(this.context.rootGetters['user/authToken']).handle(id);
+        this.context.commit(PostMutation.SetPosts, new PagedResultSet([post], new PaginationInfo(0, 1, 1)));
+
+        return post;
     }
 
     /**

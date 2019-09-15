@@ -12,3 +12,4 @@ export { ThemeVariant } from '@/core/ui/common/themeable/theme-variant';
 export { Themeable } from '@/core/ui/common/themeable/themeable';
 export { Size } from '@/core/ui/common/size';
 export { Sizable } from '@/core/ui/common/sizable';
+export { Form } from '@/core/ui/common/form/form';

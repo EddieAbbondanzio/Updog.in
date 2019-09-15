@@ -108,6 +108,7 @@ export default class CommentStore extends VuexModule {
     public async update(params: CommentUpdateParams) {
         const updatedComment = await new CommentUpdater(this.context.rootGetters['user/authToken']).handle(params);
 
+        // bleh
         const oldIndex = this.comments!.findIndex(c => c.id === params.commentId);
         const newComments = [...this.comments!];
         newComments.splice(oldIndex, 1, updatedComment);

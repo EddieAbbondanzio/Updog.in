@@ -3,7 +3,7 @@
         <b-container>
             <b-row>
                 <b-col md="8" lg="6" offset-md="2" offset-lg="3">
-                    <user-login-form @login="onLogin" />
+                    <user-login-form @submit="onLogin" />
                 </b-col>
             </b-row>
         </b-container>

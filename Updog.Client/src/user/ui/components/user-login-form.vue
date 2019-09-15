@@ -8,6 +8,13 @@
             </h5>
         </div>
 
+        <b-alert
+            variant="danger"
+            :show="loginFailed"
+            dismissible
+            @dismissed="loginFailed = false"
+        >{{ serverErrorMessage}}</b-alert>
+
         <b-form-group>
             <b-form-input
                 type="text"
@@ -39,8 +46,8 @@
         </b-form-group>
 
         <b-form-group class="form-buttons pt-3">
-            <b-button variant="primary" @click="onLogin">Login</b-button>
-            <b-button variant="outline-primary" @click="onReset">Reset</b-button>
+            <b-button variant="primary" @click="submit">Login</b-button>
+            <b-button variant="outline-primary" @click="reset">Reset</b-button>
         </b-form-group>
     </b-form>
 </template>
@@ -55,7 +62,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { UserLoginMixin, UserCredentials } from '@/user';
+import { UserLoginMixin, UserCredentials, UserLogin } from '@/user';
+import { Form } from '@/core';
 
 /**
  * Login form for logging in users via username / password.
@@ -63,7 +71,7 @@ import { UserLoginMixin, UserCredentials } from '@/user';
 @Component({
     name: 'user-login-form'
 })
-export default class UserLoginForm extends UserLoginMixin {
+export default class UserLoginForm extends UserLoginMixin implements Form<UserLogin | null> {
     public $refs!: {
         loginUsernameTextbox: HTMLInputElement;
     };
@@ -77,6 +85,16 @@ export default class UserLoginForm extends UserLoginMixin {
      * Password entered by the user.
      */
     public password: string = '';
+
+    /**
+     * If a failed login attempt occured.
+     */
+    public loginFailed: boolean = false;
+
+    /**
+     * Error message from the server if the login failed.
+     */
+    public serverErrorMessage: string = '';
 
     /**
      * Set up the error messages when the component is created.
@@ -105,24 +123,33 @@ export default class UserLoginForm extends UserLoginMixin {
     /**
      * Attempt to log in the user.
      */
-    public async onLogin() {
-        // Validate first.
-        if (!(await this.$validator.validate())) {
-            return;
+    public async submit() {
+        try {
+            if (!(await this.$validator.validate())) {
+                return null;
+            }
+
+            const login = await this.$loginUser(new UserCredentials(this.username, this.password));
+
+            this.$emit('submit', login);
+            return login;
+        } catch (error) {
+            // Unauthorized return means login failed.
+            this.loginFailed = error.response.status === 401;
+            this.serverErrorMessage = error.response.data;
+
+            return null;
         }
-
-        // Send off the request to the backend.
-        const login = await this.$loginUser(new UserCredentials(this.username, this.password));
-
-        this.$emit('login', login);
     }
 
     /**
      * Reset the form back to defaults.
      */
-    public onReset() {
+    public reset() {
         this.username = '';
         this.password = '';
+        this.loginFailed = false;
+        this.serverErrorMessage = '';
         this.$validator.reset();
     }
 }

@@ -6,6 +6,7 @@ import { VoteOnPostParams } from '../interactors/vote-on-post/vote-on-post-param
 import { CommentVoter } from '../interactors/vote-on-comment/comment-voter';
 import { PostMutation } from '@/post/store/post-mutation';
 import { CommentMutation } from '@/comment/store/comment-mutation';
+import { StoreName } from '@/core';
 
 /**
  * Module to manage votes.
@@ -19,7 +20,7 @@ export default class VoteStore extends VuexModule {
     @Action({ rawError: true })
     public async voteOnPost(params: VoteOnPostParams) {
         const res = await new PostVoter(this.context.rootGetters['user/authToken']).handle(params);
-        this.context.commit(`post/${PostMutation.Vote}`, params, { root: true });
+        this.context.commit(`${StoreName.Post}/${PostMutation.Vote}`, params, { root: true });
 
         return res;
     }
@@ -31,7 +32,8 @@ export default class VoteStore extends VuexModule {
     @Action({ rawError: true })
     public async voteOnComment(params: VoteOnCommentParams) {
         const res = await new CommentVoter(this.context.rootGetters['user/authToken']).handle(params);
-        this.context.commit(`comment/${CommentMutation.Vote}`, params, { root: true });
+        this.context.commit(`${StoreName.Comment}/${CommentMutation.Vote}`, params, { root: true });
+
         return res;
     }
 }
