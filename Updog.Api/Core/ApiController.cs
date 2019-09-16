@@ -1,6 +1,9 @@
 using Updog.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Updog.Application.Paging;
+using FluentValidation.Results;
+using System.Net;
+using Updog.Api.Validation;
 
 namespace Updog.Api {
     /// <summary>
@@ -29,7 +32,15 @@ namespace Updog.Api {
         /// Create an internal server error response object.
         /// </summary>
         /// <param name="body">The body to send back.</param>
-        protected ObjectResult InternalServerError(object? body = null) => StatusCode(500, body = null);
+        protected ObjectResult InternalServerError(object? body = null) => StatusCode((int)HttpStatusCode.InternalServerError, body);
+
+        /// <summary>
+        /// Generate a validation failure response message to send back to the client.
+        /// </summary>
+        /// <param name="validationResult">The validation result to convert.</param>
+        protected ObjectResult ValidationFailure(ValidationResult validationResult) {
+            return StatusCode((int)HttpStatusCode.BadRequest, ValidationFailureFactory.FromResult(validationResult));
+        }
         #endregion
     }
 }

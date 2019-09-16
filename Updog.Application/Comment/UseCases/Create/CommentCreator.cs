@@ -2,13 +2,14 @@ using System;
 using System.Data.Common;
 using System.Threading.Tasks;
 using FluentValidation;
+using FluentValidation.Results;
 using Updog.Domain;
 
 namespace Updog.Application {
     /// <summary>
     /// Interactor to create a new comment.
     /// </summary>
-    public sealed class CommentCreator : IInteractor<CommentCreateParams, CommentView> {
+    public sealed class CommentCreator : IInteractor<CommentCreateParams, Either<CommentView, ValidationResult>> {
         #region Fields
         private IDatabase database;
         private IValidator<CommentCreateParams> commentValidator;
@@ -24,8 +25,12 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<CommentView> Handle(CommentCreateParams input) {
-            await commentValidator.ValidateAndThrowAsync(input);
+        public async Task<Either<CommentView, ValidationResult>> Handle(CommentCreateParams input) {
+            ValidationResult valResult = await commentValidator.ValidateAsync(input);
+
+            if (!valResult.IsValid) {
+                return valResult;
+            }
 
             using (var connection = database.GetConnection()) {
                 IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);

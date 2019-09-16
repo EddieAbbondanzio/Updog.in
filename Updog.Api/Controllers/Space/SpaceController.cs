@@ -52,7 +52,7 @@ namespace Updog.Api {
         [HttpGet("default")]
         [AllowAnonymous]
         public async Task<ActionResult> GetDefaultSpaces() {
-            IEnumerable<SpaceView> spaces = await spaceFinderDefault.Handle(new SpaceFindByDefaultParams(User));
+            IEnumerable<SpaceView> spaces = await spaceFinderDefault.Handle(new FindParams(User));
             return Ok(spaces);
         }
 
@@ -61,14 +61,14 @@ namespace Updog.Api {
         /// </summary>
         [HttpGet("subscribed")]
         public async Task<ActionResult> GetSubscribedSpaces() {
-            IEnumerable<SubscriptionView> subs = await subsriptionFinderByUser.Handle(new SubscriptionFindByUserParams(User!));
+            IEnumerable<SubscriptionView> subs = await subsriptionFinderByUser.Handle(new FindByValueParams<string>(User!.Username));
             return Ok(subs.Select(s => s.Space));
         }
 
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult> Find([FromQuery]int pageNumber, [FromQuery] int pageSize = Space.PageSize) {
-            PagedResultSet<SpaceView> spaces = await this.spaceFinder.Handle(new SpaceFindParams(pageNumber, pageSize));
+            PagedResultSet<SpaceView> spaces = await this.spaceFinder.Handle(new FindParams(pagination: new PaginationInfo(pageNumber, pageSize)));
             SetContentRangeHeader(spaces.Pagination);
             return Ok(spaces);
         }
@@ -82,7 +82,7 @@ namespace Updog.Api {
         [HttpGet("{name}")]
         [AllowAnonymous]
         public async Task<ActionResult> FindByName(string name) {
-            SpaceView? s = await this.spaceFinderByName.Handle(new SpaceFindByNameParams(name, User));
+            SpaceView? s = await this.spaceFinderByName.Handle(new FindByValueParams<string>(name, User));
 
             if (s != null) {
                 return Ok(s);
@@ -120,7 +120,7 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{name}/post/new")]
         public async Task<ActionResult> FindPosts(string name, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            PagedResultSet<PostView> posts = await this.postFinderBySpace.Handle(new PostFindBySpaceParams(name, pageNumber, pageSize));
+            PagedResultSet<PostView> posts = await this.postFinderBySpace.Handle(new FindByValueParams<string>(name, User, new PaginationInfo(pageNumber, pageSize)));
             SetContentRangeHeader(posts.Pagination);
             return Ok(posts);
         }

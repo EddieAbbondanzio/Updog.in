@@ -7,7 +7,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to find the susbcriptions for a user.
     /// </summary>
-    public sealed class SubscriptionFinderByUser : IInteractor<SubscriptionFindByUserParams, IEnumerable<SubscriptionView>> {
+    public sealed class SubscriptionFinderByUser : IInteractor<FindByValueParams<string>, IEnumerable<SubscriptionView>> {
         #region Fields
         private IDatabase database;
         private ISubscriptionViewMapper subscriptionMapper;
@@ -21,11 +21,11 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<IEnumerable<SubscriptionView>> Handle(SubscriptionFindByUserParams input) {
+        public async Task<IEnumerable<SubscriptionView>> Handle(FindByValueParams<string> input) {
             using (var connection = database.GetConnection()) {
                 ISubscriptionRepo subRepo = database.GetRepo<ISubscriptionRepo>(connection);
 
-                IEnumerable<Subscription> subs = await subRepo.FindByUser(input.User.Username);
+                IEnumerable<Subscription> subs = await subRepo.FindByUser(input.Value);
                 return subs.Select(s => subscriptionMapper.Map(s));
             }
         }

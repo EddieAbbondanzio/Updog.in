@@ -1,8 +1,8 @@
-namespace Updog.Api {
+namespace Updog.Api.Validation {
     /// <summary>
     /// Property and error message pair.
     /// </summary>
-    public sealed class ValidationFailure {
+    public sealed class ValidationError {
         #region Properties
         /// <summary>
         /// The field name.
@@ -22,7 +22,7 @@ namespace Updog.Api {
         /// </summary>
         /// <param name="field">The name of the field.</param>
         /// <param name="message">The error message.</param>
-        public ValidationFailure(string field, string message) {
+        public ValidationError(string field, string message) {
             Field = field;
             Message = message;
         }

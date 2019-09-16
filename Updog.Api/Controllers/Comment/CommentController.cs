@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Updog.Application;
@@ -47,14 +48,14 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{commentId}")]
         public async Task<ActionResult> GetComment(int commentId) {
-            CommentView? c = await _commentFinderById.Handle(new CommentFindByIdParams(commentId, User));
+            CommentView? c = await _commentFinderById.Handle(new FindByValueParams<int>(commentId, User));
             return c != null ? Ok(c) : NotFound() as ActionResult;
         }
 
         [AllowAnonymous]
         [HttpGet("user/{username}")]
         public async Task<ActionResult> GetCommentsByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery]int pageSize = Post.PageSize) {
-            PagedResultSet<CommentView> comments = await _commentFinderByUser.Handle(new CommentFinderByUserParams(username, pageNumber, pageSize));
+            PagedResultSet<CommentView> comments = await _commentFinderByUser.Handle(new FindByValueParams<string>(username, User, new PaginationInfo(pageNumber, pageSize)));
             SetContentRangeHeader(comments.Pagination);
             return Ok(comments);
         }
@@ -64,8 +65,12 @@ namespace Updog.Api {
         /// </summary>
         [HttpPost]
         public async Task<ActionResult> CreateComment([FromBody]CommentCreateRequest body) {
-            CommentView comment = await _commentCreator.Handle(new CommentCreateParams(body.PostId, User!, body.Body, body.ParentId));
-            return Ok(comment);
+            Either<CommentView, ValidationResult> result = await _commentCreator.Handle(new CommentCreateParams(body.PostId, User!, body.Body, body.ParentId));
+
+            return result.Match<ActionResult>(
+                (CommentView comment) => Ok(comment),
+                (ValidationResult valResult) => ValidationFailure(valResult)
+            );
         }
 
         /// <summary>

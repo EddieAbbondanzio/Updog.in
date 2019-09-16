@@ -4,13 +4,8 @@ namespace Updog.Application.Paging {
     /// </summary>
     public interface IPagable {
         /// <summary>
-        /// The 0 based index of the page.
+        /// The pagination info.
         /// </summary>
-        int PageNumber { get; }
-
-        /// <summary>
-        /// The size of the desired page.
-        /// </summary>
-        int PageSize { get; }
+        PaginationInfo Pagination { get; }
     }
 }

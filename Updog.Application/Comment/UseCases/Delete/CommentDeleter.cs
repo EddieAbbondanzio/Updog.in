@@ -16,7 +16,7 @@ namespace Updog.Application {
         #endregion
 
         #region Constructor(s)
-        public CommentDeleter(IDatabase database, IPermissionHandler<Comment> permissionHandler, AbstractValidator<CommentDeleteParams> validator, ICommentViewMapper commentMapper) {
+        public CommentDeleter(IDatabase database, IPermissionHandler<Comment> permissionHandler, IValidator<CommentDeleteParams> validator, ICommentViewMapper commentMapper) {
             this.database = database;
             this.permissionHandler = permissionHandler;
             this.validator = validator;

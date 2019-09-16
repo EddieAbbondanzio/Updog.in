@@ -9,7 +9,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to find comments on a post.
     /// </summary>
-    public sealed class CommentFinderByPost : IInteractor<CommentFinderByPostParams, IEnumerable<CommentView>> {
+    public sealed class CommentFinderByPost : IInteractor<FindByValueParams<int>, IEnumerable<CommentView>> {
         #region Fields
         private IDatabase database;
         private ICommentViewMapper commentMapper;
@@ -23,16 +23,17 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<IEnumerable<CommentView>> Handle(CommentFinderByPostParams p) {
+        public async Task<IEnumerable<CommentView>> Handle(FindByValueParams<int> input) {
             using (var connection = database.GetConnection()) {
                 ICommentRepo commentRepo = database.GetRepo<ICommentRepo>(connection);
 
-                IEnumerable<Comment> comments = await commentRepo.FindByPost(p.PostId);
+                IEnumerable<Comment> comments = await commentRepo.FindByPost(input.Value);
 
-                if (p.User != null) {
+                if (input.User != null) {
+                    IVoteRepo voteRepo = database.GetRepo<IVoteRepo>(connection);
+
                     foreach (Comment c in comments) {
-                        IVoteRepo voteRepo = database.GetRepo<IVoteRepo>(connection);
-                        await GetVotes(voteRepo, c, p.User);
+                        await GetVotes(voteRepo, c, input.User);
                     }
                 }
 

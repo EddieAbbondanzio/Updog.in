@@ -44,7 +44,7 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("new")]
         public async Task<ActionResult> FindByNew([FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            PagedResultSet<PostView> posts = await postFinderByNew.Handle(new PostFindByNewParams(pageSize, pageNumber, User));
+            PagedResultSet<PostView> posts = await postFinderByNew.Handle(new FindParams(User, new PaginationInfo(pageSize, pageNumber)));
             SetContentRangeHeader(posts.Pagination);
             return Ok(posts);
         }
@@ -69,14 +69,14 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{postId}/comment")]
         public async Task<ActionResult> GetComments(int postId) {
-            IEnumerable<CommentView> comments = await commentFinderByPost.Handle(new CommentFinderByPostParams(postId, User));
+            IEnumerable<CommentView> comments = await commentFinderByPost.Handle(new FindByValueParams<int>(postId, User));
             return Ok(comments);
         }
 
         [AllowAnonymous]
         [HttpGet("user/{username}")]
         public async Task<ActionResult> FindByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            PagedResultSet<PostView> posts = await postFinderByUser.Handle(new PostFinderByUserParam(username, pageNumber, pageSize, User));
+            PagedResultSet<PostView> posts = await postFinderByUser.Handle(new FindByValueParams<string>(username, User, new PaginationInfo(pageNumber, pageSize)));
             SetContentRangeHeader(posts.Pagination);
             return Ok(posts);
         }
