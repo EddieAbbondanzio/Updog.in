@@ -11,7 +11,7 @@ namespace Updog.Application {
         #region Fields
         private IDatabase database;
         private IPermissionHandler<Comment> permissionHandler;
-        private AbstractValidator<CommentDeleteParams> validator;
+        private IValidator<CommentDeleteParams> validator;
         private ICommentViewMapper commentMapper;
         #endregion
 

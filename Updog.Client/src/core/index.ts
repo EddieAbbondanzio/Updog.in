@@ -13,3 +13,4 @@ export { Themeable } from '@/core/ui/common/themeable/themeable';
 export { Size } from '@/core/ui/common/size';
 export { Sizable } from '@/core/ui/common/sizable';
 export { Form } from '@/core/ui/common/form/form';
+export { HttpStatusCode } from '@/core/common/http-status-code';

@@ -11,12 +11,12 @@ namespace Updog.Application {
     public sealed class CommentCreator : IInteractor<CommentCreateParams, CommentView> {
         #region Fields
         private IDatabase database;
-        private AbstractValidator<CommentCreateParams> commentValidator;
+        private IValidator<CommentCreateParams> commentValidator;
         private ICommentViewMapper commentMapper;
         #endregion
 
         #region Constructor(s)
-        public CommentCreator(IDatabase database, AbstractValidator<CommentCreateParams> commentValidator, ICommentViewMapper commentMapper) {
+        public CommentCreator(IDatabase database, IValidator<CommentCreateParams> commentValidator, ICommentViewMapper commentMapper) {
             this.database = database;
             this.commentValidator = commentValidator;
             this.commentMapper = commentMapper;

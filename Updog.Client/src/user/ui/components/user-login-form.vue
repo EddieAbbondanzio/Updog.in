@@ -63,7 +63,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { UserLoginMixin, UserCredentials, UserLogin } from '@/user';
-import { Form } from '@/core';
+import { Form, HttpStatusCode } from '@/core';
 
 /**
  * Login form for logging in users via username / password.
@@ -135,7 +135,7 @@ export default class UserLoginForm extends UserLoginMixin implements Form<UserLo
             return login;
         } catch (error) {
             // Unauthorized return means login failed.
-            this.loginFailed = error.response.status === 401;
+            this.loginFailed = error.response.status === HttpStatusCode.Unauthorized;
             this.serverErrorMessage = error.response.data;
 
             return null;

@@ -12,12 +12,12 @@ namespace Updog.Application {
         #region Fields
         private IDatabase database;
         private IPermissionHandler<Space> spacePermissionHandler;
-        private AbstractValidator<SpaceUpdateParams> spaceValidator;
+        private IValidator<SpaceUpdateParams> spaceValidator;
         private ISpaceViewMapper spaceMapper;
         #endregion
 
         #region Constructor(s)
-        public SpaceUpdater(IDatabase database, IPermissionHandler<Space> spacePermissionHandler, AbstractValidator<SpaceUpdateParams> spaceValidator, ISpaceViewMapper spaceMapper) {
+        public SpaceUpdater(IDatabase database, IPermissionHandler<Space> spacePermissionHandler, IValidator<SpaceUpdateParams> spaceValidator, ISpaceViewMapper spaceMapper) {
             this.database = database;
             this.spacePermissionHandler = spacePermissionHandler;
             this.spaceValidator = spaceValidator;

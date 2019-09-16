@@ -11,12 +11,12 @@ namespace Updog.Application {
         #region Fields
         private IDatabase database;
         private IPermissionHandler<Post> permissionHandler;
-        private AbstractValidator<PostDeleteParams> postValidator;
+        private IValidator<PostDeleteParams> postValidator;
         private IPostViewMapper postMapper;
         #endregion
 
         #region Constructor(s)
-        public PostDeleter(IDatabase database, IPermissionHandler<Post> postPermissionHandler, AbstractValidator<PostDeleteParams> postValidator, IPostViewMapper postMapper) {
+        public PostDeleter(IDatabase database, IPermissionHandler<Post> postPermissionHandler, IValidator<PostDeleteParams> postValidator, IPostViewMapper postMapper) {
             this.database = database;
             this.permissionHandler = postPermissionHandler;
             this.postValidator = postValidator;

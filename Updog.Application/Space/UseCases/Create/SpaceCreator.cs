@@ -10,12 +10,12 @@ namespace Updog.Application {
     public sealed class SpaceCreator : IInteractor<SpaceCreateParams, SpaceView> {
         #region Fields
         private IDatabase database;
-        private AbstractValidator<SpaceCreateParams> spaceValidator;
+        private IValidator<SpaceCreateParams> spaceValidator;
         private ISpaceViewMapper spaceMapper;
         #endregion
 
         #region Constructor(s)
-        public SpaceCreator(IDatabase database, AbstractValidator<SpaceCreateParams> spaceValidator, ISpaceViewMapper spaceMapper) {
+        public SpaceCreator(IDatabase database, IValidator<SpaceCreateParams> spaceValidator, ISpaceViewMapper spaceMapper) {
             this.database = database;
             this.spaceValidator = spaceValidator;
             this.spaceMapper = spaceMapper;

@@ -64,8 +64,8 @@
         </b-form-group>
 
         <b-form-group class="form-buttons pt-3">
-            <b-button variant="primary" @click="onRegister">Sign Up</b-button>
-            <b-button variant="outline-primary" @click="onReset">Reset</b-button>
+            <b-button variant="primary" @click="submit">Sign Up</b-button>
+            <b-button variant="outline-primary" @click="reset">Reset</b-button>
         </b-form-group>
     </b-form>
 </template>
@@ -83,6 +83,8 @@ import { UserRegistration } from '@/user/domain/user-registration';
 import { UserFinderMixin } from '../../mixins/user-finder-mixin';
 import { mixins } from 'vue-class-component';
 import { UserRegistrarMixin } from '@/user/mixins/user-registrar-mixin';
+import { Form } from '../../../core';
+import { UserLogin } from '../../domain/user-login';
 
 /**
  * Login form for logging in users via username / password.
@@ -90,7 +92,7 @@ import { UserRegistrarMixin } from '@/user/mixins/user-registrar-mixin';
 @Component({
     name: 'user-login-form'
 })
-export default class UserRegisterForm extends UserRegistrarMixin {
+export default class UserRegisterForm extends UserRegistrarMixin implements Form<UserLogin | null> {
     public $refs!: {
         registerUsernameTextbox: HTMLInputElement;
     };
@@ -133,21 +135,28 @@ export default class UserRegisterForm extends UserRegistrarMixin {
     /**
      * Attempt to log in the user.
      */
-    public async onRegister() {
+    public async submit() {
         // Validate first.
         if (!(await this.$validator.validate())) {
-            return;
+            return null;
         }
 
-        const login = await this.$registerUser(new UserRegistration(this.username, this.password, this.email));
+        const login = await this.$registerUser(
+            new UserRegistration(
+                'ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd',
+                this.password,
+                this.email
+            )
+        );
 
         this.$emit('register', login);
+        return login;
     }
 
     /**
      * Reset the form back to initial state.
      */
-    public onReset() {
+    public reset() {
         this.username = '';
         this.email = '';
         this.password = '';

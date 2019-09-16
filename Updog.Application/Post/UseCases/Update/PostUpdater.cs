@@ -12,12 +12,12 @@ namespace Updog.Application {
         #region Fields
         private IDatabase database;
         private IPermissionHandler<Post> postPermissionHandler;
-        private AbstractValidator<PostUpdateParams> postValidator;
+        private IValidator<PostUpdateParams> postValidator;
         private IPostViewMapper postMapper;
         #endregion
 
         #region Constructor(s)
-        public PostUpdater(IDatabase database, IPermissionHandler<Post> postPermissionHandler, AbstractValidator<PostUpdateParams> postValidator, IPostViewMapper postMapper) {
+        public PostUpdater(IDatabase database, IPermissionHandler<Post> postPermissionHandler, IValidator<PostUpdateParams> postValidator, IPostViewMapper postMapper) {
             this.database = database;
             this.postPermissionHandler = postPermissionHandler;
             this.postValidator = postValidator;

@@ -15,11 +15,11 @@ namespace Updog.Application {
         private IUserViewMapper userMapper;
         private IPasswordHasher passwordHasher;
         private IAuthenticationTokenHandler tokenHandler;
-        private AbstractValidator<UserRegisterParams> validator;
+        private IValidator<UserRegisterParams> validator;
         #endregion
 
         #region Constructor(s)
-        public UserRegisterInteractor(IDatabase database, IUserViewMapper userMapper, IPasswordHasher passwordHasher, IAuthenticationTokenHandler tokenHandler, AbstractValidator<UserRegisterParams> validator) {
+        public UserRegisterInteractor(IDatabase database, IUserViewMapper userMapper, IPasswordHasher passwordHasher, IAuthenticationTokenHandler tokenHandler, IValidator<UserRegisterParams> validator) {
             this.database = database;
             this.userMapper = userMapper;
             this.passwordHasher = passwordHasher;

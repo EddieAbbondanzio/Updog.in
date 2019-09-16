@@ -10,12 +10,12 @@ namespace Updog.Application {
     public sealed class PostCreator : IInteractor<PostCreateParams, PostView?> {
         #region Fields
         private IDatabase database;
-        private AbstractValidator<PostCreateParams> postValidator;
+        private IValidator<PostCreateParams> postValidator;
         private IPostViewMapper postMapper;
         #endregion
 
         #region Constructor(s)
-        public PostCreator(IDatabase database, AbstractValidator<PostCreateParams> postValidator, IPostViewMapper postMapper) {
+        public PostCreator(IDatabase database, IValidator<PostCreateParams> postValidator, IPostViewMapper postMapper) {
             this.database = database;
             this.postValidator = postValidator;
             this.postMapper = postMapper;

@@ -7,11 +7,11 @@ namespace Updog.Application {
         #region Fields
         private IDatabase database;
         private IPasswordHasher passwordHasher;
-        private AbstractValidator<UserPasswordUpdateParams> validator;
+        private IValidator<UserPasswordUpdateParams> validator;
         #endregion
 
         #region Constructor(s)
-        public UserPasswordUpdater(IDatabase database, IPasswordHasher passwordHasher, AbstractValidator<UserPasswordUpdateParams> validator) {
+        public UserPasswordUpdater(IDatabase database, IPasswordHasher passwordHasher, IValidator<UserPasswordUpdateParams> validator) {
             this.database = database;
             this.passwordHasher = passwordHasher;
             this.validator = validator;

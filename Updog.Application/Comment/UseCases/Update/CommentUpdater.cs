@@ -12,12 +12,12 @@ namespace Updog.Application {
         #region Fields
         private IDatabase database;
         private IPermissionHandler<Comment> commentPermissionHandler;
-        private AbstractValidator<CommentUpdateParams> commentValidator;
+        private IValidator<CommentUpdateParams> commentValidator;
         private ICommentViewMapper commentMapper;
         #endregion
 
         #region Constructor(s)
-        public CommentUpdater(IDatabase database, IPermissionHandler<Comment> commentPermissionHandler, AbstractValidator<CommentUpdateParams> commentValidator, ICommentViewMapper commentMapper) {
+        public CommentUpdater(IDatabase database, IPermissionHandler<Comment> commentPermissionHandler, IValidator<CommentUpdateParams> commentValidator, ICommentViewMapper commentMapper) {
             this.database = database;
             this.commentPermissionHandler = commentPermissionHandler;
             this.commentValidator = commentValidator;

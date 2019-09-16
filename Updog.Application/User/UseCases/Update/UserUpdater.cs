@@ -11,11 +11,11 @@ namespace Updog.Application {
     public sealed class UserUpdater : IInteractor<UpdateUserParams> {
         #region Fields
         private IDatabase database;
-        private AbstractValidator<UpdateUserParams> validator;
+        private IValidator<UpdateUserParams> validator;
         #endregion
 
         #region Constructor(s)
-        public UserUpdater(IDatabase database, AbstractValidator<UpdateUserParams> userValidator) {
+        public UserUpdater(IDatabase database, IValidator<UpdateUserParams> userValidator) {
             this.database = database;
             validator = userValidator;
         }
