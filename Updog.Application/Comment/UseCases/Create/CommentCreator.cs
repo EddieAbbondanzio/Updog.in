@@ -4,34 +4,28 @@ using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
 using Updog.Domain;
+using System.Reflection;
 
 namespace Updog.Application {
     /// <summary>
     /// Interactor to create a new comment.
     /// </summary>
-    public sealed class CommentCreator : IInteractor<CommentCreateParams, Either<CommentView, ValidationResult>> {
+    public sealed class CommentCreator : Interactor<CommentCreateParams, CommentView> {
         #region Fields
         private IDatabase database;
-        private IValidator<CommentCreateParams> commentValidator;
         private ICommentViewMapper commentMapper;
         #endregion
 
         #region Constructor(s)
-        public CommentCreator(IDatabase database, IValidator<CommentCreateParams> commentValidator, ICommentViewMapper commentMapper) {
+        public CommentCreator(IDatabase database, ICommentViewMapper commentMapper) {
             this.database = database;
-            this.commentValidator = commentValidator;
             this.commentMapper = commentMapper;
         }
         #endregion
 
         #region Publics
-        public async Task<Either<CommentView, ValidationResult>> Handle(CommentCreateParams input) {
-            ValidationResult valResult = await commentValidator.ValidateAsync(input);
-
-            if (!valResult.IsValid) {
-                return valResult;
-            }
-
+        [Validate(typeof(CommentCreateValidator))]
+        protected async override Task<CommentView> HandleInput(CommentCreateParams input) {
             using (var connection = database.GetConnection()) {
                 IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);
                 ICommentRepo commentRepo = database.GetRepo<ICommentRepo>(connection);
