@@ -131,7 +131,8 @@ export default class CreatePostForm extends Vue {
     public textBodyCharactersRemaining = Post.BODY_MAX_LENGTH;
 
     public created(): void {
-        if (this.$route.query.isText) {
+        // isText is a boolean so we need to check it's string value, not if it's truthy
+        if (this.$route.query.isText === 'true') {
             this.activeTab = 1;
         }
 
