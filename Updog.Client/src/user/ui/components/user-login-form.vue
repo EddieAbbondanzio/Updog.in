@@ -23,7 +23,7 @@
                 ref="loginUsernameTextbox"
                 name="loginUsername"
                 v-validate="'required'"
-                @keyup.enter="onLogin"
+                @keyup.enter="submit"
             />
             <b-form-invalid-feedback
                 class="d-block text-left"
@@ -37,7 +37,7 @@
                 v-model="password"
                 name="loginPassword"
                 v-validate="'required'"
-                @keyup.enter="onLogin"
+                @keyup.enter="submit"
             />
             <b-form-invalid-feedback
                 class="d-block text-left"

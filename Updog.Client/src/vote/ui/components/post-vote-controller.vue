@@ -4,7 +4,7 @@
             <material-icon icon="keyboard_arrow_up" variant="muted" :class="{ upvoted: isUpvoted}" />
         </b-button>
         <div
-            class="d-flex flex-row justify-content-center text-center karma-count font-weight-bold text-muted"
+            class="d-flex flex-row justify-content-center text-center font-weight-bold text-muted text-md"
         >
             <span :class="{ upvoted: isUpvoted, downvoted: isDownvoted}">{{ karma }}</span>
         </div>
@@ -19,10 +19,6 @@
 </template>
 
 <style scoped>
-.karma-count {
-    font-size: 1em;
-}
-
 .vote-arrow {
     height: 32px;
 }

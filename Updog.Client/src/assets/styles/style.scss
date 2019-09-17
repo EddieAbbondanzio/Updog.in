@@ -1,0 +1,27 @@
+@import 'variables.scss';
+@import 'text.scss';
+@import 'background.scss';
+
+.upvoted {
+    color: $upvote !important;
+}
+
+div.upvoted {
+    background-color: $upvote;
+}
+
+i.upvoted {
+    color: $upvote !important;
+}
+
+.downvoted {
+    color: $downvote !important;
+}
+
+div.downvoted {
+    background-color: $downvote;
+}
+
+i.downvoted {
+    color: $downvote !important;
+}

@@ -1,10 +1,7 @@
 <template>
-    <span>
-        <router-link
-            :to="{ name: 'space', params: { spaceName: space.name}}"
-            :class="cssClass"
-        >{{ formattedName }}</router-link>&nbsp;
-    </span>
+    <router-link :to="{ name: 'space', params: { spaceName: space.name}}" :class="cssClass">
+        <slot>{{ formattedName }}</slot>
+    </router-link>
 </template>
 
 <script lang="ts">

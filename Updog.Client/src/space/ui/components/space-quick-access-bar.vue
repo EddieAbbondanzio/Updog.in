@@ -1,8 +1,15 @@
 <template>
-    <div class="bg-secondary text-white">
-        <space-link v-for="space in spaces" v-bind:key="space.id" :space="space" class="px-1" />
+    <div class="bg-dark space-quick-access px-3 text-sm">
+        <router-link :to="{name: 'home'}" class="text-200">HOME</router-link>
+        <span class="px-3 text-500">|</span>
+        <div class="d-inline-block" v-for="(space, index) in spaces" v-bind:key="space.id">
+            <space-link :space="space" variant="light">{{ space.name | capitalize }}</space-link>
+
+            <span class="px-1 text-500" v-if="index + 1 < spaces.length">-</span>
+        </div>
     </div>
 </template>
+
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
@@ -23,7 +30,7 @@ export default class SpaceQuickAccessBar extends SpaceFinderMixin {
         if (this.$isLoggedIn()) {
             return this.$subscribedSpaces;
         } else {
-            return this.$defaultSpaces;
+            return [...this.$defaultSpaces, { name: 'test' }, { name: 'test2' }];
         }
     }
 

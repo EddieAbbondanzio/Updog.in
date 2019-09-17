@@ -2,8 +2,8 @@
     <router-view />
 </template>
 
-<style>
-@import './assets/css/style.css';
+<style lang="scss">
+@import './assets/styles/style.scss';
 </style>
 
 <script lang="ts">

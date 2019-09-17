@@ -17,7 +17,7 @@
                             <expand-button @toggle="isExpanded = !isExpanded" />
                         </div>
 
-                        <div class="d-flex flex-column" style="font-size: 14px;">
+                        <div class="d-flex flex-column text-sm">
                             <post-time-stamp
                                 :post="post"
                                 class="text-muted"
