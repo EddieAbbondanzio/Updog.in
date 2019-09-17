@@ -2,6 +2,7 @@ using Updog.Application;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Updog.Domain;
 
 namespace Updog.Api {
     /// <summary>
@@ -11,12 +12,12 @@ namespace Updog.Api {
     [ApiController]
     public sealed class SessionController : ApiController {
         #region Fields
-        private UserLoginInteractor _loginUserInteractor;
+        private UserLoginInteractor loginUserInteractor;
         #endregion
 
         #region Constructor(s)
         public SessionController(UserLoginInteractor loginUserInteractor) {
-            this._loginUserInteractor = loginUserInteractor;
+            this.loginUserInteractor = loginUserInteractor;
         }
         #endregion
 
@@ -27,8 +28,12 @@ namespace Updog.Api {
         /// <param name="loginRequest">The credentials to authenticate under.</param>
         [HttpPost]
         public async Task<ActionResult> Login([FromBody]SessionLoginRequest loginRequest) {
-            UserLogin? login = await _loginUserInteractor.Handle(new UserLoginParams(loginRequest.Username, loginRequest.Password));
-            return login != null ? Ok(login) : Unauthorized("Invalid username and/or password.") as ActionResult;
+            var result = await loginUserInteractor.Handle(new UserCredentials(loginRequest.Username, loginRequest.Password));
+
+            return result.Match<ActionResult>(
+                login => Ok(login),
+                fail => BadRequest(fail)
+            );
         }
         #endregion
     }

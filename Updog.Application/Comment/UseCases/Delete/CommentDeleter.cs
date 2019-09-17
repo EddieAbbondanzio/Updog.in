@@ -1,33 +1,29 @@
 using System.Threading.Tasks;
 using Updog.Domain;
-using FluentValidation;
 using System;
 
 namespace Updog.Application {
     /// <summary>
     /// Interactor to handle deleting comments.
     /// </summary>
-    public sealed class CommentDeleter : IInteractor<CommentDeleteParams, CommentView> {
+    public sealed class CommentDeleter : Interactor<CommentDeleteParams, CommentView> {
         #region Fields
         private IDatabase database;
         private IPermissionHandler<Comment> permissionHandler;
-        private IValidator<CommentDeleteParams> validator;
         private ICommentViewMapper commentMapper;
         #endregion
 
         #region Constructor(s)
-        public CommentDeleter(IDatabase database, IPermissionHandler<Comment> permissionHandler, IValidator<CommentDeleteParams> validator, ICommentViewMapper commentMapper) {
+        public CommentDeleter(IDatabase database, IPermissionHandler<Comment> permissionHandler, ICommentViewMapper commentMapper) {
             this.database = database;
             this.permissionHandler = permissionHandler;
-            this.validator = validator;
             this.commentMapper = commentMapper;
         }
         #endregion
 
         #region Publics
-        public async Task<CommentView> Handle(CommentDeleteParams input) {
-            await validator.ValidateAndThrowAsync(input);
-
+        [Validate(typeof(CommentDeleteValidator))]
+        protected async override Task<CommentView> HandleInput(CommentDeleteParams input) {
             using (var connection = database.GetConnection()) {
                 ICommentRepo commentRepo = database.GetRepo<ICommentRepo>(connection);
                 IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);

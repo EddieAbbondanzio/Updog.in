@@ -1,30 +1,26 @@
 
 using System;
 using System.Threading.Tasks;
-using FluentValidation;
 using Updog.Domain;
 
 namespace Updog.Application {
     /// <summary>
     /// Interactor to update a user.
     /// </summary>
-    public sealed class UserUpdater : IInteractor<UpdateUserParams> {
+    public sealed class UserUpdater : Interactor<UpdateUserParams> {
         #region Fields
         private IDatabase database;
-        private IValidator<UpdateUserParams> validator;
         #endregion
 
         #region Constructor(s)
-        public UserUpdater(IDatabase database, IValidator<UpdateUserParams> userValidator) {
+        public UserUpdater(IDatabase database) {
             this.database = database;
-            validator = userValidator;
         }
         #endregion
 
         #region Publics
-        public async Task Handle(UpdateUserParams input) {
-            await validator.ValidateAndThrowAsync(input);
-
+        [Validate(typeof(UserUpdateValidator))]
+        protected override async Task HandleInput(UpdateUserParams input) {
             using (var connection = database.GetConnection()) {
                 IUserRepo userRepo = database.GetRepo<IUserRepo>(connection);
 

@@ -1,11 +1,12 @@
 using Updog.Domain;
 using FluentValidation;
+using Updog.Application.Validation;
 
 namespace Updog.Application {
     /// <summary>
     /// Validator to validate that the update parameters of a post update are okay.
     /// </summary>
-    public sealed class CommentUpdateValidator : AbstractValidator<CommentUpdateParams> {
+    internal sealed class CommentUpdateValidator : FluentValidatorAdapter<CommentUpdateParams> {
         public CommentUpdateValidator() {
             RuleFor(c => c.User).NotNull().WithMessage("User performing the action is null.");
 

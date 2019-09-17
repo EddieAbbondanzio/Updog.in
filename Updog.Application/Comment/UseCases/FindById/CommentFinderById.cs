@@ -5,7 +5,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to find a comment by it's ID.
     /// </summary>
-    public sealed class CommentFinderById : IInteractor<FindByValueParams<int>, CommentView?> {
+    public sealed class CommentFinderById : Interactor<FindByValueParams<int>, CommentView?> {
         #region Fields
         private IDatabase database;
         private ICommentViewMapper commentMapper;
@@ -19,7 +19,8 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<CommentView?> Handle(FindByValueParams<int> input) {
+        [Validate(typeof(FindByIdValidator))]
+        protected async override Task<CommentView?> HandleInput(FindByValueParams<int> input) {
             using (var connection = database.GetConnection()) {
                 ICommentRepo commentRepo = database.GetRepo<ICommentRepo>(connection);
 

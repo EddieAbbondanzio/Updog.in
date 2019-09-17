@@ -19,15 +19,14 @@ namespace Updog.Api {
     [ApiController]
     public sealed class SubscriptionController : ApiController {
         #region Fields
-        private SubscriptionCreator _subscriptionCreator;
-
-        private SubscriptionDeleter _subscriptionDeleter;
+        private SubscriptionCreator subscriptionCreator;
+        private SubscriptionDeleter subscriptionDeleter;
         #endregion
 
         #region Constructor(s)
         public SubscriptionController(SubscriptionCreator subscriptionCreator, SubscriptionDeleter subscriptionDeleter) {
-            _subscriptionCreator = subscriptionCreator;
-            _subscriptionDeleter = subscriptionDeleter;
+            this.subscriptionCreator = subscriptionCreator;
+            this.subscriptionDeleter = subscriptionDeleter;
         }
         #endregion
 
@@ -38,8 +37,12 @@ namespace Updog.Api {
         /// <param name="spaceName">The name of the space.</param>
         [HttpPost("{spaceName}")]
         public async Task<ActionResult> SubscribeToSpace(string spaceName) {
-            SubscriptionView s = await _subscriptionCreator.Handle(new SubscriptionCreateParams(spaceName, User!));
-            return Ok(s);
+            var result = await subscriptionCreator.Handle(new SubscriptionCreateParams(spaceName, User!));
+
+            return result.Match<ActionResult>(
+                sub => Ok(sub),
+                fail => BadRequest(fail)
+            );
         }
 
         /// <summary>
@@ -48,8 +51,12 @@ namespace Updog.Api {
         /// <param name="spaceName">The name of the space to cancel.</param>
         [HttpDelete("{spaceName}")]
         public async Task<ActionResult> DesubscribeFromSpace(string spaceName) {
-            await _subscriptionDeleter.Handle(new SubscriptionDeleteParams(spaceName, User!));
-            return Ok();
+            var failable = await subscriptionDeleter.Handle(new SubscriptionDeleteParams(spaceName, User!));
+
+            return failable.Match<ActionResult>(
+                fail => BadRequest(fail),
+                () => Ok()
+            );
         }
         #endregion
     }

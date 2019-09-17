@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Updog.Domain;
-using FluentValidation;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,29 +8,26 @@ namespace Updog.Application {
     /// <summary>
     /// Use case interactor for registering a new user with the site.
     /// </summary>
-    public sealed class UserRegisterInteractor : IInteractor<UserRegisterParams, UserLogin> {
+    public sealed class UserRegisterInteractor : Interactor<UserRegisterParams, UserLogin> {
         #region Fields
         private IDatabase database;
         private IUserViewMapper userMapper;
         private IPasswordHasher passwordHasher;
         private IAuthenticationTokenHandler tokenHandler;
-        private IValidator<UserRegisterParams> validator;
         #endregion
 
         #region Constructor(s)
-        public UserRegisterInteractor(IDatabase database, IUserViewMapper userMapper, IPasswordHasher passwordHasher, IAuthenticationTokenHandler tokenHandler, IValidator<UserRegisterParams> validator) {
+        public UserRegisterInteractor(IDatabase database, IUserViewMapper userMapper, IPasswordHasher passwordHasher, IAuthenticationTokenHandler tokenHandler) {
             this.database = database;
             this.userMapper = userMapper;
             this.passwordHasher = passwordHasher;
             this.tokenHandler = tokenHandler;
-            this.validator = validator;
         }
         #endregion
 
-        #region Publics
-        public async Task<UserLogin> Handle(UserRegisterParams input) {
-            await validator.ValidateAndThrowAsync(input);
-
+        #region Helpers
+        [Validate(typeof(UserRegisterValidator))]
+        protected override async Task<UserLogin> HandleInput(UserRegisterParams input) {
             using (var connection = database.GetConnection()) {
                 IUserRepo userRepo = database.GetRepo<IUserRepo>(connection);
                 ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(connection);

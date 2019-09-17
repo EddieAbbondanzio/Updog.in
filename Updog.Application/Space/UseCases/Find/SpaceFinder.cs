@@ -8,7 +8,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to find spaces.
     /// </summary>
-    public sealed class SpaceFinder : IInteractor<FindParams, PagedResultSet<SpaceView>> {
+    public sealed class SpaceFinder : Interactor<FindParams, PagedResultSet<SpaceView>> {
         #region Fields
         private IDatabase database;
         private ISpaceViewMapper mapper;
@@ -22,11 +22,11 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<PagedResultSet<SpaceView>> Handle(FindParams input) {
+        protected override async Task<PagedResultSet<SpaceView>> HandleInput(FindParams input) {
             using (var connection = database.GetConnection()) {
                 ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(connection);
 
-                PagedResultSet<Space> spaces = await spaceRepo.Find(input.Pagination.PageNumber, input.Pagination.PageSize);
+                PagedResultSet<Space> spaces = await spaceRepo.Find(input.Pagination?.PageNumber ?? 0, input.Pagination?.PageSize ?? Post.PageSize);
                 return new PagedResultSet<SpaceView>(spaces.Select(s => mapper.Map(s)), spaces.Pagination);
             }
         }

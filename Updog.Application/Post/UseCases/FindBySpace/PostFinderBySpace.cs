@@ -8,7 +8,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to find posts by a space.
     /// </summary>
-    public sealed class PostFinderBySpace : IInteractor<FindByValueParams<string>, PagedResultSet<PostView>> {
+    public sealed class PostFinderBySpace : Interactor<FindByValueParams<string>, PagedResultSet<PostView>> {
         #region Fields
         private IDatabase database;
         private IPostViewMapper mapper;
@@ -20,13 +20,13 @@ namespace Updog.Application {
             this.mapper = mapper;
         }
         #endregion
-
-        public async Task<PagedResultSet<PostView>> Handle(FindByValueParams<string> input) {
+        [Validate(typeof(FindBySpaceValidator))]
+        protected override async Task<PagedResultSet<PostView>> HandleInput(FindByValueParams<string> input) {
             using (var connection = database.GetConnection()) {
                 IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);
                 IVoteRepo voteRepo = database.GetRepo<IVoteRepo>(connection);
 
-                PagedResultSet<Post> posts = await postRepo.FindBySpace(input.Value, input.Pagination.PageNumber, input.Pagination.PageSize);
+                PagedResultSet<Post> posts = await postRepo.FindBySpace(input.Value, input.Pagination?.PageNumber ?? 0, input.Pagination?.PageSize ?? Post.PageSize);
 
                 if (input.User != null) {
 

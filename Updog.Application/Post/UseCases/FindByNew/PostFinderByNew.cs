@@ -7,7 +7,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to find posts by new for the front page.
     /// </summary>
-    public sealed class PostFinderByNew : IInteractor<FindParams, PagedResultSet<PostView>> {
+    public sealed class PostFinderByNew : Interactor<FindParams, PagedResultSet<PostView>> {
         #region Fields
         private IDatabase database;
         private IPostViewMapper mapper;
@@ -21,12 +21,12 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<PagedResultSet<PostView>> Handle(FindParams input) {
+        protected override async Task<PagedResultSet<PostView>> HandleInput(FindParams input) {
             using (var connection = database.GetConnection()) {
                 IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);
                 IVoteRepo voteRepo = database.GetRepo<IVoteRepo>(connection);
 
-                PagedResultSet<Post> posts = await postRepo.FindByNew(input.Pagination.PageNumber, input.Pagination.PageSize);
+                PagedResultSet<Post> posts = await postRepo.FindByNew(input.Pagination?.PageNumber ?? 0, input.Pagination?.PageSize ?? Post.PageSize);
 
                 if (input.User != null) {
 

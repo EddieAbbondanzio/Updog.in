@@ -1,31 +1,27 @@
 using System.Threading.Tasks;
 using Updog.Domain;
-using FluentValidation;
 using System;
 
 namespace Updog.Application {
     /// <summary>
     /// Adds new posts to the system.
     /// </summary>
-    public sealed class PostCreator : IInteractor<PostCreateParams, PostView?> {
+    public sealed class PostCreator : Interactor<PostCreateParams, PostView?> {
         #region Fields
         private IDatabase database;
-        private IValidator<PostCreateParams> postValidator;
         private IPostViewMapper postMapper;
         #endregion
 
         #region Constructor(s)
-        public PostCreator(IDatabase database, IValidator<PostCreateParams> postValidator, IPostViewMapper postMapper) {
+        public PostCreator(IDatabase database, IPostViewMapper postMapper) {
             this.database = database;
-            this.postValidator = postValidator;
             this.postMapper = postMapper;
         }
         #endregion
 
         #region Publics
-        public async Task<PostView?> Handle(PostCreateParams input) {
-            await postValidator.ValidateAndThrowAsync(input);
-
+        [Validate(typeof(PostCreateValidator))]
+        protected override async Task<PostView?> HandleInput(PostCreateParams input) {
             using (var connection = database.GetConnection()) {
                 ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(connection);
                 IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);

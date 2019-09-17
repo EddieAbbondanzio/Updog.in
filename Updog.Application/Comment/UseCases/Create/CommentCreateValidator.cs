@@ -1,16 +1,17 @@
 using Updog.Domain;
 using FluentValidation;
+using Updog.Application.Validation;
 
 namespace Updog.Application {
     /// <summary>
     /// Validator to validate new comments being created.
     /// </summary>
-    public sealed class CommentCreateValidator : AbstractValidator<CommentCreateParams> {
+    internal sealed class CommentCreateValidator : FluentValidatorAdapter<CommentCreateParams> {
         #region Constructor(s)
         public CommentCreateValidator() {
-            RuleFor(c => c.User).NotNull().WithMessage("User performing the action is null.");
-
             RuleFor(c => c.PostId).GreaterThan(0).WithMessage("Post Id is required.");
+
+            RuleFor(c => c.User).NotNull().WithMessage("User performing the action is null.");
 
             RuleFor(c => c.Body).NotNull().WithMessage("Body is required.");
 

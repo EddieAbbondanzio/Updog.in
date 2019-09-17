@@ -5,7 +5,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to vote on a post.
     /// </summary>
-    public sealed class PostVoter : IInteractor<VoteOnPostParams, VoteView> {
+    public sealed class PostVoter : Interactor<VoteOnPostParams, VoteView> {
         #region Fields
         private IDatabase database;
 
@@ -19,8 +19,9 @@ namespace Updog.Application {
         }
         #endregion
 
-        #region Publics
-        public async Task<VoteView> Handle(VoteOnPostParams input) {
+        #region Helpers
+        [Validate(typeof(VoteOnPostValidator))]
+        protected override async Task<VoteView> HandleInput(VoteOnPostParams input) {
             using (var connection = database.GetConnection()) {
                 IVoteRepo voteRepo = database.GetRepo<IVoteRepo>(connection);
                 IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);

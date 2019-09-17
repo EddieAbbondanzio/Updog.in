@@ -1,31 +1,27 @@
 using System;
 using System.Threading.Tasks;
-using FluentValidation;
 using Updog.Domain;
 
 namespace Updog.Application {
     /// <summary>
     /// Interactor to create a new space.
     /// </summary>
-    public sealed class SpaceCreator : IInteractor<SpaceCreateParams, SpaceView> {
+    public sealed class SpaceCreator : Interactor<SpaceCreateParams, SpaceView> {
         #region Fields
         private IDatabase database;
-        private IValidator<SpaceCreateParams> spaceValidator;
         private ISpaceViewMapper spaceMapper;
         #endregion
 
         #region Constructor(s)
-        public SpaceCreator(IDatabase database, IValidator<SpaceCreateParams> spaceValidator, ISpaceViewMapper spaceMapper) {
+        public SpaceCreator(IDatabase database, ISpaceViewMapper spaceMapper) {
             this.database = database;
-            this.spaceValidator = spaceValidator;
             this.spaceMapper = spaceMapper;
         }
         #endregion
 
         #region Publics
-        public async Task<SpaceView> Handle(SpaceCreateParams input) {
-            await spaceValidator.ValidateAndThrowAsync(input);
-
+        [Validate(typeof(SpaceCreateValidator))]
+        protected override async Task<SpaceView> HandleInput(SpaceCreateParams input) {
             using (var connection = database.GetConnection()) {
                 ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(connection);
                 Space? existing = await spaceRepo.FindByName(input.Name);

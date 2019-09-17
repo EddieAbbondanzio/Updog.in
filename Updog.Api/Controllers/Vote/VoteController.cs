@@ -19,7 +19,6 @@ namespace Updog.Api {
     public sealed class VoteController : ApiController {
         #region Fields
         private PostVoter postVoter;
-
         private CommentVoter commentVoter;
         #endregion
 
@@ -37,8 +36,12 @@ namespace Updog.Api {
         /// <param name="vote">The vote type.</param>
         [HttpPost("post/{postId}/{vote}")]
         public async Task<ActionResult> VoteOnPost(int postId, VoteDirection vote) {
-            VoteView v = await postVoter.Handle(new VoteOnPostParams(postId, vote, User!));
-            return Ok(v);
+            var result = await postVoter.Handle(new VoteOnPostParams(postId, vote, User!));
+
+            return result.Match<ActionResult>(
+                vote => Ok(vote),
+                fail => BadRequest(fail)
+            );
         }
 
         /// <summary>
@@ -48,8 +51,12 @@ namespace Updog.Api {
         /// <param name="vote">The vote type.</param>
         [HttpPost("comment/{commentId}/{vote}")]
         public async Task<ActionResult> VoteOnComment(int commentId, VoteDirection vote) {
-            VoteView v = await commentVoter.Handle(new VoteOnCommentParams(commentId, vote, User!));
-            return Ok(v);
+            var result = await commentVoter.Handle(new VoteOnCommentParams(commentId, vote, User!));
+
+            return result.Match<ActionResult>(
+                vote => Ok(vote),
+                fail => BadRequest(fail)
+            );
         }
     }
 }

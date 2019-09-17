@@ -1,10 +1,11 @@
 using FluentValidation;
+using Updog.Application.Validation;
 
 namespace Updog.Application {
     /// <summary>
     /// Validator to check that a post can be deleted.
     /// </summary>
-    public sealed class PostDeleteValidator : AbstractValidator<PostDeleteParams> {
+    internal sealed class PostDeleteValidator : FluentValidatorAdapter<PostDeleteParams> {
         #region Constructor(s)
         public PostDeleteValidator() {
             RuleFor(p => p.User).NotNull().WithMessage("User performing the action is null.");

@@ -7,7 +7,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to find all of the default spaces.
     /// </summary>
-    public sealed class SpaceFinderDefault : IInteractor<FindParams, IEnumerable<SpaceView>> {
+    public sealed class SpaceFinderDefault : Interactor<FindParams, IEnumerable<SpaceView>> {
         #region Fields
         private IDatabase database;
         private ISpaceViewMapper spaceMapper;
@@ -20,7 +20,8 @@ namespace Updog.Application {
         }
         #endregion
 
-        public async Task<IEnumerable<SpaceView>> Handle(FindParams input) {
+        #region Helpers
+        protected override async Task<IEnumerable<SpaceView>> HandleInput(FindParams input) {
             using (var connection = database.GetConnection()) {
                 ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(connection);
 
@@ -28,5 +29,6 @@ namespace Updog.Application {
                 return spaces.Select(s => spaceMapper.Map(s));
             }
         }
+        #endregion
     }
 }

@@ -92,7 +92,6 @@ namespace Updog.Api {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSingleton<IAuthenticationTokenHandler, JsonWebTokenHandler>();
-            // services.AddSingleton<IDatabase, PostgresDatabase>();
 
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
 
@@ -103,10 +102,6 @@ namespace Updog.Api {
             services.AddTransient<UserRegisterInteractor>();
             services.AddTransient<UserUpdater>();
             services.AddTransient<UserPasswordUpdater>();
-
-            services.AddTransient<IValidator<UserRegisterParams>, UserRegisterValidator>();
-            services.AddTransient<IValidator<UpdateUserParams>, UserUpdateValidator>();
-            services.AddTransient<IValidator<UserPasswordUpdateParams>, UserPasswordUpdateValidator>();
 
             services.AddSingleton<IPostViewMapper, PostViewMapper>();
             services.AddSingleton<IPermissionHandler<Post>, PostPermissionHandler>();
@@ -119,10 +114,6 @@ namespace Updog.Api {
             services.AddTransient<PostDeleter>();
             services.AddTransient<PostUpdater>();
 
-            services.AddTransient<IValidator<PostCreateParams>, PostCreateValidator>();
-            services.AddTransient<IValidator<PostUpdateParams>, PostUpdateValidator>();
-            services.AddTransient<IValidator<PostDeleteParams>, PostDeleteValidator>();
-
             services.AddSingleton<IPermissionHandler<Comment>, CommentPermissionHandler>();
             services.AddSingleton<ICommentViewMapper, CommentViewMapper>();
             services.AddSingleton<ICommentRecordMapper, CommentRecordMapper>();
@@ -132,9 +123,6 @@ namespace Updog.Api {
             services.AddTransient<CommentFinderByUser>();
             services.AddTransient<CommentDeleter>();
             services.AddTransient<CommentUpdater>();
-            services.AddTransient<IValidator<CommentCreateParams>, CommentCreateValidator>();
-            services.AddTransient<IValidator<CommentUpdateParams>, CommentUpdateValidator>();
-            services.AddTransient<IValidator<CommentDeleteParams>, CommentDeleteValidator>();
 
             services.AddSingleton<IPermissionHandler<Space>, SpacePermissionHandler>();
             services.AddSingleton<ISpaceViewMapper, SpaceViewMapper>();
@@ -144,8 +132,6 @@ namespace Updog.Api {
             services.AddTransient<SpaceFinder>();
             services.AddTransient<SpaceCreator>();
             services.AddTransient<SpaceUpdater>();
-            services.AddTransient<IValidator<SpaceCreateParams>, SpaceCreateValidator>();
-            services.AddTransient<IValidator<SpaceUpdateParams>, SpaceUpdateValidator>();
 
             services.AddSingleton<ISubscriptionViewMapper, SubscriptionViewMapper>();
             services.AddSingleton<ISubscriptionRecordMapper, SubscriptionRecordMapper>();

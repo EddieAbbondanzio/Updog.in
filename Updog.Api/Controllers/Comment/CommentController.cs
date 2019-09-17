@@ -19,24 +19,20 @@ namespace Updog.Api {
     [ApiController]
     public sealed class CommentController : ApiController {
         #region Fields
-        private CommentFinderById _commentFinderById;
-
-        private CommentFinderByUser _commentFinderByUser;
-
-        private CommentCreator _commentCreator;
-
-        private CommentUpdater _commentUpdater;
-
-        private CommentDeleter _commentDeleter;
+        private CommentFinderById commentFinderById;
+        private CommentFinderByUser commentFinderByUser;
+        private CommentCreator commentCreator;
+        private CommentUpdater commentUpdater;
+        private CommentDeleter commentDeleter;
         #endregion
 
         #region Constructor(s)
         public CommentController(CommentFinderById commentFinderById, CommentFinderByUser commentFinderByUser, CommentCreator commentCreator, CommentUpdater commentUpdater, CommentDeleter commentDeleter) {
-            this._commentFinderById = commentFinderById;
-            this._commentFinderByUser = commentFinderByUser;
-            this._commentCreator = commentCreator;
-            this._commentUpdater = commentUpdater;
-            this._commentDeleter = commentDeleter;
+            this.commentFinderById = commentFinderById;
+            this.commentFinderByUser = commentFinderByUser;
+            this.commentCreator = commentCreator;
+            this.commentUpdater = commentUpdater;
+            this.commentDeleter = commentDeleter;
         }
         #endregion
 
@@ -48,16 +44,26 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{commentId}")]
         public async Task<ActionResult> GetComment(int commentId) {
-            CommentView? c = await _commentFinderById.Handle(new FindByValueParams<int>(commentId, User));
-            return c != null ? Ok(c) : NotFound() as ActionResult;
+            var findResult = await commentFinderById.Handle(new FindByValueParams<int>(commentId, User));
+
+            return findResult.Match(
+                comment => comment != null ? Ok(comment) : NotFound() as ActionResult,
+                fail => BadRequest(fail)
+            );
         }
 
         [AllowAnonymous]
         [HttpGet("user/{username}")]
-        public async Task<ActionResult> GetCommentsByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery]int pageSize = Post.PageSize) {
-            PagedResultSet<CommentView> comments = await _commentFinderByUser.Handle(new FindByValueParams<string>(username, User, new PaginationInfo(pageNumber, pageSize)));
-            SetContentRangeHeader(comments.Pagination);
-            return Ok(comments);
+        public async Task<ActionResult> GetCommentsByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery]int pageSize = Comment.PageSize) {
+            var findResult = await commentFinderByUser.Handle(new FindByValueParams<string>(username, User, new PaginationInfo(pageNumber, pageSize)));
+
+            return findResult.Match<ActionResult>(
+                comments => {
+                    SetContentRangeHeader(comments.Pagination);
+                    return Ok(comments);
+                },
+                fail => BadRequest(fail)
+            );
         }
 
         /// <summary>
@@ -65,11 +71,11 @@ namespace Updog.Api {
         /// </summary>
         [HttpPost]
         public async Task<ActionResult> CreateComment([FromBody]CommentCreateRequest body) {
-            Either<CommentView, ValidationResult> result = await _commentCreator.Handle(new CommentCreateParams(body.PostId, User!, body.Body, body.ParentId));
+            var result = await commentCreator.Handle(new CommentCreateParams(body.PostId, User!, body.Body, body.ParentId));
 
             return result.Match<ActionResult>(
-                (CommentView comment) => Ok(comment),
-                (ValidationResult valResult) => ValidationFailure(valResult)
+                comment => Ok(comment),
+                fail => BadRequest(fail)
             );
         }
 
@@ -78,8 +84,12 @@ namespace Updog.Api {
         /// </summary>
         [HttpPatch("{commentId}")]
         public async Task<ActionResult> Update(int commentId, [FromBody]CommentUpdateRequest request) {
-            CommentView c = await _commentUpdater.Handle(new CommentUpdateParams(User!, commentId, request.Body));
-            return Ok(c);
+            var updateResult = await commentUpdater.Handle(new CommentUpdateParams(User!, commentId, request.Body));
+
+            return updateResult.Match<ActionResult>(
+                updatedComment => Ok(updatedComment),
+                fail => BadRequest(fail)
+            );
         }
 
         /// <summary>
@@ -87,8 +97,12 @@ namespace Updog.Api {
         /// </summary>
         [HttpDelete("{commentId}")]
         public async Task<ActionResult> DeleteComment(int commentId) {
-            CommentView c = await _commentDeleter.Handle(new CommentDeleteParams(User!, commentId));
-            return Ok(c);
+            var deleteResult = await commentDeleter.Handle(new CommentDeleteParams(User!, commentId));
+
+            return deleteResult.Match<ActionResult>(
+                deletedComment => Ok(deletedComment),
+                fail => BadRequest(fail)
+            );
         }
         #endregion
     }

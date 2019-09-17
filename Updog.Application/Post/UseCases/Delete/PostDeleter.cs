@@ -1,36 +1,31 @@
 using System.Threading.Tasks;
 using Updog.Domain;
-using FluentValidation;
 using System;
 
 namespace Updog.Application {
     /// <summary>
     /// Interactor to handle deleting posts.
     /// </summary>
-    public sealed class PostDeleter : IInteractor<PostDeleteParams, PostView?> {
+    public sealed class PostDeleter : Interactor<PostDeleteParams, PostView?> {
         #region Fields
         private IDatabase database;
         private IPermissionHandler<Post> permissionHandler;
-        private IValidator<PostDeleteParams> postValidator;
         private IPostViewMapper postMapper;
         #endregion
 
         #region Constructor(s)
-        public PostDeleter(IDatabase database, IPermissionHandler<Post> postPermissionHandler, IValidator<PostDeleteParams> postValidator, IPostViewMapper postMapper) {
+        public PostDeleter(IDatabase database, IPermissionHandler<Post> postPermissionHandler, IPostViewMapper postMapper) {
             this.database = database;
             this.permissionHandler = postPermissionHandler;
-            this.postValidator = postValidator;
             this.postMapper = postMapper;
         }
         #endregion
 
         #region Publics
-        public async Task<PostView?> Handle(PostDeleteParams input) {
-            await postValidator.ValidateAndThrowAsync(input);
-
+        [Validate(typeof(PostDeleteValidator))]
+        protected override async Task<PostView?> HandleInput(PostDeleteParams input) {
             using (var connection = database.GetConnection()) {
                 IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);
-
 
                 Post? p = await postRepo.FindById(input.PostId);
 

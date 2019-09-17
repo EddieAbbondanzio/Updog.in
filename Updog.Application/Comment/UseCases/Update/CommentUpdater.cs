@@ -2,33 +2,29 @@
 using System;
 using System.Threading.Tasks;
 using Updog.Domain;
-using FluentValidation;
 
 namespace Updog.Application {
     /// <summary>
     /// Updater to handler updating comments.
     /// </summary>
-    public sealed class CommentUpdater : IInteractor<CommentUpdateParams, CommentView> {
+    public sealed class CommentUpdater : Interactor<CommentUpdateParams, CommentView> {
         #region Fields
         private IDatabase database;
         private IPermissionHandler<Comment> commentPermissionHandler;
-        private IValidator<CommentUpdateParams> commentValidator;
         private ICommentViewMapper commentMapper;
         #endregion
 
         #region Constructor(s)
-        public CommentUpdater(IDatabase database, IPermissionHandler<Comment> commentPermissionHandler, IValidator<CommentUpdateParams> commentValidator, ICommentViewMapper commentMapper) {
+        public CommentUpdater(IDatabase database, IPermissionHandler<Comment> commentPermissionHandler, ICommentViewMapper commentMapper) {
             this.database = database;
             this.commentPermissionHandler = commentPermissionHandler;
-            this.commentValidator = commentValidator;
             this.commentMapper = commentMapper;
         }
         #endregion
 
         #region Publics
-        public async Task<CommentView> Handle(CommentUpdateParams input) {
-            await commentValidator.ValidateAndThrowAsync(input);
-
+        [Validate(typeof(CommentUpdateValidator))]
+        protected override async Task<CommentView> HandleInput(CommentUpdateParams input) {
             using (var connection = database.GetConnection()) {
                 ICommentRepo commentRepo = database.GetRepo<ICommentRepo>(connection);
                 Comment? comment = await commentRepo.FindById(input.CommentId);

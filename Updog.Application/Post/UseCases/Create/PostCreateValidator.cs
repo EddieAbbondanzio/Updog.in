@@ -1,15 +1,14 @@
 using Updog.Domain;
 using FluentValidation;
+using Updog.Application.Validation;
 
 namespace Updog.Application {
     /// <summary>
     /// Validator to validate new posts being created.
     /// </summary>
-    public sealed class PostCreateValidator : AbstractValidator<PostCreateParams> {
+    internal sealed class PostCreateValidator : FluentValidatorAdapter<PostCreateParams> {
         #region Constructor(s)
         public PostCreateValidator() {
-            RuleFor(p => p.User).NotNull().WithMessage("User performing the action is null.");
-
             RuleFor(p => p.Type).IsInEnum().WithMessage("Type must be link, or text.");
 
             RuleFor(p => p.Title).NotNull().WithMessage("Title is required.");
@@ -22,6 +21,8 @@ namespace Updog.Application {
 
             RuleFor(p => p.Space).NotNull().WithMessage("Space is required.");
             RuleFor(p => p.Space).NotEmpty().WithMessage("Space is required.");
+
+            RuleFor(p => p.User).NotNull().WithMessage("User performing the action is null.");
         }
         #endregion
     }

@@ -6,7 +6,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to creat e new subscription for a space.
     /// </summary>
-    public sealed class SubscriptionCreator : IInteractor<SubscriptionCreateParams, SubscriptionView> {
+    public sealed class SubscriptionCreator : Interactor<SubscriptionCreateParams, SubscriptionView> {
         #region Fields
         private IDatabase database;
         private ISubscriptionViewMapper subscriptionMapper;
@@ -20,7 +20,8 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<SubscriptionView> Handle(SubscriptionCreateParams input) {
+        [Validate(typeof(SubscriptionCreateValidator))]
+        protected override async Task<SubscriptionView> HandleInput(SubscriptionCreateParams input) {
             using (var connection = database.GetConnection()) {
                 ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(connection);
                 ISubscriptionRepo subRepo = database.GetRepo<ISubscriptionRepo>(connection);

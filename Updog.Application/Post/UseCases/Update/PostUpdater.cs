@@ -2,33 +2,29 @@
 using System;
 using System.Threading.Tasks;
 using Updog.Domain;
-using FluentValidation;
 
 namespace Updog.Application {
     /// <summary>
     /// Updater to handler updating posts.
     /// </summary>
-    public sealed class PostUpdater : IInteractor<PostUpdateParams, PostView> {
+    public sealed class PostUpdater : Interactor<PostUpdateParams, PostView> {
         #region Fields
         private IDatabase database;
         private IPermissionHandler<Post> postPermissionHandler;
-        private IValidator<PostUpdateParams> postValidator;
         private IPostViewMapper postMapper;
         #endregion
 
         #region Constructor(s)
-        public PostUpdater(IDatabase database, IPermissionHandler<Post> postPermissionHandler, IValidator<PostUpdateParams> postValidator, IPostViewMapper postMapper) {
+        public PostUpdater(IDatabase database, IPermissionHandler<Post> postPermissionHandler, IPostViewMapper postMapper) {
             this.database = database;
             this.postPermissionHandler = postPermissionHandler;
-            this.postValidator = postValidator;
             this.postMapper = postMapper;
         }
         #endregion
 
         #region Publics
-        public async Task<PostView> Handle(PostUpdateParams input) {
-            await postValidator.ValidateAndThrowAsync(input);
-
+        [Validate(typeof(PostUpdateValidator))]
+        protected override async Task<PostView> HandleInput(PostUpdateParams input) {
             using (var connection = database.GetConnection()) {
                 IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);
                 Post? post = await postRepo.FindById(input.PostId);

@@ -1,34 +1,30 @@
 
 using System;
 using System.Threading.Tasks;
-using FluentValidation;
 using Updog.Domain;
 
 namespace Updog.Application {
     /// <summary>
     /// Interactor to update a space.
     /// </summary>
-    public sealed class SpaceUpdater : IInteractor<SpaceUpdateParams, SpaceView> {
+    public sealed class SpaceUpdater : Interactor<SpaceUpdateParams, SpaceView> {
         #region Fields
         private IDatabase database;
         private IPermissionHandler<Space> spacePermissionHandler;
-        private IValidator<SpaceUpdateParams> spaceValidator;
         private ISpaceViewMapper spaceMapper;
         #endregion
 
         #region Constructor(s)
-        public SpaceUpdater(IDatabase database, IPermissionHandler<Space> spacePermissionHandler, IValidator<SpaceUpdateParams> spaceValidator, ISpaceViewMapper spaceMapper) {
+        public SpaceUpdater(IDatabase database, IPermissionHandler<Space> spacePermissionHandler, ISpaceViewMapper spaceMapper) {
             this.database = database;
             this.spacePermissionHandler = spacePermissionHandler;
-            this.spaceValidator = spaceValidator;
             this.spaceMapper = spaceMapper;
         }
         #endregion
 
         #region Publics
-        public async Task<SpaceView> Handle(SpaceUpdateParams input) {
-            await spaceValidator.ValidateAndThrowAsync(input);
-
+        [Validate(typeof(SpaceUpdateValidator))]
+        protected override async Task<SpaceView> HandleInput(SpaceUpdateParams input) {
             using (var connection = database.GetConnection()) {
                 ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(connection);
 

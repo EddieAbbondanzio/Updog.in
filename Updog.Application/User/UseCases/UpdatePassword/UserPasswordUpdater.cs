@@ -1,26 +1,23 @@
 using System.Threading.Tasks;
-using FluentValidation;
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class UserPasswordUpdater : IInteractor<UserPasswordUpdateParams> {
+    public sealed class UserPasswordUpdater : Interactor<UserPasswordUpdateParams> {
         #region Fields
         private IDatabase database;
         private IPasswordHasher passwordHasher;
-        private IValidator<UserPasswordUpdateParams> validator;
         #endregion
 
         #region Constructor(s)
-        public UserPasswordUpdater(IDatabase database, IPasswordHasher passwordHasher, IValidator<UserPasswordUpdateParams> validator) {
+        public UserPasswordUpdater(IDatabase database, IPasswordHasher passwordHasher) {
             this.database = database;
             this.passwordHasher = passwordHasher;
-            this.validator = validator;
         }
         #endregion
 
-        public async Task Handle(UserPasswordUpdateParams input) {
-            await this.validator.ValidateAndThrowAsync(input);
-
+        #region Helpers
+        [Validate(typeof(UserPasswordUpdateValidator))]
+        protected override async Task HandleInput(UserPasswordUpdateParams input) {
             using (var connection = database.GetConnection()) {
                 IUserRepo userRepo = database.GetRepo<IUserRepo>(connection);
 
@@ -36,4 +33,5 @@ namespace Updog.Application {
             }
         }
     }
+    #endregion
 }

@@ -1,11 +1,12 @@
 using Updog.Domain;
 using FluentValidation;
+using Updog.Application.Validation;
 
 namespace Updog.Application {
     /// <summary>
     /// Validator to validate that the update parameters of a space update are okay.
     /// </summary>
-    public sealed class SpaceUpdateValidator : AbstractValidator<SpaceUpdateParams> {
+    internal sealed class SpaceUpdateValidator : FluentValidatorAdapter<SpaceUpdateParams> {
         public SpaceUpdateValidator() {
             RuleFor(s => s.User).NotNull().WithMessage("User performing the action is null.");
 

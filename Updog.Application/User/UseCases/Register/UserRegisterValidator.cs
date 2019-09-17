@@ -3,12 +3,13 @@ using Updog.Domain;
 using FluentValidation;
 using FluentValidation.Results;
 using System.Linq;
+using Updog.Application.Validation;
 
 namespace Updog.Application {
     /// <summary>
     /// Validator to validate user registrations.
     /// </summary>
-    public sealed class UserRegisterValidator : AbstractValidator<UserRegisterParams> {
+    internal sealed class UserRegisterValidator : FluentValidatorAdapter<UserRegisterParams> {
         #region Constructor(s)
         public UserRegisterValidator() {
             //Username

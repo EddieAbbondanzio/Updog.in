@@ -14,9 +14,8 @@ namespace Updog.Api {
     [ApiController]
     public sealed class UserController : ApiController {
         #region Fields
-        private UserFinderByUsername _userFinder;
-
-        private UserRegisterInteractor _userRegistrar;
+        private UserFinderByUsername userFinder;
+        private UserRegisterInteractor userRegistrar;
         #endregion
 
         #region Constructor(s)
@@ -27,8 +26,8 @@ namespace Updog.Api {
                 UserFinderByUsername userFinder,
                 UserRegisterInteractor userRegistrar
             ) {
-            this._userFinder = userFinder;
-            this._userRegistrar = userRegistrar;
+            this.userFinder = userFinder;
+            this.userRegistrar = userRegistrar;
         }
         #endregion
 
@@ -40,8 +39,12 @@ namespace Updog.Api {
         [HttpGet("{username}")]
         [HttpHead("{username}")]
         public async Task<ActionResult> FindByUsername(string username) {
-            UserView? user = await _userFinder.Handle(new FindByValueParams<string>(username, user: User));
-            return user != null ? Ok(user) : NotFound() as ActionResult;
+            var result = await userFinder.Handle(new FindByValueParams<string>(username, user: User));
+
+            return result.Match<ActionResult>(
+                user => Ok(user),
+                fail => BadRequest(fail)
+            );
         }
 
         /// <summary>
@@ -50,10 +53,12 @@ namespace Updog.Api {
         /// <param name="registration">The new user registration</param>
         [HttpPost]
         public async Task<ActionResult> Register([FromBody] UserRegisterRequest req) {
-            UserRegisterParams registration = new UserRegisterParams(req.Username, req.Password, req.Email);
+            var result = await userRegistrar.Handle(new UserRegisterParams(req.Username, req.Password, req.Email));
 
-            UserLogin login = await _userRegistrar.Handle(registration);
-            return login != null ? Ok(login) : BadRequest("Registration failed.") as ActionResult;
+            return result.Match<ActionResult>(
+                login => Ok(login),
+                fail => BadRequest(fail)
+            );
         }
         #endregion
     }

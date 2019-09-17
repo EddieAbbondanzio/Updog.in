@@ -6,7 +6,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to cancel a user's subscription with a space.
     /// </summary>
-    public sealed class SubscriptionDeleter : IInteractor<SubscriptionDeleteParams> {
+    public sealed class SubscriptionDeleter : Interactor<SubscriptionDeleteParams> {
         #region Fields
         private IDatabase database;
         private ISubscriptionViewMapper subscriptionMapper;
@@ -20,7 +20,8 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task Handle(SubscriptionDeleteParams input) {
+        [Validate(typeof(SubscriptionDeleteValidator))]
+        protected override async Task HandleInput(SubscriptionDeleteParams input) {
             using (var conenction = database.GetConnection()) {
                 ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(conenction);
                 ISubscriptionRepo subRepo = database.GetRepo<ISubscriptionRepo>(conenction);

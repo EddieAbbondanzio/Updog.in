@@ -9,7 +9,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to find comments on a post.
     /// </summary>
-    public sealed class CommentFinderByUser : IInteractor<FindByValueParams<string>, PagedResultSet<CommentView>> {
+    public sealed class CommentFinderByUser : Interactor<FindByValueParams<string>, PagedResultSet<CommentView>> {
         #region Fields
         private IDatabase database;
         private ICommentViewMapper commentMapper;
@@ -23,11 +23,12 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<PagedResultSet<CommentView>> Handle(FindByValueParams<string> input) {
+        [Validate(typeof(FindByUserValidator))]
+        protected async override Task<PagedResultSet<CommentView>> HandleInput(FindByValueParams<string> input) {
             using (var connection = database.GetConnection()) {
                 ICommentRepo commentRepo = database.GetRepo<ICommentRepo>(connection);
 
-                PagedResultSet<Comment> comments = await commentRepo.FindByUser(input.Value, input.Pagination.PageNumber, input.Pagination.PageSize);
+                PagedResultSet<Comment> comments = await commentRepo.FindByUser(input.Value, input.Pagination?.PageNumber ?? 0, input.Pagination?.PageSize ?? Comment.PageSize);
 
                 if (input.User != null) {
                     foreach (Comment c in comments) {

@@ -14,15 +14,15 @@ namespace Updog.Api {
     [ApiController]
     public sealed class MeController : ApiController {
         #region Fields
-        public UserUpdater _userUpdater;
+        public UserUpdater userUpdater;
 
-        public UserPasswordUpdater _passwordUpdater;
+        public UserPasswordUpdater passwordUpdater;
         #endregion
 
         #region Constructor(s)
         public MeController(UserUpdater userUpdater, UserPasswordUpdater passwordUpdater) {
-            this._userUpdater = userUpdater;
-            this._passwordUpdater = passwordUpdater;
+            this.userUpdater = userUpdater;
+            this.passwordUpdater = passwordUpdater;
         }
         #endregion
 
@@ -41,8 +41,12 @@ namespace Updog.Api {
         /// <param name="updateRequest">The new user info.</param>
         [HttpPut]
         public async Task<ActionResult> Update([FromBody] MeUpdateRequest updateRequest) {
-            await _userUpdater.Handle(new UpdateUserParams(User!, updateRequest.Email));
-            return Ok();
+            var result = await userUpdater.Handle(new UpdateUserParams(User!, updateRequest.Email));
+
+            return result.Match<ActionResult>(
+                fail => BadRequest(fail),
+                Ok
+            );
         }
 
         /// <summary>
@@ -51,8 +55,12 @@ namespace Updog.Api {
         /// <param name="updatePasswordRequest">The new password.</param>
         [HttpPut("password")]
         public async Task<ActionResult> UpdatePassword([FromBody] MeUpdatePasswordRequest updatePasswordRequest) {
-            await _passwordUpdater.Handle(new UserPasswordUpdateParams(User!, updatePasswordRequest.CurrentPassword, updatePasswordRequest.NewPassword));
-            return Ok();
+            var result = await passwordUpdater.Handle(new UserPasswordUpdateParams(User!, updatePasswordRequest.CurrentPassword, updatePasswordRequest.NewPassword));
+
+            return result.Match<ActionResult>(
+                fail => BadRequest(fail),
+                Ok
+            );
         }
         #endregion
     }

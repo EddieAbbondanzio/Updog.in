@@ -2,12 +2,13 @@ using Updog.Domain;
 using FluentValidation;
 using System.Linq;
 using System;
+using Updog.Application.Validation;
 
 namespace Updog.Application {
     /// <summary>
     /// Validator to validate new posts being created.
     /// </summary>
-    public sealed class SpaceCreateValidator : AbstractValidator<SpaceCreateParams> {
+    internal sealed class SpaceCreateValidator : FluentValidatorAdapter<SpaceCreateParams> {
         #region Constructor(s)
         public SpaceCreateValidator() {
             RuleFor(s => s.User).NotNull().WithMessage("User performing the action is null.");

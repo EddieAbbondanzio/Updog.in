@@ -6,7 +6,7 @@ namespace Updog.Application {
     /// <summary>
     /// Interactor to handler a login user use case.
     /// </summary>
-    public sealed class UserLoginInteractor : IInteractor<UserLoginParams, UserLogin?> {
+    public sealed class UserLoginInteractor : Interactor<UserCredentials, UserLogin?> {
         #region Fields
         private IDatabase database;
         private IPasswordHasher passwordHasher;
@@ -24,7 +24,8 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task<UserLogin?> Handle(UserLoginParams input) {
+        [Validate(typeof(UserLoginValidator))]
+        protected override async Task<UserLogin?> HandleInput(UserCredentials input) {
             using (var connection = database.GetConnection()) {
                 IUserRepo userRepo = database.GetRepo<IUserRepo>(connection);
 

@@ -1,8 +1,7 @@
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
-using FluentValidation;
-using FluentValidation.Results;
+using Updog.Application.Validation;
 
 namespace Updog.Application {
     /// <summary>
@@ -50,7 +49,7 @@ namespace Updog.Application {
     public abstract class Interactor<TInput> : Interactor {
         #region Publics
         public async Task<Maybe<ValidationResult>> Handle(TInput input) {
-            if (Validator != null) {
+            if (Validator != null && input != null) {
                 var result = await Validator.ValidateAsync(input);
 
                 if (!result.IsValid) {
@@ -81,7 +80,7 @@ namespace Updog.Application {
     public abstract class Interactor<TInput, TOutput> : Interactor {
         #region Publics
         public async Task<Either<TOutput, ValidationResult>> Handle(TInput input) {
-            if (Validator != null) {
+            if (Validator != null && input != null) {
                 var result = await Validator.ValidateAsync(input);
 
                 if (!result.IsValid) {

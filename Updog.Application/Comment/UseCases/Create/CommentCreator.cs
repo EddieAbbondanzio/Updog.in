@@ -1,8 +1,6 @@
 using System;
 using System.Data.Common;
 using System.Threading.Tasks;
-using FluentValidation;
-using FluentValidation.Results;
 using Updog.Domain;
 using System.Reflection;
 
