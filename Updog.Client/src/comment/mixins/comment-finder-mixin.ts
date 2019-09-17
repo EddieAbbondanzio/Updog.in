@@ -13,7 +13,7 @@ import CommentStore from '../store/comment-store';
  */
 @Mixin
 export class CommentFinderMixin extends Vue {
-    get $cachedComments() {
+    get $comments() {
         const module = getModule(CommentStore, this.$store);
         return module.comments;
     }
@@ -38,14 +38,10 @@ export class CommentFinderMixin extends Vue {
 
     /**
      * Find a list of comments made by a user.
-     * @param username The username of the user.
-     * @param paginationInfo Pagination info.
+     * @param params The info of the user to get comments for.
      */
-    public async $findCommentsByUser(
-        username: string,
-        paginationInfo: PaginationParams
-    ): Promise<PagedResultSet<Comment>> {
+    public async $findCommentsByUser(params: CommentFinderByUserParams): Promise<PagedResultSet<Comment>> {
         const module = getModule(CommentStore, this.$store);
-        return module.findByUser(new CommentFinderByUserParams(username, paginationInfo));
+        return module.findByUser(params);
     }
 }

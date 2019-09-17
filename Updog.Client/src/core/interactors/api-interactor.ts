@@ -64,7 +64,7 @@ export abstract class ApiInteractor<TInput, TOutput> {
         const end = Number.parseInt(splitStartEnd[1], 10);
 
         const pageSize = end - start + 1;
-        const pageNumber = Math.floor((start + 1) / pageSize);
+        const pageNumber = Math.floor(start / pageSize);
 
         return new PaginationInfo(pageNumber, pageSize, total);
     }

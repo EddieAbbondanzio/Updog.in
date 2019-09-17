@@ -82,7 +82,7 @@ import { Component, Vue, Prop, Mixins } from 'vue-property-decorator';
 import TimeStamp from '@/core/ui/components/time-stamp.vue';
 import UserLink from '@/user/ui/components/user-link.vue';
 import CommentCreateForm from '@/comment/ui/components/comment-create-form.vue';
-import CommentVoteController from '@/vote/ui/components/post-vote-controller.vue';
+import CommentVoteController from '@/vote/ui/components/comment-vote-controller.vue';
 import { CommentCreatorMixin, CommentCreateParams, CommentUpdateParams } from '@/comment';
 import { Comment, CommentUpdaterMixin } from '@/comment';
 
