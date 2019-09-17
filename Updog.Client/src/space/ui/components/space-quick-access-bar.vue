@@ -30,7 +30,7 @@ export default class SpaceQuickAccessBar extends SpaceFinderMixin {
         if (this.$isLoggedIn()) {
             return this.$subscribedSpaces;
         } else {
-            return [...this.$defaultSpaces, { name: 'test' }, { name: 'test2' }];
+            return this.$defaultSpaces;
         }
     }
 
