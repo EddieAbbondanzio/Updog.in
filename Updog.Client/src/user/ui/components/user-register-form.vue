@@ -14,8 +14,8 @@
                 v-model="username"
                 ref="registerUsernameTextbox"
                 name="registerUsername"
-                v-validate="'required|min:4'"
-                @input="onUsernameInput"
+                v-validate="'required|min:4|isUnique'"
+                v-b-popover.hover.focus.right="'Username must be at least 4 characters'"
             />
             <b-form-invalid-feedback
                 class="d-block"
@@ -43,6 +43,7 @@
                 ref="registerPassword"
                 name="registerPassword"
                 v-validate="'required'"
+                v-b-popover.hover.focus.right="'Password must be at least 8 characters'"
             />
             <b-form-invalid-feedback
                 class="d-block"
@@ -103,11 +104,15 @@ export default class UserRegisterForm extends UserRegistrarMixin implements Form
     public confirmPassword: string = '';
 
     public created() {
+        // Add way to check the backend for available username.
+        this.$validator.extend('isUnique', async value => this.$isUsernameAvailable(value));
+
         this.$validator.localize('en', {
             custom: {
                 registerUsername: {
                     required: 'Username is required.',
-                    min: 'Username must be at least 4 characters.'
+                    min: 'Username must be at least 4 characters.',
+                    isUnique: 'Username is unavailable.'
                 },
                 registerEmail: {
                     email: 'Email must be a valid address.'
@@ -128,10 +133,6 @@ export default class UserRegisterForm extends UserRegistrarMixin implements Form
         this.$refs.registerUsernameTextbox.focus();
     }
 
-    public async onUsernameInput() {
-        console.log(await this.$isUsernameAvailable(this.username));
-    }
-
     /**
      * Attempt to log in the user.
      */
@@ -141,13 +142,7 @@ export default class UserRegisterForm extends UserRegistrarMixin implements Form
             return null;
         }
 
-        const login = await this.$registerUser(
-            new UserRegistration(
-                'ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd',
-                this.password,
-                this.email
-            )
-        );
+        const login = await this.$registerUser(new UserRegistration(this.username, this.password, this.email));
 
         this.$emit('register', login);
         return login;
