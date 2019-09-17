@@ -7,8 +7,7 @@
             <div>
                 <!-- Header -->
                 <div class="d-flex flex-row align-items-center">
-                    <user-link :user="comment.user" />
-
+                    <user-link :user="comment.user" />&nbsp;
                     <span
                         class="text-muted pr-1"
                     >{{ comment.karma}} {{comment.karma === 1 ? 'upvote' : 'upvotes'}}</span>

@@ -42,7 +42,7 @@ namespace Updog.Api {
             var result = await userFinder.Handle(new FindByValueParams<string>(username, user: User));
 
             return result.Match<ActionResult>(
-                user => Ok(user),
+                user => user != null ? Ok(user) : NotFound() as ActionResult,
                 fail => BadRequest(fail)
             );
         }

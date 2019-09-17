@@ -34,9 +34,11 @@ namespace Updog.Application {
                 ISubscriptionRepo subRepo = database.GetRepo<ISubscriptionRepo>(connection);
 
                 // Check that the email is free first.
-                User? emailInUse = await userRepo.FindByEmail(input.Email);
-                if (emailInUse != null) {
-                    throw new CollisionException("Email is already in use");
+                if (!String.IsNullOrWhiteSpace(input.Email)) {
+                    User? emailInUse = await userRepo.FindByEmail(input.Email);
+                    if (emailInUse != null) {
+                        throw new CollisionException("Email is already in use");
+                    }
                 }
 
                 User? usernameInUse = await userRepo.FindByUsername(input.Username);
@@ -47,7 +49,7 @@ namespace Updog.Application {
                 User user = new User() {
                     Username = input.Username,
                     PasswordHash = passwordHasher.Hash(input.Password),
-                    Email = input.Email,
+                    Email = StringUtils.NullifyWhiteSpace(input.Email),
                     JoinedDate = System.DateTime.UtcNow
                 };
 

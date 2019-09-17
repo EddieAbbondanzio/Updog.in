@@ -31,7 +31,7 @@ namespace Updog.Domain {
         /// <summary>
         /// Contact email (if any)
         /// </summary>
-        public string Email { get; set; } = "";
+        public string? Email { get; set; }
 
         /// <summary>
         /// Super secret hash of the password.
