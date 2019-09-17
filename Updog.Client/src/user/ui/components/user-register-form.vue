@@ -35,6 +35,9 @@
                 :state="false"
             >{{ errors.first('registerEmail')}}</b-form-invalid-feedback>
         </b-form-group>
+        <b-form-group class="d-none">
+            <b-form-input type="text" v-model="honey" placeholder="Name" />
+        </b-form-group>
         <b-form-group>
             <b-form-input
                 type="password"
@@ -102,6 +105,7 @@ export default class UserRegisterForm extends UserRegistrarMixin implements Form
     public email: string = '';
     public password: string = '';
     public confirmPassword: string = '';
+    public honey: string = '';
 
     public created() {
         // Add way to check the backend for available username.
@@ -137,6 +141,10 @@ export default class UserRegisterForm extends UserRegistrarMixin implements Form
      * Attempt to log in the user.
      */
     public async submit() {
+        if (this.honey !== '') {
+            throw new Error('Oh bother');
+        }
+
         // Validate first.
         if (!(await this.$validator.validate())) {
             return null;
