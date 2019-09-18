@@ -2,12 +2,13 @@ import Mixin from 'vue-class-component';
 import Vue from 'vue';
 import { UserCredentials, UserLogin, UserStore } from '..';
 import { getModule } from 'vuex-module-decorators';
+import { AuthenticatedMixin } from './authenticated-mixin';
 
 /**
  * Mixin to handle logging in and out a user.
  */
 @Mixin
-export class UserLoginMixin extends Vue {
+export class UserLoginMixin extends AuthenticatedMixin {
     /**
      * Log in the user with the backend.
      * @param userCreds The username / password combo to log in with.

@@ -58,6 +58,17 @@ export default class PostStore extends VuexModule {
         }
     }
 
+    @Mutation
+    public [PostMutation.ClearVotes]() {
+        if (this.posts == null) {
+            return;
+        }
+
+        for (const p of this.posts) {
+            p.vote = null;
+        }
+    }
+
     /**
      * Create a new post.
      * @param params The post creation parameters.

@@ -52,6 +52,25 @@ export default class CommentStore extends VuexModule {
         }
     }
 
+    @Mutation
+    public [CommentMutation.ClearVotes]() {
+        if (this.comments == null) {
+            return;
+        }
+
+        for (const comment of this.comments) {
+            clearVotesHelper(comment);
+        }
+
+        function clearVotesHelper(comment: Comment) {
+            comment.vote = null;
+
+            for (const c of comment.children) {
+                clearVotesHelper(c);
+            }
+        }
+    }
+
     /**
      * Find a comment via it's ID.
      * @param id The comment's ID.

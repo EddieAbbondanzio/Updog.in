@@ -84,6 +84,8 @@ export default class UserStore extends VuexModule {
     @Action({ rawError: true })
     public async logout() {
         this.context.commit(UserMutation.ClearLogin);
+        this.context.commit('post/clearVotes', {}, { root: true });
+        this.context.commit('comment/clearVotes', {}, { root: true });
     }
 
     /**
