@@ -2,11 +2,12 @@
     <div class="py-1">
         <!-- Comment -->
         <div class="d-flex flex-row">
-            <comment-vote-controller :comment="comment" />
+            <comment-vote-controller :comment="comment" v-if="isExpanded" />
 
             <div>
                 <!-- Header -->
                 <div class="d-flex flex-row align-items-center">
+                    <comment-expand-button @toggle="onExpand" />&nbsp;
                     <user-link :user="comment.user" />&nbsp;
                     <span
                         class="text-muted pr-1"
@@ -20,48 +21,50 @@
                 </div>
 
                 <!-- Body -->
-                <div v-if="!isEditing">{{ comment.body}}</div>
-                <div v-else>
-                    <textarea
-                        v-model="editedBody"
-                        name="editCommentBody"
-                        v-validate="'required|max:10000'"
-                    />
-                    <b-form-invalid-feedback
-                        class="d-block"
-                        :state="false"
-                    >{{ errors.first('editCommentBody')}}</b-form-invalid-feedback>
-                    <b-button variant="primary" @click="onEditSave">Save</b-button>
-                    <b-button variant="outline-primary" @click="onEditCancel">Cancel</b-button>
-                </div>
+                <div v-if="isExpanded">
+                    <div v-if="!isEditing">{{ comment.body}}</div>
+                    <div v-else>
+                        <textarea
+                            v-model="editedBody"
+                            name="editCommentBody"
+                            v-validate="'required|max:10000'"
+                        />
+                        <b-form-invalid-feedback
+                            class="d-block"
+                            :state="false"
+                        >{{ errors.first('editCommentBody')}}</b-form-invalid-feedback>
+                        <b-button variant="primary" @click="onEditSave">Save</b-button>
+                        <b-button variant="outline-primary" @click="onEditCancel">Cancel</b-button>
+                    </div>
 
-                <!-- Actions -->
-                <div class="d-flex flex-row">
-                    <!-- Permalink -->
-                    <b-button
-                        variant="link"
-                        class="text-secondary pl-0 pr-1"
-                        :to="{name: 'comment', params: { commentId: comment.id}}"
-                    >permalink</b-button>
+                    <!-- Actions -->
+                    <div class="d-flex flex-row">
+                        <!-- Permalink -->
+                        <b-button
+                            variant="link"
+                            class="text-secondary pl-0 pr-1"
+                            :to="{name: 'comment', params: { commentId: comment.id}}"
+                        >permalink</b-button>
 
-                    <b-button
-                        variant="link"
-                        class="text-secondary pl-0 pr-1"
-                        v-if="canEdit()"
-                        @click="onEditClick"
-                    >edit</b-button>
+                        <b-button
+                            variant="link"
+                            class="text-secondary pl-0 pr-1"
+                            v-if="canEdit()"
+                            @click="onEditClick"
+                        >edit</b-button>
 
-                    <!-- Reply -->
-                    <b-button
-                        variant="link"
-                        class="text-secondary pl-0 pr-1"
-                        @click="onReplyClick"
-                    >reply</b-button>
-                </div>
+                        <!-- Reply -->
+                        <b-button
+                            variant="link"
+                            class="text-secondary pl-0 pr-1"
+                            @click="onReplyClick"
+                        >reply</b-button>
+                    </div>
 
-                <!-- Reply Box -->
-                <div v-if="isReplying">
-                    <comment-create-form @submit="onReplySubmit" />
+                    <!-- Reply Box -->
+                    <div v-if="isReplying">
+                        <comment-create-form @submit="onReplySubmit" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -84,6 +87,7 @@ import CommentCreateForm from '@/comment/ui/components/comment-create-form.vue';
 import CommentVoteController from '@/vote/ui/components/comment-vote-controller.vue';
 import { CommentCreatorMixin, CommentCreateParams, CommentUpdateParams } from '@/comment';
 import { Comment, CommentUpdaterMixin } from '@/comment';
+import CommentExpandButton from '@/comment/ui/components/comment-expand-button.vue';
 
 /**
  * Component to show a comment on screen.
@@ -94,13 +98,19 @@ import { Comment, CommentUpdaterMixin } from '@/comment';
         UserLink,
         TimeStamp,
         CommentCreateForm,
-        CommentVoteController
+        CommentVoteController,
+        CommentExpandButton
     },
     mixins: [CommentCreatorMixin, CommentUpdaterMixin]
 })
 export default class CommentSummary extends Mixins(CommentCreatorMixin, CommentUpdaterMixin) {
     @Prop()
     public comment!: Comment;
+
+    /**
+     * If the comment body is currently expanded.
+     */
+    public isExpanded: boolean = true;
 
     /**
      * If the user is currently replying to this comment.
@@ -126,6 +136,13 @@ export default class CommentSummary extends Mixins(CommentCreatorMixin, CommentU
                 }
             }
         });
+    }
+
+    /**
+     * Event handler for when the comment body is expanded / collapsed.
+     */
+    public onExpand(expanded: boolean) {
+        this.isExpanded = expanded;
     }
 
     /**

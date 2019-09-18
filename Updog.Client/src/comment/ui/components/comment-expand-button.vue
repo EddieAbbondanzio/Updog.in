@@ -1,10 +1,7 @@
 <template>
-    <b-button @click="onClick" variant="link" class="px-0 py-0">
-        <material-icon
-            :icon="expanded ? 'remove' : 'add_box'"
-            variant="muted"
-            style="font-size: 36px;"
-        />
+    <b-button @click="onClick" variant="link" class="px-0 py-0 text-decoration-none">
+        <span v-if="expanded" class="text-muted">[&nbsp;-&nbsp;]</span>
+        <span v-else class="text-muted">[&nbsp;+&nbsp;]</span>
     </b-button>
 </template>
 
@@ -17,15 +14,15 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 @Component({
     name: 'expand-button'
 })
-export default class ExpandButton extends Vue {
+export default class CommentExpandButton extends Vue {
     /**
      * If the button is currently expanded.
      */
-    public expanded: boolean = false;
+    public expanded: boolean = true;
 
     public onClick() {
-        this.$emit('toggle');
         this.expanded = !this.expanded;
+        this.$emit('toggle', this.expanded);
     }
 }
 </script>

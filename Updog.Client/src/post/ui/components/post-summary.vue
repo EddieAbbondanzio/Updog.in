@@ -14,7 +14,7 @@
                     <div class="d-flex flex-row">
                         <!-- Expand / Collapse -->
                         <div v-if="showToggle">
-                            <expand-button @toggle="isExpanded = !isExpanded" />
+                            <post-expand-button @toggle="isExpanded = !isExpanded" />
                         </div>
 
                         <div class="d-flex flex-column text-sm">
@@ -78,7 +78,7 @@ import PostIcon from '@/post/ui/components/post-icon.vue';
 import SpaceLink from '@/space/ui/components/space-link.vue';
 import { PostUpdaterMixin, Post, PostUpdateParams, PostType } from '@/post';
 import PostLink from '@/post/ui/components/post-link.vue';
-import ExpandButton from '@/core/ui/components/expand-button.vue';
+import PostExpandButton from '@/post/ui/components/post-expand-button.vue';
 import PostTimeStamp from '@/post/ui/components/post-time-stamp.vue';
 import CommentsLink from '@/comment/ui/components/comments-link.vue';
 
@@ -94,7 +94,7 @@ import CommentsLink from '@/comment/ui/components/comments-link.vue';
         PostIcon,
         SpaceLink,
         PostLink,
-        ExpandButton,
+        PostExpandButton,
         PostTimeStamp,
         CommentsLink
     }
