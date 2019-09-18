@@ -38,9 +38,9 @@ export default class SpaceQuickAccessBar extends SpaceFinderMixin {
     }
 
     public async created() {
-        Store.subscribe((mutation, state) => {
-            console.log(mutation);
-        });
+        // Store.subscribe((mutation, state) => {
+        //     console.log(mutation);
+        // });
 
         if (this.$isLoggedIn()) {
             await this.$findDefaultSpaces();

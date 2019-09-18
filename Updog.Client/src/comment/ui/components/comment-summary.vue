@@ -2,7 +2,10 @@
     <div class="py-1">
         <!-- Comment -->
         <div class="d-flex flex-row">
-            <comment-vote-controller :comment="comment" v-if="isExpanded" />
+            <div>
+                <comment-vote-controller :comment="comment" v-if="isExpanded" />
+                <div style="width: 24px;" v-else>&nbsp;</div>
+            </div>
 
             <div>
                 <!-- Header -->
@@ -70,12 +73,14 @@
         </div>
 
         <!-- Children -->
-        <comment-summary
-            v-for="child in comment.children"
-            :comment="child"
-            v-bind:key="child.id"
-            class="pl-4"
-        />
+        <div v-if="isExpanded">
+            <comment-summary
+                v-for="child in comment.children"
+                :comment="child"
+                v-bind:key="child.id"
+                class="pl-4"
+            />
+        </div>
     </div>
 </template>
 
