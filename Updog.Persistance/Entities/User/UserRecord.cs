@@ -19,7 +19,7 @@ namespace Updog.Persistance {
         /// <summary>
         /// Contact email (if any).
         /// </summary>
-        public string Email { get; set; } = "";
+        public string? Email { get; set; }
 
         /// <summary>
         /// Super secret hash.

@@ -5,7 +5,7 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters to perform an open find action.
     /// </summary>
-    public class FindParams : IParams {
+    public class FindParams : IParams, IPagable {
         #region Properties
         /// <summary>
         /// The user performing the find.

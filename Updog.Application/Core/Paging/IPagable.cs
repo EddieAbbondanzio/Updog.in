@@ -6,6 +6,6 @@ namespace Updog.Application.Paging {
         /// <summary>
         /// The pagination info.
         /// </summary>
-        PaginationInfo Pagination { get; }
+        PaginationInfo? Pagination { get; }
     }
 }

@@ -22,6 +22,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
+        [Validate(typeof(FindValidator))]
         protected override async Task<PagedResultSet<SpaceView>> HandleInput(FindParams input) {
             using (var connection = database.GetConnection()) {
                 ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(connection);

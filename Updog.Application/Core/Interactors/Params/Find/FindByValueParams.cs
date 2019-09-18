@@ -6,7 +6,7 @@ namespace Updog.Application {
     /// Parameters to perform a find action using a specific value.
     /// </summary>
     /// <typeparam name="TValue"></typeparam>
-    public class FindByValueParams<TValue> : IParams {
+    public class FindByValueParams<TValue> : IParams, IPagable {
         #region Properties
         /// <summary>
         /// The value to search by.

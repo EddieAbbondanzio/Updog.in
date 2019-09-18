@@ -5,7 +5,7 @@ namespace Updog.Application {
     /// <summary>
     /// Validator to find a resource via the user that created it..
     /// </summary>
-    internal sealed class FindByUserValidator : FluentValidatorAdapter<FindByValueParams<string>> {
+    internal sealed class FindByUserValidator : IPagableValidator<FindByValueParams<string>> {
         #region Constructor(s)
         public FindByUserValidator() {
             RuleFor(c => c.Value).NotNull().WithMessage("Username is required.");

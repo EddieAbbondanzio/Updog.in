@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Updog.Application.Paging;
+using Updog.Application.Validation;
 using Updog.Domain;
 
 namespace Updog.Application {
@@ -21,6 +22,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
+        [Validate(typeof(FindValidator))]
         protected override async Task<PagedResultSet<PostView>> HandleInput(FindParams input) {
             using (var connection = database.GetConnection()) {
                 IPostRepo postRepo = database.GetRepo<IPostRepo>(connection);
