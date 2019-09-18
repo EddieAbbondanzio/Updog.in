@@ -88,8 +88,8 @@ namespace Updog.Persistance {
         public async Task Add(Subscription entity) {
             await Connection.ExecuteAsync(
                 @"INSERT INTO Subscription 
-                        (Id, SpaceId, UserId) 
-                        VALUES(@Id, @SpaceId, @UserId)",
+                        (SpaceId, UserId) 
+                        VALUES(@SpaceId, @UserId)",
                 _mapper.Reverse(entity).Item1
             );
         }
@@ -101,7 +101,6 @@ namespace Updog.Persistance {
         public async Task Update(Subscription entity) {
             await Connection.ExecuteAsync(
                 @"UPDATE Subscription SET
-                        Id = @Id,
                         SpaceId = @SpaceId,
                         UserId = @UserId
                         WHERE Id = @Id",

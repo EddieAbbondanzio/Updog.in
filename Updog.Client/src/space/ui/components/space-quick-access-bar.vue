@@ -15,6 +15,9 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { SpaceFinderMixin } from '@/space';
 import SpaceLink from '@/space/ui/components/space-link.vue';
+import { getModule } from 'vuex-module-decorators';
+import { UserStore, UserLogin } from '../../../user';
+import { Store } from '../../../core';
 
 /**
  * Quick access bar to navigate default spaces, or subscribed spaces.
@@ -35,6 +38,10 @@ export default class SpaceQuickAccessBar extends SpaceFinderMixin {
     }
 
     public async created() {
+        Store.subscribe((mutation, state) => {
+            console.log(mutation);
+        });
+
         if (this.$isLoggedIn()) {
             await this.$findDefaultSpaces();
         } else {
