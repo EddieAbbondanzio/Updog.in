@@ -19,6 +19,15 @@ export class UserLoginMixin extends AuthenticatedMixin {
     }
 
     /**
+     * Re log in a user with an older token.
+     * @param authToken The auth token to authenticate.
+     */
+    public async $reloginUser(authToken: string): Promise<UserLogin> {
+        const userStore: UserStore = getModule(UserStore, this.$store);
+        return userStore.relogin(authToken);
+    }
+
+    /**
      * Log out the user.
      */
     public async $logoutUser(): Promise<void> {

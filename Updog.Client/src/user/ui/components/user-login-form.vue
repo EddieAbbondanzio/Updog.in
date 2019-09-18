@@ -45,6 +45,10 @@
             >{{ errors.first('loginPassword')}}</b-form-invalid-feedback>
         </b-form-group>
 
+        <b-form-group>
+            <b-form-checkbox v-model="rememberMe">Remember Me</b-form-checkbox>
+        </b-form-group>
+
         <b-form-group class="form-buttons pt-3">
             <b-button variant="primary" @click="submit">Login</b-button>
             <b-button variant="outline-primary" @click="reset">Reset</b-button>
@@ -64,6 +68,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { UserLoginMixin, UserCredentials, UserLogin } from '@/user';
 import { Form, HttpStatusCode } from '@/core';
+import Cookie from 'js-cookie';
 
 /**
  * Login form for logging in users via username / password.
@@ -85,6 +90,11 @@ export default class UserLoginForm extends UserLoginMixin implements Form<UserLo
      * Password entered by the user.
      */
     public password: string = '';
+
+    /**
+     * If the user info should be saved off.
+     */
+    public rememberMe: boolean = false;
 
     /**
      * If a failed login attempt occured.
@@ -132,6 +142,12 @@ export default class UserLoginForm extends UserLoginMixin implements Form<UserLo
             const login = await this.$loginUser(new UserCredentials(this.username, this.password));
 
             this.$emit('submit', login);
+
+            // Avenge me!
+            if (this.rememberMe) {
+                Cookie.set('auth', login.authToken, { secure: true });
+            }
+
             return login;
         } catch (error) {
             // Unauthorized return means login failed.

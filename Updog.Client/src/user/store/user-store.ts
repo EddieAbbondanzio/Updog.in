@@ -9,6 +9,7 @@ import { UserRegistration } from '../domain/user-registration';
 import { UserMutation } from './user-mutation';
 import { StoreName } from '@/core/store/store-name';
 import { UserUsernameAvailableChecker } from '../interactors/is-username-available/user-username-available-checker';
+import { UserReLoginInteractor } from '../interactors/relogin/user-relogin-interactor';
 
 /**
  * Vuex store module for managing user data.
@@ -73,6 +74,18 @@ export default class UserStore extends VuexModule {
     @Action({ rawError: true })
     public async login(userCreds: UserCredentials) {
         const login = await new UserLoginInteractor().handle(userCreds);
+        this.context.commit(UserMutation.SetLogin, login);
+
+        return login;
+    }
+
+    /**
+     * Re log in a user using an older auth token.
+     * @param authToken The auth token to authenticate.
+     */
+    @Action({ rawError: true })
+    public async relogin(authToken: string) {
+        const login = await new UserReLoginInteractor().handle(authToken);
         this.context.commit(UserMutation.SetLogin, login);
 
         return login;

@@ -16,7 +16,7 @@
             </h5>
             <span class="mx-1">|</span>
 
-            <b-button variant="link" class="pl-0" @click="$logoutUser()">Logout</b-button>
+            <b-button variant="link" class="pl-0" @click="onLogout">Logout</b-button>
         </div>
     </div>
 </template>
@@ -26,6 +26,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import UserLink from '@/user/ui/components/user-link.vue';
 import { AuthenticatedMixin } from '@/user';
 import { UserLoginMixin } from '../../mixins/user-login-mixin';
+import Cookie from 'js-cookie';
 
 /**
  * Component to handle logging in, and signing up new users.
@@ -36,5 +37,10 @@ import { UserLoginMixin } from '../../mixins/user-login-mixin';
         UserLink
     }
 })
-export default class UserWidget extends UserLoginMixin {}
+export default class UserWidget extends UserLoginMixin {
+    public async onLogout() {
+        Cookie.remove('auth');
+        await this.$logoutUser();
+    }
+}
 </script>

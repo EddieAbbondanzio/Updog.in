@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Updog.Domain;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Updog.Api {
     /// <summary>
@@ -13,11 +14,14 @@ namespace Updog.Api {
     public sealed class SessionController : ApiController {
         #region Fields
         private UserLoginInteractor loginUserInteractor;
+
+        private IUserViewMapper userViewMapper;
         #endregion
 
         #region Constructor(s)
-        public SessionController(UserLoginInteractor loginUserInteractor) {
+        public SessionController(UserLoginInteractor loginUserInteractor, IUserViewMapper userViewMapper) {
             this.loginUserInteractor = loginUserInteractor;
+            this.userViewMapper = userViewMapper;
         }
         #endregion
 
@@ -34,6 +38,21 @@ namespace Updog.Api {
                 login => Ok(login),
                 fail => BadRequest(fail)
             );
+        }
+
+        /// <summary>
+        /// Relogin using an auth token issued at an earlier date.
+        /// </summary>
+        [HttpPatch]
+        [Authorize]
+        public ActionResult ReLogin([FromHeader] string authorization) {
+            /*
+            * Dirty work is done by the auth filter.
+            * Down the road this can be tweaked to support rolling tokens...
+            */
+            UserView user = userViewMapper.Map(User!);
+
+            return Ok(new UserLogin(user, authorization.Split(" ")[1]));
         }
         #endregion
     }
