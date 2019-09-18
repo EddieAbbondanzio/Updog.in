@@ -2,9 +2,9 @@
     <div>
         <comment-create-form ref="commentCreateForm" @submit="onCommentCreate" />
 
-        <div v-if="$cachedComments != null">
+        <div v-if="$comments != null">
             <comment-summary
-                v-for="comment in $cachedComments"
+                v-for="comment in $comments"
                 :comment="comment"
                 v-bind:key="comment.id"
             />

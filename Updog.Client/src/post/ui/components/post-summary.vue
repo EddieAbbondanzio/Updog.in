@@ -26,10 +26,7 @@
 
                             <!-- Footer links -->
                             <div class="text-muted post-controls">
-                                <post-link
-                                    :post="post"
-                                    variant="dark"
-                                >{{ post.commentCount == 1 ? `1 comment` : `${post.commentCount} comments` }}</post-link>
+                                <comments-link :post="post" variant="dark" />
 
                                 <b-button
                                     variant="link"
@@ -83,6 +80,7 @@ import { PostUpdaterMixin, Post, PostUpdateParams, PostType } from '@/post';
 import PostLink from '@/post/ui/components/post-link.vue';
 import ExpandButton from '@/core/ui/components/expand-button.vue';
 import PostTimeStamp from '@/post/ui/components/post-time-stamp.vue';
+import CommentsLink from '@/comment/ui/components/comments-link.vue';
 
 /**
  * Summary of information about a post. Used on post lists, and post topic page.
@@ -97,7 +95,8 @@ import PostTimeStamp from '@/post/ui/components/post-time-stamp.vue';
         SpaceLink,
         PostLink,
         ExpandButton,
-        PostTimeStamp
+        PostTimeStamp,
+        CommentsLink
     }
 })
 export default class PostSummary extends PostUpdaterMixin {
