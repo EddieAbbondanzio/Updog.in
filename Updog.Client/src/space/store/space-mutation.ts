@@ -3,5 +3,6 @@
  */
 export enum SpaceMutation {
     SetSubscribed = 'setSubscribed',
-    SetDefault = 'setDefault'
+    SetDefault = 'setDefault',
+    ClearSubscribed = 'clearSubscribed'
 }

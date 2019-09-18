@@ -75,6 +75,7 @@ export default class UserStore extends VuexModule {
     public async login(userCreds: UserCredentials) {
         const login = await new UserLoginInteractor().handle(userCreds);
         this.context.commit(UserMutation.SetLogin, login);
+        this.context.dispatch('space/findSubscribedSpaces', {}, { root: true });
 
         return login;
     }
@@ -87,6 +88,7 @@ export default class UserStore extends VuexModule {
     public async relogin(authToken: string) {
         const login = await new UserReLoginInteractor().handle(authToken);
         this.context.commit(UserMutation.SetLogin, login);
+        this.context.dispatch('space/findSubscribedSpaces', {}, { root: true });
 
         return login;
     }
@@ -99,6 +101,7 @@ export default class UserStore extends VuexModule {
         this.context.commit(UserMutation.ClearLogin);
         this.context.commit('post/clearVotes', {}, { root: true });
         this.context.commit('comment/clearVotes', {}, { root: true });
+        this.context.commit('space/clearSubscribed', {}, { root: true });
     }
 
     /**

@@ -27,6 +27,11 @@ export default class SpaceStore extends VuexModule {
     }
 
     @Mutation
+    public [SpaceMutation.ClearSubscribed]() {
+        this.subscribed = [];
+    }
+
+    @Mutation
     public [SpaceMutation.SetDefault](spaces: Space[]) {
         this.default = spaces;
     }
