@@ -47,8 +47,8 @@
 
                 <!-- Post Body -->
                 <div v-if="isExpanded">
-                    <div v-if="!isEditting">{{ post.body }}</div>
-                    <div v-else>
+                    <div v-show="!isEditting">{{ post.body }}</div>
+                    <div v-show="isEditting">
                         <textarea
                             v-model.trim="edittedBody"
                             name="editPostBody"

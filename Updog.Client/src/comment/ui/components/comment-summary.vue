@@ -25,8 +25,8 @@
 
                 <!-- Body -->
                 <div v-if="isExpanded">
-                    <div v-if="!isEditing">{{ comment.body}}</div>
-                    <div v-else>
+                    <div v-show="!isEditing">{{ comment.body}}</div>
+                    <div v-show="isEditing">
                         <textarea
                             v-model="editedBody"
                             name="editCommentBody"
