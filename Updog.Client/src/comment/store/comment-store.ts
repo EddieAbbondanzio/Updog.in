@@ -15,13 +15,20 @@ import { CommentFinderByPostParams } from '../interactors/find-by-post/comment-f
 import Vue from 'vue';
 import { PostMutation } from '@/post/store/post-mutation';
 import { VoteOnCommentParams } from '@/vote/interactors/vote-on-comment/vote-on-comment-params';
-import { StoreName } from '@/core/store/store-name';
+import { StoreNamespace } from '@/core/store/store-namespace';
+import { CommentAction } from './comment-action';
+import { StoreUtils } from '@/core/store/store-utils';
 /**
  * Cache module for comments.
  */
-@Module({ namespaced: true, name: StoreName.Comment })
+@Module({ namespaced: true, name: StoreNamespace.Comment })
 export default class CommentStore extends VuexModule {
     public comments: Comment[] | null = null;
+
+    private incrementPostCommentCountMutation = StoreUtils.buildMutation(
+        StoreNamespace.Post,
+        PostMutation.IncrementCommentCount
+    );
 
     @Mutation
     public [CommentMutation.SetComments](comments: Comment[]) {
@@ -76,7 +83,7 @@ export default class CommentStore extends VuexModule {
      * @param id The comment's ID.
      */
     @Action
-    public async findById(id: number) {
+    public async [CommentAction.FindById](id: number) {
         return new CommentFinderById(this.context.rootGetters['user/authToken']).handle(id);
     }
 
@@ -85,7 +92,7 @@ export default class CommentStore extends VuexModule {
      * @param params The post info to look for.
      */
     @Action({ rawError: true })
-    public async findByPost(params: CommentFinderByPostParams) {
+    public async [CommentAction.FindByPost](params: CommentFinderByPostParams) {
         this.context.commit(CommentMutation.ClearComments);
         const comments = await new CommentFinderByPost(this.context.rootGetters['user/authToken']).handle(params);
         this.context.commit(CommentMutation.SetComments, comments);
@@ -98,7 +105,7 @@ export default class CommentStore extends VuexModule {
      * @param params Finder params..
      */
     @Action
-    public async findByUser(params: CommentFinderByUserParams) {
+    public async [CommentAction.FindByUser](params: CommentFinderByUserParams) {
         this.context.commit(CommentMutation.ClearComments);
         const comments = await new CommentFinderByUser(this.context.rootGetters['user/authToken']).handle(params);
         this.context.commit(CommentMutation.SetComments, comments);
@@ -111,11 +118,11 @@ export default class CommentStore extends VuexModule {
      * @param params The comment creation params.
      */
     @Action
-    public async create(params: CommentCreateParams) {
+    public async [CommentAction.Create](params: CommentCreateParams) {
         const c = await new CommentCreator(this.context.rootGetters['user/authToken']).handle(params);
         const all = [c, ...this.comments!];
         this.context.commit(CommentMutation.SetComments, all);
-        this.context.commit(`post/${PostMutation.IncrementCommentCount}`, params.postId, { root: true });
+        this.context.commit(this.incrementPostCommentCountMutation, params.postId, { root: true });
         return c;
     }
 
@@ -124,7 +131,7 @@ export default class CommentStore extends VuexModule {
      * @param params The comment update params.
      */
     @Action({ rawError: true })
-    public async update(params: CommentUpdateParams) {
+    public async [CommentAction.Update](params: CommentUpdateParams) {
         const updatedComment = await new CommentUpdater(this.context.rootGetters['user/authToken']).handle(params);
 
         // bleh

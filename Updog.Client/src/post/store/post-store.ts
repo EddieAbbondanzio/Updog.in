@@ -18,12 +18,13 @@ import { VoteDirection } from '@/vote/domain/vote-direction';
 import { VoteOnPostParams } from '@/vote/interactors/vote-on-post/vote-on-post-params';
 import { PostFindBySpaceParams } from '../interactors/find-by-space/post-find-by-space-params';
 import { PostFinderBySpace } from '../interactors/find-by-space/post-finder-by-space';
-import { StoreName } from '@/core/store/store-name';
+import { StoreNamespace } from '@/core/store/store-namespace';
+import { PostAction } from './post-action';
 
 /**
  * Module for posts
  */
-@Module({ namespaced: true, name: StoreName.Post })
+@Module({ namespaced: true, name: StoreNamespace.Post })
 export default class PostStore extends VuexModule {
     /**
      * The collection of cached posts.
@@ -74,7 +75,7 @@ export default class PostStore extends VuexModule {
      * @param params The post creation parameters.
      */
     @Action({ rawError: true })
-    public async create(params: PostCreateParams) {
+    public async [PostAction.Create](params: PostCreateParams) {
         return new PostCreator(this.context.rootGetters['user/authToken']).handle(params);
     }
 
@@ -83,7 +84,7 @@ export default class PostStore extends VuexModule {
      * @param params The post to update params.
      */
     @Action({ rawError: true })
-    public async update(params: PostUpdateParams) {
+    public async [PostAction.Update](params: PostUpdateParams) {
         return new PostUpdater(this.context.rootGetters['user/authToken']).handle(params);
     }
 
@@ -92,7 +93,7 @@ export default class PostStore extends VuexModule {
      * @param id The post to look for.
      */
     @Action({ rawError: true })
-    public async findById(id: number) {
+    public async [PostAction.FindById](id: number) {
         const post = await new PostFinderById(this.context.rootGetters['user/authToken']).handle(id);
         this.context.commit(PostMutation.SetPosts, new PagedResultSet([post], new PaginationInfo(0, 1, 1)));
 
@@ -104,7 +105,7 @@ export default class PostStore extends VuexModule {
      * @param paging The paging info.
      */
     @Action({ rawError: true })
-    public async findByNew(paging: PaginationParams) {
+    public async [PostAction.FindByNew](paging: PaginationParams) {
         this.context.commit(PostMutation.ClearPosts);
         const posts = await new PostFinderByNew(this.context.rootGetters['user/authToken']).handle(paging);
         this.context.commit(PostMutation.SetPosts, posts);
@@ -117,7 +118,7 @@ export default class PostStore extends VuexModule {
      * @param params The input parameters.
      */
     @Action({ rawError: true })
-    public async findByUser(params: PostFinderByUserParams) {
+    public async [PostAction.FindByUser](params: PostFinderByUserParams) {
         this.context.commit(PostMutation.ClearPosts);
         const posts = await new PostFinderByUser(this.context.rootGetters['user/authToken']).handle(params);
         this.context.commit(PostMutation.SetPosts, posts);
@@ -130,7 +131,7 @@ export default class PostStore extends VuexModule {
      * @param params The input params.
      */
     @Action({ rawError: true })
-    public async findBySpace(params: PostFindBySpaceParams) {
+    public async [PostAction.FindBySpace](params: PostFindBySpaceParams) {
         this.context.commit(PostMutation.ClearPosts);
         const posts = await new PostFinderBySpace(this.context.rootGetters['user/authToken']).handle(params);
         this.context.commit(PostMutation.SetPosts, posts);

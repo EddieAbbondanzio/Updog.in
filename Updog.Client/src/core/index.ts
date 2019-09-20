@@ -7,7 +7,7 @@ export { PaginationParams } from './pagination/pagination-params';
 export { default as Store } from './store/store';
 export { DateUtils } from './utils/date-utils';
 export { NumberUtils } from './utils/number-utils';
-export { StoreName } from './store/store-name';
+export { StoreNamespace as StoreName } from './store/store-namespace';
 export { ThemeVariant } from '@/core/ui/common/themeable/theme-variant';
 export { Themeable } from '@/core/ui/common/themeable/themeable';
 export { Size } from '@/core/ui/common/size';

@@ -4,12 +4,13 @@ import { SpaceMutation } from './space-mutation';
 import { SpaceFinderBySubscribed } from '../interactors/find-subscribed/space-finder-by-subscribed';
 import { SpaceFinderByDefault } from '../interactors/find-default/space-finder-by-default';
 import { SpaceFinderByName } from '../interactors/find-by-name/space-finder-by-name';
-import { StoreName } from '@/core/store/store-name';
+import { StoreNamespace } from '@/core/store/store-namespace';
+import { SpaceAction } from './space-action';
 
 /**
  * Module for space
  */
-@Module({ namespaced: true, name: StoreName.Space })
+@Module({ namespaced: true, name: StoreNamespace.Space })
 export default class SpaceStore extends VuexModule {
     /**
      * Cache of the subscribed spaces.
@@ -40,7 +41,7 @@ export default class SpaceStore extends VuexModule {
      * Find the subscribed spaces of the user.
      */
     @Action({ rawError: true })
-    public async findSubscribedSpaces() {
+    public async [SpaceAction.FindSubscribedSpaces]() {
         const spaces = await new SpaceFinderBySubscribed(this.context.rootGetters['user/authToken']).handle();
         this.context.commit(SpaceMutation.SetSubscribed, spaces);
 
@@ -51,7 +52,7 @@ export default class SpaceStore extends VuexModule {
      * Find the default spaces.
      */
     @Action({ rawError: true })
-    public async findDefaultSpaces() {
+    public async [SpaceAction.FindDefaultSpaces]() {
         const spaces = await new SpaceFinderByDefault(this.context.rootGetters['user/authToken']).handle();
         this.context.commit(SpaceMutation.SetDefault, spaces);
 
@@ -63,7 +64,7 @@ export default class SpaceStore extends VuexModule {
      * @param spaceName The name of the space to find.
      */
     @Action({ rawError: true })
-    public async findSpace(spaceName: string) {
+    public async [SpaceAction.FindSpace](spaceName: string) {
         return new SpaceFinderByName(this.context.rootGetters['user/authToken']).handle(spaceName);
     }
 }

@@ -1,4 +1,4 @@
-export enum StoreName {
+export enum StoreNamespace {
     Comment = 'comment',
     Post = 'post',
     Space = 'space',

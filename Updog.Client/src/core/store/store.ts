@@ -5,19 +5,21 @@ import PostStore from '@/post/store/post-store';
 import CommentStore from '@/comment/store/comment-store';
 import VoteStore from '@/vote/store/vote-store';
 import SpaceStore from '@/space/store/space-store';
-import { StoreName } from './store-name';
+import { StoreNamespace } from './store-namespace';
 
 Vue.use(Vuex);
 
 /**
  * Root store.
  */
-export default new Vuex.Store({
+const s = new Vuex.Store({
     modules: {
-        [StoreName.User]: UserStore,
-        [StoreName.Post]: PostStore,
-        [StoreName.Comment]: CommentStore,
-        [StoreName.Vote]: VoteStore,
-        [StoreName.Space]: SpaceStore
+        [StoreNamespace.User]: UserStore,
+        [StoreNamespace.Post]: PostStore,
+        [StoreNamespace.Comment]: CommentStore,
+        [StoreNamespace.Vote]: VoteStore,
+        [StoreNamespace.Space]: SpaceStore
     }
 });
+
+export default s;

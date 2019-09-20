@@ -7,20 +7,27 @@ import { CommentVoter } from '../interactors/vote-on-comment/comment-voter';
 import { PostMutation } from '@/post/store/post-mutation';
 import { CommentMutation } from '@/comment/store/comment-mutation';
 import { StoreName } from '@/core';
+import { VoteAction } from './vote-action';
+import { StoreNamespace } from '@/core/store/store-namespace';
+import { StoreUtils } from '@/core/store/store-utils';
 
 /**
  * Module to manage votes.
  */
-@Module({ namespaced: true, name: 'vote' })
+@Module({ namespaced: true, name: StoreNamespace.Vote })
 export default class VoteStore extends VuexModule {
+    private postVoteMutation = StoreUtils.buildMutation(StoreName.Post, PostMutation.Vote);
+    private commentVoteMutation = StoreUtils.buildMutation(StoreName.Comment, CommentMutation.Vote);
+
     /**
      * Vote on a post.
      * @param params The vote type to apply.
      */
     @Action({ rawError: true })
-    public async voteOnPost(params: VoteOnPostParams) {
+    public async [VoteAction.VoteOnPost](params: VoteOnPostParams) {
         const res = await new PostVoter(this.context.rootGetters['user/authToken']).handle(params);
-        this.context.commit(`${StoreName.Post}/${PostMutation.Vote}`, params, { root: true });
+
+        this.context.commit(this.postVoteMutation, params, { root: true });
 
         return res;
     }
@@ -30,9 +37,10 @@ export default class VoteStore extends VuexModule {
      * @param params The vote params..
      */
     @Action({ rawError: true })
-    public async voteOnComment(params: VoteOnCommentParams) {
+    public async [VoteAction.VoteOnComment](params: VoteOnCommentParams) {
         const res = await new CommentVoter(this.context.rootGetters['user/authToken']).handle(params);
-        this.context.commit(`${StoreName.Comment}/${CommentMutation.Vote}`, params, { root: true });
+
+        this.context.commit(this.commentVoteMutation, params, { root: true });
 
         return res;
     }
