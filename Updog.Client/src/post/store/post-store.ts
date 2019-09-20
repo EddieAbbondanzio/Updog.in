@@ -31,6 +31,10 @@ export default class PostStore extends VuexModule {
      */
     public posts: PagedResultSet<Post> | null = null;
 
+    get post() {
+        return this.posts![0];
+    }
+
     @Mutation
     public [PostMutation.SetPosts](posts: PagedResultSet<Post>) {
         this.posts = posts;
@@ -70,6 +74,18 @@ export default class PostStore extends VuexModule {
         }
     }
 
+    @Mutation
+    public [PostMutation.Edit](params: PostUpdateParams) {
+        const post = this.posts!.find(p => p.id === params.postId);
+
+        if (post == null) {
+            throw new Error(`No post with ${params.postId} to update.`);
+        }
+
+        post.body = params.body;
+        post.wasUpdated = true;
+    }
+
     /**
      * Create a new post.
      * @param params The post creation parameters.
@@ -85,7 +101,14 @@ export default class PostStore extends VuexModule {
      */
     @Action({ rawError: true })
     public async [PostAction.Update](params: PostUpdateParams) {
-        return new PostUpdater(this.context.rootGetters['user/authToken']).handle(params);
+        if (this.posts == null) {
+            throw new Error('Bad move Brochowski');
+        }
+
+        const p = await new PostUpdater(this.context.rootGetters['user/authToken']).handle(params);
+
+        this.context.commit(PostMutation.Edit, params);
+        return p;
     }
 
     /**
