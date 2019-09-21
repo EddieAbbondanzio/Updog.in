@@ -4,5 +4,6 @@ export enum PostAction {
     FindById = 'findById',
     FindByNew = 'findByNew',
     FindByUser = 'findByUser',
-    FindBySpace = 'findBySpace'
+    FindBySpace = 'findBySpace',
+    Delete = 'delete'
 }

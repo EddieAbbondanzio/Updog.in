@@ -30,4 +30,9 @@ export class PostUpdaterMixin extends AuthenticatedMixin {
         const postModule: PostModule = getModule(PostModule, this.$store);
         return postModule.update(request);
     }
+
+    public async $deletePost(post: Post) {
+        const postModule: PostModule = getModule(PostModule, this.$store);
+        return postModule.delete(post);
+    }
 }

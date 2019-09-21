@@ -20,6 +20,7 @@ import { PostFindBySpaceParams } from '../interactors/find-by-space/post-find-by
 import { PostFinderBySpace } from '../interactors/find-by-space/post-finder-by-space';
 import { StoreNamespace } from '@/core/store/store-namespace';
 import { PostAction } from './post-action';
+import { PostDeleter } from '../interactors/delete/post-deleter';
 
 /**
  * Module for posts
@@ -86,6 +87,24 @@ export default class PostStore extends VuexModule {
         post.wasUpdated = true;
     }
 
+    @Mutation
+    public [PostMutation.RemovePost](post: Post) {
+        if (this.posts == null) {
+            return;
+        }
+
+        // Gross!
+        const ps = this.posts.filter(p => p.id !== post.id);
+        this.posts = new PagedResultSet(
+            ps,
+            new PaginationInfo(
+                this.posts.pagination.pageNumber,
+                this.posts.pagination.pageSize,
+                this.posts.pagination.totalCount - 1
+            )
+        );
+    }
+
     /**
      * Create a new post.
      * @param params The post creation parameters.
@@ -108,6 +127,14 @@ export default class PostStore extends VuexModule {
         const p = await new PostUpdater(this.context.rootGetters['user/authToken']).handle(params);
 
         this.context.commit(PostMutation.Edit, params);
+        return p;
+    }
+
+    @Action({ rawError: true })
+    public async [PostAction.Delete](post: Post) {
+        const p = await new PostDeleter(this.context.rootGetters['user/authToken']).handle(post);
+
+        this.context.commit(PostMutation.RemovePost, p);
         return p;
     }
 

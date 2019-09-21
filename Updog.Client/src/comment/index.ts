@@ -10,6 +10,7 @@ export { CommentFinderByUserParams } from './interactors/find-by-user/comment-fi
 export { CommentFinderByUser } from './interactors/find-by-user/comment-finder-by-user';
 export { CommentUpdateParams } from './interactors/update/comment-update-params';
 export { CommentUpdater } from './interactors/update/comment-updater';
+export { CommentDeleter } from './interactors/delete/comment-deleter';
 export { CommentCreatorMixin } from './mixins/comment-creator-mixin';
 export { CommentFinderMixin } from './mixins/comment-finder-mixin';
 export { CommentUpdaterMixin } from './mixins/comment-updater-mixin';

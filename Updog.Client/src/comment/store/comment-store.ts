@@ -18,6 +18,7 @@ import { VoteOnCommentParams } from '@/vote/interactors/vote-on-comment/vote-on-
 import { StoreNamespace } from '@/core/store/store-namespace';
 import { CommentAction } from './comment-action';
 import { StoreUtils } from '@/core/store/store-utils';
+import { CommentDeleter } from '..';
 /**
  * Cache module for comments.
  */
@@ -76,6 +77,15 @@ export default class CommentStore extends VuexModule {
                 clearVotesHelper(c);
             }
         }
+    }
+
+    @Mutation
+    public [CommentMutation.RemoveComment](comment: Comment) {
+        if (this.comments == null) {
+            return;
+        }
+
+        this.comments = this.comments.filter(c => c.id !== comment.id);
     }
 
     /**
@@ -142,5 +152,9 @@ export default class CommentStore extends VuexModule {
         this.context.commit(CommentMutation.SetComments, newComments);
 
         return updatedComment;
+    }
+
+    public async [CommentAction.Delete](comment: Comment) {
+        const deletedComment = await new CommentDeleter(this.context.rootGetters['user/authToken']).handle(comment);
     }
 }

@@ -10,6 +10,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import Cookie from 'js-cookie';
 import { UserLoginMixin } from './user';
+import '@/core/plugins/vuetify';
 
 @Component({
     name: 'app'

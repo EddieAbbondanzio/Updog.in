@@ -3,5 +3,6 @@ export enum CommentAction {
     FindByPost = 'findByPost',
     FindByUser = 'findByUser',
     Create = 'create',
-    Update = 'update'
+    Update = 'update',
+    Delete = 'delete'
 }

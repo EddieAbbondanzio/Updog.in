@@ -1,6 +1,10 @@
 <template>
     <router-link :to="{name:'comments', params: { postId: post.id}}" :class="cssClass">
-        <slot>{{ post.commentCount == 1 ? `1 comment` : `${post.commentCount} comments` }}</slot>
+        <slot>
+            <span
+                class="text-sm"
+            >{{ post.commentCount == 1 ? `1 comment` : `${post.commentCount} comments` }}</span>
+        </slot>
     </router-link>
 </template>
 

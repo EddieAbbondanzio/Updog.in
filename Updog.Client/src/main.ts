@@ -8,6 +8,7 @@ import VeeVaidate from 'vee-validate';
 import store from '@/core/store/store';
 import MaterialIcon from '@/core/ui/components/material-icon.vue';
 import { capitalize } from './core/ui/filters/capitalize';
+import vuetify from './plugins/vuetify';
 
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
@@ -19,5 +20,6 @@ Vue.filter(capitalize.name, capitalize);
 const v = new Vue({
     router,
     store,
+    vuetify,
     render: h => h(App)
 }).$mount('#app');

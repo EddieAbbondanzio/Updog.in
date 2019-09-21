@@ -25,8 +25,8 @@
                             />
 
                             <!-- Footer links -->
-                            <div class="text-muted post-controls">
-                                <comments-link :post="post" variant="dark" />
+                            <div class="text-muted post-controls text-sm">
+                                <comments-link :post="post" variant="muted" />
 
                                 <b-button
                                     variant="link"
@@ -34,12 +34,18 @@
                                     @click="onEditPost"
                                     v-if="canEdit() && showEdit"
                                 >edit</b-button>
-                                <b-button
-                                    variant="link"
+                                <b-link
                                     class="text-muted px-1"
-                                    @click="onDeletePost"
+                                    @click.prevent="onDeletePost"
                                     v-if="canDelete() && showEdit"
-                                >delete</b-button>
+                                >
+                                    <span class="text-sm">delete</span>
+                                </b-link>
+                                <are-you-sure
+                                    v-if="isDeleting"
+                                    @yes="onDeleteConfirm"
+                                    @no="onDeleteCancel"
+                                />
                             </div>
                         </div>
                     </div>
@@ -81,6 +87,7 @@ import PostLink from '@/post/ui/components/post-link.vue';
 import PostExpandButton from '@/post/ui/components/post-expand-button.vue';
 import PostTimeStamp from '@/post/ui/components/post-time-stamp.vue';
 import CommentsLink from '@/comment/ui/components/comments-link.vue';
+import AreYouSure from '@/core/ui/components/are-you-sure.vue';
 
 /**
  * Summary of information about a post. Used on post lists, and post topic page.
@@ -96,7 +103,8 @@ import CommentsLink from '@/comment/ui/components/comments-link.vue';
         PostLink,
         PostExpandButton,
         PostTimeStamp,
-        CommentsLink
+        CommentsLink,
+        AreYouSure
     }
 })
 export default class PostSummary extends PostUpdaterMixin {
@@ -136,6 +144,8 @@ export default class PostSummary extends PostUpdaterMixin {
      * If the user is editting the post.
      */
     public isEditting: boolean = false;
+
+    public isDeleting: boolean = false;
 
     public edittedBody: string = '';
 
@@ -177,7 +187,7 @@ export default class PostSummary extends PostUpdaterMixin {
     }
 
     public onDeletePost() {
-        alert('reee');
+        this.isDeleting = true;
     }
 
     /**
@@ -199,6 +209,15 @@ export default class PostSummary extends PostUpdaterMixin {
      */
     protected canDelete(): boolean {
         return this.showEdit && this.isPostOwner();
+    }
+
+    protected async onDeleteConfirm() {
+        await this.$deletePost(this.post);
+        this.$router.push({ name: 'home' });
+    }
+
+    protected onDeleteCancel() {
+        this.isDeleting = false;
     }
 
     /**
