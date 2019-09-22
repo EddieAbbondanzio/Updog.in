@@ -35,7 +35,7 @@ namespace Updog.Api {
             var result = await loginUserInteractor.Handle(new UserCredentials(loginRequest.Username, loginRequest.Password));
 
             return result.Match<ActionResult>(
-                login => Ok(login),
+                login => login != null ? Ok(login) : Unauthorized("Invalid username and/or password") as ActionResult,
                 fail => BadRequest(fail)
             );
         }

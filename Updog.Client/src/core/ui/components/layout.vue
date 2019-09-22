@@ -8,7 +8,9 @@
                 </b-col>
                 <!-- Side bar on the right -->
                 <b-col md="4" lg="2" v-if="!noSideBar">
-                    <slot name="side-bar"></slot>
+                    <v-card>
+                        <slot name="side-bar"></slot>
+                    </v-card>
                 </b-col>
             </b-row>
         </b-container>

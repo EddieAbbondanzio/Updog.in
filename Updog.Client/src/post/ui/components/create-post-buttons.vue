@@ -1,15 +1,13 @@
 <template>
     <div>
-        <b-button
-            variant="outline-primary"
-            class="w-100 mb-2"
+        <v-btn
+            class="mb-3"
+            color="primary"
+            block
+            outlined
             @click="onClick(false)"
-        >Submit a new link post</b-button>
-        <b-button
-            variant="outline-primary"
-            class="w-100 mt-2 mb-3"
-            @click="onClick(true)"
-        >Submit a new text post</b-button>
+        >Submit a new link post</v-btn>
+        <v-btn color="primary" block outlined @click="onClick(true)">Submit a new text post</v-btn>
     </div>
 </template>
 
