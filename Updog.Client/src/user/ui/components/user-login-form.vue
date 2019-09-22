@@ -1,59 +1,41 @@
 <template>
-    <b-form class="bg-light border px-5 pt-5 pb-3 my-5">
+    <v-form class="bg-light border px-5 pt-5 pb-3 my-5">
         <div class="pb-3">
             <h1 class="pb-0 mb-0">Welcome Back!</h1>
-            <h5 class="text-muted">
+            <span class="grey--text subtitle-1">
                 Not a member?
                 <router-link to="/signup">Sign up.</router-link>
-            </h5>
+            </span>
         </div>
 
-        <b-alert
-            variant="danger"
-            :show="loginFailed"
-            dismissible
-            @dismissed="loginFailed = false"
-        >{{ serverErrorMessage}}</b-alert>
+        <v-alert type="error" v-model="loginFailed" dismissible>{{ serverErrorMessage}}</v-alert>
 
-        <b-form-group>
-            <b-form-input
-                type="text"
-                placeholder="Username"
-                v-model="username"
-                ref="loginUsernameTextbox"
-                name="loginUsername"
-                v-validate="'required'"
-                @keyup.enter="submit"
-            />
-            <b-form-invalid-feedback
-                class="d-block text-left"
-                :state="false"
-            >{{ errors.first('loginUsername')}}</b-form-invalid-feedback>
-        </b-form-group>
-        <b-form-group>
-            <b-form-input
-                type="password"
-                placeholder="Password"
-                v-model="password"
-                name="loginPassword"
-                v-validate="'required'"
-                @keyup.enter="submit"
-            />
-            <b-form-invalid-feedback
-                class="d-block text-left"
-                :state="false"
-            >{{ errors.first('loginPassword')}}</b-form-invalid-feedback>
-        </b-form-group>
+        <v-text-field
+            placeholder="Username"
+            v-model="username"
+            ref="loginUsernameTextbox"
+            name="loginUsername"
+            v-validate="'required'"
+            @keyup.enter="submit"
+            :error="errors.first('loginUsername') != null ? true : false"
+            :error-messages="errors.first('loginUsername')"
+        />
+        <v-text-field
+            type="password"
+            placeholder="Password"
+            v-model="password"
+            name="loginPassword"
+            v-validate="'required'"
+            @keyup.enter="submit"
+            :error="errors.first('loginPassword') != null ? true : false"
+            :error-messages="errors.first('loginPassword')"
+        />
 
-        <b-form-group>
-            <b-form-checkbox v-model="rememberMe">Remember Me</b-form-checkbox>
-        </b-form-group>
+        <v-switch v-model="rememberMe" label="Remember Me" />
 
-        <b-form-group class="form-buttons pt-3">
-            <b-button variant="primary" @click="submit">Login</b-button>
-            <b-button variant="outline-primary" @click="reset">Reset</b-button>
-        </b-form-group>
-    </b-form>
+        <v-btn class="mr-2" color="primary" @click="submit">Login</v-btn>
+        <v-btn class="ml-2" color="error" outlined @click="reset">Reset</v-btn>
+    </v-form>
 </template>
 
 <style scoped>
