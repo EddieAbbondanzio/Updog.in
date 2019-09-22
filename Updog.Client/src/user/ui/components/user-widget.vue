@@ -21,7 +21,16 @@
                 </template>
 
                 <v-list>
-                    <!-- <v-list-item-group> -->
+                    <div class="px-4 pt-4 d-flex flex-column align-center">
+                        <v-avatar color="primary" size="48" :title="username" class="mb-2 d-block">
+                            <v-icon color="white">person</v-icon>
+                        </v-avatar>
+                        <span class="title d-block">{{username}}</span>
+                        <span class="subtitle">{{ karma }}&nbsp;karma</span>
+                    </div>
+                    <v-divider />
+
+                    <!-- Options -->
                     <v-list-item
                         :link="true"
                         :to="{ name: 'user', params: { username: username}}"
@@ -38,7 +47,6 @@
                             <v-icon color="red">exit_to_app</v-icon>
                         </v-list-item-icon>
                     </v-list-item>
-                    <!-- </v-list-item-group> -->
                 </v-list>
             </v-menu>
         </div>
@@ -51,6 +59,7 @@ import UserLink from '@/user/ui/components/user-link.vue';
 import { AuthenticatedMixin } from '@/user';
 import { UserLoginMixin } from '../../mixins/user-login-mixin';
 import Cookie from 'js-cookie';
+import { NumberUtils } from '../../../core';
 
 /**
  * Component to handle logging in, and signing up new users.
@@ -64,6 +73,10 @@ import Cookie from 'js-cookie';
 export default class UserWidget extends UserLoginMixin {
     get username() {
         return this.$login!.user.username;
+    }
+
+    get karma() {
+        return NumberUtils.formatWithK(this.$login!.user.postKarma + this.$login!.user.commentKarma);
     }
 
     public async onLogout() {
