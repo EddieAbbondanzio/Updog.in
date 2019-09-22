@@ -1,6 +1,6 @@
 <template>
     <comments-link v-if="isTextPost" :post="post">{{post.title}}</comments-link>
-    <a :href="post.body" :class="cssClass" v-else>
+    <a :href="post.body" v-else>
         <slot>{{ post.title}}</slot>
     </a>
 </template>
@@ -9,7 +9,6 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Post } from '../../domain/post';
 import { PostType } from '../../domain/post-type';
-import { ThemeableText } from '../../../core/ui/common/themeable/themeable-text';
 import CommentsLink from '@/comment/ui/components/comments-link.vue';
 
 /**
@@ -22,7 +21,7 @@ import CommentsLink from '@/comment/ui/components/comments-link.vue';
         CommentsLink
     }
 })
-export default class PostLink extends ThemeableText {
+export default class PostLink extends Vue {
     /**
      * The post to link to.
      */

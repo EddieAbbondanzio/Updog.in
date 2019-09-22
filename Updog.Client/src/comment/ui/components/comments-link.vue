@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="{name:'comments', params: { postId: post.id}}" :class="cssClass">
+    <router-link :to="{name:'comments', params: { postId: post.id}}">
         <slot>
             <span
                 class="text-sm"
@@ -11,7 +11,6 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Comment } from '../../domain/comment';
-import { ThemeableText } from '@/core/ui/common/themeable/themeable-text';
 import { Post } from '../../../post';
 
 /**
@@ -20,7 +19,7 @@ import { Post } from '../../../post';
 @Component({
     name: 'comment-link'
 })
-export default class CommentsLink extends ThemeableText {
+export default class CommentsLink extends Vue {
     /**
      * The post to link to.
      */

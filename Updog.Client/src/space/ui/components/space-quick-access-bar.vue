@@ -1,13 +1,13 @@
 <template>
-    <div class="bg-dark space-quick-access px-3 text-sm">
-        <router-link :to="{name: 'home'}" class="text-200">HOME</router-link>
-        <span class="px-3 text-500">|</span>
+    <v-system-bar app dark>
+        <router-link :to="{name: 'home'}" class="font-weight-bold white--text">HOME</router-link>
+        <span class="px-3">|</span>
         <div class="d-inline-block" v-for="(space, index) in spaces" v-bind:key="space.id">
             <space-link :space="space" variant="light">{{ space.name | capitalize }}</space-link>
 
-            <span class="px-1 text-500" v-if="index + 1 < spaces.length">-</span>
+            <span class="px-1 font-weight-bold" v-if="index + 1 < spaces.length">-</span>
         </div>
-    </div>
+    </v-system-bar>
 </template>
 
 

@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import App from './app.vue';
 import router from './router';
 import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -16,6 +15,12 @@ Vue.use(VeeVaidate);
 Vue.component(MaterialIcon.name, MaterialIcon);
 
 Vue.filter(capitalize.name, capitalize);
+
+/*
+ * Hack. Don't friggen even think about moving this lest ye
+ * desires a rawModule is undefined error.
+ */
+import App from './app.vue';
 
 const v = new Vue({
     router,
