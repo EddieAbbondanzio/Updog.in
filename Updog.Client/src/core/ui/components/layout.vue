@@ -1,9 +1,5 @@
 <template>
     <div>
-        <header>
-            <app-bar />
-        </header>
-
         <b-container fluid>
             <b-row class="py-3">
                 <!-- Main Content of the page -->

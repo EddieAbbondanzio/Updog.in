@@ -1,5 +1,7 @@
 <template>
     <v-app-bar app color="grey lighten-4">
+        <v-app-bar-nav-icon @click="$emit('toggleNav')" />
+
         <router-link :to="{name: 'home'}">
             <img src="@/assets/logo.png" class="nav-icon" />
         </router-link>

@@ -1,23 +1,13 @@
 <template>
     <v-app>
         <space-quick-access-bar />
-
-        <v-app-bar app>
-            <v-toolbar-title class="headline text-uppercase">
-                <span>Vuetify</span>
-                <span class="font-weight-light">MATERIAL DESIGN</span>
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn text href="https://github.com/vuetifyjs/vuetify/releases/latest" target="_blank">
-                <span class="mr-2">Latest Release</span>
-            </v-btn>
-        </v-app-bar>
+        <app-bar @toggleNav="onToggleNav" />
+        <nav-drawer :show="showNav" />
 
         <v-content>
             <router-view />
         </v-content>
     </v-app>
-    <!-- <router-view /> -->
 </template>
 
 <style lang="scss">
@@ -31,14 +21,20 @@ import { Component, Vue } from 'vue-property-decorator';
 import Cookie from 'js-cookie';
 import { UserLoginMixin } from './user';
 import SpaceQuickAccessBar from '@/space/ui/components/space-quick-access-bar.vue';
+import AppBar from '@/core/ui/components/app-bar.vue';
+import NavDrawer from '@/core/ui/components/nav-drawer.vue';
 
 @Component({
     name: 'app',
     components: {
-        SpaceQuickAccessBar
+        SpaceQuickAccessBar,
+        AppBar,
+        NavDrawer
     }
 })
 export default class App extends UserLoginMixin {
+    public showNav: boolean = false;
+
     public async created() {
         const authToken = Cookie.get('auth');
 
@@ -49,6 +45,10 @@ export default class App extends UserLoginMixin {
                 // Magic!
             }
         }
+    }
+
+    public onToggleNav() {
+        this.showNav = !this.showNav;
     }
 }
 </script>

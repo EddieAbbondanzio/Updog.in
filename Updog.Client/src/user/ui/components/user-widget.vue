@@ -26,7 +26,7 @@
                             <v-icon color="white">person</v-icon>
                         </v-avatar>
                         <span class="title d-block">{{username}}</span>
-                        <span class="subtitle">{{ karma }}&nbsp;karma</span>
+                        <span class="subtitle" :title="karmaDetails">{{ karma }}&nbsp;karma</span>
                     </div>
                     <v-divider />
 
@@ -77,6 +77,12 @@ export default class UserWidget extends UserLoginMixin {
 
     get karma() {
         return NumberUtils.formatWithK(this.$login!.user.postKarma + this.$login!.user.commentKarma);
+    }
+
+    get karmaDetails() {
+        return `${NumberUtils.formatWithK(this.$login!.user.postKarma)} post karma \n${NumberUtils.formatWithK(
+            this.$login!.user.commentKarma
+        )} comment karma`;
     }
 
     public async onLogout() {
