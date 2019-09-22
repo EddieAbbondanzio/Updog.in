@@ -1,5 +1,5 @@
 <template>
-    <b-form class="bg-light border px-5 pt-5 pb-3 my-5">
+    <v-form class="bg-light border px-5 pt-5 pb-3 my-5">
         <div class="pb-3">
             <h1 class="pb-0 mb-0">Sign Up</h1>
             <h5 class="text-muted">
@@ -7,71 +7,51 @@
                 <router-link to="/login">Sign in.</router-link>
             </h5>
         </div>
-        <b-form-group>
-            <b-form-input
-                type="text"
-                placeholder="Username"
-                v-model="username"
-                ref="registerUsernameTextbox"
-                name="registerUsername"
-                v-validate="'required|min:4|isUnique'"
-                v-b-popover.hover.focus.right="'Username must be at least 4 characters'"
-            />
-            <b-form-invalid-feedback
-                class="d-block"
-                :state="false"
-            >{{ errors.first('registerUsername')}}</b-form-invalid-feedback>
-        </b-form-group>
-        <b-form-group>
-            <b-form-input
-                type="email"
-                placeholder="Email"
-                v-model="email"
-                name="registerEmail"
-                v-validate="'email'"
-            />
-            <b-form-invalid-feedback
-                class="d-block"
-                :state="false"
-            >{{ errors.first('registerEmail')}}</b-form-invalid-feedback>
-        </b-form-group>
-        <b-form-group class="d-none">
-            <b-form-input type="text" v-model="honey" placeholder="Name" />
-        </b-form-group>
-        <b-form-group>
-            <b-form-input
-                type="password"
-                placeholder="Password"
-                v-model="password"
-                ref="registerPassword"
-                name="registerPassword"
-                v-validate="'required'"
-                v-b-popover.hover.focus.right="'Password must be at least 8 characters'"
-            />
-            <b-form-invalid-feedback
-                class="d-block"
-                :state="false"
-            >{{ errors.first('registerPassword')}}</b-form-invalid-feedback>
-        </b-form-group>
-        <b-form-group>
-            <b-form-input
-                type="password"
-                placeholder="Confirm password"
-                v-model="confirmPassword"
-                name="registerConfirmPassword"
-                v-validate="'required|confirmed:registerPassword'"
-            />
-            <b-form-invalid-feedback
-                class="d-block"
-                :state="false"
-            >{{ errors.first('registerConfirmPassword')}}</b-form-invalid-feedback>
-        </b-form-group>
+        <v-text-field
+            placeholder="Username"
+            v-model="username"
+            ref="registerUsernameTextbox"
+            name="registerUsername"
+            v-validate="'required|min:4|isUnique'"
+            title="Username must be at least 4 characters"
+            :error="errors.first('registerUsername') != null"
+            :error-messages="errors.first('registerUsername')"
+        />
+        <v-text-field
+            type="email"
+            placeholder="Email"
+            v-model="email"
+            name="registerEmail"
+            v-validate="'email'"
+            :error="errors.first('registerEmail') != null"
+            :error-messages="errors.first('registerEmail')"
+        />
 
-        <b-form-group class="form-buttons pt-3">
-            <b-button variant="primary" @click="submit">Sign Up</b-button>
-            <b-button variant="outline-primary" @click="reset">Reset</b-button>
-        </b-form-group>
-    </b-form>
+        <v-text-field v-show="false" type="text" v-model="honey" placeholder="Name" />
+        <v-text-field
+            type="password"
+            placeholder="Password must be at least 8 characters."
+            v-model="password"
+            ref="registerPassword"
+            name="registerPassword"
+            v-validate="'required'"
+            :error="errors.first('registerPassword') != null"
+            :error-messages="errors.first('registerPassword')"
+        />
+
+        <v-text-field
+            type="password"
+            placeholder="Confirm password"
+            v-model="confirmPassword"
+            name="registerConfirmPassword"
+            v-validate="'required|confirmed:registerPassword'"
+            :error="errors.first('registerConfirmPassword') != null"
+            :error-messages="errors.first('registerConfirmPassword')"
+        />
+
+        <v-btn class="mr-2" color="primary" @click="submit">Sign Up</v-btn>
+        <v-btn class="ml-2" color="error" outlined @click="reset">Reset</v-btn>
+    </v-form>
 </template>
 
 <style scoped>
