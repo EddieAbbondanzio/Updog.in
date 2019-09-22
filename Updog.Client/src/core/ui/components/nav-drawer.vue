@@ -3,7 +3,7 @@
         <template v-slot:prepend>
             <v-list-item class="p-3">
                 <v-list-item-content class="d-flex flex-column align-center">
-                    <v-list-item-title class="display-1">My Spaces</v-list-item-title>
+                    <v-list-item-title class="headline">My Spaces</v-list-item-title>
 
                     <v-text-field
                         placeholder="Type to filter"

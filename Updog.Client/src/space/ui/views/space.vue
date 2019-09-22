@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import { SpaceViewerMixin } from '@/space/mixins/space-viewer-mixin';
 import Layout from '@/core/ui/components/layout.vue';
 import { Space as SpaceEntity } from '@/space/domain/space';
@@ -47,6 +47,12 @@ export default class Space extends SpaceViewerMixin {
     public posts: PagedResultSet<Post> | null = null;
 
     public async created() {
+        this.space = await this.$findSpace(this.$route.params.spaceName);
+        this.posts = await this.$findPosts(new PostFindBySpaceParams(this.space.name, new PaginationParams(0, 20)));
+    }
+
+    @Watch('$route')
+    public async watchRoute() {
         this.space = await this.$findSpace(this.$route.params.spaceName);
         this.posts = await this.$findPosts(new PostFindBySpaceParams(this.space.name, new PaginationParams(0, 20)));
     }
