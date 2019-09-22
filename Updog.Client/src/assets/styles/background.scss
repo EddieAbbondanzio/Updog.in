@@ -1,5 +1,0 @@
-@import '../../../node_modules/bootstrap/scss/bootstrap';
-
-@each $color, $value in $grays {
-    @include bg-variant('.bg-#{$color}', $value);
-}

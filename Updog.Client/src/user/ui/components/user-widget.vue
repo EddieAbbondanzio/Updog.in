@@ -1,22 +1,46 @@
 <template>
     <div class="ml-auto">
         <div v-if="$login == null">
-            <b-button variant="primary" :to="{ name:'login' }" class="mr-2">Log In</b-button>
-            <b-button variant="outline-primary" :to="{ name: 'signup' }" class="ml-2">Sign Up</b-button>
+            <v-btn color="primary" :to="{ name:'login' }" class="mr-2">Log In</v-btn>
+            <v-btn color="primary" outlined :to="{ name: 'signup' }" class="ml-2">Sign Up</v-btn>
         </div>
-        <div class="d-flex align-items-center flex-row" v-else>
-            <material-icon
-                icon="person"
-                variant="dark"
-                class="border border-dark rounded mr-2"
-                size="md"
-            />
-            <h5 class="d-inline-block my-0">
-                <user-link :user="$login.user" />
-            </h5>
-            <span class="mx-1">|</span>
+        <div v-else>
+            <v-menu bottom left>
+                <template v-slot:activator="{ on }">
+                    <v-btn color="normal" text v-on="on" large>
+                        <div class="d-flex align-center">
+                            <v-avatar color="primary" size="36" :title="username" class="mr-2">
+                                <v-icon color="white">person</v-icon>
+                            </v-avatar>
 
-            <b-button variant="link" class="pl-0" @click="onLogout">Logout</b-button>
+                            <span class="title text-none">{{ username}}</span>
+
+                            <v-icon color="grey darken-3" x-large>arrow_drop_down</v-icon>
+                        </div>
+                    </v-btn>
+                </template>
+
+                <v-list>
+                    <!-- <v-list-item-group> -->
+                    <v-list-item
+                        :link="true"
+                        :to="{ name: 'user', params: { username: username}}"
+                        class="text-decoration-none"
+                    >
+                        <v-list-item-title>Profile</v-list-item-title>
+                        <v-list-item-icon>
+                            <v-icon>person</v-icon>
+                        </v-list-item-icon>
+                    </v-list-item>
+                    <v-list-item :link="true" class="text-decoration-none">
+                        <v-list-item-title>Logout</v-list-item-title>
+                        <v-list-item-icon>
+                            <v-icon color="red">exit_to_app</v-icon>
+                        </v-list-item-icon>
+                    </v-list-item>
+                    <!-- </v-list-item-group> -->
+                </v-list>
+            </v-menu>
         </div>
     </div>
 </template>
@@ -38,6 +62,10 @@ import Cookie from 'js-cookie';
     }
 })
 export default class UserWidget extends UserLoginMixin {
+    get username() {
+        return this.$login!.user.username;
+    }
+
     public async onLogout() {
         Cookie.remove('auth');
         await this.$logoutUser();

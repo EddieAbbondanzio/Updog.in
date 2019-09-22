@@ -1,5 +1,7 @@
 <template>
-    <router-link :to="{ name: 'user', params: { username: user.username}}">{{ formattedName }}</router-link>
+    <router-link :to="{ name: 'user', params: { username: user.username}}">
+        <slot>{{ formattedName }}</slot>
+    </router-link>
 </template>
 
 <script lang="ts">

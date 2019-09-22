@@ -1,7 +1,7 @@
 <template>
     <div>
         <header>
-            <nav-bar />
+            <app-bar />
         </header>
 
         <b-container fluid>
@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import NavBar from '@/core/ui/components/nav-bar.vue';
+import AppBar from '@/core/ui/components/app-bar.vue';
 
 /**
  * Page layout for the site.
@@ -33,7 +33,7 @@ import NavBar from '@/core/ui/components/nav-bar.vue';
 @Component({
     name: 'layout',
     components: {
-        NavBar
+        AppBar
     }
 })
 export default class Layout extends Vue {

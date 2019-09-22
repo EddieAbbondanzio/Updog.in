@@ -17,7 +17,7 @@ Vue.component(MaterialIcon.name, MaterialIcon);
 Vue.filter(capitalize.name, capitalize);
 
 /*
- * Hack. Don't friggen even think about moving this lest ye
+ * Hack. Don't friggen even think about moving this, lest ye
  * desires a rawModule is undefined error.
  */
 import App from './app.vue';
