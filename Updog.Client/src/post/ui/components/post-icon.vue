@@ -1,16 +1,7 @@
 <template>
-    <div class="d-flex flex-column justify-content-center px-2">
-        <div
-            class="border rounded-circle d-flex flex-column justify-content-center bg-secondary"
-            style="padding: 12px;"
-        >
-            <material-icon
-                :icon="isTextPost ? 'message' : 'link'"
-                variant="light"
-                style="font-size: 32px!important;"
-            />
-        </div>
-    </div>
+    <v-avatar color="grey darken-2" size="48">
+        <v-icon dark medium>{{ isTextPost ? 'message' : 'link'}}</v-icon>
+    </v-avatar>
 </template>
 
 <script lang="ts">

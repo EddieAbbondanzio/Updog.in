@@ -1,11 +1,7 @@
 <template>
-    <b-button @click="onClick" variant="link" class="px-0 py-0">
-        <material-icon
-            :icon="expanded ? 'remove' : 'add_box'"
-            variant="muted"
-            style="font-size: 36px;"
-        />
-    </b-button>
+    <v-btn @click.native.stop="onClick" text icon>
+        <v-icon size="36">{{expanded ? 'remove' : 'add_box'}}</v-icon>
+    </v-btn>
 </template>
 
 <script lang="ts">

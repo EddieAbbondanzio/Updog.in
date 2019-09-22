@@ -1,24 +1,10 @@
 <template>
     <div class="d-inline-block">
-        <div class="d-flex flex-row">
-            <span class="text-danger">Are you sure?&nbsp;</span>
-            <b-button
-                variant="link"
-                class="m-0 p-0 d-flex"
-                @click="$emit('yes')"
-                style="border-width: 0px!important; height: 21px!important;"
-            >
-                <span class="text-sm text-muted">yes</span>
-            </b-button>
+        <div class="d-flex flex-row grey--text text--darken-3">
+            <span class="error--text">Are you sure?&nbsp;</span>
+            <a class="grey--text text--darken-3" href="#" @click.prevent="$emit('yes')">yes</a>
             <span>&nbsp;/&nbsp;</span>
-            <b-button
-                variant="link"
-                class="m-0 p-0 d-flex"
-                @click="$emit('no')"
-                style="border-width: 0px!important; height: 21px!important;"
-            >
-                <span class="text-sm text-muted">no</span>
-            </b-button>
+            <a class="grey--text text--darken-3" href="#" @click.prevent="$emit('no')">no</a>
         </div>
     </div>
 </template>

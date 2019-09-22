@@ -2,7 +2,7 @@
     <router-link :to="{name:'comments', params: { postId: post.id}}">
         <slot>
             <span
-                class="text-sm"
+                class="caption grey--text text--darken-3"
             >{{ post.commentCount == 1 ? `1 comment` : `${post.commentCount} comments` }}</span>
         </slot>
     </router-link>

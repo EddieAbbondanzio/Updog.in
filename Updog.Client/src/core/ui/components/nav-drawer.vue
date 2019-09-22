@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer app :value="show">
+    <v-navigation-drawer app temporary :value="show">
         <template v-slot:prepend>
             <v-list-item class="p-3">
                 <v-list-item-content class="d-flex flex-column align-center">

@@ -1,12 +1,7 @@
 <template>
     <layout>
         <template>
-            <post-summary
-                v-for="post in posts"
-                v-bind:key="post.id"
-                :post="post"
-                :showSpace="false"
-            />
+            <post-summary-list :posts="posts" />
         </template>
         <template slot="side-bar">
             <div class="bg-light border p-3" v-if="space != null">
@@ -25,7 +20,7 @@ import { SpaceViewerMixin } from '@/space/mixins/space-viewer-mixin';
 import Layout from '@/core/ui/components/layout.vue';
 import { Space as SpaceEntity } from '@/space/domain/space';
 import SpaceLink from '@/space/ui/components/space-link.vue';
-import PostSummary from '@/post/ui/components/post-summary.vue';
+import PostSummaryList from '@/post/ui/components/post-summary-list.vue';
 import { Post } from '@/post/domain/post';
 import { PagedResultSet, PaginationParams } from '@/core';
 import { PostFindBySpaceParams } from '@/post';
@@ -38,7 +33,7 @@ import { PostFindBySpaceParams } from '@/post';
     components: {
         Layout,
         SpaceLink,
-        PostSummary
+        PostSummaryList
     }
 })
 export default class Space extends SpaceViewerMixin {
@@ -47,12 +42,15 @@ export default class Space extends SpaceViewerMixin {
     public posts: PagedResultSet<Post> | null = null;
 
     public async created() {
-        this.space = await this.$findSpace(this.$route.params.spaceName);
-        this.posts = await this.$findPosts(new PostFindBySpaceParams(this.space.name, new PaginationParams(0, 20)));
+        this.refreshPosts();
     }
 
     @Watch('$route')
     public async watchRoute() {
+        this.refreshPosts();
+    }
+
+    private async refreshPosts() {
         this.space = await this.$findSpace(this.$route.params.spaceName);
         this.posts = await this.$findPosts(new PostFindBySpaceParams(this.space.name, new PaginationParams(0, 20)));
     }

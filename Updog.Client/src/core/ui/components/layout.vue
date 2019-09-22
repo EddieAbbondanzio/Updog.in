@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-container fluid>
-            <b-row class="py-3">
+            <b-row class="pt-1">
                 <!-- Main Content of the page -->
                 <b-col :md="noSideBar ? 12 : 8" :lg="noSideBar ? 12 : 10">
                     <slot></slot>

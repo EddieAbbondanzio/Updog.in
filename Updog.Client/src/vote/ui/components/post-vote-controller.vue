@@ -1,20 +1,14 @@
 <template>
-    <div class="d-flex flex-column justify-content-center">
-        <b-button variant="link" @click="upvote()" class="p-0 m-0 vote-arrow">
-            <material-icon icon="keyboard_arrow_up" variant="muted" :class="{ upvoted: isUpvoted}" />
-        </b-button>
-        <div
-            class="d-flex flex-row justify-content-center text-center font-weight-bold text-muted text-md"
-        >
+    <div class="d-flex flex-column justify-center">
+        <v-btn @click.native.stop="upvote" text icon>
+            <v-icon size="32" :class="{ upvoted: isUpvoted}">keyboard_arrow_up</v-icon>
+        </v-btn>
+        <div class="d-flex flex-row justify-center text-center font-weight-bold text-muted text-md">
             <span :class="{ upvoted: isUpvoted, downvoted: isDownvoted}">{{ karma }}</span>
         </div>
-        <b-button variant="link" @click="downvote()" class="p-0 m-0 vote-arrow">
-            <material-icon
-                icon="keyboard_arrow_down"
-                variant="muted"
-                :class="{downvoted: isDownvoted}"
-            />
-        </b-button>
+        <v-btn @click.native.stop="downvote" text icon>
+            <v-icon size="32" :class="{ downvoted: isDownvoted}">keyboard_arrow_down</v-icon>
+        </v-btn>
     </div>
 </template>
 

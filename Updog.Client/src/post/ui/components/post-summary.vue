@@ -1,77 +1,74 @@
 <template>
-    <div class="bg-light border mb-2 px-3 py-1">
-        <div class="d-flex flex-row">
-            <!-- Vote Arrows -->
-            <post-vote-controller :post="post" />
+    <v-card class="p-2 mb-2 d-flex flex-row">
+        <div class="d-flex align-self-start align-center">
+            <post-vote-controller :post="post" class="mr-2" />
+            <post-icon :post="post" class="mr-2" />
+        </div>
 
-            <post-icon :post="post" />
-
+        <div class="flex-grow-1">
             <div>
                 <!-- Post Title -->
-                <div>
-                    <post-link :post="post" />
+                <post-link :post="post" />
 
-                    <div class="d-flex flex-row">
-                        <!-- Expand / Collapse -->
-                        <div v-if="showToggle">
-                            <post-expand-button @toggle="isExpanded = !isExpanded" />
-                        </div>
-
-                        <div class="d-flex flex-column text-sm">
-                            <post-time-stamp
-                                :post="post"
-                                class="text-muted"
-                                :showSpace="showSpace"
-                            />
-
-                            <!-- Footer links -->
-                            <div class="text-muted post-controls text-sm">
-                                <comments-link :post="post" variant="muted" />
-
-                                <b-button
-                                    variant="link"
-                                    class="text-muted px-1"
-                                    @click="onEditPost"
-                                    v-if="canEdit() && showEdit"
-                                >edit</b-button>
-                                <b-link
-                                    class="text-muted px-1"
-                                    @click.prevent="onDeletePost"
-                                    v-if="canDelete() && showEdit"
-                                >
-                                    <span class="text-sm">delete</span>
-                                </b-link>
-                                <are-you-sure
-                                    v-if="isDeleting"
-                                    @yes="onDeleteConfirm"
-                                    @no="onDeleteCancel"
-                                />
-                            </div>
-                        </div>
+                <div class="d-flex flex-row">
+                    <!-- Expand / Collapse -->
+                    <div v-if="showToggle && isTextPost()">
+                        <post-expand-button @toggle="isExpanded = !isExpanded" />
                     </div>
-                </div>
 
-                <!-- Post Body -->
-                <div v-if="isExpanded">
-                    <div v-show="!isEditting">{{ post.body }}</div>
-                    <div v-show="isEditting">
-                        <textarea
-                            v-model.trim="edittedBody"
-                            name="editPostBody"
-                            v-validate="'required|max:10000'"
+                    <div class="d-flex flex-column text-sm">
+                        <post-time-stamp
+                            :post="post"
+                            class="grey--text text--darken-1 caption"
+                            :showSpace="showSpace"
                         />
-                        <b-form-invalid-feedback
-                            class="d-block"
-                            :state="false"
-                        >{{ errors.first('editPostBody')}}</b-form-invalid-feedback>
 
-                        <b-button variant="primary" @click="onEdittedPost">Save</b-button>
-                        <b-button variant="primary-outline" @click="onEditCancel">Cancel</b-button>
+                        <!-- Footer links -->
+                        <div class="muted--text post-controls caption">
+                            <comments-link :post="post" variant="muted" />&nbsp;
+                            <a
+                                href="#"
+                                class="grey--text text--darken-3"
+                                @click.prevent="onEditPost"
+                                v-if="canEdit() && showEdit"
+                            >edit</a>&nbsp;
+                            <a
+                                href="#"
+                                class="grey--text text--darken-3"
+                                @click.prevent="onDeletePost"
+                                v-if="canDelete() && showEdit"
+                            >delete</a>&nbsp;
+                            <are-you-sure
+                                v-if="isDeleting"
+                                @yes="onDeleteConfirm"
+                                @no="onDeleteCancel"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Post Body -->
+            <v-expand-transition>
+                <div v-show="isExpanded">
+                    <div v-show="!isEditting">{{ post.body }}</div>
+                    <div v-show="isEditting">
+                        <v-textarea
+                            class="pb-3"
+                            v-model.trim="edittedBody"
+                            name="editPostBody"
+                            v-validate="'required|max:10000'"
+                            :error="errors.first('editPostBody') != null ? true : false"
+                            :error-messages="errors.first('editPostBody')"
+                        />
+
+                        <v-btn class="mr-2" color="primary" @click="onEdittedPost">Save</v-btn>
+                        <v-btn class="ml-2" color="primary" outlined @click="onEditCancel">Cancel</v-btn>
+                    </div>
+                </div>
+            </v-expand-transition>
         </div>
-    </div>
+    </v-card>
 </template>
 
 <script lang="ts">
