@@ -127,6 +127,7 @@ export default class UserStore extends VuexModule {
     public async [UserAction.Register](userReg: UserRegistration) {
         const login = await new UserRegisterInteractor().handle(userReg);
         this.context.commit(UserMutation.SetLogin, login);
+        this.context.dispatch(this.findSubscribedSpacesAction, {}, { root: true });
 
         return login;
     }

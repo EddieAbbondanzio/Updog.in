@@ -27,8 +27,6 @@ import { UserRegistration } from '@/user';
 export default class SignUp extends Vue {
     public async onRegister(userLogin: UserLogin) {
         this.$router.push({ name: 'home' });
-
-        // EventBus.emit('login', userLogin);
     }
 }
 </script>
