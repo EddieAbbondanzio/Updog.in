@@ -29,12 +29,12 @@ import { Store } from '../../../core';
     }
 })
 export default class SpaceQuickAccessBar extends SpaceFinderMixin {
+    /**
+     * Get the spaces to display in alphabetical order.
+     */
     get spaces() {
-        if (this.$isLoggedIn()) {
-            return this.$subscribedSpaces;
-        } else {
-            return this.$defaultSpaces;
-        }
+        const spaces = this.$isLoggedIn() ? this.$subscribedSpaces : this.$defaultSpaces;
+        return spaces.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1));
     }
 
     public async created() {

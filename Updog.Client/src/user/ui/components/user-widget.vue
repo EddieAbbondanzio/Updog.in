@@ -32,7 +32,7 @@
                             <v-icon>person</v-icon>
                         </v-list-item-icon>
                     </v-list-item>
-                    <v-list-item :link="true" class="text-decoration-none">
+                    <v-list-item :link="true" class="text-decoration-none" @click="onLogout">
                         <v-list-item-title>Logout</v-list-item-title>
                         <v-list-item-icon>
                             <v-icon color="red">exit_to_app</v-icon>
