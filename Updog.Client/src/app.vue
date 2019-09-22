@@ -1,6 +1,7 @@
 <template>
     <v-app>
         <space-quick-access-bar />
+
         <v-app-bar app>
             <v-toolbar-title class="headline text-uppercase">
                 <span>Vuetify</span>
