@@ -4,17 +4,16 @@
         <div class="d-flex flex-row">
             <div>
                 <comment-vote-controller :comment="comment" v-if="isExpanded" />
-                <div style="width: 24px;" v-else>&nbsp;</div>
             </div>
 
-            <div>
+            <div class="flex-grow-1">
                 <!-- Header -->
                 <div class="d-flex flex-row align-items-center">
                     <comment-expand-button @toggle="onExpand" />&nbsp;
                     <user-link :user="comment.user" />&nbsp;
                     <span
                         class="text-muted pr-1"
-                    >{{ comment.karma}} {{comment.karma === 1 ? 'upvote' : 'upvotes'}}</span>
+                    >{{ comment.karma}} {{comment.karma === 1 ? 'point' : 'points'}}</span>
 
                     <time-stamp
                         :date="comment.creationDate"
@@ -27,41 +26,38 @@
                 <div v-if="isExpanded">
                     <div v-show="!isEditing">{{ comment.body}}</div>
                     <div v-show="isEditing">
-                        <textarea
+                        <v-textarea
                             v-model="editedBody"
                             name="editCommentBody"
                             v-validate="'required|max:10000'"
+                            :error="errors.first('editCommentBody') != null"
+                            :error-messages="errors.first('editCommentBody')"
                         />
-                        <b-form-invalid-feedback
-                            class="d-block"
-                            :state="false"
-                        >{{ errors.first('editCommentBody')}}</b-form-invalid-feedback>
-                        <b-button variant="primary" @click="onEditSave">Save</b-button>
-                        <b-button variant="outline-primary" @click="onEditCancel">Cancel</b-button>
+                        <v-btn color="primary" @click="onEditSave">Save</v-btn>
+                        <v-btn color="primary" outlined @click="onEditCancel">Cancel</v-btn>
                     </div>
 
                     <!-- Actions -->
                     <div class="d-flex flex-row">
                         <!-- Permalink -->
-                        <b-button
-                            variant="link"
-                            class="text-secondary pl-0 pr-1"
+                        <router-link
+                            class="secondary--text pl-0 pr-1"
                             :to="{name: 'comment', params: { commentId: comment.id}}"
-                        >permalink</b-button>
+                        >permalink</router-link>
 
-                        <b-button
-                            variant="link"
-                            class="text-secondary pl-0 pr-1"
+                        <a
+                            href="#"
+                            class="secondary--text pl-0 pr-1"
                             v-if="canEdit()"
-                            @click="onEditClick"
-                        >edit</b-button>
+                            @click.prevent="onEditClick"
+                        >edit</a>
 
                         <!-- Reply -->
-                        <b-button
-                            variant="link"
-                            class="text-secondary pl-0 pr-1"
-                            @click="onReplyClick"
-                        >reply</b-button>
+                        <a
+                            href="#"
+                            class="secondary--text pl-0 pr-1"
+                            @click.prevent="onReplyClick"
+                        >reply</a>
                     </div>
 
                     <!-- Reply Box -->

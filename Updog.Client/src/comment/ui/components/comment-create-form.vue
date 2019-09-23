@@ -1,22 +1,24 @@
 <template>
-    <b-form class="comment-create-form">
-        <b-form-group>
-            <b-form-textarea
-                class="mb-3"
-                v-model="comment"
-                width="480"
-                name="commentCreateTextArea"
-                v-validate="`required|max:${getMaxLength()}`"
-            />
-            <b-form-invalid-feedback
-                class="d-block"
-                :state="false"
-            >{{ errors.first('commentCreateTextArea')}}</b-form-invalid-feedback>
-        </b-form-group>
-        <b-button variant="primary" @click="onSubmit">Submit</b-button>
-    </b-form>
+    <v-form class="comment-create-form">
+        <v-textarea
+            label="Type your comment"
+            class="mb-3"
+            v-model="comment"
+            width="480"
+            name="commentCreateTextArea"
+            v-validate="`required|max:${getMaxLength()}`"
+            :error="errors.first('commentCreateTextArea') != null"
+            :error-messages="errors.first('commentCreateTextArea')"
+        />
+        <v-btn color="primary" @click="onSubmit">Submit</v-btn>
+    </v-form>
 </template>
 
+<style scoped>
+.comment-create-form {
+    max-width: 720px;
+}
+</style>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';

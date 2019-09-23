@@ -1,12 +1,12 @@
 <template>
     <layout noSideBar="true">
-        <b-container>
-            <b-row>
-                <b-col md="8" lg="6" offset-md="2" offset-lg="3">
+        <v-row align="center" justify="center">
+            <v-col cols="12" sm="8" md="4">
+                <v-card>
                     <user-register-form @register="onRegister" />
-                </b-col>
-            </b-row>
-        </b-container>
+                </v-card>
+            </v-col>
+        </v-row>
     </layout>
 </template>
 

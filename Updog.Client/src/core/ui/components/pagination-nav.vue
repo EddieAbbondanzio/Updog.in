@@ -1,23 +1,23 @@
 <template>
     <div class="d-flex flex-row">
-        <b-button
-            variant="outline-dark"
+        <v-btn
+            outlined
             class="d-flex flex-row align-self-center mr-1"
             v-if="pagination.hasPreviousPage()"
             @click="$emit('previous')"
         >
             Previous
-            <material-icon icon="navigate_before" variant="dark" />
-        </b-button>
-        <b-button
-            variant="outline-dark"
+            <v-icon color="grey darken-3">navigate_before</v-icon>
+        </v-btn>
+        <v-btn
+            outlined
             class="d-flex flex-row align-self-center ml-1"
             v-if="pagination.hasNextPage()"
             @click="$emit('next')"
         >
             Next
-            <material-icon icon="navigate_next" variant="dark" />
-        </b-button>
+            <v-icon color="grey darken-3">navigate_next</v-icon>
+        </v-btn>
     </div>
 </template>
 
@@ -25,9 +25,9 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { PaginationInfo } from '@/core';
 @Component({
-    name: 'pagination-navigation'
+    name: 'pagination-nav'
 })
-export default class PaginationNavigation extends Vue {
+export default class PaginationNav extends Vue {
     /**
      * The pagination info to work with.
      */

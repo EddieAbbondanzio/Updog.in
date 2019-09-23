@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="{name:'comments', params: { postId: post.id}}">
+    <router-link :to="{name:'comments', params: { postId: post.id, spaceName: post.space.name}}">
         <slot>
             <span
                 class="caption grey--text text--darken-3"
@@ -17,7 +17,7 @@ import { Post } from '../../../post';
  * Link to a post's comments.
  */
 @Component({
-    name: 'comment-link'
+    name: 'comments-link'
 })
 export default class CommentsLink extends Vue {
     /**

@@ -26,7 +26,7 @@ import { Post } from '@/post';
     }
 })
 export default class UserPostList extends PostFinderMixin {
-    public static DEFAULT_POST_PAGE_SIZE = 1;
+    public static DEFAULT_POST_PAGE_SIZE = 10;
 
     /**
      * The user to retrieve posts for.

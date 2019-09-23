@@ -5,9 +5,9 @@
             <pagination-nav :pagination="$posts.pagination" @previous="onPrevious" @next="onNext" />
         </template>
         <template slot="side-bar">
-            <div class="bg-light border p-3">
+            <v-card class="pa-3">
                 <create-post-buttons />
-            </div>
+            </v-card>
         </template>
     </layout>
 </template>

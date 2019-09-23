@@ -1,24 +1,10 @@
 <template>
-    <layout>
-        <template>
-            <div v-if="isLoaded">
-                <post-summary :post="$posts[0]" :showEdit="true" :showToggle="false" expand="true" />
+    <div v-if="isLoaded">
+        <post-summary :post="$posts[0]" :showEdit="true" :showToggle="false" expand="true" />
 
-                <!-- Comments! -->
-                <router-view></router-view>
-            </div>
-        </template>
-
-        <!-- Side Bar -->
-        <template slot="side-bar">
-            <create-post-buttons />
-
-            <div v-if="isLoaded">
-                <post-vote-bar :post="$posts[0]" />
-            </div>
-        </template>
-        <template slot="footer">FOOTER!</template>
-    </layout>
+        <!-- Comments! -->
+        <router-view></router-view>
+    </div>
 </template>
 
 <script lang="ts">
@@ -33,7 +19,6 @@ import { Post as PostEntity } from '@/post';
 import CommentSummary from '@/comment/ui/components/comment-summary.vue';
 import { User } from '@/user';
 import PaginationNav from '@/core/ui/components/pagination-nav.vue';
-import PostVoteBar from '@/vote/ui/components/post-vote-bar.vue';
 import { PostFinderMixin } from '@/post';
 
 /**
@@ -41,12 +26,7 @@ import { PostFinderMixin } from '@/post';
  */
 @Component({
     components: {
-        CreatePostButtons,
-        Layout,
-        PostSummary,
-        CommentSummary,
-        PaginationNav,
-        PostVoteBar
+        PostSummary
     }
 })
 export default class Post extends PostFinderMixin {

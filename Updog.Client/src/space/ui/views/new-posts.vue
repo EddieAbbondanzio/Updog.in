@@ -1,19 +1,5 @@
 <template>
-    <layout>
-        <template>
-            <router-view>
-                <post-summary-list :posts="posts" />
-            </router-view>
-        </template>
-        <template slot="side-bar">
-            <v-card v-if="space != null" class="pa-3">
-                <space-link :space="space" class="title primary--text" />
-                <p class="subtitle-1">{{ space.description }}</p>
-
-                <create-post-buttons />
-            </v-card>
-        </template>
-    </layout>
+    <post-summary-list :posts="posts" />
 </template>
 
 <script lang="ts">
@@ -26,7 +12,6 @@ import PostSummaryList from '@/post/ui/components/post-summary-list.vue';
 import { Post } from '@/post/domain/post';
 import { PagedResultSet, PaginationParams } from '@/core';
 import { PostFindBySpaceParams } from '@/post';
-import CreatePostButtons from '@/post/ui/components/create-post-buttons.vue';
 
 /**
  * Page to view a space and it's posts.
@@ -34,10 +19,7 @@ import CreatePostButtons from '@/post/ui/components/create-post-buttons.vue';
 @Component({
     name: 'space',
     components: {
-        Layout,
-        SpaceLink,
-        PostSummaryList,
-        CreatePostButtons
+        PostSummaryList
     }
 })
 export default class Space extends SpaceViewerMixin {

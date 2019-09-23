@@ -1,84 +1,65 @@
 <template>
-    <b-form class="bg-light p-3 border">
-        <b-tabs
-            v-model="activeTab"
-            class="post-submit-form"
-            content-class="m-3"
-            @input="onTabChange"
-        >
-            <b-tab title="Link">
-                <b-form-group>
-                    <b-form-input
-                        type="text"
-                        id="link-title-textbox"
-                        placeholder="Title"
-                        v-model.trim="linkTitle"
-                        name="linkTitle"
-                        v-validate="'required|max:300'"
-                        data-vv-scope="createLinkPost"
-                    />
-                    <b-form-invalid-feedback
-                        class="d-block"
-                        :state="false"
-                    >{{ errors.first('createLinkPost.linkTitle')}}</b-form-invalid-feedback>
-                </b-form-group>
-                <b-form-group>
-                    <b-form-input
-                        type="text"
-                        id="link-body-textbox"
-                        placeholder="URL"
-                        v-model.trim="linkUrl"
-                        name="linkUrl"
-                        v-validate="'required|url'"
-                        data-vv-scope="createLinkPost"
-                    />
-                    <b-form-invalid-feedback
-                        class="d-block"
-                        :state="false"
-                    >{{ errors.first('createLinkPost.linkUrl')}}</b-form-invalid-feedback>
-                </b-form-group>
-            </b-tab>
-            <b-tab title="Text">
-                <b-form-group>
-                    <b-form-input
-                        type="text"
-                        id="text-title-textbox"
-                        placeholder="Title"
-                        v-model.trim="textTitle"
-                        name="textTitle"
-                        v-validate="'required|max:300'"
-                        data-vv-scope="createTextPost"
-                    />
-                    <b-form-invalid-feedback
-                        class="d-block"
-                        :state="false"
-                    >{{ errors.first('createTextPost.textTitle')}}</b-form-invalid-feedback>
-                </b-form-group>
-                <b-form-group>
-                    <b-form-textarea
-                        id="text-body-textarea"
-                        placeholder="Body"
-                        v-model.trim="textBody"
-                        name="textBody"
-                        v-validate="'required|max:10000'"
-                        data-vv-scope="createTextPost"
-                        v-on:keyup="onTextBodyKeyUp"
-                        v-on:blur="onTextBodyKeyUp"
-                    />
-                    <div
-                        class="text-muted"
-                    >{{ textBodyCharactersRemaining == 1 ? '1 character remaining' : ` ${textBodyCharactersRemaining.toLocaleString()} characters remaining`}}</div>
-                    <b-form-invalid-feedback
-                        class="d-block"
-                        :state="false"
-                    >{{ errors.first('createTextPost.textBody')}}</b-form-invalid-feedback>
-                </b-form-group>
-            </b-tab>
-        </b-tabs>
+    <v-form>
+        <v-card>
+            <v-tabs v-model="activeTab" class="mb-3">
+                <v-tab>Link</v-tab>
+                <v-tab>Text</v-tab>
+            </v-tabs>
+        </v-card>
 
-        <b-button variant="primary" class="mr-2" @click="onSubmit">Submit</b-button>
-        <b-button variant="outline-danger" type="reset" class="ml-2" @click="onReset">Reset</b-button>
-    </b-form>
+        <v-tabs-items v-model="activeTab">
+            <v-tab-item>
+                <v-text-field
+                    id="link-title-textbox"
+                    placeholder="Title"
+                    v-model.trim="linkTitle"
+                    name="linkTitle"
+                    v-validate="'required|max:300'"
+                    data-vv-scope="createLinkPost"
+                    :error="errors.first('createLinkPost.linkTitle') != null"
+                    :error-messages="errors.first('createLinkPost.linkTitle')"
+                />
+                <v-text-field
+                    type="text"
+                    id="link-body-textbox"
+                    placeholder="URL"
+                    v-model.trim="linkUrl"
+                    name="linkUrl"
+                    v-validate="'required|url'"
+                    data-vv-scope="createLinkPost"
+                    :error="errors.first('createLinkPost.linkUrl') != null"
+                    :error-messages="errors.first('createLinkPost.linkUrl')"
+                />
+            </v-tab-item>
+            <v-tab-item>
+                <v-text-field
+                    id="text-title-textbox"
+                    placeholder="Title"
+                    v-model.trim="textTitle"
+                    name="textTitle"
+                    v-validate="'required|max:300'"
+                    data-vv-scope="createTextPost"
+                    :error="errors.first('createTextPost.textTitle') != null"
+                    :error-messages="errors.first('createTextPost.textTitle')"
+                />
+                <v-textarea
+                    id="text-body-textarea"
+                    placeholder="Body"
+                    v-model.trim="textBody"
+                    name="textBody"
+                    v-validate="'required|max:10000'"
+                    data-vv-scope="createTextPost"
+                    v-on:keyup="onTextBodyKeyUp"
+                    v-on:blur="onTextBodyKeyUp"
+                    :error="errors.first('createTextPost.textBody') != null"
+                    :error-messages="errors.first('createTextPost.textBody')"
+                />
+            </v-tab-item>
+        </v-tabs-items>
+
+        <v-btn color="primary" class="mr-2" @click="onSubmit">Submit</v-btn>
+        <v-btn color="error" outlined type="reset" class="ml-2" @click="onReset">Reset</v-btn>
+    </v-form>
 </template>
 
 <style scoped>

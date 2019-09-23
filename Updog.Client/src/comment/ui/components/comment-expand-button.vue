@@ -1,8 +1,8 @@
 <template>
-    <b-button @click="onClick" variant="link" class="px-0 py-0 text-decoration-none">
-        <span v-if="expanded" class="text-muted">[&nbsp;-&nbsp;]</span>
-        <span v-else class="text-muted">[&nbsp;+&nbsp;]</span>
-    </b-button>
+    <a href="#" @click.prevent="onClick" class="px-0 py-0 text-decoration-none">
+        <span v-if="expanded" class="grey--text">[&nbsp;-&nbsp;]</span>
+        <span v-else class="grey--text">[&nbsp;+&nbsp;]</span>
+    </a>
 </template>
 
 <script lang="ts">

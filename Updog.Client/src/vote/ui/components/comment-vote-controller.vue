@@ -1,24 +1,20 @@
 <template>
     <div class="d-flex flex-column justify-content-top">
-        <b-button variant="link" @click="upvote()" class="p-0 m-0 vote-arrow">
-            <material-icon
-                icon="keyboard_arrow_up"
-                variant="muted"
-                :class="{ upvoted: isUpvoted}"
-                color="red"
-            />
-        </b-button>
-        <b-button variant="link" @click="downvote()" class="p-0 m-0 vote-arrow">
-            <material-icon
-                icon="keyboard_arrow_down"
-                variant="muted"
-                :class="{downvoted: isDownvoted}"
-            />
-        </b-button>
+        <v-btn icon @click="upvote()" class="vote-arrow">
+            <v-icon :class="{ upvoted: isUpvoted}">keyboard_arrow_up</v-icon>
+        </v-btn>
+        <v-btn icon @click="downvote()" class="vote-arrow">
+            <v-icon :class="{downvoted: isDownvoted}">keyboard_arrow_down</v-icon>
+        </v-btn>
     </div>
 </template>
 
 <style scoped>
+.v-btn:hover:before,
+.v-btn:focus:before {
+    color: transparent !important;
+}
+
 .vote-arrow {
     height: 24px;
 }

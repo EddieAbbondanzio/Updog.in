@@ -15,7 +15,7 @@
 </style>
 
 <script lang="ts">
-import '@/core/plugins/vuetify';
+import './plugins/vuetify';
 
 import { Component, Vue } from 'vue-property-decorator';
 import Cookie from 'js-cookie';

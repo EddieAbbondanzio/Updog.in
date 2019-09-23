@@ -130,8 +130,12 @@ export default class CommentStore extends VuexModule {
     @Action
     public async [CommentAction.Create](params: CommentCreateParams) {
         const c = await new CommentCreator(this.context.rootGetters['user/authToken']).handle(params);
-        const all = [c, ...this.comments!];
-        this.context.commit(CommentMutation.SetComments, all);
+
+        if (params.parentId === 0) {
+            const all = [c, ...this.comments!];
+            this.context.commit(CommentMutation.SetComments, all);
+        }
+
         this.context.commit(this.incrementPostCommentCountMutation, params.postId, { root: true });
         return c;
     }

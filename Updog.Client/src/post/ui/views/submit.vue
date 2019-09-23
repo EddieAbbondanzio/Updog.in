@@ -3,8 +3,6 @@
         <template>
             <create-post-form @submit="onSubmit" />
         </template>
-        <!-- <template slot="side-bar">SIDE BAR</template> -->
-        <!-- <template slot="footer">FOOTER!</template> -->
     </layout>
 </template>
 

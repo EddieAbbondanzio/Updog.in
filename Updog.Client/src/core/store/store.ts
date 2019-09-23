@@ -6,7 +6,7 @@ import CommentStore from '@/comment/store/comment-store';
 import VoteStore from '@/vote/store/vote-store';
 import SpaceStore from '@/space/store/space-store';
 import { StoreNamespace } from './store-namespace';
-import '@/core/plugins/vuex';
+import '@/plugins/vuex';
 
 /**
  * Root store.

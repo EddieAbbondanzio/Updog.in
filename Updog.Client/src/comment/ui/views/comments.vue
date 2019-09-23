@@ -1,15 +1,14 @@
 <template>
-    <div>
-        <comment-create-form ref="commentCreateForm" @submit="onCommentCreate" />
+    <v-card class="mt-6 pa-3" v-if="$comments != null">
+        <!-- Header -->
+        <div class="mb-5">
+            <span class="title">All&nbsp;{{commentCount}}</span>
 
-        <div v-if="$comments != null">
-            <comment-summary
-                v-for="comment in $comments"
-                :comment="comment"
-                v-bind:key="comment.id"
-            />
+            <comment-create-form ref="commentCreateForm" @submit="onCommentCreate" />
         </div>
-    </div>
+
+        <comment-summary v-for="comment in $comments" :comment="comment" v-bind:key="comment.id" />
+    </v-card>
 </template>
 
 <script lang="ts">
@@ -32,6 +31,14 @@ import { CommentCreatorMixin, CommentFinderMixin, CommentFinderByPostParams, Com
 export default class Comments extends Mixins(CommentFinderMixin, CommentCreatorMixin) {
     get postId() {
         return Number.parseInt(this.$route.params.postId, 10);
+    }
+
+    get commentCount() {
+        if (this.$comments == null) {
+            return '0 comments';
+        }
+
+        return this.$comments.length === 1 ? '1 comment' : `${this.$comments.length} comments`;
     }
 
     /**

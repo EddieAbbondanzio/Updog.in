@@ -1,14 +1,21 @@
 <template>
     <layout>
         <template v-if="user != null">
-            <b-tabs content-class="p-3">
-                <b-tab title="Posts">
+            <v-card>
+                <v-tabs v-model="activeTab" class="mb-3">
+                    <v-tab>Posts</v-tab>
+                    <v-tab>Comments</v-tab>
+                </v-tabs>
+            </v-card>
+
+            <v-tabs-items v-model="activeTab">
+                <v-tab-item>
                     <user-post-list :user="user" />
-                </b-tab>
-                <b-tab title="Comments">
+                </v-tab-item>
+                <v-tab-item>
                     <user-comment-list :user="user" />
-                </b-tab>
-            </b-tabs>
+                </v-tab-item>
+            </v-tabs-items>
         </template>
         <template slot="side-bar">
             <div class="bg-light border p-3">
@@ -51,6 +58,8 @@ export default class User extends UserFinderMixin {
      * The ID of the user.
      */
     public user: UserEntity | null = null;
+
+    public activeTab: number = 0;
 
     public async created() {
         const username = this.$route.params.username;

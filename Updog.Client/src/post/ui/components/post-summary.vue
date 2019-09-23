@@ -1,5 +1,5 @@
 <template>
-    <v-card class="p-2 mb-2 d-flex flex-row">
+    <v-card class="pa-2 mb-2 d-flex flex-row">
         <div class="d-flex align-self-start align-center">
             <post-vote-controller :post="post" class="mr-2" />
             <post-icon :post="post" class="mr-2" />

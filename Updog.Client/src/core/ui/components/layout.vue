@@ -1,19 +1,17 @@
 <template>
     <div>
-        <b-container fluid>
-            <b-row class="pt-1">
+        <v-container>
+            <v-row class="px-3">
                 <!-- Main Content of the page -->
-                <b-col :md="noSideBar ? 12 : 8" :lg="noSideBar ? 12 : 10">
+                <v-col :sm="noSideBar ? 12 : 8" :md="noSideBar ? 12 : 8" :lg="noSideBar ? 12 : 10">
                     <slot></slot>
-                </b-col>
+                </v-col>
                 <!-- Side bar on the right -->
-                <b-col md="4" lg="2" v-if="!noSideBar">
-                    <v-card>
-                        <slot name="side-bar"></slot>
-                    </v-card>
-                </b-col>
-            </b-row>
-        </b-container>
+                <v-col class="pl-3" sm="4" md="4" lg="2" v-if="!noSideBar">
+                    <slot name="side-bar"></slot>
+                </v-col>
+            </v-row>
+        </v-container>
 
         <footer>
             <slot name="footer"></slot>

@@ -1,5 +1,4 @@
 import { RouteConfig } from 'vue-router';
-import { commentRoutes } from '@/comment/ui/routes';
 
 export const postRoutes: RouteConfig[] = [
     {
@@ -9,12 +8,5 @@ export const postRoutes: RouteConfig[] = [
         meta: {
             authenticate: true
         }
-    },
-    {
-        name: 'post',
-        path: '/post/:postId',
-        component: () => import('@/post/ui/views/post.vue'),
-        redirect: '/',
-        children: commentRoutes
     }
 ];
