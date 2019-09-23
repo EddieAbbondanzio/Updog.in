@@ -1,7 +1,8 @@
 <template>
-    <div>
+    <div v-if="posts != null && posts.length > 0">
         <post-summary v-for="post in posts" :post="post" v-bind:key="post.id" />
     </div>
+    <div v-else class="error--text">There's nothing here!</div>
 </template>
 
 <script lang="ts">

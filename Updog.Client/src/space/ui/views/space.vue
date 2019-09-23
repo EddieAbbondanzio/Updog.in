@@ -1,9 +1,7 @@
 <template>
     <layout>
         <template>
-            <router-view>
-                <post-summary-list :posts="posts" />
-            </router-view>
+            <router-view></router-view>
         </template>
         <template slot="side-bar">
             <v-card v-if="space != null" class="pa-3">
@@ -43,20 +41,8 @@ import CreatePostButtons from '@/post/ui/components/create-post-buttons.vue';
 export default class Space extends SpaceViewerMixin {
     public space: SpaceEntity | null = null;
 
-    public posts: PagedResultSet<Post> | null = null;
-
     public async created() {
-        this.refreshPosts();
-    }
-
-    @Watch('$route')
-    public async watchRoute() {
-        this.refreshPosts();
-    }
-
-    private async refreshPosts() {
         this.space = await this.$findSpace(this.$route.params.spaceName);
-        this.posts = await this.$findPosts(new PostFindBySpaceParams(this.space.name, new PaginationParams(0, 20)));
     }
 }
 </script>
