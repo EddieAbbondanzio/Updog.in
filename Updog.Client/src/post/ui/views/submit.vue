@@ -21,7 +21,7 @@ import { PostCreateParams, PostCreatorMixin } from '@/post';
 export default class Submit extends PostCreatorMixin {
     public async onSubmit(creationParams: PostCreateParams) {
         const result = await this.$createPost(creationParams);
-        this.$redirectToPost(result.id);
+        this.$redirectToPost(result.space.name, result.id);
     }
 }
 </script>

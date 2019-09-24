@@ -53,7 +53,7 @@
                         <!-- Reply -->
                         <a
                             href="#"
-                            class="secondary--text pl-0 pr-1"
+                            class="primary--text pl-0 pr-1"
                             @click.prevent="onReplyClick"
                         >reply</a>
                     </div>

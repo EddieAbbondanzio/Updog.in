@@ -22,7 +22,6 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Layout from '@/core/ui/components/layout.vue';
-import PostSummary from '@/post/ui/components/post-summary.vue';
 import PaginationNav from '@/core/ui/components/pagination-nav.vue';
 import { getModule } from 'vuex-module-decorators';
 import { PaginationParams } from '@/core';
@@ -37,7 +36,6 @@ import PostSummaryList from '@/post/ui/components/post-summary-list.vue';
     components: {
         CreatePostButtons,
         Layout,
-        PostSummary,
         PaginationNav,
         PostSummaryList
     }

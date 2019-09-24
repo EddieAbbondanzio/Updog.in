@@ -5,18 +5,19 @@ import { Post } from '../domain/post';
 import { PostCreator } from '../interactors/create/post-creator';
 import PostModule from '../store/post-store';
 import { getModule } from 'vuex-module-decorators';
+import { SpaceFinderMixin } from '@/space';
 
 /**
  * Mixin to handle creating new posts.
  */
 @Mixin
-export class PostCreatorMixin extends Vue {
+export class PostCreatorMixin extends SpaceFinderMixin {
     /**
      * Reirect to the post topic page.
      * @param id The ID of the new post.
      */
-    public async $redirectToPost(id: number) {
-        this.$router.push(`/post/${id}`);
+    public async $redirectToPost(space: string, id: number) {
+        this.$router.push({ name: 'post', params: { spaceName: space, postId: id.toString() } });
     }
 
     /**

@@ -1,15 +1,32 @@
 <template>
     <v-form>
+        <v-alert type="info">
+            Rules:
+            <br />1. Don't be a jerk.
+        </v-alert>
         <v-card>
-            <v-tabs v-model="activeTab" class="mb-6">
+            <v-tabs v-model="activeTab" class="mb-6" @change="onTabChange">
                 <v-tab>Link</v-tab>
                 <v-tab>Text</v-tab>
             </v-tabs>
         </v-card>
 
-        <v-tabs-items v-model="activeTab">
-            <v-tab-item>
-                <v-card class="pa-3">
+        <v-card class="pa-3">
+            <v-select
+                placeholder="Space"
+                name="postSpace"
+                v-model="postingToSpace"
+                :items="$subscribedSpaces"
+                :readonly="lockSpace"
+                item-text="name"
+                item-value="name"
+                v-validate="'required'"
+                :error="errors.first('postSpace') != null"
+                :error-messages="errors.first('postSpace')"
+            />
+
+            <v-tabs-items v-model="activeTab">
+                <v-tab-item>
                     <v-text-field
                         id="link-title-textbox"
                         placeholder="Title"
@@ -31,10 +48,8 @@
                         :error="errors.first('createLinkPost.linkUrl') != null"
                         :error-messages="errors.first('createLinkPost.linkUrl')"
                     />
-                </v-card>
-            </v-tab-item>
-            <v-tab-item>
-                <v-card class="pa-3">
+                </v-tab-item>
+                <v-tab-item>
                     <v-text-field
                         id="text-title-textbox"
                         placeholder="Title"
@@ -52,17 +67,16 @@
                         name="textBody"
                         v-validate="'required|max:10000'"
                         data-vv-scope="createTextPost"
-                        v-on:keyup="onTextBodyKeyUp"
-                        v-on:blur="onTextBodyKeyUp"
+                        counter="10000"
                         :error="errors.first('createTextPost.textBody') != null"
                         :error-messages="errors.first('createTextPost.textBody')"
                     />
-                </v-card>
-            </v-tab-item>
-        </v-tabs-items>
+                </v-tab-item>
+            </v-tabs-items>
 
-        <v-btn color="primary" class="mr-2" @click="onSubmit">Submit</v-btn>
-        <v-btn color="error" outlined type="reset" class="ml-2" @click="onReset">Reset</v-btn>
+            <v-btn color="primary" class="mr-2" @click="onSubmit">Submit</v-btn>
+            <v-btn color="error" outlined type="reset" class="ml-2" @click="onReset">Reset</v-btn>
+        </v-card>
     </v-form>
 </template>
 
@@ -76,6 +90,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Post, PostCreateParams, PostType } from '@/post';
+import { SpaceFinderMixin, Space } from '../../../space';
 
 /**
  * Form to create a new text or link post.
@@ -83,7 +98,7 @@ import { Post, PostCreateParams, PostType } from '@/post';
 @Component({
     name: 'create-post-form'
 })
-export default class CreatePostForm extends Vue {
+export default class CreatePostForm extends SpaceFinderMixin {
     /**
      * The currently active tab.
      */
@@ -110,13 +125,21 @@ export default class CreatePostForm extends Vue {
     public textBody: string = '';
 
     /**
-     * The number displayed on screen of how many characters are left
-     * on the text post body.
+     * The post to submit to.
      */
-    public textBodyCharactersRemaining = Post.BODY_MAX_LENGTH;
+    public postingToSpace: string | null = null;
 
-    public created(): void {
-        // isText is a boolean so we need to check it's string value, not if it's truthy
+    public lockSpace: boolean = false;
+
+    public async created() {
+        if (this.$route.params.spaceName != null) {
+            this.postingToSpace = this.$route.params.spaceName;
+            this.lockSpace = true;
+        }
+
+        await this.$findSubscribedSpaces();
+
+        // isText is a string so we can't just check if it's truthy
         if (this.$route.query.isText === 'true') {
             this.activeTab = 1;
         }
@@ -154,8 +177,8 @@ export default class CreatePostForm extends Vue {
 
         const creationParams =
             this.activeTab === 0
-                ? new PostCreateParams(PostType.Link, this.linkTitle, this.linkUrl)
-                : new PostCreateParams(PostType.Text, this.textTitle, this.textBody);
+                ? new PostCreateParams(this.postingToSpace!, PostType.Link, this.linkTitle, this.linkUrl)
+                : new PostCreateParams(this.postingToSpace!, PostType.Text, this.textTitle, this.textBody);
 
         this.$emit('submit', creationParams);
     }
@@ -170,13 +193,6 @@ export default class CreatePostForm extends Vue {
     }
 
     /**
-     * Update the remaining character count.
-     */
-    public async onTextBodyKeyUp() {
-        this.textBodyCharactersRemaining = Post.BODY_MAX_LENGTH - this.textBody.length;
-    }
-
-    /**
      * Reset the v-models of the form.
      */
     public async onReset() {
@@ -186,7 +202,6 @@ export default class CreatePostForm extends Vue {
         this.linkUrl = '';
         this.textTitle = '';
         this.textBody = '';
-        this.textBodyCharactersRemaining = Post.BODY_MAX_LENGTH;
     }
 }
 </script>
