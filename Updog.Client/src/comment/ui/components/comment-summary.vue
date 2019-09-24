@@ -1,10 +1,8 @@
 <template>
     <div class="py-1">
         <!-- Comment -->
-        <div class="d-flex flex-row">
-            <div>
-                <comment-vote-controller :comment="comment" v-if="isExpanded" />
-            </div>
+        <div class="d-inline-flex flex-row">
+            <comment-vote-controller :comment="comment" v-if="isExpanded" />
 
             <div class="flex-grow-1">
                 <!-- Header -->
@@ -12,7 +10,7 @@
                     <comment-expand-button @toggle="onExpand" />&nbsp;
                     <user-link :user="comment.user" />&nbsp;
                     <span
-                        class="text-muted pr-1"
+                        class="pr-1 grey--text"
                     >{{ comment.karma}} {{comment.karma === 1 ? 'point' : 'points'}}</span>
 
                     <time-stamp
@@ -41,13 +39,13 @@
                     <div class="d-flex flex-row">
                         <!-- Permalink -->
                         <router-link
-                            class="secondary--text pl-0 pr-1"
+                            class="grey--text pl-0 pr-1"
                             :to="{name: 'comment', params: { commentId: comment.id}}"
                         >permalink</router-link>
 
                         <a
                             href="#"
-                            class="secondary--text pl-0 pr-1"
+                            class="grey--text pl-0 pr-1"
                             v-if="canEdit()"
                             @click.prevent="onEditClick"
                         >edit</a>

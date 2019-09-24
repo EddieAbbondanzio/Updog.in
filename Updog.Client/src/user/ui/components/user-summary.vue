@@ -1,20 +1,23 @@
 <template>
-    <div v-if="user != null">
-        <h4>{{ user.username }}</h4>
-        <h5 class="text-muted">
-            Member for
-            <span class="text-dark">{{ membershipStatus() }}</span>
-        </h5>
+    <v-card v-if="user != null" class="pa-3">
+        <v-card-title>{{ user.username }}</v-card-title>
 
-        <div>
-            <span class="text-muted pr-1">Post Karma:</span>
-            <span>{{ user.postKarma}}</span>
-        </div>
-        <div>
-            <span class="text-muted pr-1">Comment Karma:</span>
-            <span>{{ user.commentKarma}}</span>
-        </div>
-    </div>
+        <v-card-text>
+            <h5 class="subtitle-1 text-lighten-2">
+                Member for
+                <span class="text-dark">{{ membershipStatus() }}</span>
+            </h5>
+
+            <div>
+                <span>Post Karma:&nbsp;</span>
+                <span class="black--text">{{ user.postKarma}}</span>
+            </div>
+            <div>
+                <span>Comment Karma:&nbsp;</span>
+                <span class="black--text">{{ user.commentKarma}}</span>
+            </div>
+        </v-card-text>
+    </v-card>
 </template>
 
 <script lang="ts">

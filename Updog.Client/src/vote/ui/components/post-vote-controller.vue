@@ -4,7 +4,10 @@
             <v-icon size="32" :class="{ upvoted: isUpvoted}">keyboard_arrow_up</v-icon>
         </v-btn>
         <div class="d-flex flex-row justify-center text-center font-weight-bold text-muted text-md">
-            <span :class="{ upvoted: isUpvoted, downvoted: isDownvoted}">{{ karma }}</span>
+            <span
+                :class="{ upvoted: isUpvoted, downvoted: isDownvoted}"
+                :title="`${post.karma} points`"
+            >{{ karma }}</span>
         </div>
         <v-btn @click.native.stop="downvote" text icon>
             <v-icon size="32" :class="{ downvoted: isDownvoted}">keyboard_arrow_down</v-icon>

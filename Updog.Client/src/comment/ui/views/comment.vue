@@ -1,11 +1,11 @@
 <template>
     <div v-if="comment != null">
-        <b-alert variant="warning" show>
+        <v-alert type="warning" show>
             You are viewing a single comment thread.
             <router-link
                 :to="{name:'comments', params: {postId: postId}}"
             >View the rest of the conversation.</router-link>
-        </b-alert>
+        </v-alert>
         <div>
             <comment-summary :comment="comment" />
         </div>

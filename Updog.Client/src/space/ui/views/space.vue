@@ -5,10 +5,17 @@
         </template>
         <template slot="side-bar">
             <v-card v-if="space != null" class="pa-3">
-                <space-link :space="space" class="title primary--text" />
-                <p class="subtitle-1">{{ space.description }}</p>
+                <v-card-title>
+                    <space-link :space="space" />
+                </v-card-title>
 
-                <create-post-buttons />
+                <v-card-text>
+                    <p>{{ space.description }}</p>
+                </v-card-text>
+
+                <v-card-actions>
+                    <create-post-buttons />
+                </v-card-actions>
             </v-card>
         </template>
     </layout>

@@ -1,6 +1,8 @@
 <template>
     <div v-if="comments != null">
-        <Comment-summary :comment="comment" v-for="comment in comments" v-bind:key="comment.id" />
+        <v-card class="pa-3 mb-3" v-for="comment in comments" v-bind:key="comment.id">
+            <comment-summary :comment="comment" />
+        </v-card>
 
         <pagination-nav :pagination="comments.pagination" @previous="onPrevious" @next="onNext" />
     </div>

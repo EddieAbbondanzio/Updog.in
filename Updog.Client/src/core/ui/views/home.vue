@@ -6,7 +6,9 @@
         </template>
         <template slot="side-bar">
             <v-card class="pa-3">
-                <create-post-buttons />
+                <v-card-actions>
+                    <create-post-buttons />
+                </v-card-actions>
             </v-card>
         </template>
     </layout>

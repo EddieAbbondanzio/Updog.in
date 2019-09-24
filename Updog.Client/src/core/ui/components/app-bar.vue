@@ -1,8 +1,8 @@
 <template>
-    <v-app-bar app color="accent" dark>
+    <v-app-bar app color="accent" dark height="72">
         <v-app-bar-nav-icon @click="$emit('toggleNav')" />
 
-        <router-link :to="{name: 'home'}">
+        <router-link :to="{name: 'home'}" class="d-flex align-center">
             <img src="@/assets/logo_white.png" class="nav-icon" />
         </router-link>
 
@@ -10,7 +10,7 @@
             <h1 class="mb-0 pb-0">
                 <router-link
                     :to="{name: 'space', params: { spaceName: spaceName}}"
-                    class="black--text"
+                    class="white--text text-decoration-none"
                 >{{spaceName}}</router-link>
             </h1>
         </div>

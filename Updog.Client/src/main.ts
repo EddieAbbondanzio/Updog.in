@@ -4,6 +4,7 @@ import VeeVaidate from 'vee-validate';
 import store from '@/core/store/store';
 import { capitalize } from './core/ui/filters/capitalize';
 import vuetify from './plugins/vuetify';
+import './plugins/vue-content-placeholders';
 import 'vuetify/dist/vuetify.min.css';
 
 Vue.config.productionTip = false;
