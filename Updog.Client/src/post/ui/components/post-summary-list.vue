@@ -14,7 +14,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Post } from '../../domain/post';
 import PostSummary from '@/post/ui/components/post-summary.vue';
-import PostLoadingPlaceHolder from '@/post/ui/components/post-loading-placeholder.vue';
+import PostLoadingPlaceHolder from '@/post/ui/components/post-loading-place-holder.vue';
 
 @Component({
     name: 'post-summary-list',
@@ -25,6 +25,6 @@ import PostLoadingPlaceHolder from '@/post/ui/components/post-loading-placeholde
 })
 export default class PostSummaryList extends Vue {
     @Prop()
-    public posts!: Post[];
+    public posts!: Post[] | null;
 }
 </script>

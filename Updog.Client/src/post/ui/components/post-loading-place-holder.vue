@@ -40,6 +40,11 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+
+/**
+ * Loading placeholder that flashes to make the user feel like it takes less time
+ * to load.
+ */
 @Component({
     name: 'post-loading-place-holder'
 })

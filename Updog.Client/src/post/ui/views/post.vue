@@ -23,7 +23,7 @@ import CommentSummary from '@/comment/ui/components/comment-summary.vue';
 import { User } from '@/user';
 import PaginationNav from '@/core/ui/components/pagination-nav.vue';
 import { PostFinderMixin } from '@/post';
-import PostLoadingPlaceHolder from '@/post/ui/components/post-loading-placeholder.vue';
+import PostLoadingPlaceHolder from '@/post/ui/components/post-loading-place-holder.vue';
 
 /**
  * View a post via it's ID.

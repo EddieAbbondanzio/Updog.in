@@ -1,7 +1,7 @@
 <template>
     <v-form>
         <v-card>
-            <v-tabs v-model="activeTab" class="mb-3">
+            <v-tabs v-model="activeTab" class="mb-6">
                 <v-tab>Link</v-tab>
                 <v-tab>Text</v-tab>
             </v-tabs>
@@ -9,51 +9,55 @@
 
         <v-tabs-items v-model="activeTab">
             <v-tab-item>
-                <v-text-field
-                    id="link-title-textbox"
-                    placeholder="Title"
-                    v-model.trim="linkTitle"
-                    name="linkTitle"
-                    v-validate="'required|max:300'"
-                    data-vv-scope="createLinkPost"
-                    :error="errors.first('createLinkPost.linkTitle') != null"
-                    :error-messages="errors.first('createLinkPost.linkTitle')"
-                />
-                <v-text-field
-                    type="text"
-                    id="link-body-textbox"
-                    placeholder="URL"
-                    v-model.trim="linkUrl"
-                    name="linkUrl"
-                    v-validate="'required|url'"
-                    data-vv-scope="createLinkPost"
-                    :error="errors.first('createLinkPost.linkUrl') != null"
-                    :error-messages="errors.first('createLinkPost.linkUrl')"
-                />
+                <v-card class="pa-3">
+                    <v-text-field
+                        id="link-title-textbox"
+                        placeholder="Title"
+                        v-model.trim="linkTitle"
+                        name="linkTitle"
+                        v-validate="'required|max:300'"
+                        data-vv-scope="createLinkPost"
+                        :error="errors.first('createLinkPost.linkTitle') != null"
+                        :error-messages="errors.first('createLinkPost.linkTitle')"
+                    />
+                    <v-text-field
+                        type="text"
+                        id="link-body-textbox"
+                        placeholder="URL"
+                        v-model.trim="linkUrl"
+                        name="linkUrl"
+                        v-validate="'required|url'"
+                        data-vv-scope="createLinkPost"
+                        :error="errors.first('createLinkPost.linkUrl') != null"
+                        :error-messages="errors.first('createLinkPost.linkUrl')"
+                    />
+                </v-card>
             </v-tab-item>
             <v-tab-item>
-                <v-text-field
-                    id="text-title-textbox"
-                    placeholder="Title"
-                    v-model.trim="textTitle"
-                    name="textTitle"
-                    v-validate="'required|max:300'"
-                    data-vv-scope="createTextPost"
-                    :error="errors.first('createTextPost.textTitle') != null"
-                    :error-messages="errors.first('createTextPost.textTitle')"
-                />
-                <v-textarea
-                    id="text-body-textarea"
-                    placeholder="Body"
-                    v-model.trim="textBody"
-                    name="textBody"
-                    v-validate="'required|max:10000'"
-                    data-vv-scope="createTextPost"
-                    v-on:keyup="onTextBodyKeyUp"
-                    v-on:blur="onTextBodyKeyUp"
-                    :error="errors.first('createTextPost.textBody') != null"
-                    :error-messages="errors.first('createTextPost.textBody')"
-                />
+                <v-card class="pa-3">
+                    <v-text-field
+                        id="text-title-textbox"
+                        placeholder="Title"
+                        v-model.trim="textTitle"
+                        name="textTitle"
+                        v-validate="'required|max:300'"
+                        data-vv-scope="createTextPost"
+                        :error="errors.first('createTextPost.textTitle') != null"
+                        :error-messages="errors.first('createTextPost.textTitle')"
+                    />
+                    <v-textarea
+                        id="text-body-textarea"
+                        placeholder="Body"
+                        v-model.trim="textBody"
+                        name="textBody"
+                        v-validate="'required|max:10000'"
+                        data-vv-scope="createTextPost"
+                        v-on:keyup="onTextBodyKeyUp"
+                        v-on:blur="onTextBodyKeyUp"
+                        :error="errors.first('createTextPost.textBody') != null"
+                        :error-messages="errors.first('createTextPost.textBody')"
+                    />
+                </v-card>
             </v-tab-item>
         </v-tabs-items>
 

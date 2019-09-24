@@ -27,7 +27,11 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 })
 export default class CreatePostButtons extends Vue {
     public onClick(isText: boolean) {
-        this.$router.push({ path: '/submit', query: { isText: isText ? 'true' : 'false' } });
+        if (this.$route.params.spaceName != null) {
+            this.$router.push({ name: 'spaceSubmit', query: { isText: isText ? 'true' : 'false' } });
+        } else {
+            this.$router.push({ name: 'submit', query: { isText: isText ? 'true' : 'false' } });
+        }
     }
 }
 </script>

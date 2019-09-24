@@ -20,6 +20,14 @@ export const spaceRoutes: RouteConfig[] = [
                 component: () => import('@/post/ui/views/post.vue'),
                 redirect: { name: 'comments' },
                 children: commentRoutes
+            },
+            {
+                name: 'spaceSubmit',
+                path: 'submit',
+                component: () => import('@/space/ui/views/submit.vue'),
+                meta: {
+                    authenticate: true
+                }
             }
         ]
     }

@@ -1,8 +1,13 @@
 <template>
     <layout>
-        <template v-if="$posts != null">
-            <post-summary v-for="post in $posts" v-bind:key="post.id" :post="post" />
-            <pagination-nav :pagination="$posts.pagination" @previous="onPrevious" @next="onNext" />
+        <template>
+            <post-summary-list :posts="$posts" />
+            <pagination-nav
+                v-if="$posts != null"
+                :pagination="$posts.pagination"
+                @previous="onPrevious"
+                @next="onNext"
+            />
         </template>
         <template slot="side-bar">
             <v-card class="pa-3">
@@ -23,6 +28,7 @@ import { getModule } from 'vuex-module-decorators';
 import { PaginationParams } from '@/core';
 import { PostFinderMixin, Post } from '@/post';
 import CreatePostButtons from '@/post/ui/components/create-post-buttons.vue';
+import PostSummaryList from '@/post/ui/components/post-summary-list.vue';
 
 /**
  * Home page that shows off the newests new posts.
@@ -32,7 +38,8 @@ import CreatePostButtons from '@/post/ui/components/create-post-buttons.vue';
         CreatePostButtons,
         Layout,
         PostSummary,
-        PaginationNav
+        PaginationNav,
+        PostSummaryList
     }
 })
 export default class Home extends PostFinderMixin {

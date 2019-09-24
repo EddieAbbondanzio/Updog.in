@@ -7,7 +7,16 @@
             <comment-create-form ref="commentCreateForm" @submit="onCommentCreate" />
         </div>
 
-        <comment-summary v-for="comment in $comments" :comment="comment" v-bind:key="comment.id" />
+        <div v-if="isLoading">
+            <comment-loading-place-holder v-for="i in 8" :key="i" />
+        </div>
+        <div v-else>
+            <comment-summary
+                v-for="comment in $comments"
+                :comment="comment"
+                v-bind:key="comment.id"
+            />
+        </div>
     </v-card>
 </template>
 
@@ -16,6 +25,7 @@ import { Component, Vue, Prop, Mixins } from 'vue-property-decorator';
 import CommentSummary from '@/comment/ui/components/comment-summary.vue';
 import CommentCreateForm from '@/comment/ui/components/comment-create-form.vue';
 import { CommentCreatorMixin, CommentFinderMixin, CommentFinderByPostParams, CommentCreateParams } from '@/comment';
+import CommentLoadingPlaceHolder from '@/comment/ui/components/comment-loading-place-holder.vue';
 
 /**
  * Comment discussion thread of a post.
@@ -24,11 +34,14 @@ import { CommentCreatorMixin, CommentFinderMixin, CommentFinderByPostParams, Com
     name: 'comments',
     components: {
         CommentSummary,
-        CommentCreateForm
+        CommentCreateForm,
+        CommentLoadingPlaceHolder
     },
     mixins: [CommentFinderMixin, CommentCreatorMixin]
 })
 export default class Comments extends Mixins(CommentFinderMixin, CommentCreatorMixin) {
+    public isLoading: boolean = true;
+
     get postId() {
         return Number.parseInt(this.$route.params.postId, 10);
     }
@@ -46,6 +59,7 @@ export default class Comments extends Mixins(CommentFinderMixin, CommentCreatorM
      */
     public async mounted() {
         await this.$findCommentsByPost(new CommentFinderByPostParams(this.postId));
+        this.isLoading = false;
     }
 
     /**
