@@ -74,4 +74,27 @@ export class Comment extends VotableEntity {
 
         return null;
     }
+
+    /**
+     * Attempt to delete a child however deep it may be.
+     * @param id The ID of the child to delete.
+     */
+    public deleteChild(id: number): boolean {
+        const rootIndex = this.children.findIndex(c => c.id === id);
+
+        if (rootIndex !== -1) {
+            this.children.splice(rootIndex, 1);
+            return true;
+        }
+
+        for (const c of this.children) {
+            const wasDeleted = c.deleteChild(id);
+
+            if (wasDeleted) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

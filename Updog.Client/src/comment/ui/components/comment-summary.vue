@@ -1,7 +1,7 @@
 <template>
     <div class="py-1">
         <!-- Comment -->
-        <div class="d-inline-flex flex-row">
+        <div class="d-flex flex-row">
             <comment-vote-controller :comment="comment" v-if="isExpanded" />
 
             <div class="flex-grow-1">
@@ -50,6 +50,19 @@
                             @click.prevent="onEditClick"
                         >edit</a>
 
+                        <a
+                            href="#"
+                            class="grey--text pl-0 pr-1"
+                            v-if="canEdit()"
+                            @click.prevent="onDeleteClick"
+                        >delete</a>
+
+                        <are-you-sure
+                            v-if="isDeleting"
+                            @yes="onDeleteConfirm"
+                            @no="onDeleteCancel"
+                        />
+
                         <!-- Reply -->
                         <a
                             href="#"
@@ -60,7 +73,7 @@
 
                     <!-- Reply Box -->
                     <div v-if="isReplying">
-                        <comment-create-form @submit="onReplySubmit" />
+                        <comment-create-form @submit="onReplySubmit" :parentId="comment.id" />
                     </div>
                 </div>
             </div>
@@ -84,9 +97,10 @@ import TimeStamp from '@/core/ui/components/time-stamp.vue';
 import UserLink from '@/user/ui/components/user-link.vue';
 import CommentCreateForm from '@/comment/ui/components/comment-create-form.vue';
 import CommentVoteController from '@/vote/ui/components/comment-vote-controller.vue';
-import { CommentCreatorMixin, CommentCreateParams, CommentUpdateParams } from '@/comment';
+import { CommentCreateParams, CommentUpdateParams } from '@/comment';
 import { Comment, CommentUpdaterMixin } from '@/comment';
 import CommentExpandButton from '@/comment/ui/components/comment-expand-button.vue';
+import AreYouSure from '@/core/ui/components/are-you-sure.vue';
 
 /**
  * Component to show a comment on screen.
@@ -98,11 +112,11 @@ import CommentExpandButton from '@/comment/ui/components/comment-expand-button.v
         TimeStamp,
         CommentCreateForm,
         CommentVoteController,
-        CommentExpandButton
-    },
-    mixins: [CommentCreatorMixin, CommentUpdaterMixin]
+        CommentExpandButton,
+        AreYouSure
+    }
 })
-export default class CommentSummary extends Mixins(CommentCreatorMixin, CommentUpdaterMixin) {
+export default class CommentSummary extends CommentUpdaterMixin {
     @Prop()
     public comment!: Comment;
 
@@ -120,6 +134,8 @@ export default class CommentSummary extends Mixins(CommentCreatorMixin, CommentU
      * If the user is currently editing this comment.
      */
     public isEditing: boolean = false;
+
+    public isDeleting: boolean = false;
 
     /**
      * The raw text of the editted comment.
@@ -160,11 +176,6 @@ export default class CommentSummary extends Mixins(CommentCreatorMixin, CommentU
      * User clicked submit on the reply. Attempt to send it over to the backend.
      */
     public async onReplySubmit(text: string) {
-        const postId = Number.parseInt(this.$route.params.postId, 10);
-
-        const c = await this.$createComment(new CommentCreateParams(text, postId, this.comment.id));
-        this.comment.children.push(c!);
-
         this.isReplying = false;
     }
 
@@ -197,6 +208,18 @@ export default class CommentSummary extends Mixins(CommentCreatorMixin, CommentU
 
     public async onEditCancel() {
         this.isEditing = false;
+    }
+
+    public onDeleteClick() {
+        this.isDeleting = true;
+    }
+
+    public async onDeleteConfirm() {
+        await this.$deleteComment(this.comment);
+    }
+
+    public async onDeleteCancel() {
+        this.isDeleting = false;
     }
 }
 </script>

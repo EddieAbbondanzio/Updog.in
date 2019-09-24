@@ -36,6 +36,9 @@ export default class CommentCreateForm extends CommentCreatorMixin {
         return Number.parseInt(this.$route.params.postId, 10);
     }
 
+    @Prop({ default: 0 })
+    public parentId!: number;
+
     /**
      * The content of the comment.
      */
@@ -70,7 +73,7 @@ export default class CommentCreateForm extends CommentCreatorMixin {
             return;
         }
 
-        await this.$createComment(new CommentCreateParams(this.comment, this.postId));
+        await this.$createComment(new CommentCreateParams(this.comment, this.postId, this.parentId));
 
         this.$emit('submit', this.comment);
         this.clear();

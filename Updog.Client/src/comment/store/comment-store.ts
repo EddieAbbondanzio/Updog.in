@@ -148,6 +148,19 @@ export default class CommentStore extends VuexModule {
         if (params.parentId === 0) {
             const all = [c, ...this.comments!];
             this.context.commit(CommentMutation.SetComments, all);
+        } else {
+            for (const rootC of this.comments!) {
+                if (rootC.id === params.parentId) {
+                    rootC.children.push(c);
+                } else {
+                    const parent = rootC.findChild(params.parentId);
+
+                    if (parent != null) {
+                        parent.children.push(c);
+                        break;
+                    }
+                }
+            }
         }
 
         this.context.commit(this.incrementPostCommentCountMutation, params.postId, { root: true });
@@ -172,7 +185,20 @@ export default class CommentStore extends VuexModule {
         return updatedComment;
     }
 
+    @Action({ rawError: true })
     public async [CommentAction.Delete](comment: Comment) {
+        if (this.comments == null) {
+            throw new Error();
+        }
+
         const deletedComment = await new CommentDeleter(this.context.rootGetters['user/authToken']).handle(comment);
+
+        for (const c of this.comments) {
+            if (c.deleteChild(comment.id)) {
+                return deletedComment;
+            }
+        }
+
+        return deletedComment;
     }
 }
