@@ -4,7 +4,7 @@
         <app-bar @toggleNav="onToggleNav" />
         <nav-drawer :show="showNav" />
 
-        <v-content>
+        <v-content class="d-flex flex-grow-1">
             <router-view />
         </v-content>
     </v-app>

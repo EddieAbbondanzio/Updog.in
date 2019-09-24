@@ -1,7 +1,7 @@
 <template>
-    <v-navigation-drawer app temporary :value="show">
+    <v-navigation-drawer app temporary :value="show" color>
         <template v-slot:prepend>
-            <v-list-item class="p-3">
+            <v-list-item class="p-3 primary" dark>
                 <v-list-item-content class="d-flex flex-column align-center">
                     <v-list-item-title class="headline">My Spaces</v-list-item-title>
 

@@ -1,21 +1,21 @@
 <template>
     <div class="ml-auto">
         <div v-if="$login == null">
-            <v-btn color="primary" :to="{ name:'login' }" class="mr-2">Log In</v-btn>
-            <v-btn color="primary" outlined :to="{ name: 'signup' }" class="ml-2">Sign Up</v-btn>
+            <v-btn color="secondary" :to="{ name:'login' }" class="mr-2">Log In</v-btn>
+            <v-btn color="secondary" :to="{ name: 'signup' }" class="ml-2">Sign Up</v-btn>
         </div>
         <div v-else>
             <v-menu bottom left>
                 <template v-slot:activator="{ on }">
                     <v-btn color="normal" text v-on="on" large>
                         <div class="d-flex align-center">
-                            <v-avatar color="primary" size="36" :title="username" class="mr-2">
+                            <v-avatar color="accent" size="36" :title="username" class="mr-2">
                                 <v-icon color="white">person</v-icon>
                             </v-avatar>
 
                             <span class="title text-none">{{ username}}</span>
 
-                            <v-icon color="grey darken-3" x-large>arrow_drop_down</v-icon>
+                            <v-icon dark x-large>arrow_drop_down</v-icon>
                         </div>
                     </v-btn>
                 </template>

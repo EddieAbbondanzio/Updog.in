@@ -1,5 +1,5 @@
 <template>
-    <v-system-bar app dark>
+    <v-system-bar app color="primary">
         <router-link :to="{name: 'home'}" class="font-weight-bold white--text">HOME</router-link>
         <span class="px-3">|</span>
         <div class="d-inline-block" v-for="(space, index) in spaces" v-bind:key="space.id">
