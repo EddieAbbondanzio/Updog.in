@@ -22,7 +22,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Comment } from '@/comment';
+import { Comment, CommentCreateParams } from '@/comment';
+import { CommentCreatorMixin } from '../../mixins/comment-creator-mixin';
 
 /**
  * Form to create a new comment.
@@ -30,13 +31,23 @@ import { Comment } from '@/comment';
 @Component({
     name: 'comment-create-form'
 })
-export default class CommentCreateForm extends Vue {
+export default class CommentCreateForm extends CommentCreatorMixin {
+    get postId() {
+        return Number.parseInt(this.$route.params.postId, 10);
+    }
+
     /**
      * The content of the comment.
      */
     public comment: string = '';
 
     public created() {
+        // Check to see if we have a cached comment from earlier?
+        if (this.$cachedCommentInProgress != null) {
+            this.comment = this.$cachedCommentInProgress;
+            this.$clearCommentInProgress();
+        }
+
         this.$validator.localize('en', {
             custom: {
                 commentCreateTextArea: {
@@ -52,6 +63,15 @@ export default class CommentCreateForm extends Vue {
         if (!(await this.$validator.validate())) {
             return;
         }
+
+        if (!this.$isLoggedIn()) {
+            this.$cacheCommentInProgress(this.comment);
+            this.$redirectToLogin();
+            return;
+        }
+
+        await this.$createComment(new CommentCreateParams(this.comment, this.postId));
+
         this.$emit('submit', this.comment);
         this.clear();
     }

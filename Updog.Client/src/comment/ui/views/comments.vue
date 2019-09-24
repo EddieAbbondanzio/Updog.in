@@ -4,7 +4,7 @@
         <div class="mb-5">
             <span class="title">All&nbsp;{{commentCount}}</span>
 
-            <comment-create-form ref="commentCreateForm" @submit="onCommentCreate" />
+            <comment-create-form />
         </div>
 
         <div v-if="isLoading">
@@ -36,10 +36,9 @@ import CommentLoadingPlaceHolder from '@/comment/ui/components/comment-loading-p
         CommentSummary,
         CommentCreateForm,
         CommentLoadingPlaceHolder
-    },
-    mixins: [CommentFinderMixin, CommentCreatorMixin]
+    }
 })
-export default class Comments extends Mixins(CommentFinderMixin, CommentCreatorMixin) {
+export default class Comments extends CommentFinderMixin {
     public isLoading: boolean = true;
 
     get postId() {
@@ -60,13 +59,6 @@ export default class Comments extends Mixins(CommentFinderMixin, CommentCreatorM
     public async mounted() {
         await this.$findCommentsByPost(new CommentFinderByPostParams(this.postId));
         this.isLoading = false;
-    }
-
-    /**
-     * When a comment is created, send it to the backend.
-     */
-    public async onCommentCreate(body: string) {
-        await this.$createComment(new CommentCreateParams(body, this.postId));
     }
 }
 </script>

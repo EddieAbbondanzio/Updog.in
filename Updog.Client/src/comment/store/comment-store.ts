@@ -26,6 +26,11 @@ import { CommentDeleter } from '..';
 export default class CommentStore extends VuexModule {
     public comments: Comment[] | null = null;
 
+    /**
+     * Temporary cache to hold a comment that is in progress but got postponed to log in.
+     */
+    public commentInProgress: string | null = null;
+
     private incrementPostCommentCountMutation = StoreUtils.buildMutation(
         StoreNamespace.Post,
         PostMutation.IncrementCommentCount
@@ -89,10 +94,19 @@ export default class CommentStore extends VuexModule {
     }
 
     /**
+     * Cache a comment temporarily.
+     * @param comment The comment body to cache.
+     */
+    @Mutation
+    public [CommentMutation.SetCommentInProgress](comment: string | null) {
+        this.commentInProgress = comment;
+    }
+
+    /**
      * Find a comment via it's ID.
      * @param id The comment's ID.
      */
-    @Action
+    @Action({ rawError: true })
     public async [CommentAction.FindById](id: number) {
         return new CommentFinderById(this.context.rootGetters['user/authToken']).handle(id);
     }
@@ -114,7 +128,7 @@ export default class CommentStore extends VuexModule {
      * Find a set comments for a specific user.
      * @param params Finder params..
      */
-    @Action
+    @Action({ rawError: true })
     public async [CommentAction.FindByUser](params: CommentFinderByUserParams) {
         this.context.commit(CommentMutation.ClearComments);
         const comments = await new CommentFinderByUser(this.context.rootGetters['user/authToken']).handle(params);
@@ -127,7 +141,7 @@ export default class CommentStore extends VuexModule {
      * Create a new comemnt.
      * @param params The comment creation params.
      */
-    @Action
+    @Action({ rawError: true })
     public async [CommentAction.Create](params: CommentCreateParams) {
         const c = await new CommentCreator(this.context.rootGetters['user/authToken']).handle(params);
 

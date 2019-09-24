@@ -163,7 +163,7 @@ export default class CommentSummary extends Mixins(CommentCreatorMixin, CommentU
         const postId = Number.parseInt(this.$route.params.postId, 10);
 
         const c = await this.$createComment(new CommentCreateParams(text, postId, this.comment.id));
-        this.comment.children.push(c);
+        this.comment.children.push(c!);
 
         this.isReplying = false;
     }

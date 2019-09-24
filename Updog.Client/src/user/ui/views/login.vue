@@ -24,7 +24,8 @@ import { UserLogin } from '@/user';
 })
 export default class Login extends Vue {
     public async onLogin(login: UserLogin) {
-        this.$router.push({ name: 'home' });
+        this.$router.back();
+        // this.$router.push({ name: 'home' });
     }
 }
 </script>
