@@ -1,5 +1,13 @@
 <template>
-    <post-summary-list :posts="posts" />
+    <div>
+        <post-summary-list :posts="posts" />
+        <pagination-nav
+            v-if="posts != null"
+            :pagination="posts.pagination"
+            @previous="onPrevious"
+            @next="onNext"
+        />
+    </div>
 </template>
 
 <script lang="ts">
@@ -12,6 +20,7 @@ import PostSummaryList from '@/post/ui/components/post-summary-list.vue';
 import { Post } from '@/post/domain/post';
 import { PagedResultSet, PaginationParams } from '@/core';
 import { PostFindBySpaceParams } from '@/post';
+import PaginationNav from '@/core/ui/components/pagination-nav.vue';
 
 /**
  * Page to view a space and it's posts.
@@ -19,7 +28,8 @@ import { PostFindBySpaceParams } from '@/post';
 @Component({
     name: 'space',
     components: {
-        PostSummaryList
+        PostSummaryList,
+        PaginationNav
     }
 })
 export default class Space extends SpaceViewerMixin {
@@ -38,7 +48,21 @@ export default class Space extends SpaceViewerMixin {
 
     private async refreshPosts() {
         this.space = await this.$findSpace(this.$route.params.spaceName);
-        this.posts = await this.$findPosts(new PostFindBySpaceParams(this.space.name, new PaginationParams(0, 20)));
+        this.posts = await this.$findPosts(
+            new PostFindBySpaceParams(this.space.name, new PaginationParams(this.currentPage, Post.DEFAULT_PAGE_SIZE))
+        );
+    }
+
+    public currentPage: number = 0;
+
+    public async onPrevious() {
+        this.currentPage--;
+        this.refreshPosts();
+    }
+
+    public async onNext() {
+        this.currentPage++;
+        this.refreshPosts();
     }
 }
 </script>

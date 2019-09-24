@@ -1,24 +1,25 @@
 <template>
-    <div class="d-flex flex-row">
+    <v-card class="d-flex flex-row pa-3">
         <v-btn
+            color="primary"
             outlined
             class="d-flex flex-row align-self-center mr-1"
             v-if="pagination.hasPreviousPage()"
             @click="$emit('previous')"
         >
-            Previous
-            <v-icon color="grey darken-3">navigate_before</v-icon>
+            <v-icon color="primary">navigate_before</v-icon>Previous
         </v-btn>
         <v-btn
+            color="primary"
             outlined
             class="d-flex flex-row align-self-center ml-1"
             v-if="pagination.hasNextPage()"
             @click="$emit('next')"
         >
             Next
-            <v-icon color="grey darken-3">navigate_next</v-icon>
+            <v-icon color="primary">navigate_next</v-icon>
         </v-btn>
-    </div>
+    </v-card>
 </template>
 
 <script lang="ts">

@@ -12,7 +12,7 @@ export class Post extends VotableEntity {
     /**
      * Default number of posts in a page.
      */
-    public static DEFAULT_PAGE_SIZE: number = 20;
+    public static DEFAULT_PAGE_SIZE: number = 10;
 
     /**
      * Max char count for the title.
