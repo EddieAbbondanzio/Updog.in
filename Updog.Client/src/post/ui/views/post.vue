@@ -5,6 +5,9 @@
         <!-- Comments! -->
         <router-view></router-view>
     </div>
+    <div v-else>
+        <post-loading-place-holder />
+    </div>
 </template>
 
 <script lang="ts">
@@ -20,13 +23,15 @@ import CommentSummary from '@/comment/ui/components/comment-summary.vue';
 import { User } from '@/user';
 import PaginationNav from '@/core/ui/components/pagination-nav.vue';
 import { PostFinderMixin } from '@/post';
+import PostLoadingPlaceHolder from '@/post/ui/components/post-loading-placeholder.vue';
 
 /**
  * View a post via it's ID.
  */
 @Component({
     components: {
-        PostSummary
+        PostSummary,
+        PostLoadingPlaceHolder
     }
 })
 export default class Post extends PostFinderMixin {

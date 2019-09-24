@@ -1,7 +1,7 @@
 
 <template>
     <v-card class="mb-3 post-placeholder">
-        <content-placeholders class="d-flex flex-row pr-4 py-4">
+        <content-placeholders class="d-flex flex-row pr-4 py-4 pl-2" style="height:112px;">
             <!-- Icon -->
             <content-placeholders-img class="icon-placeholder align-self-center" />
 
