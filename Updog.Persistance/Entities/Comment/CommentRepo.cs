@@ -40,6 +40,7 @@ namespace Updog.Persistance {
                     UNION ALL
                     SELECT c.* FROM Comment c
                     INNER JOIN commenttree ct ON ct.Id = c.ParentId
+                    WHERE c.WasDeleted = FALSE
                     ) SELECT * FROM commenttree
                     LEFT JOIN ""User"" ON UserId = ""User"".Id ORDER BY ParentId, CreationDate ASC;",
                 Mapper,
@@ -67,9 +68,10 @@ namespace Updog.Persistance {
                     UNION ALL
                     SELECT c.* FROM Comment c
                     INNER JOIN commenttree ct ON ct.Id = c.ParentId
+                    WHERE c.WasDeleted = FALSE
                     ) SELECT * FROM commenttree
                     LEFT JOIN ""User"" ON UserId = ""User"".Id 
-                    ORDER BY ParentId, CreationDate ASC;",
+                    ORDER BY ParentId, CreationDate DESC;",
                 Mapper,
                 new { PostId = postId }
             ));

@@ -6,13 +6,22 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Updog.Application;
+using Updog.Domain;
+using Updog.Infrastructure;
 
 namespace Updog.Api {
     public class Program {
-        public static void Main(string[] args) {
-            var host = CreateWebHostBuilder(args);
-            host.Build().Run();
+        public static async Task Main(string[] args) {
+            var host = CreateWebHostBuilder(args).Build();
+
+            // Either create, or find the admin.
+            var adminConfig = host.Services.GetService<IAdminConfig>();
+            var admin = host.Services.GetService<AdminRegistrar>().Handle(adminConfig);
+
+            await host.RunAsync();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

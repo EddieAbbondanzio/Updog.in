@@ -10,12 +10,12 @@ namespace Updog.Application {
     public sealed class PostUpdater : Interactor<PostUpdateParams, PostView> {
         #region Fields
         private IDatabase database;
-        private IPermissionHandler<Post> postPermissionHandler;
+        private PermissionHandler<Post> postPermissionHandler;
         private IPostViewMapper postMapper;
         #endregion
 
         #region Constructor(s)
-        public PostUpdater(IDatabase database, IPermissionHandler<Post> postPermissionHandler, IPostViewMapper postMapper) {
+        public PostUpdater(IDatabase database, PermissionHandler<Post> postPermissionHandler, IPostViewMapper postMapper) {
             this.database = database;
             this.postPermissionHandler = postPermissionHandler;
             this.postMapper = postMapper;

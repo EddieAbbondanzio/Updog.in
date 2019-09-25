@@ -176,12 +176,14 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="post">The post to add.</param>
         public async Task Add(Post post) {
+            PostRecord rec = _postMapper.Reverse(post).Item1;
+
             post.Id = await Connection.QueryFirstOrDefaultAsync<int>(
                 @"INSERT INTO Post 
                     (Title, Body, Type, CreationDate, UserId, SpaceId, WasUpdated, WasDeleted, CommentCount, Upvotes, Downvotes) 
                     VALUES 
                     (@Title, @Body, @Type, @CreationDate, @UserId, @SpaceId, @WasUpdated, @WasDeleted, @CommentCount, @Upvotes, @Downvotes) RETURNING Id;",
-                _postMapper.Reverse(post).Item1
+                rec
             );
         }
 

@@ -6,9 +6,14 @@ namespace Updog.Application {
     /// <summary>
     /// Permissions checker to see if a user has permission to edit a comment.
     /// </summary>
-    public sealed class CommentPermissionHandler : IPermissionHandler<Comment> {
+    public sealed class CommentPermissionHandler : PermissionHandler<Comment> {
+        #region Constructor(s)
+        public CommentPermissionHandler(IAdminConfig adminConfig) : base(adminConfig) {
+        }
+        #endregion
+
 #pragma warning disable 1998
-        public async Task<bool> HasPermission(User user, PermissionAction action, Comment comment) {
+        protected override async Task<bool> HasPermissionTo(User user, PermissionAction action, Comment comment) {
             switch (action) {
                 case PermissionAction.UpdateComment:
                 case PermissionAction.DeleteComment:

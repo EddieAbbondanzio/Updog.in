@@ -62,6 +62,20 @@ namespace Updog.Domain {
 
         #region Publics
         /// <summary>
+        /// Get the child count of every root and nested child comment.
+        /// </summary>
+        public int ChildCount() {
+            int count = Children.Count;
+
+            foreach (Comment child in Children) {
+                count += child.ChildCount();
+            }
+
+            return count;
+        }
+
+
+        /// <summary>
         /// Check to see if the comment is equal to another object.
         /// </summary>
         /// <param name="obj">The other object to check.</param>

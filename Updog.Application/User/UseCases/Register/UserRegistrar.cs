@@ -8,7 +8,7 @@ namespace Updog.Application {
     /// <summary>
     /// Use case interactor for registering a new user with the site.
     /// </summary>
-    public sealed class UserRegisterInteractor : Interactor<UserRegisterParams, UserLogin> {
+    public sealed class UserRegistrar : Interactor<UserRegisterParams, UserLogin> {
         #region Fields
         private IDatabase database;
         private IUserViewMapper userMapper;
@@ -17,7 +17,7 @@ namespace Updog.Application {
         #endregion
 
         #region Constructor(s)
-        public UserRegisterInteractor(IDatabase database, IUserViewMapper userMapper, IPasswordHasher passwordHasher, IAuthenticationTokenHandler tokenHandler) {
+        public UserRegistrar(IDatabase database, IUserViewMapper userMapper, IPasswordHasher passwordHasher, IAuthenticationTokenHandler tokenHandler) {
             this.database = database;
             this.userMapper = userMapper;
             this.passwordHasher = passwordHasher;
@@ -61,6 +61,9 @@ namespace Updog.Application {
 
                 foreach (Subscription s in defaultSubscriptions) {
                     await subRepo.Add(s);
+
+                    s.Space.SubscriptionCount++;
+                    await spaceRepo.Update(s.Space);
                 }
 
                 UserView userView = userMapper.Map(user);

@@ -10,10 +10,18 @@ namespace Updog.Application.Tests {
     /// </summary>
     [TestClass]
     public class PostPermissionHandlerTests {
+        private class MockAdminConfig : IAdminConfig {
+            #region Properties
+            public string Username { get; set; } = "";
+
+            public string Password { get; set; } = "";
+            #endregion
+        }
+
         #region Fields
         private User user2 = new User();
 
-        private PostPermissionHandler permissionHandler = new PostPermissionHandler();
+        private PostPermissionHandler permissionHandler = new PostPermissionHandler(new MockAdminConfig());
 
         private User user = new User() { Id = 3 };
         #endregion

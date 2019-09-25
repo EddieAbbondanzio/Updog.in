@@ -9,12 +9,12 @@ namespace Updog.Application {
     public sealed class PostDeleter : Interactor<PostDeleteParams, PostView?> {
         #region Fields
         private IDatabase database;
-        private IPermissionHandler<Post> permissionHandler;
+        private PermissionHandler<Post> permissionHandler;
         private IPostViewMapper postMapper;
         #endregion
 
         #region Constructor(s)
-        public PostDeleter(IDatabase database, IPermissionHandler<Post> postPermissionHandler, IPostViewMapper postMapper) {
+        public PostDeleter(IDatabase database, PermissionHandler<Post> postPermissionHandler, IPostViewMapper postMapper) {
             this.database = database;
             this.permissionHandler = postPermissionHandler;
             this.postMapper = postMapper;

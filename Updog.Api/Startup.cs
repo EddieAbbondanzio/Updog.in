@@ -88,6 +88,7 @@ namespace Updog.Api {
 
             services.ConfigurePoco<IDatabaseConfig, DatabaseConfig>(Configuration.GetSection("Database"));
             services.ConfigurePoco<IAuthenticationTokenConfig, AuthenticationTokenConfig>(Configuration.GetSection("AuthenticationToken"));
+            services.ConfigurePoco<IAdminConfig, AdminConfig>(Configuration.GetSection("Admin"));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -99,12 +100,13 @@ namespace Updog.Api {
             services.AddSingleton<IUserRecordMapper, UserRecordMapper>();
             services.AddTransient<UserFinderByUsername>();
             services.AddTransient<UserLoginInteractor>();
-            services.AddTransient<UserRegisterInteractor>();
+            services.AddTransient<UserRegistrar>();
             services.AddTransient<UserUpdater>();
             services.AddTransient<UserPasswordUpdater>();
+            services.AddTransient<AdminRegistrar>();
 
             services.AddSingleton<IPostViewMapper, PostViewMapper>();
-            services.AddSingleton<IPermissionHandler<Post>, PostPermissionHandler>();
+            services.AddSingleton<PermissionHandler<Post>, PostPermissionHandler>();
             services.AddSingleton<IPostRecordMapper, PostRecordMapper>();
             services.AddTransient<PostCreator>();
             services.AddTransient<PostFinderById>();
@@ -114,7 +116,7 @@ namespace Updog.Api {
             services.AddTransient<PostDeleter>();
             services.AddTransient<PostUpdater>();
 
-            services.AddSingleton<IPermissionHandler<Comment>, CommentPermissionHandler>();
+            services.AddSingleton<PermissionHandler<Comment>, CommentPermissionHandler>();
             services.AddSingleton<ICommentViewMapper, CommentViewMapper>();
             services.AddSingleton<ICommentRecordMapper, CommentRecordMapper>();
             services.AddTransient<CommentCreator>();
@@ -124,7 +126,7 @@ namespace Updog.Api {
             services.AddTransient<CommentDeleter>();
             services.AddTransient<CommentUpdater>();
 
-            services.AddSingleton<IPermissionHandler<Space>, SpacePermissionHandler>();
+            services.AddSingleton<PermissionHandler<Space>, SpacePermissionHandler>();
             services.AddSingleton<ISpaceViewMapper, SpaceViewMapper>();
             services.AddTransient<ISpaceRecordMapper, SpaceRecordMapper>();
             services.AddTransient<SpaceFinderDefault>();
@@ -142,7 +144,6 @@ namespace Updog.Api {
             services.AddSingleton<IVoteViewMapper, VoteViewMapper>();
             services.AddTransient<PostVoter>();
             services.AddTransient<CommentVoter>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

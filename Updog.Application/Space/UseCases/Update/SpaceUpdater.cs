@@ -10,12 +10,12 @@ namespace Updog.Application {
     public sealed class SpaceUpdater : Interactor<SpaceUpdateParams, SpaceView> {
         #region Fields
         private IDatabase database;
-        private IPermissionHandler<Space> spacePermissionHandler;
+        private PermissionHandler<Space> spacePermissionHandler;
         private ISpaceViewMapper spaceMapper;
         #endregion
 
         #region Constructor(s)
-        public SpaceUpdater(IDatabase database, IPermissionHandler<Space> spacePermissionHandler, ISpaceViewMapper spaceMapper) {
+        public SpaceUpdater(IDatabase database, PermissionHandler<Space> spacePermissionHandler, ISpaceViewMapper spaceMapper) {
             this.database = database;
             this.spacePermissionHandler = spacePermissionHandler;
             this.spaceMapper = spaceMapper;

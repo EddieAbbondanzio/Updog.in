@@ -71,7 +71,8 @@ namespace Updog.Persistance {
                 WasDeleted = destination.WasDeleted,
                 CommentCount = destination.CommentCount,
                 Upvotes = destination.Upvotes,
-                Downvotes = destination.Downvotes
+                Downvotes = destination.Downvotes,
+                SpaceId = destination.Space.Id
             };
 
             UserRecord u = userMapper.Reverse(destination.User);

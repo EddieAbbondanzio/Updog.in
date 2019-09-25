@@ -6,13 +6,18 @@ namespace Updog.Application {
     /// <summary>
     /// Permissions checker to see if a user has permission to edit a post.
     /// </summary>
-    public sealed class SpacePermissionHandler : IPermissionHandler<Space> {
+    public sealed class SpacePermissionHandler : PermissionHandler<Space> {
+        #region Constructor(s)
+        public SpacePermissionHandler(IAdminConfig adminConfig) : base(adminConfig) { }
+        #endregion
+
 #pragma warning disable 1998
-        public async Task<bool> HasPermission(User user, PermissionAction action, Space space) {
+        protected override async Task<bool> HasPermissionTo(User user, PermissionAction action, Space space) {
             switch (action) {
+                case PermissionAction.CreateSpace:
                 case PermissionAction.UpdateSpace:
                 case PermissionAction.DeleteSpace:
-                    return user.Equals(space.User);
+                    return false;
                 default:
                     throw new NotSupportedException();
             }

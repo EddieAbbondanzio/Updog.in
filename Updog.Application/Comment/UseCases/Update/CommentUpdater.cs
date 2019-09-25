@@ -10,12 +10,12 @@ namespace Updog.Application {
     public sealed class CommentUpdater : Interactor<CommentUpdateParams, CommentView> {
         #region Fields
         private IDatabase database;
-        private IPermissionHandler<Comment> commentPermissionHandler;
+        private PermissionHandler<Comment> commentPermissionHandler;
         private ICommentViewMapper commentMapper;
         #endregion
 
         #region Constructor(s)
-        public CommentUpdater(IDatabase database, IPermissionHandler<Comment> commentPermissionHandler, ICommentViewMapper commentMapper) {
+        public CommentUpdater(IDatabase database, PermissionHandler<Comment> commentPermissionHandler, ICommentViewMapper commentMapper) {
             this.database = database;
             this.commentPermissionHandler = commentPermissionHandler;
             this.commentMapper = commentMapper;

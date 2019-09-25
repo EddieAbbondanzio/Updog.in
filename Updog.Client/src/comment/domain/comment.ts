@@ -97,4 +97,14 @@ export class Comment extends VotableEntity {
 
         return false;
     }
+
+    public childCount(): number {
+        let count = this.children.length;
+
+        for (const child of this.children) {
+            count += child.childCount();
+        }
+
+        return count;
+    }
 }

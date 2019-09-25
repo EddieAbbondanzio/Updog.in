@@ -15,7 +15,7 @@ namespace Updog.Api {
     public sealed class UserController : ApiController {
         #region Fields
         private UserFinderByUsername userFinder;
-        private UserRegisterInteractor userRegistrar;
+        private UserRegistrar userRegistrar;
         #endregion
 
         #region Constructor(s)
@@ -24,7 +24,7 @@ namespace Updog.Api {
         /// </summary>
         public UserController(
                 UserFinderByUsername userFinder,
-                UserRegisterInteractor userRegistrar
+                UserRegistrar userRegistrar
             ) {
             this.userFinder = userFinder;
             this.userRegistrar = userRegistrar;

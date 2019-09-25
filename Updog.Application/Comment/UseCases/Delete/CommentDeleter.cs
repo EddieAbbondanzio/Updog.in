@@ -9,12 +9,12 @@ namespace Updog.Application {
     public sealed class CommentDeleter : Interactor<CommentDeleteParams, CommentView> {
         #region Fields
         private IDatabase database;
-        private IPermissionHandler<Comment> permissionHandler;
+        private PermissionHandler<Comment> permissionHandler;
         private ICommentViewMapper commentMapper;
         #endregion
 
         #region Constructor(s)
-        public CommentDeleter(IDatabase database, IPermissionHandler<Comment> permissionHandler, ICommentViewMapper commentMapper) {
+        public CommentDeleter(IDatabase database, PermissionHandler<Comment> permissionHandler, ICommentViewMapper commentMapper) {
             this.database = database;
             this.permissionHandler = permissionHandler;
             this.commentMapper = commentMapper;
@@ -42,7 +42,7 @@ namespace Updog.Application {
                 // (Hopefully) it would be impossible for post to be null if a comment exists...
                 Post post = (await postRepo.FindById(comment.PostId))!;
 
-                post.CommentCount--;
+                post.CommentCount -= (comment.ChildCount() + 1);
 
                 using (var transaction = connection.BeginTransaction()) {
                     await commentRepo.Delete(comment);
