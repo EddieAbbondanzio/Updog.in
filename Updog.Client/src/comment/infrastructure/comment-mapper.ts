@@ -23,6 +23,10 @@ export class CommentMapper implements Mapper<{ [key: string]: any }, Comment> {
             throw new TypeError('user must be of type object');
         }
 
+        if (typeof source.postId !== 'number') {
+            throw new TypeError();
+        }
+
         if (typeof source.id !== 'number') {
             throw new TypeError('id must be of type number');
         }
@@ -41,6 +45,7 @@ export class CommentMapper implements Mapper<{ [key: string]: any }, Comment> {
         const comment = new Comment(
             source.id,
             user,
+            source.postId,
             source.body,
             new Date(source.creationDate),
             source.wasUpdated,

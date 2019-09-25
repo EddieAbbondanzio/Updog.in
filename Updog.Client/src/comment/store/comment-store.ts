@@ -193,12 +193,27 @@ export default class CommentStore extends VuexModule {
 
         const deletedComment = await new CommentDeleter(this.context.rootGetters['user/authToken']).handle(comment);
 
-        for (const c of this.comments) {
-            if (c.deleteChild(comment.id)) {
-                return deletedComment;
+        // Check roots first
+        const index = this.comments.findIndex(c => c.id === comment.id);
+
+        if (index !== -1) {
+            const newComments = [...this.comments!];
+            newComments.splice(index, 1);
+
+            this.context.commit(CommentMutation.SetComments, newComments);
+        } else {
+            for (const c of this.comments) {
+                if (c.deleteChild(comment.id)) {
+                    return deletedComment;
+                }
             }
         }
 
+        this.context.commit(
+            `post/${PostMutation.DecrementCommentCount}`,
+            { postId: comment.postId, delta: comment.childCount() + 1 },
+            { root: true }
+        );
         return deletedComment;
     }
 }

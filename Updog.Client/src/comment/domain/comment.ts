@@ -29,6 +29,7 @@ export class Comment extends VotableEntity {
      *
      * @param id The ID of the comment.
      * @param user The user who posted it.
+     * @param postId The post it belongs to.
      * @param body The body (text) of the comment.
      * @param creationDate The date of commenting.
      * @param wasUpdated If the comment was updated.
@@ -41,6 +42,7 @@ export class Comment extends VotableEntity {
     constructor(
         public id: number,
         public user: User,
+        public postId: number,
         public body: string,
         public creationDate: Date,
         public wasUpdated: boolean,

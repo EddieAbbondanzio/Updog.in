@@ -56,6 +56,15 @@ export default class PostStore extends VuexModule {
     }
 
     @Mutation
+    public [PostMutation.DecrementCommentCount](params: { postId: number; delta: number }) {
+        const post = this.posts!.find(p => p.id === params.postId);
+
+        if (post != null) {
+            post.commentCount -= params.delta;
+        }
+    }
+
+    @Mutation
     public [PostMutation.Vote](params: VoteOnPostParams) {
         const post = this.posts!.find(p => p.id === params.postId);
 

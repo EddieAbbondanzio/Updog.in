@@ -32,7 +32,7 @@
                             :error-messages="errors.first('editCommentBody')"
                         />
                         <v-btn color="primary" @click="onEditSave">Save</v-btn>
-                        <v-btn color="primary" outlined @click="onEditCancel">Cancel</v-btn>
+                        <v-btn color="error" outlined @click="onEditCancel">Cancel</v-btn>
                     </div>
 
                     <!-- Actions -->
@@ -57,11 +57,9 @@
                             @click.prevent="onDeleteClick"
                         >delete</a>
 
-                        <are-you-sure
-                            v-if="isDeleting"
-                            @yes="onDeleteConfirm"
-                            @no="onDeleteCancel"
-                        />
+                        <div v-if="isDeleting">
+                            <are-you-sure @yes="onDeleteConfirm" @no="onDeleteCancel" />&nbsp;
+                        </div>
 
                         <!-- Reply -->
                         <a
@@ -202,7 +200,7 @@ export default class CommentSummary extends CommentUpdaterMixin {
             return false;
         }
 
-        return this.comment.user.id === this.$login!.user.id;
+        return this.comment.user.id === this.$login!.user.id && !this.isEditing && !this.isDeleting;
     }
 
     public onEditClick() {
