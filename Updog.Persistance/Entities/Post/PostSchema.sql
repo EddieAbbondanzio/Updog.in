@@ -11,6 +11,6 @@ CREATE TABLE Post (
     Upvotes INT,
     Downvotes INT,
     CommentCount INT NOT NULL,
-    FOREIGN KEY (UserId) REFERENCES "User"(Id)
+    FOREIGN KEY (UserId) REFERENCES "User"(Id),
     FOREIGN KEY (SpaceId) REFERENCES Space(Id)
 );

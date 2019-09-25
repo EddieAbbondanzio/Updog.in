@@ -17,9 +17,13 @@ namespace Updog.Api {
         public static async Task Main(string[] args) {
             var host = CreateWebHostBuilder(args).Build();
 
-            // Either create, or find the admin.
-            var adminConfig = host.Services.GetService<IAdminConfig>();
-            var admin = host.Services.GetService<AdminRegistrar>().Handle(adminConfig);
+            try {
+
+                var adminConfig = host.Services.GetService<IAdminConfig>();
+                var admin = host.Services.GetService<AdminRegistrar>().Handle(adminConfig);
+            } catch {
+                Console.WriteLine("Failed to create admin account");
+            }
 
             await host.RunAsync();
         }

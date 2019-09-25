@@ -16,6 +16,11 @@ namespace Updog.Application {
         public UserView User { get; }
 
         /// <summary>
+        /// The ID of the post it belongs to.
+        /// </summary>
+        public int PostId { get; }
+
+        /// <summary>
         /// The text of the comment.
         /// </summary>
         public string Body { get; }
@@ -63,6 +68,7 @@ namespace Updog.Application {
         /// </summary>
         /// <param name="id">The ID of the comment.</param>
         /// <param name="user">The user that made the comment.</param>
+        /// <param name="postId">The Post it was commented on</param>
         /// <param name="body">The text of the comment.</param>
         /// <param name="creationDate">The time of commenting</param>
         /// <param name="wasUpdated">If the comment was modified</param>
@@ -70,9 +76,10 @@ namespace Updog.Application {
         /// <param name="upvotes">The number of upvotes.</param>
         /// <param name="downvotes">The number of downvotes.</param>
         /// <param name="vote">The vote of the user viewing it</param>
-        public CommentView(int id, UserView user, string body, DateTime creationDate, bool wasUpdated, bool wasDeleted, int upvotes, int downvotes, VoteView? vote = null) {
+        public CommentView(int id, UserView user, int postId, string body, DateTime creationDate, bool wasUpdated, bool wasDeleted, int upvotes, int downvotes, VoteView? vote = null) {
             Id = id;
             User = user;
+            PostId = postId;
             Body = body;
             CreationDate = creationDate;
             WasUpdated = wasUpdated;
