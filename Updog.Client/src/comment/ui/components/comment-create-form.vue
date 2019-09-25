@@ -1,6 +1,7 @@
 <template>
     <v-form class="comment-create-form">
         <v-textarea
+            ref="bodyTextarea"
             label="Type your comment"
             class="mb-3"
             v-model="comment"
@@ -10,7 +11,8 @@
             :error="errors.first('commentCreateTextArea') != null"
             :error-messages="errors.first('commentCreateTextArea')"
         />
-        <v-btn color="primary" @click="onSubmit">Submit</v-btn>
+        <v-btn color="primary" @click="onSubmit" class="mr-3">Submit</v-btn>
+        <v-btn v-show="parentId !== 0" color="error" outlined @click="onCancel">Cancel</v-btn>
     </v-form>
 </template>
 
@@ -32,6 +34,10 @@ import { CommentCreatorMixin } from '../../mixins/comment-creator-mixin';
     name: 'comment-create-form'
 })
 export default class CommentCreateForm extends CommentCreatorMixin {
+    public $refs!: {
+        bodyTextarea: HTMLTextAreaElement;
+    };
+
     get postId() {
         return Number.parseInt(this.$route.params.postId, 10);
     }
@@ -61,6 +67,13 @@ export default class CommentCreateForm extends CommentCreatorMixin {
         });
     }
 
+    /**
+     * Activate the form.
+     */
+    public focus() {
+        this.$refs.bodyTextarea.focus();
+    }
+
     public async onSubmit() {
         // Validate first.
         if (!(await this.$validator.validate())) {
@@ -77,6 +90,10 @@ export default class CommentCreateForm extends CommentCreatorMixin {
 
         this.$emit('submit', this.comment);
         this.clear();
+    }
+
+    public async onCancel() {
+        this.$emit('cancel');
     }
 
     public clear(): void {

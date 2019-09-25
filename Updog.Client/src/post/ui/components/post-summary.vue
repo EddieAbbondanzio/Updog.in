@@ -85,6 +85,7 @@ import PostExpandButton from '@/post/ui/components/post-expand-button.vue';
 import PostTimeStamp from '@/post/ui/components/post-time-stamp.vue';
 import CommentsLink from '@/comment/ui/components/comments-link.vue';
 import AreYouSure from '@/core/ui/components/are-you-sure.vue';
+import CommentCreateForm from '../../../comment/ui/components/comment-create-form.vue';
 
 /**
  * Summary of information about a post. Used on post lists, and post topic page.

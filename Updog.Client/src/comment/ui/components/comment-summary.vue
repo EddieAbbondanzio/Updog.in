@@ -72,8 +72,13 @@
                     </div>
 
                     <!-- Reply Box -->
-                    <div v-if="isReplying">
-                        <comment-create-form @submit="onReplySubmit" :parentId="comment.id" />
+                    <div v-show="isReplying">
+                        <comment-create-form
+                            ref="commentCreateForm"
+                            @submit="onReplySubmit"
+                            @cancel="isReplying = false"
+                            :parentId="comment.id"
+                        />
                     </div>
                 </div>
             </div>
@@ -117,6 +122,10 @@ import AreYouSure from '@/core/ui/components/are-you-sure.vue';
     }
 })
 export default class CommentSummary extends CommentUpdaterMixin {
+    public $refs!: {
+        commentCreateForm: CommentCreateForm;
+    };
+
     @Prop()
     public comment!: Comment;
 
@@ -169,6 +178,11 @@ export default class CommentSummary extends CommentUpdaterMixin {
             this.$redirectToLogin();
         } else {
             this.isReplying = true;
+
+            // Auto focus the textbox to make user's life easier
+            this.$nextTick(() => {
+                this.$refs.commentCreateForm.focus();
+            });
         }
     }
 
