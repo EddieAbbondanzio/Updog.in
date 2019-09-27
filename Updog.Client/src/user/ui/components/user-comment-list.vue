@@ -10,12 +10,14 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { CommentFinderMixin, CommentFinderByUserParams } from '../../../comment';
+import { CommentFinderByUserParams } from '../../../comment/interactors/find-by-user/comment-finder-by-user-params';
 import { User } from '../../domain/user';
-import CommentSummary from '@/comment/ui/components/comment-summary.vue';
+import { Comment } from '@/comment/domain/comment';
+import { PagedResultSet } from '@/core/pagination/paged-result-set';
 import PaginationNav from '@/core/ui/components/pagination-nav.vue';
-import { PaginationParams, PagedResultSet } from '../../../core';
-import { Comment } from '@/comment';
+import CommentSummary from '@/comment/ui/components/comment-summary.vue';
+import CommentFinderMixin from '@/comment/mixins/comment-finder-mixin';
+import { PaginationParams } from '@/core/pagination/pagination-params';
 
 /**
  * List of Comments made by a user

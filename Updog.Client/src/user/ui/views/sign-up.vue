@@ -12,11 +12,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import UserRegisterForm from '@/user/ui/components/user-register-form.vue';
-import { User } from '@/user';
-import { UserLogin } from '@/user';
 import Layout from '@/core/ui/components/layout.vue';
-import { UserRegistration } from '@/user';
+import UserRegisterForm from '@/user/ui/components/user-register-form.vue';
+import { UserLogin } from '@/user/domain/user-login';
 
 @Component({
     components: {

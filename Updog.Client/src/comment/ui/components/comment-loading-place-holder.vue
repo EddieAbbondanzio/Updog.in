@@ -7,18 +7,20 @@
 </template>
 
 <style lang="scss" scoped>
-.comment-title-placeholder {
-    width: 480px;
-}
+// .comment-title-placeholder {
+//     width: 480px;
+// }
 
-.comment-text-placeholder {
-    width: 240px;
-    margin-top: 8px;
-}
+// .comment-text-placeholder {
+//     width: 240px;
+//     margin-top: 8px;
+// }
+//
 </style>
 
-<script lang="ts">
+// <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+
 @Component({
     name: 'comment-loading-place-holder'
 })

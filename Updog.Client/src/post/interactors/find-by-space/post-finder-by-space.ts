@@ -1,7 +1,4 @@
-import { ApiInteractor } from '@/core/interactors/api-interactor';
-import { PaginationParams } from '@/core/pagination/pagination-params';
 import { Post } from '@/post/domain/post';
-import { PostMapper } from '@/post/infrastructure/post-mapper';
 import { PostApiInteractor } from '@/post/infrastructure/post-api-interactor';
 import { PagedResultSet } from '@/core/pagination/paged-result-set';
 import { PostFindBySpaceParams } from './post-find-by-space-params';

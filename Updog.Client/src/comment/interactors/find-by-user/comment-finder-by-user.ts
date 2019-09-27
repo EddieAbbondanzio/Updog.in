@@ -1,7 +1,7 @@
 import { CommentFinderByUserParams } from './comment-finder-by-user-params';
-import { Comment } from '@/comment';
-import { CommentApiInteractor } from '@/comment';
-import { PagedResultSet } from '@/core';
+import { CommentApiInteractor } from '@/comment/infrastructure/comment-api-interactor';
+import { Comment } from '@/comment/domain/comment';
+import { PagedResultSet } from '@/core/pagination/paged-result-set';
 
 /**
  * API interactor to find coments by the user that created them.

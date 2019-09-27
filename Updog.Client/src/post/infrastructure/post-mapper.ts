@@ -1,8 +1,8 @@
-import { Mapper } from '@/core';
 import { Post } from '@/post/domain/post';
-import { UserMapper } from '@/user';
-import { VoteMapper } from '@/vote';
-import { SpaceMapper } from '@/space';
+import { Mapper } from '@/core/infrastructure/mapper';
+import { UserMapper } from '@/user/infrastructure/user-mapper';
+import { SpaceMapper } from '@/space/infrastructure/space-mapper';
+import { VoteMapper } from '@/vote/infrastructure/vote-mapper';
 
 /**
  * Mapper to convert a post into it's entity form from a raw

@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { DateUtils } from '@/core';
+import { DateUtils } from '@/core/utils/date-utils';
 
 /**
  * Timestamp that displays a difference between two dates in a human

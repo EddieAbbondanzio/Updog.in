@@ -24,7 +24,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { PaginationInfo } from '@/core';
+import { PaginationInfo } from '@/core/pagination/pagination-info';
+
 @Component({
     name: 'pagination-nav'
 })

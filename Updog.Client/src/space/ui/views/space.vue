@@ -23,14 +23,12 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-import { SpaceViewerMixin } from '@/space/mixins/space-viewer-mixin';
-import Layout from '@/core/ui/components/layout.vue';
 import { Space as SpaceEntity } from '@/space/domain/space';
-import SpaceLink from '@/space/ui/components/space-link.vue';
-import PostSummaryList from '@/post/ui/components/post-summary-list.vue';
 import { Post } from '@/post/domain/post';
-import { PagedResultSet, PaginationParams } from '@/core';
-import { PostFindBySpaceParams } from '@/post';
+import SpaceViewerMixin from '@/space/mixins/space-viewer-mixin';
+import { PostFindBySpaceParams } from '@/post/interactors/find-by-space/post-find-by-space-params';
+import Layout from '@/core/ui/components/layout.vue';
+import SpaceLink from '@/space/ui/components/space-link.vue';
 import CreatePostButtons from '@/post/ui/components/create-post-buttons.vue';
 
 /**
@@ -41,7 +39,6 @@ import CreatePostButtons from '@/post/ui/components/create-post-buttons.vue';
     components: {
         Layout,
         SpaceLink,
-        PostSummaryList,
         CreatePostButtons
     }
 })

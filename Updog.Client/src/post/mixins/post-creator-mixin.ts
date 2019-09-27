@@ -1,17 +1,15 @@
 import Mixin from 'vue-class-component';
-import Vue from 'vue';
 import { PostCreateParams } from '../interactors/create/post-create-params';
 import { Post } from '../domain/post';
-import { PostCreator } from '../interactors/create/post-creator';
 import PostModule from '../store/post-store';
 import { getModule } from 'vuex-module-decorators';
-import { SpaceFinderMixin } from '@/space';
+import SpaceFinderMixin from '@/space/mixins/space-finder-mixin';
 
 /**
  * Mixin to handle creating new posts.
  */
 @Mixin
-export class PostCreatorMixin extends SpaceFinderMixin {
+export default class PostCreatorMixin extends SpaceFinderMixin {
     /**
      * Reirect to the post topic page.
      * @param id The ID of the new post.

@@ -55,20 +55,15 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import UserLink from '@/user/ui/components/user-link.vue';
-import { AuthenticatedMixin } from '@/user';
-import { UserLoginMixin } from '../../mixins/user-login-mixin';
+import UserLoginMixin from '../../mixins/user-login-mixin';
 import Cookie from 'js-cookie';
-import { NumberUtils } from '../../../core';
+import { NumberUtils } from '@/core/utils/number-utils';
 
 /**
  * Component to handle logging in, and signing up new users.
  */
 @Component({
-    name: 'new-component',
-    components: {
-        UserLink
-    }
+    name: 'new-component'
 })
 export default class UserWidget extends UserLoginMixin {
     get username() {

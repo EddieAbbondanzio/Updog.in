@@ -2,14 +2,14 @@ import Mixin from 'vue-class-component';
 import Vue from 'vue';
 import UserModule from '../store/user-store';
 import { getModule } from 'vuex-module-decorators';
-import { UserLogin } from '@/user';
+import { UserLogin } from '../domain/user-login';
 
 /**
  * Mixin to check if a user is logged in and some
  * helper functions.
  */
 @Mixin
-export class AuthenticatedMixin extends Vue {
+export default class AuthenticatedMixin extends Vue {
     /**
      * Get the currently logged in user.
      */

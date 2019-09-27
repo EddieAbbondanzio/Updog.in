@@ -22,9 +22,10 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Comment } from '@/comment';
-import { NumberUtils } from '@/core';
-import { VoteDirection, CommentVoterMixin } from '@/vote';
+import { Comment } from '@/comment/domain/comment';
+import CommentVoterMixin from '@/vote/mixins/comment-voter-mixin';
+import { VoteDirection } from '@/vote/domain/vote-direction';
+import { NumberUtils } from '@/core/utils/number-utils';
 
 /**
  * Controller to handle the votes of a comment.

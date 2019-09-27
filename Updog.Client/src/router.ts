@@ -12,7 +12,7 @@ const r = new Router({
     routes: [...coreRoutes, ...spaceRoutes, ...userRoutes, ...postRoutes]
 });
 
-r.mode = 'history';
+r.mode = 'hash';
 
 r.beforeEach(async (to, from, next) => {
     if (to.meta.authenticate && store.state.user.userLogin == null) {

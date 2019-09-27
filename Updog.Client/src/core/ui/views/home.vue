@@ -21,13 +21,13 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import PostFinderMixin from '@/post/mixins/post-finder-mixin';
 import Layout from '@/core/ui/components/layout.vue';
 import PaginationNav from '@/core/ui/components/pagination-nav.vue';
-import { getModule } from 'vuex-module-decorators';
-import { PaginationParams } from '@/core';
-import { PostFinderMixin, Post } from '@/post';
 import CreatePostButtons from '@/post/ui/components/create-post-buttons.vue';
 import PostSummaryList from '@/post/ui/components/post-summary-list.vue';
+import { PaginationParams } from '@/core/pagination/pagination-params';
+import { Post } from '@/post/domain/post';
 
 /**
  * Home page that shows off the newests new posts.

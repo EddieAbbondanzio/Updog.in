@@ -9,6 +9,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Post } from '../../domain/post';
 import { PostType } from '../../domain/post-type';
+
 import CommentsLink from '@/comment/ui/components/comments-link.vue';
 
 /**

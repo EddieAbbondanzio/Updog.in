@@ -1,7 +1,7 @@
-import { Mapper } from '@/core';
 import { Comment } from '@/comment/domain/comment';
-import { UserMapper } from '@/user';
-import { VoteMapper } from '@/vote';
+import { Mapper } from '@/core/infrastructure/mapper';
+import { UserMapper } from '@/user/infrastructure/user-mapper';
+import { VoteMapper } from '@/vote/infrastructure/vote-mapper';
 
 /**
  * Mapper to convert a comment into it's entity.

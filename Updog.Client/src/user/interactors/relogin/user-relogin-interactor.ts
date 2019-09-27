@@ -1,8 +1,4 @@
-import { ApiInteractor } from '@/core/interactors/api-interactor';
-import { UserCredentials } from '../../domain/user-credentials';
 import { UserLogin } from '../../domain/user-login';
-import { User } from '../../domain/user';
-import { UserMapper } from '@/user/infrastructure/user-mapper';
 import { UserApiInteractor } from '@/user/infrastructure/user-api-interactor';
 
 /**

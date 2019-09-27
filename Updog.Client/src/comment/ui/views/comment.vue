@@ -14,9 +14,9 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Comment as CommentEntity } from '@/comment';
+import { Comment as CommentEntity } from '@/comment/domain/comment';
+import CommentFinderMixin from '@/comment/mixins/comment-finder-mixin';
 import CommentSummary from '@/comment/ui/components/comment-summary.vue';
-import { CommentFinderMixin } from '@/comment';
 
 /**
  * Page for permalnking to a comment.

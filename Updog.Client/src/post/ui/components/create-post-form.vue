@@ -89,9 +89,9 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Post, PostCreateParams, PostType } from '@/post';
-import { SpaceFinderMixin, Space } from '../../../space';
-
+import SpaceFinderMixin from '@/space/mixins/space-finder-mixin';
+import { PostType } from '@/post/domain/post-type';
+import { PostCreateParams } from '@/post/interactors/create/post-create-params';
 /**
  * Form to create a new text or link post.
  */

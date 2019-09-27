@@ -5,9 +5,7 @@ import { CommentFinderById } from '../interactors/find-by-id/comment-finder-by-i
 import { CommentFinderByPost } from '../interactors/find-by-post/comment-finder-by-post';
 import { CommentFinderByUser } from '../interactors/find-by-user/comment-finder-by-user';
 import { CommentCreator } from '../interactors/create/comment-creator';
-import { PagedResultSet } from '@/core/pagination/paged-result-set';
 import { CommentMutation } from './comment-mutation';
-import { PaginationInfo } from '@/core/pagination/pagination-info';
 import { Comment } from '@/comment/domain/comment';
 import { CommentUpdateParams } from '../interactors/update/comment-update-params';
 import { CommentUpdater } from '../interactors/update/comment-updater';
@@ -18,7 +16,7 @@ import { VoteOnCommentParams } from '@/vote/interactors/vote-on-comment/vote-on-
 import { StoreNamespace } from '@/core/store/store-namespace';
 import { CommentAction } from './comment-action';
 import { StoreUtils } from '@/core/store/store-utils';
-import { CommentDeleter } from '..';
+import { CommentDeleter } from '@/comment/interactors/delete/comment-deleter';
 /**
  * Cache module for comments.
  */

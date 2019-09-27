@@ -73,31 +73,25 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import TimeStamp from '@/core/ui/components/time-stamp.vue';
-import UserLink from '@/user/ui/components/user-link.vue';
-import { mixins } from 'vue-class-component';
+import PostUpdaterMixin from '@/post/mixins/post-updater-mixin';
 import PostVoteController from '@/vote/ui/components/post-vote-controller.vue';
 import PostIcon from '@/post/ui/components/post-icon.vue';
-import SpaceLink from '@/space/ui/components/space-link.vue';
-import { PostUpdaterMixin, Post, PostUpdateParams, PostType } from '@/post';
 import PostLink from '@/post/ui/components/post-link.vue';
 import PostExpandButton from '@/post/ui/components/post-expand-button.vue';
 import PostTimeStamp from '@/post/ui/components/post-time-stamp.vue';
 import CommentsLink from '@/comment/ui/components/comments-link.vue';
 import AreYouSure from '@/core/ui/components/are-you-sure.vue';
-import CommentCreateForm from '../../../comment/ui/components/comment-create-form.vue';
-
+import { Post } from '@/post/domain/post';
+import { PostUpdateParams } from '@/post/interactors/update/post-update-params';
+import { PostType } from '@/post/domain/post-type';
 /**
  * Summary of information about a post. Used on post lists, and post topic page.
  */
 @Component({
     name: 'post-summary',
     components: {
-        TimeStamp,
-        UserLink,
         PostVoteController,
         PostIcon,
-        SpaceLink,
         PostLink,
         PostExpandButton,
         PostTimeStamp,

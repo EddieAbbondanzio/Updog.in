@@ -1,19 +1,18 @@
 <template>
-    <div v-if="$posts != null">
-        <post-summary :post="post" v-for="post in $posts" v-bind:key="post.id" />
-
+    <div>
+        <post-summary-list :posts="posts" />
         <pagination-nav :pagination="$posts.pagination" @previous="onPrevious" @next="onNext" />
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { PostFinderMixin, PostFinderByUserParams } from '../../../post';
 import { User } from '../../domain/user';
-import PostSummary from '@/post/ui/components/post-summary.vue';
+import PostFinderMixin from '@/post/mixins/post-finder-mixin';
+import PostSummaryList from '@/post/ui/components/post-summary-list.vue';
 import PaginationNav from '@/core/ui/components/pagination-nav.vue';
-import { PaginationParams } from '../../../core';
-import { Post } from '@/post';
+import { PostFinderByUserParams } from '@/post/interactors/find-by-user/post-finder-by-user-params';
+import { PaginationParams } from '@/core/pagination/pagination-params';
 
 /**
  * List of posts made by a user
@@ -21,7 +20,7 @@ import { Post } from '@/post';
 @Component({
     name: 'user-post-list',
     components: {
-        PostSummary,
+        PostSummaryList,
         PaginationNav
     }
 })

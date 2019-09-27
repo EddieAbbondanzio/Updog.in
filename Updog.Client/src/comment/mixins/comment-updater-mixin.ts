@@ -1,16 +1,15 @@
 import Mixin from 'vue-class-component';
-import Vue from 'vue';
 import CommentModule from '../store/comment-store';
 import { getModule } from 'vuex-module-decorators';
-import { CommentUpdateParams } from '@/comment';
 import { Comment } from '../domain/comment';
-import { AuthenticatedMixin } from '@/user';
+import AuthenticatedMixin from '@/user/mixins/authenticated-mixin';
+import { CommentUpdateParams } from '../interactors/update/comment-update-params';
 
 /**
  * Mixin to handle comment related things.
  */
 @Mixin
-export class CommentUpdaterMixin extends AuthenticatedMixin {
+export default class CommentUpdaterMixin extends AuthenticatedMixin {
     /**
      * Create a new comment.
      * @param params The new comment info.

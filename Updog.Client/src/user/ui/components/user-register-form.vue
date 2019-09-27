@@ -64,11 +64,10 @@
 <script lang="ts">
 import { Component, Vue, Mixins } from 'vue-property-decorator';
 import { UserRegistration } from '@/user/domain/user-registration';
-import { UserFinderMixin } from '../../mixins/user-finder-mixin';
 import { mixins } from 'vue-class-component';
-import { UserRegistrarMixin } from '@/user/mixins/user-registrar-mixin';
-import { Form } from '../../../core';
+import UserRegistrarMixin from '@/user/mixins/user-registrar-mixin';
 import { UserLogin } from '../../domain/user-login';
+import { Form } from '@/core/ui/common/form/form';
 
 /**
  * Login form for logging in users via username / password.

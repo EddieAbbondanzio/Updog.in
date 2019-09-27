@@ -14,7 +14,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import UserLoginForm from '@/user/ui/components/user-login-form.vue';
 import Layout from '@/core/ui/components/layout.vue';
-import { UserLogin } from '@/user';
+import { UserLogin } from '@/user/domain/user-login';
 
 @Component({
     components: {
@@ -25,7 +25,6 @@ import { UserLogin } from '@/user';
 export default class Login extends Vue {
     public async onLogin(login: UserLogin) {
         this.$router.back();
-        // this.$router.push({ name: 'home' });
     }
 }
 </script>

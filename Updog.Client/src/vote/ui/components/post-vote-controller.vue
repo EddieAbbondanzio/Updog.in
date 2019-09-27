@@ -27,10 +27,10 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { PostVoterMixin } from '@/vote';
-import { NumberUtils } from '@/core';
-import { VoteDirection } from '@/vote';
-import { Post } from '@/post';
+import PostVoterMixin from '@/vote/mixins/post-voter-mixin';
+import { Post } from '@/post/domain/post';
+import { VoteDirection } from '@/vote/domain/vote-direction';
+import { NumberUtils } from '@/core/utils/number-utils';
 
 /**
  * Control to upvote, or downvote a comment, or post.
@@ -38,7 +38,7 @@ import { Post } from '@/post';
 @Component({
     name: 'vote-controller'
 })
-export default class VoteController extends PostVoterMixin {
+export default class PostVoteController extends PostVoterMixin {
     /**
      * The post being voted on.
      */

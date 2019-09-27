@@ -13,8 +13,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import TimeStamp from '@/core/ui/components/time-stamp.vue';
 import { Post } from '../../domain/post';
+import TimeStamp from '@/core/ui/components/time-stamp.vue';
 import UserLink from '@/user/ui/components/user-link.vue';
 import SpaceLink from '@/space/ui/components/space-link.vue';
 

@@ -1,14 +1,13 @@
 import Mixin from 'vue-class-component';
-import Vue from 'vue';
 import { getModule } from 'vuex-module-decorators';
 import SpaceModule from '../store/space-store';
-import { AuthenticatedMixin } from '@/user';
+import AuthenticatedMixin from '@/user/mixins/authenticated-mixin';
 
 /**
  * Mixin to find spaces.
  */
 @Mixin
-export class SpaceFinderMixin extends AuthenticatedMixin {
+export default class SpaceFinderMixin extends AuthenticatedMixin {
     get $defaultSpaces() {
         const spaceModule = getModule(SpaceModule, this.$store);
         return spaceModule.default;

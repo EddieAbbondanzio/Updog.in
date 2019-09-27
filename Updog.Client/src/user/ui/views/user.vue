@@ -28,14 +28,13 @@
 <script lang="ts">
 import { Component, Vue, Prop, Mixins } from 'vue-property-decorator';
 import Layout from '@/core/ui/components/layout.vue';
-import { User as UserEntity } from '@/user';
+import { User as UserEntity } from '@/user/domain/user';
 import UserSummary from '@/user/ui/components/user-summary.vue';
 import CommentSummary from '@/comment/ui/components/comment-summary.vue';
 import PaginationNav from '@/core/ui/components/pagination-nav.vue';
-import { UserFinderMixin } from '@/user';
-import { PagedResultSet, PaginationParams } from '@/core';
-import { Post, PostFinderByUserParams, PostFinderMixin } from '@/post';
-import { CommentFinderMixin, Comment } from '@/comment';
+import UserFinderMixin from '@/user/mixins/user-finder-mixin';
+import { Post } from '@/post/domain/post';
+import { Comment } from '@/comment/domain/comment';
 import UserPostList from '@/user/ui/components/user-post-list.vue';
 import UserCommentList from '@/user/ui/components/user-comment-list.vue';
 
@@ -47,7 +46,6 @@ import UserCommentList from '@/user/ui/components/user-comment-list.vue';
     components: {
         Layout,
         UserSummary,
-        CommentSummary,
         PaginationNav,
         UserPostList,
         UserCommentList

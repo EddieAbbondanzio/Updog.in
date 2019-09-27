@@ -18,10 +18,11 @@
 </template>
 
 <script lang="ts">
+import { Component, Vue, Prop } from 'vue-property-decorator';
+
 /**
  * Widget to create a new post.
  */
-import { Component, Vue, Prop } from 'vue-property-decorator';
 @Component({
     name: 'create-post-buttons'
 })

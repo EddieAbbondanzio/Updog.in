@@ -30,14 +30,11 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-import { Space, SpaceFinderMixin } from '../../../space';
-import SpaceLink from '@/space/ui/components/space-link.vue';
+import { Space } from '@/space/domain/space';
+import SpaceFinderMixin from '@/space/mixins/space-finder-mixin';
 
 @Component({
-    name: 'nav-drawer',
-    components: {
-        SpaceLink
-    }
+    name: 'nav-drawer'
 })
 export default class NavDrawer extends SpaceFinderMixin {
     @Prop({ default: false })

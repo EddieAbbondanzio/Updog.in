@@ -96,14 +96,15 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Mixins } from 'vue-property-decorator';
+import { Comment } from '@/comment/domain/comment';
+import CommentUpdaterMixin from '@/comment/mixins/comment-updater-mixin';
 import TimeStamp from '@/core/ui/components/time-stamp.vue';
 import UserLink from '@/user/ui/components/user-link.vue';
 import CommentCreateForm from '@/comment/ui/components/comment-create-form.vue';
 import CommentVoteController from '@/vote/ui/components/comment-vote-controller.vue';
-import { CommentCreateParams, CommentUpdateParams } from '@/comment';
-import { Comment, CommentUpdaterMixin } from '@/comment';
 import CommentExpandButton from '@/comment/ui/components/comment-expand-button.vue';
 import AreYouSure from '@/core/ui/components/are-you-sure.vue';
+import { CommentUpdateParams } from '@/comment/interactors/update/comment-update-params';
 
 /**
  * Component to show a comment on screen.

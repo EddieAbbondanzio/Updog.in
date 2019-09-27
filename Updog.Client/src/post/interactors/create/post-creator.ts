@@ -1,8 +1,5 @@
-import { ApiInteractor } from '@/core/interactors/api-interactor';
 import { PostCreateParams } from './post-create-params';
 import { Post } from '@/post/domain/post';
-import { PostMapper } from '@/post/infrastructure/post-mapper';
-import { UserMapper } from '@/user/infrastructure/user-mapper';
 import { PostApiInteractor } from '@/post/infrastructure/post-api-interactor';
 
 /**

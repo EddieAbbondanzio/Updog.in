@@ -1,4 +1,3 @@
-import { ApiInteractor } from '@/core/interactors/api-interactor';
 import { Post } from '../../domain/post';
 import { PostApiInteractor } from '@/post/infrastructure/post-api-interactor';
 

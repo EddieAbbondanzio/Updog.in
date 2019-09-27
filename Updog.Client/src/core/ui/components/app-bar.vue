@@ -28,8 +28,6 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import UserWidget from '@/user/ui/components/user-widget.vue';
-import { User } from '@/user';
-import { UserLogin } from '@/user';
 
 /**
  * Nav bar atop the page. Shows the logged in user and brand image / name.

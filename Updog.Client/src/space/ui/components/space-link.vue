@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Space } from '@/space';
+import { Space } from '@/space/domain/space';
 
 /**
  * Link to a space.

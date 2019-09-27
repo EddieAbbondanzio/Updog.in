@@ -1,5 +1,7 @@
-import { User } from '@/user';
-import { Vote, VoteResourceType, VotableEntity } from '@/vote';
+import { VotableEntity } from '@/vote/common/votable-entity';
+import { VoteResourceType } from '@/vote/domain/vote-resource-type';
+import { User } from '@/user/domain/user';
+import { Vote } from '@/vote/domain/vote';
 
 /**
  * A text comment attached to a post.

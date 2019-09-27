@@ -1,15 +1,15 @@
 import Mixin from 'vue-class-component';
-import { AuthenticatedMixin } from './authenticated-mixin';
-import { UserUsernameAvailableChecker } from '../interactors/is-username-available/user-username-available-checker';
+import AuthenticatedMixin from './authenticated-mixin';
 import { getModule } from 'vuex-module-decorators';
 import UserStore from '../store/user-store';
-import { UserRegistration, UserLogin } from '@/user';
+import { UserRegistration } from '../domain/user-registration';
+import { UserLogin } from '../domain/user-login';
 
 /**
  * Mixin to handle registering new users.
  */
 @Mixin
-export class UserRegistrarMixin extends AuthenticatedMixin {
+export default class UserRegistrarMixin extends AuthenticatedMixin {
     /**
      * Check to see if a username is available.
      * @param username The username to check.
