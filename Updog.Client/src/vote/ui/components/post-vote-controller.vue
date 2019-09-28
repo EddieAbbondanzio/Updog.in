@@ -7,7 +7,7 @@
             <span
                 :class="{ upvoted: isUpvoted, downvoted: isDownvoted}"
                 :title="`${post.karma} points`"
-            >{{ karma }}</span>
+            >{{ post.karma | shortHand }}</span>
         </div>
         <v-btn @click.native.stop="downvote" text icon>
             <v-icon size="32" :class="{ downvoted: isDownvoted}">keyboard_arrow_down</v-icon>
@@ -65,13 +65,6 @@ export default class PostVoteController extends PostVoterMixin {
         }
 
         return this.post.vote.direction === VoteDirection.Down;
-    }
-
-    /**
-     * Fancily formatted karma number.
-     */
-    get karma() {
-        return NumberUtils.formatWithK(this.post.karma);
     }
 
     /**

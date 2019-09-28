@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <post-summary-list :posts="posts" />
+    <div v-if="$posts != null">
+        <post-summary-list :posts="$posts" />
         <pagination-nav :pagination="$posts.pagination" @previous="onPrevious" @next="onNext" />
     </div>
 </template>

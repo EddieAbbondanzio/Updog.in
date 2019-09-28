@@ -6,10 +6,12 @@ import vuetify from './plugins/vuetify';
 import './plugins/vue-content-placeholders';
 import './plugins/vee-validate';
 import App from './app.vue';
+import { shortHand } from '@/core/ui/filters/short-hand';
 
 Vue.config.productionTip = false;
 
 Vue.filter(capitalize.name, capitalize);
+Vue.filter(shortHand.name, shortHand);
 
 const v = new Vue({
     router,
