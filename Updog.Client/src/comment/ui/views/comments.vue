@@ -58,8 +58,8 @@ export default class Comments extends CommentFinderMixin {
      * On load, pull in the comments.
      */
     public async mounted() {
-        // await this.$findCommentsByPost(new CommentFinderByPostParams(this.postId));
-        // this.isLoading = false;
+        await this.$findCommentsByPost(new CommentFinderByPostParams(this.postId));
+        this.isLoading = false;
     }
 }
 </script>
