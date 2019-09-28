@@ -9,7 +9,10 @@ export const userRoutes: RouteConfig[] = [
     {
         path: '/signup',
         name: 'signup',
-        component: () => import('@/user/ui/views/sign-up.vue')
+        component: () => import('@/user/ui/views/sign-up.vue'),
+        meta: {
+            anonymous: true
+        }
     },
     {
         name: 'user',

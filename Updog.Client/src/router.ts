@@ -15,10 +15,21 @@ const r = new Router({
 r.mode = 'hash';
 
 r.beforeEach(async (to, from, next) => {
-    if (to.meta.authenticate && store.state.user.userLogin == null) {
-        next({
-            name: 'login'
-        });
+    // Page should only allow logged in users.
+    if (to.meta.authenticate) {
+        if (store.state.user.userLogin == null) {
+            next({ name: 'login' });
+        } else {
+            next();
+        }
+        // Page should not allow any logged in users.
+    } else if (to.meta.anonymous) {
+        if (store.state.user.userLogin == null) {
+            next();
+        } else {
+            next({ name: 'home' });
+        }
+        // Regular page
     } else {
         next();
     }
