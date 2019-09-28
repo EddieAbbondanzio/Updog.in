@@ -4,10 +4,10 @@ Updog is a reddit-esque content aggregation website. Users can create accounts t
 
 This project was built as a learning experience to see what it would take to build a reddit clone. The front end is built using Vue.js and TypeScript. The back end is powered by ASP.NET Core, and a PostgreSQL database. Architecture wise the project adheres to clean architecture although I've never actually read the book so it probably isn't 100% up to par ¯\\_(ツ)_/¯
 
-![ScreenShot](https://raw.github.com/{EddieAbbondanzio}/Updog.in/master/screenshots/1.png)
-![ScreenShot](https://raw.github.com/{EddieAbbondanzio}/Updog.in/master/screenshots/2.png)
-![ScreenShot](https://raw.github.com/{EddieAbbondanzio}/Updog.in/master/screenshots/3.png)
-![ScreenShot](https://raw.github.com/{EddieAbbondanzio}/Updog.in/master/screenshots/4.png)
+![ScreenShot](https://raw.githubusercontent.com/EddieAbbondanzio/Updog.in/master/screenshots/1.png)
+![ScreenShot](https://raw.githubusercontent.com/EddieAbbondanzio/Updog.in/master/screenshots/2.png)
+![ScreenShot](https://raw.githubusercontent.com/EddieAbbondanzio/Updog.in/master/screenshots/3.png)
+![ScreenShot](https://raw.githubusercontent.com/EddieAbbondanzio/Updog.in/master/screenshots/4.png)
 
 ## Features
 
