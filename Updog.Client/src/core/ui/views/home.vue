@@ -3,7 +3,7 @@
         <template>
             <post-summary-list :posts="$posts" />
             <pagination-nav
-                v-if="$posts != null && $posts.length > 0"
+                v-if="$posts != null"
                 :pagination="$posts.pagination"
                 @previous="onPrevious"
                 @next="onNext"

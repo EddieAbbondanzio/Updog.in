@@ -1,5 +1,5 @@
 <template>
-    <v-card class="d-flex flex-row pa-3">
+    <v-card class="d-flex flex-row pa-3" v-if="pagination.pageCount() > 1">
         <v-btn
             color="primary"
             outlined
