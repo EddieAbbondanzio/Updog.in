@@ -16,7 +16,6 @@ namespace Updog.Api {
     public class Program {
         public static async Task Main(string[] args) {
             var host = CreateWebHostBuilder(args).Build();
-
             try {
 
                 var adminConfig = host.Services.GetService<IAdminConfig>();

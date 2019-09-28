@@ -102,7 +102,8 @@ namespace Updog.Persistance {
             await Connection.ExecuteAsync(
                 @"UPDATE Subscription SET
                         SpaceId = @SpaceId,
-                        UserId = @UserId
+                        UserId = @UserId,
+                        SubscriptionCount = @SubscriptionCount
                         WHERE Id = @Id",
                 _mapper.Reverse(entity).Item1
             );
