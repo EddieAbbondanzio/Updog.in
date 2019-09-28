@@ -158,6 +158,7 @@ namespace Updog.Api {
             app.UseAuthentication();
 
             if (env.IsDevelopment()) {
+                app.UseHttpsRedirection();
                 app.UseDeveloperExceptionPage();
             } else {
                 app.UseMiddleware<ExceptionHandler>();
@@ -165,8 +166,9 @@ namespace Updog.Api {
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
             app.UseMvc();
+
+
         }
     }
 }

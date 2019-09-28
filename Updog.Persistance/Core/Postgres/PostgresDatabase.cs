@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.Common;
 using Npgsql;
 using Updog.Application;
@@ -21,6 +22,10 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="connection">The connection config.</param>
         public PostgresDatabase(IDatabaseConfig config) {
+            if (config == null) {
+                throw new ArgumentNullException("Database config was not found");
+            }
+
             NpgsqlConnectionStringBuilder connBuilder = new NpgsqlConnectionStringBuilder() {
                 Host = config.Host,
                 Port = config.Port,
