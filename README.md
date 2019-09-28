@@ -1,5 +1,7 @@
 # Updog.in
 
+Live: [https://updog.in]
+
 Updog is a reddit-esque content aggregation website. Users can create accounts to share posts, and create comments. Posts can be upvoted and downvoted and users can earn karma on their posts.
 
 This project was built as a learning experience to see what it would take to build a reddit clone. The front end is built using Vue.js and TypeScript. The back end is powered by ASP.NET Core, and a PostgreSQL database. Architecture wise the project adheres to clean architecture although I've never actually read the book so it probably isn't 100% up to par ¯\\_(ツ)_/¯
@@ -20,6 +22,8 @@ This project was built as a learning experience to see what it would take to bui
 -   Profile pages for users
 
 ## Set Up
+
+You'll need a PostgreSQL database. You'll also need to pre-populate the tables using the table defintion files included in the `Updog.Persistance` layer. Perhaps in the future the project will support a db initialization step.
 
 The project is divided into two parts: the API, and the client. Client source code can be found under `Updog.Client`. All other folders hold the source code for the backend (API).
 
@@ -66,3 +70,7 @@ Frontend source code is stored under `Updog.Client` and is a Vue.js project writ
 ```
 serve
 ```
+
+## Future Work
+
+Backend could use a switch to pub sub set up.
