@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Updog.Domain;
 
@@ -26,6 +28,22 @@ namespace Updog.Application {
                 User? existingAdmin = await userRepo.FindByUsername(input.Username);
 
                 if (existingAdmin != null) {
+                    // Update password is config file has new value.
+                    if (!passwordHasher.Verify(input.Password, existingAdmin.PasswordHash)) {
+                        existingAdmin.PasswordHash = passwordHasher.Hash(input.Password);
+                        await userRepo.Update(existingAdmin);
+                    }
+
+                    // ISpaceRepo spaceRepo = database.GetRepo<ISpaceRepo>(connection);
+                    // ISubscriptionRepo subRepo = database.GetRepo<ISubscriptionRepo>(connection);
+
+                    // var spaces = await spaceRepo.FindDefault();
+                    // var subs = spaces.Select(s => new Subscription() { Space = s, User = existingAdmin });
+
+                    // foreach (Subscription sub in subs) {
+                    //     await subRepo.Add(sub);
+                    // }
+
                     return userMapper.Map(existingAdmin);
                 }
 
