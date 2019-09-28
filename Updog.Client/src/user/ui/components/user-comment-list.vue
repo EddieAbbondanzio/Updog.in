@@ -2,7 +2,12 @@
     <div v-if="comments != null">
         <comment-summary-list :comments="comments" />
 
-        <pagination-nav :pagination="comments.pagination" @previous="onPrevious" @next="onNext" />
+        <pagination-nav
+            :pagination="comments.pagination"
+            @previous="onPrevious"
+            @next="onNext"
+            v-if="comments.length > 0"
+        />
     </div>
 </template>
 

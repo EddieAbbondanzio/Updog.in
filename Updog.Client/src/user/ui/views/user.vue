@@ -2,7 +2,7 @@
     <layout>
         <template v-if="user != null">
             <v-card>
-                <v-tabs v-model="activeTab" class="mb-6">
+                <v-tabs v-model="activeTab" class="mb-3">
                     <v-tab>Posts</v-tab>
                     <v-tab>Comments</v-tab>
                 </v-tabs>

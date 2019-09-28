@@ -1,7 +1,12 @@
 <template>
     <div v-if="$posts != null">
         <post-summary-list :posts="$posts" />
-        <pagination-nav :pagination="$posts.pagination" @previous="onPrevious" @next="onNext" />
+        <pagination-nav
+            :pagination="$posts.pagination"
+            @previous="onPrevious"
+            @next="onNext"
+            v-if="$posts.length > 0"
+        />
     </div>
 </template>
 

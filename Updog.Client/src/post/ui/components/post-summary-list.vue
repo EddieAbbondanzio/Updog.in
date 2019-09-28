@@ -3,7 +3,7 @@
         <div v-if="posts.length > 0">
             <post-summary v-for="post in posts" :post="post" v-bind:key="post.id" />
         </div>
-        <div v-else class="error--text">There's nothing here!</div>
+        <v-card v-else class="pa-3 mb-3 error--text">There's nothing here!</v-card>
     </div>
     <div v-else>
         <post-loading-place-holder v-for="i in 4" :key="i" />

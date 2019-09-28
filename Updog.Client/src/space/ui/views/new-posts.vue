@@ -2,7 +2,7 @@
     <div>
         <post-summary-list :posts="posts" />
         <pagination-nav
-            v-if="posts != null"
+            v-if="posts != null && posts.length > 0"
             :pagination="posts.pagination"
             @previous="onPrevious"
             @next="onNext"
