@@ -9,7 +9,7 @@
                 <template v-slot:activator="{ on }">
                     <v-btn color="normal" text v-on="on" large>
                         <div class="d-flex align-center">
-                            <v-avatar color="accent" size="36" :title="username" class="mr-2">
+                            <v-avatar color="secondary" size="36" :title="username" class="mr-2">
                                 <v-icon color="white">person</v-icon>
                             </v-avatar>
 

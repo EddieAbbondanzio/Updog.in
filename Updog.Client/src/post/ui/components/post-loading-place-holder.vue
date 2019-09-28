@@ -6,7 +6,7 @@
             <content-placeholders-img class="icon-placeholder align-self-center" />
 
             <!-- Title -->
-            <div class="align-self-start">
+            <div class="align-self-start flex-grow-1">
                 <content-placeholders-heading class="title-placeholder" />
                 <content-placeholders-text :lines="1" class="mt-3 actions-placeholder" />
             </div>
@@ -28,12 +28,12 @@
 }
 
 .title-placeholder {
-    width: 480px;
+    max-width: 480px;
 }
 
 .actions-placeholder {
     height: 12px !important;
-    width: 240px;
+    max-width: 240px;
     overflow: hidden !important;
 }
 </style>
