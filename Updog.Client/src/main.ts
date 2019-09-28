@@ -10,8 +10,8 @@ import { shortHand } from '@/core/ui/filters/short-hand';
 
 Vue.config.productionTip = false;
 
-Vue.filter(capitalize.name, capitalize);
-Vue.filter(shortHand.name, shortHand);
+Vue.filter('capitalize', capitalize);
+Vue.filter('shortHand', shortHand);
 
 const v = new Vue({
     router,
