@@ -1,21 +1,21 @@
 <template>
-    <content-placeholders>
-        <!-- Title -->
-        <content-placeholders-heading class="comment-title-placeholder" />
-        <content-placeholders-text :lines="1" class="comment-text-placeholder" />
+    <content-placeholders class="d-flex flex-row">
+        <div class="flex-grow-1">
+            <content-placeholders-heading class="comment-title-placeholder" />
+            <content-placeholders-text :lines="1" class="comment-text-placeholder" />
+        </div>
     </content-placeholders>
 </template>
 
 <style lang="scss" scoped>
-// .comment-title-placeholder {
-//     width: 480px;
-// }
+.comment-title-placeholder {
+    max-width: 480px;
+}
 
-// .comment-text-placeholder {
-//     width: 240px;
-//     margin-top: 8px;
-// }
-//
+.comment-text-placeholder {
+    max-width: 240px;
+    margin-top: 8px;
+}
 </style>
 
 // <script lang="ts">
