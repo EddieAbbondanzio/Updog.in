@@ -1,6 +1,6 @@
 # Updog.in
 
-Live: [https://updog.in]
+Live: https://updog.in
 
 Updog is a reddit-esque content aggregation website. Users can create accounts to share posts, and create comments. Posts can be upvoted and downvoted and users can earn karma on their posts.
 
