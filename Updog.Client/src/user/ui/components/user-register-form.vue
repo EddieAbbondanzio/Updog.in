@@ -12,7 +12,7 @@
             v-model="username"
             ref="registerUsernameTextbox"
             name="registerUsername"
-            v-validate="'required|min:4|isUnique'"
+            v-validate="{required: true, min: 4, isUnique: true, regex: /^[\w-]+$/}"
             title="Username must be at least 4 characters"
             :error="errors.first('registerUsername') != null"
             :error-messages="errors.first('registerUsername')"
@@ -95,7 +95,8 @@ export default class UserRegisterForm extends UserRegistrarMixin implements Form
                 registerUsername: {
                     required: 'Username is required.',
                     min: 'Username must be at least 4 characters.',
-                    isUnique: 'Username is unavailable.'
+                    isUnique: 'Username is unavailable.',
+                    regex: 'Username may only include letters, numbers, -, or _'
                 },
                 registerEmail: {
                     email: 'Email must be a valid address.'
