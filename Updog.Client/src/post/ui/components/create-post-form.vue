@@ -1,9 +1,5 @@
 <template>
     <v-form>
-        <v-alert type="info">
-            Rules:
-            <br />1. Don't be a jerk.
-        </v-alert>
         <v-card>
             <v-tabs v-model="activeTab" class="mb-6" @change="onTabChange">
                 <v-tab>Link</v-tab>
