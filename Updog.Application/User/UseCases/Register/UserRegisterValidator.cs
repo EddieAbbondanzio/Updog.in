@@ -10,6 +10,13 @@ namespace Updog.Application {
     /// Validator to validate user registrations.
     /// </summary>
     internal sealed class UserRegisterValidator : FluentValidatorAdapter<UserRegisterParams> {
+        private static string[] BannedSlurs = new string[] {
+            "fag",
+            "faggot",
+            "nigger",
+            "nigga"
+        };
+
         #region Constructor(s)
         public UserRegisterValidator() {
             //Username
@@ -18,6 +25,7 @@ namespace Updog.Application {
             RuleFor(reg => reg.Username).MaximumLength(User.UsernameMaxLength).WithMessage($"Username must be less than {User.UsernameMaxLength} characters.");
             RuleFor(reg => reg.Username).Matches(Regex.UrlSafe).WithMessage("Username may only contain letters, numbers, underscores, or hypens.");
             RuleFor(reg => reg.Username).Must((username) => !User.BannedUsernames.Any(u => String.Equals(username, u, StringComparison.OrdinalIgnoreCase))).WithMessage("Username is unavailable.");
+            RuleFor(reg => reg.Username).Must((username) => !BannedSlurs.Any(s => username.Contains(s, StringComparison.OrdinalIgnoreCase))).WithMessage("Username is unavailable.");
 
             // Password
             RuleFor(reg => reg.Password).NotNull().WithMessage("Password is required.");
