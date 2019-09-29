@@ -19,7 +19,7 @@
         />
         <v-text-field
             type="email"
-            placeholder="Email"
+            placeholder="Email (Optional)"
             v-model="email"
             name="registerEmail"
             v-validate="'email'"
