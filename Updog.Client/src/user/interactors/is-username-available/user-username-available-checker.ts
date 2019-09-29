@@ -9,7 +9,17 @@ export class UserUsernameAvailableChecker extends UserApiInteractor<string, bool
             await this.http.head(`/user/${username}`);
             return false;
         } catch (error) {
-            return error.response.status === 404;
+            switch (error.response.status) {
+                // Banned username
+                case 400:
+                    return false;
+                // No existing user found, username is free.
+                case 404:
+                    return true;
+                // Something went REALLY wrong.
+                default:
+                    throw error;
+            }
         }
     }
 }
