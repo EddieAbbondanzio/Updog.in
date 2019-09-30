@@ -15,6 +15,10 @@
 
         <footer>
             <slot name="footer"></slot>
+            <a
+                class="grey--text text-lighten-2 float-right pa-3 caption"
+                href="https://github.com/EddieAbbondanzio/Updog.in"
+            >&lt;/&gt;</a>
         </footer>
     </div>
 </template>
