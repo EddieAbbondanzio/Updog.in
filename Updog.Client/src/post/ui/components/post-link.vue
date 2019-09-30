@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex flex-row align-center">
         <comments-link v-if="isTextPost" :post="post">{{post.title}}</comments-link>
-        <a :href="postLink" v-else>
+        <a :href="post.body" v-else>
             <slot>{{ post.title}}</slot>
         </a>
 
@@ -53,7 +53,7 @@ export default class PostLink extends Vue {
             throw new Error();
         }
 
-        const pattern = /^(http|https|ftp)/;
+        const pattern = /^(http|https)/;
 
         if (!pattern.test(this.post.body)) {
             return `http://${this.post.body}`;

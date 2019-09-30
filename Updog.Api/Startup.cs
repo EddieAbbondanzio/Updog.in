@@ -35,6 +35,8 @@ namespace Updog.Api {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
+            services.AddCors();
+
             // Set up the authentication
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opts => {
                 opts.TokenValidationParameters = new TokenValidationParameters() {
@@ -76,6 +78,8 @@ namespace Updog.Api {
                 };
             });
 
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
             IDatabase db = new PostgresDatabase(Configuration.GetSection("Database").Get<DatabaseConfig>());
             db.RegisterRepo<IUserRepo, UserRepo>();
             db.RegisterRepo<IPostRepo, PostRepo>();
@@ -90,7 +94,6 @@ namespace Updog.Api {
             services.ConfigurePoco<IAuthenticationTokenConfig, AuthenticationTokenConfig>(Configuration.GetSection("AuthenticationToken"));
             services.ConfigurePoco<IAdminConfig, AdminConfig>(Configuration.GetSection("Admin"));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSingleton<IAuthenticationTokenHandler, JsonWebTokenHandler>();
 
@@ -152,6 +155,7 @@ namespace Updog.Api {
             Console.WriteLine($"Content root path: {env.ContentRootPath}");
 
             app.UseCors(b => {
+                // b.WithOrigins("https://localhost:8080");
                 b.AllowAnyOrigin();
                 b.AllowAnyMethod();
                 b.AllowAnyHeader();
