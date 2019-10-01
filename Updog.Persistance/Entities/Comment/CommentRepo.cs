@@ -12,7 +12,7 @@ namespace Updog.Persistance {
     /// <summary>
     /// CRUD interface for comments in the database.
     /// </summary>
-    public sealed class CommentRepo : DatabaseRepo<Comment>, ICommentRepo {
+    public sealed class CommentRepo : DapperRepo<Comment>, ICommentRepo {
         #region Fields
         /// <summary>
         /// Mapper to convert comments into their record and back to entity.

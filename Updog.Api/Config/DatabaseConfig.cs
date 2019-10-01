@@ -1,3 +1,4 @@
+using Updog.Application;
 using Updog.Persistance;
 
 namespace Updog.Api {

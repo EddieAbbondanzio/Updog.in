@@ -12,7 +12,7 @@ namespace Updog.Persistance {
     /// <summary>
     /// CRUD interface for managing spaces in the database.
     /// </summary>
-    public sealed class SpaceRepo : DatabaseRepo<Space>, ISpaceRepo {
+    public sealed class SpaceRepo : DapperRepo<Space>, ISpaceRepo {
         #region Fields
         private ISpaceRecordMapper mapper;
         #endregion

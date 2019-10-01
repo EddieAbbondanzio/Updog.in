@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Business entity of a space.
     /// </summary>
-    public sealed class SpaceView {
+    public sealed class SpaceView : IView {
         #region Properties
         /// <summary>
         /// The unique ID of the view.

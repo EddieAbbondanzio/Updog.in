@@ -1,4 +1,4 @@
-namespace Updog.Persistance {
+namespace Updog.Application {
     /// <summary>
     /// Information used to connect to a database.
     /// </summary>

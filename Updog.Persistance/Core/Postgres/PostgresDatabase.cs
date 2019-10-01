@@ -20,7 +20,7 @@ namespace Updog.Persistance {
         /// Create a new database.
         /// </summary>
         /// <param name="connection">The connection config.</param>
-        public PostgresDatabase(IDatabaseConfig config) {
+        public PostgresDatabase(IDatabaseConfig config) : base(config) {
             NpgsqlConnectionStringBuilder connBuilder = new NpgsqlConnectionStringBuilder() {
                 Host = config.Host,
                 Port = config.Port,
@@ -34,15 +34,11 @@ namespace Updog.Persistance {
         #endregion
 
         #region Publics
-        /// <summary>
-        /// Get a new connection with the database.
-        /// </summary>
-        /// <returns>A new pooled connection.</returns>
-        public override IDbConnection GetConnection() {
+        public override DatabaseContext GetContext() {
             var connection = new NpgsqlConnection(this.connection);
             connection.Open();
 
-            return connection;
+            return new DatabaseContext(connection, RepoMap);
         }
         #endregion
     }

@@ -11,7 +11,7 @@ namespace Updog.Persistance {
     /// <summary>
     /// CRUD interface to manage subscriptions in the database.
     /// </summary>
-    public sealed class SubscriptionRepo : DatabaseRepo<Subscription>, ISubscriptionRepo {
+    public sealed class SubscriptionRepo : DapperRepo<Subscription>, ISubscriptionRepo {
         #region Fields
         private ISubscriptionRecordMapper _mapper;
         #endregion

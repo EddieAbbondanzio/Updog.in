@@ -32,8 +32,8 @@ namespace Updog.Infrastructure {
             Queue<IDomainEventHandler<TEvent>> deferredHandlers = new Queue<IDomainEventHandler<TEvent>>();
 
             if (handlers?.Length > 0) {
-                using (var connection = database.GetConnection()) {
-                    using (var transaction = connection.BeginTransaction()) {
+                using (var context = database.GetContext()) {
+                    using (var transaction = context.Connection.BeginTransaction()) {
 
                         // Figure out if the handler should be deferred, or handled instantly.
                         for (int i = 0; i < handlers.Length; i++) {

@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// A view of a vote to send back to a client.
     /// </summary>
-    public sealed class VoteView {
+    public sealed class VoteView : IView {
         #region Properties
         /// <summary>
         /// The type of resource being voted on.

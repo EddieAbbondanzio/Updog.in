@@ -11,7 +11,7 @@ namespace Updog.Persistance {
     /// <summary>
     /// CRUD interface for managing votes in the database.
     /// </summary>
-    public sealed class VoteRepo : DatabaseRepo<Vote>, IVoteRepo {
+    public sealed class VoteRepo : DapperRepo<Vote>, IVoteRepo {
         private IVoteRecordMapper voteMapper;
 
         #region Constructor(s)

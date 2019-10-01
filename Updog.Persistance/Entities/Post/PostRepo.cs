@@ -12,7 +12,7 @@ namespace Updog.Persistance {
     /// <summary>
     /// CRUD interface for storing posts.
     /// </summary>
-    public sealed class PostRepo : DatabaseRepo<Post>, IPostRepo {
+    public sealed class PostRepo : DapperRepo<Post>, IPostRepo {
         #region Fields
         /// <summary>
         /// Mapper to convert the post record into its entity.

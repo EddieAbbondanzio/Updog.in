@@ -9,7 +9,7 @@ namespace Updog.Persistance {
     /// <summary>
     /// CRUD interface for managing user's in the database.
     /// </summary>
-    public sealed class UserRepo : DatabaseRepo<User>, IUserRepo {
+    public sealed class UserRepo : DapperRepo<User>, IUserRepo {
         #region Fields
         /// <summary>
         /// Mapper to convert the user to it's record.

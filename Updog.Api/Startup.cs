@@ -57,8 +57,8 @@ namespace Updog.Api {
                         // Retrieve the user, and cache the identity.
                         IDatabase db = c.HttpContext.RequestServices.GetService<IDatabase>();
 
-                        using (var connection = db.GetConnection()) {
-                            IUserRepo userRepo = db.GetRepo<IUserRepo>(connection);
+                        using (var context = db.GetContext()) {
+                            IUserRepo userRepo = context.GetRepo<IUserRepo>();
 
                             IIdentity identity = c.Principal.Identity;
                             User? u = await userRepo.FindById(userId);
