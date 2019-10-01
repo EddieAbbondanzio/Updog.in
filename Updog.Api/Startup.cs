@@ -85,6 +85,7 @@ namespace Updog.Api {
             db.RegisterRepo<IVoteRepo, VoteRepo>();
 
             services.AddSingleton<IDatabase>(db);
+            services.AddSingleton<IEventBus, EventBus>();
 
             services.ConfigurePoco<IDatabaseConfig, DatabaseConfig>(Configuration.GetSection("Database"));
             services.ConfigurePoco<IAuthenticationTokenConfig, AuthenticationTokenConfig>(Configuration.GetSection("AuthenticationToken"));
