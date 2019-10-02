@@ -143,8 +143,9 @@ namespace Updog.Api {
             services.AddTransient<SubscriptionDeleter>();
 
             services.AddSingleton<IVoteViewMapper, VoteViewMapper>();
-            services.AddTransient<PostVoter>();
-            services.AddTransient<CommentVoter>();
+            services.AddSingleton<IVoteFactory, VoteFactory>();
+            services.AddTransient<VoteOnPostCommandHandler>();
+            services.AddTransient<VoteOnCommentCommandHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

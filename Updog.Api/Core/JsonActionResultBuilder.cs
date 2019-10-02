@@ -8,7 +8,7 @@ namespace Updog.Api {
     /// Builder that generates an ActionResult to return from the controller endpoint.
     /// Implements IOutputPort so it can be passed into application layer.
     /// </summary>
-    public sealed class ActionResultBuilder : IOutputPort {
+    public sealed class JsonActionResultBuilder : IOutputPort {
         #region Fields
         /// <summary>
         /// The result that was built.
@@ -22,36 +22,25 @@ namespace Updog.Api {
         /// </summary>
         /// <param name="output">The payload.</param>
         /// <typeparam name="TResult">The type of payload.</typeparam>
-        public void Success<TResult>(TResult? output = null) where TResult : class {
-            var jResult = new JsonResult(output);
-            jResult.StatusCode = 200;
-
-            result = jResult;
-        }
+        public void Success<TResult>(TResult? output = null) where TResult : class => JsonResult(200, output);
 
         /// <summary>
         /// Build a 404 Not Found result.
         /// </summary>
         /// <param name="message">The error message.</param>
-        public void NotFound(string? message = null) {
-            result = new NotFoundObjectResult(message);
-        }
+        public void NotFound<TResult>(TResult? output = null) where TResult : class => JsonResult(404, output);
 
         /// <summary>
         /// Build a 400 Bad Request result.
         /// </summary>
         /// <param name="message">The error message.</param>
-        public void BadInput(string? message = null) {
-            result = new BadRequestObjectResult(message);
-        }
+        public void BadInput<TResult>(TResult? output = null) where TResult : class => JsonResult(400, output);
 
         /// <summary>
         /// Build a 401 Unauthorized result.
         /// </summary>
         /// <param name="message">The error message.</param>
-        public void Unauthorized(string? message = null) {
-            result = new UnauthorizedObjectResult(message);
-        }
+        public void Unauthorized<TResult>(TResult? output = null) where TResult : class => JsonResult(401, output);
 
         /// <summary>
         /// Get the ActionResult built by the builder.
@@ -68,6 +57,15 @@ namespace Updog.Api {
             result = null;
 
             return cachedResult;
+        }
+        #endregion
+
+        #region Privates
+        private void JsonResult<TResult>(int statusCode, TResult? output = null) where TResult : class {
+            var jResult = new JsonResult(output);
+            jResult.StatusCode = statusCode;
+
+            result = jResult;
         }
         #endregion
     }

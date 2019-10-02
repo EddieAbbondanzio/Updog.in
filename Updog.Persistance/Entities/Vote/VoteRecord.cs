@@ -26,7 +26,7 @@ namespace Updog.Persistance {
         /// <summary>
         /// The resource it's voting on.
         /// </summary>
-        public VoteResourceType ResourceType { get; set; }
+        public VotableEntityType ResourceType { get; set; }
 
         /// <summary>
         /// The type of vote it is.

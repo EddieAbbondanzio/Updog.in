@@ -49,7 +49,7 @@ namespace Updog.Application {
                     Vote upvote = new Vote() {
                         User = input.User,
                         ResourceId = post.Id,
-                        ResourceType = VoteResourceType.Post,
+                        ResourceType = VotableEntityType.Post,
                         Direction = VoteDirection.Up
                     };
 

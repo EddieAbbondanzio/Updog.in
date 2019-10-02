@@ -48,7 +48,7 @@ namespace Updog.Persistance {
                     JOIN ""User"" u ON u.Id = Vote.UserId 
                     WHERE u.Username = @Username AND Vote.ResourceType = @ResourceType AND Vote.ResourceId = @CommentId",
                 (VoteRecord voteRec, UserRecord userRec) => voteMapper.Map(Tuple.Create(voteRec, userRec)),
-                new { Username = username, CommentId = commentId, ResourceType = VoteResourceType.Comment }
+                new { Username = username, CommentId = commentId, ResourceType = VotableEntityType.Comment }
             )).FirstOrDefault();
         }
 
@@ -64,7 +64,7 @@ namespace Updog.Persistance {
                     JOIN ""User"" U ON U.Id = Vote.UserId 
                     WHERE u.Username = @Username AND Vote.ResourceType = @ResourceType AND Vote.ResourceId = @PostId",
                 (VoteRecord voteRec, UserRecord userRec) => voteMapper.Map(Tuple.Create(voteRec, userRec)),
-                new { Username = username, PostId = postId, ResourceType = VoteResourceType.Post }
+                new { Username = username, PostId = postId, ResourceType = VotableEntityType.Post }
             )).FirstOrDefault();
         }
 

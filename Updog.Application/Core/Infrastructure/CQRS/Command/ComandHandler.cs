@@ -58,7 +58,7 @@ namespace Updog.Application {
         /// if it exists.
         /// </summary>
         /// <returns>The custom attribute.</returns>
-        private Validate? GetValidateAttribute() => GetType().GetMethod("HandleInput", BindingFlags.Instance | BindingFlags.NonPublic).GetCustomAttribute<Validate>();
+        private Validate? GetValidateAttribute() => GetType().GetMethod("ExecuteCommand", BindingFlags.Instance | BindingFlags.NonPublic).GetCustomAttribute<Validate>();
 
         /// <summary>
         /// Generate a new instance of a validator from it's type.

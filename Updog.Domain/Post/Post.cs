@@ -23,12 +23,7 @@ namespace Updog.Domain {
         #endregion
 
         #region Properties
-        public override VoteResourceType ResourceType => VoteResourceType.Post;
-
-        /// <summary>
-        /// OP of the post.
-        /// </summary>
-        public User User { get; set; } = null!;
+        public override VotableEntityType EntityType => VotableEntityType.Post;
 
         /// <summary>
         /// The sub space it was submitted to.

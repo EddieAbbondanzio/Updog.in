@@ -10,7 +10,7 @@ namespace Updog.Application {
         /// The type of resource being voted on.
         /// </summary>
         /// <value></value>
-        public VoteResourceType ResourceType { get; }
+        public VotableEntityType ResourceType { get; }
 
         /// <summary>
         /// The ID of the resource.
@@ -31,7 +31,7 @@ namespace Updog.Application {
         /// <param name="resourceType">If its a post or comment.</param>
         /// <param name="resourceId">The ID of the resource.</param>
         /// <param name="direction">The direction of the vote.</param>
-        public VoteView(VoteResourceType resourceType, int resourceId, VoteDirection direction) {
+        public VoteView(VotableEntityType resourceType, int resourceId, VoteDirection direction) {
             ResourceType = resourceType;
             ResourceId = resourceId;
             Direction = direction;

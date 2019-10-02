@@ -1,6 +1,15 @@
+using Updog.Domain;
+
 namespace Updog.Application {
     /// <summary>
-    /// Marker interface for commands to implement.
+    /// Interface for commands to implement.
     /// </summary>
-    public interface ICommand { }
+    public interface ICommand {
+        #region Properties
+        /// <summary>
+        /// User performing the action.
+        /// </summary>
+        User User { get; }
+        #endregion
+    }
 }

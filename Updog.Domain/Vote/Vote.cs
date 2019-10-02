@@ -18,7 +18,7 @@ namespace Updog.Domain {
         /// <summary>
         /// The type of resource that was voted on.
         /// </summary>
-        public VoteResourceType ResourceType { get; set; }
+        public VotableEntityType ResourceType { get; set; }
 
         /// <summary>
         /// The ID of the resource it belongs to.

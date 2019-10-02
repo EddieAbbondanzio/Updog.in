@@ -1,8 +1,10 @@
+using System;
+
 namespace Updog.Domain {
     /// <summary>
     /// A resource that can be voted. on.
     /// </summary>
-    public abstract class VotableEntity : IEntity {
+    public abstract class VotableEntity : IUserEntity {
         #region Properties
         /// <summary>
         /// The unique ID of the entity.
@@ -10,9 +12,14 @@ namespace Updog.Domain {
         public int Id { get; set; }
 
         /// <summary>
+        /// The user it belongs to.
+        /// </summary>
+        public User User { get; set; } = null!;
+
+        /// <summary>
         /// The vote resource type it is.
         /// </summary>
-        public abstract VoteResourceType ResourceType { get; }
+        public abstract VotableEntityType EntityType { get; }
 
         /// <summary>
         /// How many upvotes the resource has recieved.
@@ -44,6 +51,15 @@ namespace Updog.Domain {
                     Downvotes++;
                     break;
             }
+
+            switch (EntityType) {
+                case VotableEntityType.Comment:
+                    User.CommentKarma += (int)vote;
+                    break;
+                case VotableEntityType.Post:
+                    User.PostKarma += (int)vote;
+                    break;
+            };
         }
 
         /// <summary>
@@ -59,6 +75,15 @@ namespace Updog.Domain {
                     Downvotes--;
                     break;
             }
+
+            switch (EntityType) {
+                case VotableEntityType.Comment:
+                    User.CommentKarma -= (int)vote;
+                    break;
+                case VotableEntityType.Post:
+                    User.PostKarma -= (int)vote;
+                    break;
+            };
         }
         #endregion
     }

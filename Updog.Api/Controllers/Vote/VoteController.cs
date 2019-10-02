@@ -18,14 +18,14 @@ namespace Updog.Api {
     [ApiController]
     public sealed class VoteController : ApiController {
         #region Fields
-        private PostVoter postVoter;
-        private CommentVoter commentVoter;
+        private VoteOnPostCommandHandler voteOnPostHandler;
+        private VoteOnCommentCommandHandler voteOnCommentHandler;
         #endregion
 
         #region Constructor(s)
-        public VoteController(PostVoter postVoter, CommentVoter commentVoter) {
-            this.postVoter = postVoter;
-            this.commentVoter = commentVoter;
+        public VoteController(VoteOnPostCommandHandler voteOnPostHandler, VoteOnCommentCommandHandler voteOnCommentHandler) {
+            this.voteOnPostHandler = voteOnPostHandler;
+            this.voteOnCommentHandler = voteOnCommentHandler;
         }
         #endregion
 
@@ -36,12 +36,8 @@ namespace Updog.Api {
         /// <param name="vote">The vote type.</param>
         [HttpPost("post/{postId}/{vote}")]
         public async Task<ActionResult> VoteOnPost(int postId, VoteDirection vote) {
-            var result = await postVoter.Handle(new VoteOnPostParams(postId, vote, User!));
-
-            return result.Match<ActionResult>(
-                vote => Ok(vote),
-                fail => BadRequest(fail)
-            );
+            await voteOnPostHandler.Execute(new VoteOnPostCommand(User!, postId, vote), ActionResultBuilder);
+            return ActionResultBuilder.Build();
         }
 
         /// <summary>
@@ -51,12 +47,8 @@ namespace Updog.Api {
         /// <param name="vote">The vote type.</param>
         [HttpPost("comment/{commentId}/{vote}")]
         public async Task<ActionResult> VoteOnComment(int commentId, VoteDirection vote) {
-            var result = await commentVoter.Handle(new VoteOnCommentParams(commentId, vote, User!));
-
-            return result.Match<ActionResult>(
-                vote => Ok(vote),
-                fail => BadRequest(fail)
-            );
+            await voteOnCommentHandler.Execute(new VoteOnCommentCommand(User!, commentId, vote), ActionResultBuilder);
+            return ActionResultBuilder.Build();
         }
     }
 }

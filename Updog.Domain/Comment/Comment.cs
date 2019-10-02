@@ -16,12 +16,7 @@ namespace Updog.Domain {
         #endregion
 
         #region Properties
-        public override VoteResourceType ResourceType => VoteResourceType.Comment;
-
-        /// <summary>
-        /// The ID of the user that made the comment.
-        /// </summary>
-        public User User { get; set; } = null!;
+        public override VotableEntityType EntityType => VotableEntityType.Comment;
 
         /// <summary>
         /// The parent post.
