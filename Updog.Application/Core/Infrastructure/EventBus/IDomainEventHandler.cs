@@ -7,17 +7,11 @@ namespace Updog.Application {
     /// </summary>
     /// <typeparam name="TEvent">Event type it can handle.</typeparam>
     public interface IDomainEventHandler<TEvent> where TEvent : IDomainEvent {
-        #region Properties
-        /// <summary>
-        /// If the event handler should be invoked upon transaction completion.
-        /// </summary>
-        bool IsDeferred { get; }
-        #endregion
-
         #region Publics
         /// <summary>
-        /// Handle the domain event.
+        /// Handle a doamin event.
         /// </summary>
+        /// <param name="domainEvent">The domain event to handle.</param>
         Task Handle(TEvent domainEvent);
         #endregion
     }
