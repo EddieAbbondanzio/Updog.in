@@ -41,7 +41,7 @@ namespace Updog.Application {
             Type repoType = repoMap[resolveType];
 
             // It's safe to assume the repo type will be a DatabaseRepo<T> since we can only register these.
-            return (TRepo)Activator.CreateInstance(repoType, Connection) as TRepo;
+            return (TRepo)Activator.CreateInstance(repoType, this) as TRepo;
         }
 
         public void Dispose() => Connection.Dispose();

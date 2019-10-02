@@ -5,13 +5,21 @@ using Updog.Domain;
 namespace Updog.Application {
     public abstract class DatabaseRepo {
         #region Properties
-        protected DbConnection Connection { get; }
+        protected DbConnection Connection => context.Connection;
+        #endregion
+
+        #region Fields
+        private DatabaseContext context;
         #endregion
 
         #region Constructor(s)
-        public DatabaseRepo(DbConnection connection) {
-            Connection = connection;
+        public DatabaseRepo(DatabaseContext context) {
+            this.context = context;
         }
+        #endregion
+
+        #region Privates
+        protected TRepo GetRepo<TRepo>() where TRepo : class, IRepo => context.GetRepo<TRepo>();
         #endregion
     }
 
@@ -21,7 +29,7 @@ namespace Updog.Application {
     /// <typeparam name="TEntity">The type of entity stored.</typeparam>
     public abstract class DatabaseRepo<TEntity> : DatabaseRepo where TEntity : class, IEntity {
         #region Constructor(s)
-        public DatabaseRepo(DbConnection connection) : base(connection) { }
+        public DatabaseRepo(DatabaseContext context) : base(context) { }
         #endregion
 
         #region Publics

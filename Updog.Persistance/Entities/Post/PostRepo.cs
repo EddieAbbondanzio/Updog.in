@@ -21,7 +21,7 @@ namespace Updog.Persistance {
         #endregion
 
         #region Constructor(s)
-        public PostRepo(DbConnection connection) : base(connection) {
+        public PostRepo(DatabaseContext context) : base(context) {
             this._postMapper = new PostRecordMapper(new UserRecordMapper(), new SpaceRecordMapper(new UserRecordMapper()));
         }
         #endregion

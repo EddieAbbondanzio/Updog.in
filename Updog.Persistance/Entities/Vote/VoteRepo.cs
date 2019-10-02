@@ -15,7 +15,7 @@ namespace Updog.Persistance {
         private IVoteRecordMapper voteMapper;
 
         #region Constructor(s)
-        public VoteRepo(DbConnection connection) : base(connection) {
+        public VoteRepo(DatabaseContext context) : base(context) {
             voteMapper = new VoteRecordMapper(new UserRecordMapper());
         }
         #endregion

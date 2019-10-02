@@ -21,7 +21,7 @@ namespace Updog.Persistance {
         #endregion
 
         #region Constructor(s)
-        public CommentRepo(DbConnection connection) : base(connection) {
+        public CommentRepo(DatabaseContext context) : base(context) {
             this.commentMapper = new CommentRecordMapper(new UserRecordMapper());
         }
         #endregion
