@@ -1,14 +1,19 @@
 <template>
-    <comments-link v-if="isTextPost" :post="post">{{post.title}}</comments-link>
-    <a :href="post.body" v-else>
-        <slot>{{ post.title}}</slot>
-    </a>
+    <div class="d-flex flex-row align-center">
+        <comments-link v-if="isTextPost" :post="post">{{post.title}}</comments-link>
+        <a :href="post.body" v-else>
+            <slot>{{ post.title}}</slot>
+        </a>
+
+        <span class="caption grey--text text--darken-1">&nbsp;({{ hostName}})</span>
+    </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Post } from '../../domain/post';
 import { PostType } from '../../domain/post-type';
+import { UrlUtils } from '@/core/utils/url-utils';
 import CommentsLink from '@/comment/ui/components/comments-link.vue';
 
 /**
@@ -33,6 +38,28 @@ export default class PostLink extends Vue {
      */
     get isTextPost() {
         return this.post.type === PostType.Text;
+    }
+
+    get hostName() {
+        if (this.isTextPost) {
+            return 'self';
+        } else {
+            return UrlUtils.getHostName(this.post.body);
+        }
+    }
+
+    get postLink() {
+        if (this.isTextPost) {
+            throw new Error();
+        }
+
+        const pattern = /^(http|https)/;
+
+        if (!pattern.test(this.post.body)) {
+            return `http://${this.post.body}`;
+        } else {
+            return this.post.body;
+        }
     }
 }
 </script>

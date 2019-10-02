@@ -42,6 +42,10 @@ namespace Updog.Application {
                         Space = space
                     };
 
+                    if (post.Type == PostType.Link && !System.Text.RegularExpressions.Regex.IsMatch(post.Body, Regex.UrlProtocol)) {
+                        post.Body = $"http://{post.Body}";
+                    }
+
                     // Not liking these count caches. Makes no sense?
                     post.Upvotes++;
                     await postRepo.Add(post);

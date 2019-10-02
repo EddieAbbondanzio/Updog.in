@@ -24,8 +24,9 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Comment, CommentCreateParams } from '@/comment';
-import { CommentCreatorMixin } from '../../mixins/comment-creator-mixin';
+import CommentCreatorMixin from '../../mixins/comment-creator-mixin';
+import { CommentCreateParams } from '@/comment/interactors/create/comment-create-params';
+import { Comment } from '@/comment/domain/comment';
 
 /**
  * Form to create a new comment.

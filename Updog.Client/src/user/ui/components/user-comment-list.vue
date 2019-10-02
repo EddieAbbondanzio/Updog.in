@@ -1,21 +1,26 @@
 <template>
     <div v-if="comments != null">
-        <v-card class="pa-3 mb-3" v-for="comment in comments" v-bind:key="comment.id">
-            <comment-summary :comment="comment" />
-        </v-card>
+        <comment-summary-list :comments="comments" />
 
-        <pagination-nav :pagination="comments.pagination" @previous="onPrevious" @next="onNext" />
+        <pagination-nav
+            :pagination="comments.pagination"
+            @previous="onPrevious"
+            @next="onNext"
+            v-if="comments.length > 0"
+        />
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { CommentFinderMixin, CommentFinderByUserParams } from '../../../comment';
+import { CommentFinderByUserParams } from '../../../comment/interactors/find-by-user/comment-finder-by-user-params';
 import { User } from '../../domain/user';
-import CommentSummary from '@/comment/ui/components/comment-summary.vue';
+import { Comment } from '@/comment/domain/comment';
+import { PagedResultSet } from '@/core/pagination/paged-result-set';
 import PaginationNav from '@/core/ui/components/pagination-nav.vue';
-import { PaginationParams, PagedResultSet } from '../../../core';
-import { Comment } from '@/comment';
+import CommentFinderMixin from '@/comment/mixins/comment-finder-mixin';
+import { PaginationParams } from '@/core/pagination/pagination-params';
+import CommentSummaryList from '@/comment/ui/components/comment-summary-list.vue';
 
 /**
  * List of Comments made by a user
@@ -23,8 +28,8 @@ import { Comment } from '@/comment';
 @Component({
     name: 'user-comment-list',
     components: {
-        CommentSummary,
-        PaginationNav
+        PaginationNav,
+        CommentSummaryList
     }
 })
 export default class UserCommentList extends CommentFinderMixin {

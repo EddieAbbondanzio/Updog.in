@@ -1,9 +1,5 @@
 <template>
     <v-form>
-        <v-alert type="info">
-            Rules:
-            <br />1. Don't be a jerk.
-        </v-alert>
         <v-card>
             <v-tabs v-model="activeTab" class="mb-6" @change="onTabChange">
                 <v-tab>Link</v-tab>
@@ -89,9 +85,9 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Post, PostCreateParams, PostType } from '@/post';
-import { SpaceFinderMixin, Space } from '../../../space';
-
+import SpaceFinderMixin from '@/space/mixins/space-finder-mixin';
+import { PostType } from '@/post/domain/post-type';
+import { PostCreateParams } from '@/post/interactors/create/post-create-params';
 /**
  * Form to create a new text or link post.
  */

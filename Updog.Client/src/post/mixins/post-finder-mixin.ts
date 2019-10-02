@@ -2,12 +2,11 @@ import Mixin from 'vue-class-component';
 import Vue from 'vue';
 import PostModule from '../store/post-store';
 import { getModule } from 'vuex-module-decorators';
-import { PaginationInfo } from '@/core/pagination/pagination-info';
 import { PostFinderByUserParams } from '../interactors/find-by-user/post-finder-by-user-params';
 import { PaginationParams } from '@/core/pagination/pagination-params';
 
 @Mixin
-export class PostFinderMixin extends Vue {
+export default class PostFinderMixin extends Vue {
     /**
      * The currently loaded posts.
      */

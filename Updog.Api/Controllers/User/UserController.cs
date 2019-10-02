@@ -39,6 +39,11 @@ namespace Updog.Api {
         [HttpGet("{username}")]
         [HttpHead("{username}")]
         public async Task<ActionResult> FindByUsername(string username) {
+            // When checking for username availability, see if the username is banned first.
+            if (Request.Method.Equals("HEAD") && User.IsUsernameBanned(username)) {
+                return BadRequest("Username is unavailable");
+            }
+
             var result = await userFinder.Handle(new FindByValueParams<string>(username, user: User));
 
             return result.Match<ActionResult>(

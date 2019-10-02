@@ -8,9 +8,10 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { PostCreateParams } from '@/post/interactors/create/post-create-params';
 import Layout from '@/core/ui/components/layout.vue';
 import CreatePostForm from '@/post/ui/components/create-post-form.vue';
-import { PostCreateParams, PostCreatorMixin } from '@/post';
+import PostCreatorMixin from '@/post/mixins/post-creator-mixin';
 
 @Component({
     components: {

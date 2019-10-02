@@ -1,5 +1,5 @@
 <template>
-    <v-card class="d-flex flex-row pa-3">
+    <v-card class="d-flex flex-row pa-3" v-if="pagination.pageCount() > 1">
         <v-btn
             color="primary"
             outlined
@@ -24,7 +24,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { PaginationInfo } from '@/core';
+import { PaginationInfo } from '@/core/pagination/pagination-info';
+
 @Component({
     name: 'pagination-nav'
 })

@@ -1,5 +1,4 @@
 import { RouteConfig } from 'vue-router';
-import Component from 'vue-class-component';
 import { commentRoutes } from '@/comment/ui/routes';
 
 export const spaceRoutes: RouteConfig[] = [

@@ -48,9 +48,12 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { UserLoginMixin, UserCredentials, UserLogin } from '@/user';
-import { Form, HttpStatusCode } from '@/core';
+import UserLoginMixin from '@/user/mixins/user-login-mixin';
 import Cookie from 'js-cookie';
+import { Form } from '@/core/ui/common/form/form';
+import { UserCredentials } from '@/user/domain/user-credentials';
+import { HttpStatusCode } from '@/core/common/http-status-code';
+import { UserLogin } from '@/user/domain/user-login';
 
 /**
  * Login form for logging in users via username / password.

@@ -1,9 +1,9 @@
 import { PostType } from './post-type';
-import { User } from '@/user';
-import { Vote } from '@/vote';
-import { Space } from '@/space';
-import { VoteResourceType } from '@/vote';
-import { VotableEntity } from '@/vote';
+import { VotableEntity } from '@/vote/common/votable-entity';
+import { VoteResourceType } from '@/vote/domain/vote-resource-type';
+import { User } from '@/user/domain/user';
+import { Space } from '@/space/domain/space';
+import { Vote } from '@/vote/domain/vote';
 
 /**
  * Post made by a user. Probably a repost...

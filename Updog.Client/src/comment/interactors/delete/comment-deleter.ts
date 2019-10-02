@@ -1,4 +1,5 @@
-import { CommentApiInteractor, Comment } from '@/comment';
+import { Comment } from '@/comment/domain/comment';
+import { CommentApiInteractor } from '@/comment/infrastructure/comment-api-interactor';
 
 /**
  * Interactor to de;ete an existing Comment.

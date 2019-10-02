@@ -1,5 +1,15 @@
+using System;
+using System.Linq;
+
 namespace Updog.Domain {
     public partial class User {
+        public static string[] BannedSlurs = new string[] {
+            "fag",
+            "faggot",
+            "nigger",
+            "nigga"
+        };
+
         public static string[] BannedUsernames = new string[]
             {
                 "account",
@@ -150,6 +160,7 @@ namespace Updog.Domain {
                 "theme",
                 "themes",
                 "update",
+                "updog",
                 "upload",
                 "user",
                 "username",
@@ -164,5 +175,20 @@ namespace Updog.Domain {
                 "webmaster",
                 "workshop",
             };
+
+        /// <summary>
+        /// Check to see if a username is banned, or racist.
+        /// </summary>
+        /// <param name="username">The username to test.</param>
+        /// <returns>True if the username should not be allowed.</returns>
+        public static bool IsUsernameBanned(string username) {
+            bool isBanned = User.BannedUsernames.Any(u => String.Equals(username, u, StringComparison.OrdinalIgnoreCase));
+
+            if (isBanned) {
+                return true;
+            }
+
+            return BannedSlurs.Any(s => username.Contains(s, StringComparison.OrdinalIgnoreCase));
+        }
     }
 }

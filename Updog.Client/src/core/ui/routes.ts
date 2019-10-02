@@ -6,5 +6,10 @@ export const coreRoutes: RouteConfig[] = [
         path: '/',
         name: 'home',
         component: Home
+    },
+    {
+        path: '/admin',
+        name: 'admin',
+        component: () => import('@/core/ui/views/admin.vue')
     }
 ];

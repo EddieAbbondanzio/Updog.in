@@ -119,7 +119,7 @@ namespace Updog.Persistance {
                         Description = @Description,
                         CreationDate = @CreationDate,
                         SubscriptionCount = @SubscriptionCount,
-                        UserId = @UserId,
+                        UserId = @UserId
                     WHERE Id = @Id",
                 mapper.Reverse(entity).Item1
             );

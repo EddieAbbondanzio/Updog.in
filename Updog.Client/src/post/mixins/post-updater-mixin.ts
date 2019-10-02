@@ -1,19 +1,15 @@
 import Mixin from 'vue-class-component';
-import Vue from 'vue';
-import { PostCreateParams } from '../interactors/create/post-create-params';
 import { Post } from '../domain/post';
-import { PostCreator } from '../interactors/create/post-creator';
 import { PostUpdateParams } from '../interactors/update/post-update-params';
-import { PostUpdater } from '../interactors/update/post-updater';
 import PostModule from '../store/post-store';
 import { getModule } from 'vuex-module-decorators';
-import { AuthenticatedMixin } from '@/user';
+import AuthenticatedMixin from '@/user/mixins/authenticated-mixin';
 
 /**
  * Mixin to handle updating posts.
  */
 @Mixin
-export class PostUpdaterMixin extends AuthenticatedMixin {
+export default class PostUpdaterMixin extends AuthenticatedMixin {
     /**
      * Reirect to the post topic page.
      * @param id The ID of the new post.

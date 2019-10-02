@@ -15,6 +15,7 @@
 
         <footer>
             <slot name="footer"></slot>
+            <source-code-link />
         </footer>
     </div>
 </template>
@@ -22,6 +23,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import AppBar from '@/core/ui/components/app-bar.vue';
+import SourceCodeLink from '@/core/ui/components/source-code-link.vue';
 
 /**
  * Page layout for the site.
@@ -29,7 +31,8 @@ import AppBar from '@/core/ui/components/app-bar.vue';
 @Component({
     name: 'layout',
     components: {
-        AppBar
+        AppBar,
+        SourceCodeLink
     }
 })
 export default class Layout extends Vue {

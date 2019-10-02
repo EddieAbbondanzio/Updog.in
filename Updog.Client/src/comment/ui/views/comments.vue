@@ -22,10 +22,11 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Mixins } from 'vue-property-decorator';
+import CommentFinderMixin from '@/comment/mixins/comment-finder-mixin';
 import CommentSummary from '@/comment/ui/components/comment-summary.vue';
 import CommentCreateForm from '@/comment/ui/components/comment-create-form.vue';
-import { CommentCreatorMixin, CommentFinderMixin, CommentFinderByPostParams, CommentCreateParams } from '@/comment';
 import CommentLoadingPlaceHolder from '@/comment/ui/components/comment-loading-place-holder.vue';
+import { CommentFinderByPostParams } from '@/comment/interactors/find-by-post/comment-finder-by-post-params';
 
 /**
  * Comment discussion thread of a post.

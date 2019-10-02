@@ -1,18 +1,17 @@
 import Mixin from 'vue-class-component';
 import Vue from 'vue';
-import { Comment } from '@/comment';
-import { PaginationParams } from '@/core';
 import { CommentFinderByUserParams } from '../interactors/find-by-user/comment-finder-by-user-params';
-import { PagedResultSet } from '@/core';
 import { CommentFinderByPostParams } from '../interactors/find-by-post/comment-finder-by-post-params';
 import { getModule } from 'vuex-module-decorators';
 import CommentStore from '../store/comment-store';
+import { Comment } from '@/comment/domain/comment';
+import { PagedResultSet } from '@/core/pagination/paged-result-set';
 
 /**
  * Mixin to handle comment related things.
  */
 @Mixin
-export class CommentFinderMixin extends Vue {
+export default class CommentFinderMixin extends Vue {
     get $comments() {
         const module = getModule(CommentStore, this.$store);
         return module.comments;

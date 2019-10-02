@@ -15,11 +15,11 @@
 </style>
 
 <script lang="ts">
-import './plugins/vuetify';
+// import './plugins/vuetify';
 
 import { Component, Vue } from 'vue-property-decorator';
 import Cookie from 'js-cookie';
-import { UserLoginMixin } from './user';
+import UserLoginMixin from '@/user/mixins/user-login-mixin';
 import SpaceQuickAccessBar from '@/space/ui/components/space-quick-access-bar.vue';
 import AppBar from '@/core/ui/components/app-bar.vue';
 import NavDrawer from '@/core/ui/components/nav-drawer.vue';

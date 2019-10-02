@@ -6,8 +6,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { PostType, Post } from '@/post';
-
+import { Post } from '@/post/domain/post';
+import { PostType } from '@/post/domain/post-type';
 /**
  * An icon for a text, or link post.
  */

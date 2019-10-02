@@ -7,19 +7,22 @@
                 <router-link to="/login">Sign in.</router-link>
             </h5>
         </div>
+
+        <v-alert type="error" v-model="registrationFailed" dismissible>{{ serverErrorMessage}}</v-alert>
+
         <v-text-field
             placeholder="Username"
             v-model="username"
             ref="registerUsernameTextbox"
             name="registerUsername"
-            v-validate="'required|min:4|isUnique'"
+            v-validate="{required: true, min: 4, regex: /^[\w-]+$/, isUnique: true}"
             title="Username must be at least 4 characters"
             :error="errors.first('registerUsername') != null"
             :error-messages="errors.first('registerUsername')"
         />
         <v-text-field
             type="email"
-            placeholder="Email"
+            placeholder="Email (Optional)"
             v-model="email"
             name="registerEmail"
             v-validate="'email'"
@@ -30,7 +33,8 @@
         <v-text-field v-show="false" type="text" v-model="honey" placeholder="Name" />
         <v-text-field
             type="password"
-            placeholder="Password must be at least 8 characters."
+            title="Password must be at least 8 characters."
+            placeholder="Password."
             v-model="password"
             ref="registerPassword"
             name="registerPassword"
@@ -64,11 +68,10 @@
 <script lang="ts">
 import { Component, Vue, Mixins } from 'vue-property-decorator';
 import { UserRegistration } from '@/user/domain/user-registration';
-import { UserFinderMixin } from '../../mixins/user-finder-mixin';
 import { mixins } from 'vue-class-component';
-import { UserRegistrarMixin } from '@/user/mixins/user-registrar-mixin';
-import { Form } from '../../../core';
+import UserRegistrarMixin from '@/user/mixins/user-registrar-mixin';
 import { UserLogin } from '../../domain/user-login';
+import { Form } from '@/core/ui/common/form/form';
 
 /**
  * Login form for logging in users via username / password.
@@ -86,6 +89,8 @@ export default class UserRegisterForm extends UserRegistrarMixin implements Form
     public password: string = '';
     public confirmPassword: string = '';
     public honey: string = '';
+    public registrationFailed: boolean = false;
+    public serverErrorMessage: string = '';
 
     public created() {
         // Add way to check the backend for available username.
@@ -96,7 +101,8 @@ export default class UserRegisterForm extends UserRegistrarMixin implements Form
                 registerUsername: {
                     required: 'Username is required.',
                     min: 'Username must be at least 4 characters.',
-                    isUnique: 'Username is unavailable.'
+                    isUnique: 'Username is unavailable.',
+                    regex: 'Username may only include letters, numbers, -, or _'
                 },
                 registerEmail: {
                     email: 'Email must be a valid address.'
@@ -130,10 +136,15 @@ export default class UserRegisterForm extends UserRegistrarMixin implements Form
             return null;
         }
 
-        const login = await this.$registerUser(new UserRegistration(this.username, this.password, this.email));
-
-        this.$emit('register', login);
-        return login;
+        try {
+            const login = await this.$registerUser(new UserRegistration(this.username, this.password, this.email));
+            this.$emit('register', login);
+            return login;
+        } catch (error) {
+            this.registrationFailed = true;
+            this.serverErrorMessage = error.message;
+            return null;
+        }
     }
 
     /**

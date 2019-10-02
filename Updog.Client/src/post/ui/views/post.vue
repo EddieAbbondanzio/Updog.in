@@ -12,17 +12,10 @@
 
 <script lang="ts">
 import { Component, Vue, Mixins } from 'vue-property-decorator';
-import CreatePostButtons from '@/post/ui/components/create-post-buttons.vue';
-import Layout from '@/core/ui/components/layout.vue';
+import { Post as PostEntity } from '@/post/domain/post';
+import { User } from '@/user/domain/user';
+import PostFinderMixin from '@/post/mixins/post-finder-mixin';
 import PostSummary from '@/post/ui/components/post-summary.vue';
-import { CommentFinderMixin } from '@/comment';
-import { CommentCreatorMixin } from '@/comment';
-import { mixins } from 'vue-class-component/lib/util';
-import { Post as PostEntity } from '@/post';
-import CommentSummary from '@/comment/ui/components/comment-summary.vue';
-import { User } from '@/user';
-import PaginationNav from '@/core/ui/components/pagination-nav.vue';
-import { PostFinderMixin } from '@/post';
 import PostLoadingPlaceHolder from '@/post/ui/components/post-loading-place-holder.vue';
 
 /**

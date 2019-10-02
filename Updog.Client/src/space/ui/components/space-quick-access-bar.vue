@@ -2,7 +2,7 @@
     <v-system-bar app color="primary">
         <router-link :to="{name: 'home'}" class="font-weight-bold white--text">HOME</router-link>
         <span class="px-3">|</span>
-        <div class="d-inline-block" v-for="(space, index) in spaces" v-bind:key="space.id">
+        <div class="d-inline-block" v-for="(space, index) in spaces" :key="space.id">
             <space-link :space="space" class="white--text">{{ space.name | capitalize }}</space-link>
 
             <span class="px-1 font-weight-bold" v-if="index + 1 < spaces.length">-</span>
@@ -13,11 +13,9 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { SpaceFinderMixin } from '@/space';
-import SpaceLink from '@/space/ui/components/space-link.vue';
 import { getModule } from 'vuex-module-decorators';
-import { UserStore, UserLogin } from '../../../user';
-import { Store } from '../../../core';
+import SpaceLink from '@/space/ui/components/space-link.vue';
+import SpaceFinderMixin from '@/space/mixins/space-finder-mixin';
 
 /**
  * Quick access bar to navigate default spaces, or subscribed spaces.
@@ -38,10 +36,6 @@ export default class SpaceQuickAccessBar extends SpaceFinderMixin {
     }
 
     public async created() {
-        // Store.subscribe((mutation, state) => {
-        //     console.log(mutation);
-        // });
-
         if (this.$isLoggedIn()) {
             await this.$findDefaultSpaces();
         } else {

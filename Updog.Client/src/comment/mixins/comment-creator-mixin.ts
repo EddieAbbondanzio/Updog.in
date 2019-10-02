@@ -1,16 +1,15 @@
 import Mixin from 'vue-class-component';
-import Vue from 'vue';
 import { CommentCreateParams } from '../interactors/create/comment-create-params';
 import CommentStore from '../store/comment-store';
 import { getModule } from 'vuex-module-decorators';
-import { AuthenticatedMixin } from '@/user';
+import AuthenticatedMixin from '@/user/mixins/authenticated-mixin';
 import { CommentMutation } from '../store/comment-mutation';
 
 /**
  * Mixin to handle comment related things.
  */
 @Mixin
-export class CommentCreatorMixin extends AuthenticatedMixin {
+export default class CommentCreatorMixin extends AuthenticatedMixin {
     get $cachedCommentInProgress() {
         const commentModule = getModule(CommentStore, this.$store);
         return commentModule.commentInProgress;

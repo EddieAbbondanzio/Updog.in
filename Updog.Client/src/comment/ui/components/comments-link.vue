@@ -11,7 +11,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Comment } from '../../domain/comment';
-import { Post } from '../../../post';
+import { Post } from '@/post/domain/post';
 
 /**
  * Link to a post's comments.

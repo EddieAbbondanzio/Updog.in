@@ -1,5 +1,5 @@
-import { Comment } from '@/comment';
-import { CommentApiInteractor } from '@/comment';
+import { Comment } from '@/comment/domain/comment';
+import { CommentApiInteractor } from '@/comment/infrastructure/comment-api-interactor';
 
 /**
  * Interactor to find a post by it's ID.

@@ -24,4 +24,8 @@ export class PaginationInfo {
     public hasPreviousPage(): boolean {
         return this.pageNumber > 0;
     }
+
+    public pageCount(): number {
+        return this.totalCount / this.pageSize;
+    }
 }

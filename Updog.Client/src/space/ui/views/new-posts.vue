@@ -2,7 +2,7 @@
     <div>
         <post-summary-list :posts="posts" />
         <pagination-nav
-            v-if="posts != null"
+            v-if="posts != null && posts.length > 0"
             :pagination="posts.pagination"
             @previous="onPrevious"
             @next="onNext"
@@ -12,15 +12,14 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-import { SpaceViewerMixin } from '@/space/mixins/space-viewer-mixin';
-import Layout from '@/core/ui/components/layout.vue';
-import { Space as SpaceEntity } from '@/space/domain/space';
-import SpaceLink from '@/space/ui/components/space-link.vue';
-import PostSummaryList from '@/post/ui/components/post-summary-list.vue';
 import { Post } from '@/post/domain/post';
-import { PagedResultSet, PaginationParams } from '@/core';
-import { PostFindBySpaceParams } from '@/post';
+import { Space as SpaceEntity } from '@/space/domain/space';
+import SpaceViewerMixin from '@/space/mixins/space-viewer-mixin';
+import PostSummaryList from '@/post/ui/components/post-summary-list.vue';
 import PaginationNav from '@/core/ui/components/pagination-nav.vue';
+import { PaginationParams } from '@/core/pagination/pagination-params';
+import { PostFindBySpaceParams } from '@/post/interactors/find-by-space/post-find-by-space-params';
+import { PagedResultSet } from '@/core/pagination/paged-result-set';
 
 /**
  * Page to view a space and it's posts.
