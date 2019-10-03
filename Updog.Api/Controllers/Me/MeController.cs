@@ -14,13 +14,13 @@ namespace Updog.Api {
     [ApiController]
     public sealed class MeController : ApiController {
         #region Fields
-        public UserUpdater userUpdater;
+        public CommandHandler<UserUpdateCommand> userUpdater;
 
-        public UserPasswordUpdater passwordUpdater;
+        public CommandHandler<UserUpdatePasswordCommand> passwordUpdater;
         #endregion
 
         #region Constructor(s)
-        public MeController(UserUpdater userUpdater, UserPasswordUpdater passwordUpdater) {
+        public MeController(CommandHandler<UserUpdateCommand> userUpdater, CommandHandler<UserUpdatePasswordCommand> passwordUpdater) {
             this.userUpdater = userUpdater;
             this.passwordUpdater = passwordUpdater;
         }
@@ -41,12 +41,8 @@ namespace Updog.Api {
         /// <param name="updateRequest">The new user info.</param>
         [HttpPut]
         public async Task<ActionResult> Update([FromBody] MeUpdateRequest updateRequest) {
-            var result = await userUpdater.Handle(new UpdateUserParams(User!, updateRequest.Email));
-
-            return result.Match<ActionResult>(
-                fail => BadRequest(fail),
-                Ok
-            );
+            await userUpdater.Execute(new UserUpdateCommand(User!, updateRequest.Email), ActionResultBuilder);
+            return ActionResultBuilder.Build();
         }
 
         /// <summary>
@@ -55,12 +51,8 @@ namespace Updog.Api {
         /// <param name="updatePasswordRequest">The new password.</param>
         [HttpPut("password")]
         public async Task<ActionResult> UpdatePassword([FromBody] MeUpdatePasswordRequest updatePasswordRequest) {
-            var result = await passwordUpdater.Handle(new UserPasswordUpdateParams(User!, updatePasswordRequest.CurrentPassword, updatePasswordRequest.NewPassword));
-
-            return result.Match<ActionResult>(
-                fail => BadRequest(fail),
-                Ok
-            );
+            await passwordUpdater.Execute(new UserUpdatePasswordCommand(User!, updatePasswordRequest.CurrentPassword, updatePasswordRequest.NewPassword), ActionResultBuilder);
+            return ActionResultBuilder.Build();
         }
         #endregion
     }

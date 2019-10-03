@@ -143,9 +143,9 @@ namespace Updog.Api {
 
             services.AddSingleton<ISubscriptionViewMapper, SubscriptionViewMapper>();
             services.AddSingleton<ISubscriptionRecordMapper, SubscriptionRecordMapper>();
-            services.AddTransient<SubscriptionFinderByUser>();
-            services.AddTransient<SubscriptionCreator>();
-            services.AddTransient<SubscriptionDeleter>();
+            services.AddTransient<QueryHandler<SubscribedSpaceQuery>, SubscribedSpaceQueryHandler>();
+            services.AddTransient<CommandHandler<SubscriptionCreateCommand>, SubscriptionCreateCommandHandler>();
+            services.AddTransient<CommandHandler<SubscriptionDeleteCommand>, SubscriptionDeleteCommandHandler>();
 
             services.AddSingleton<IVoteViewMapper, VoteViewMapper>();
             services.AddSingleton<IVoteFactory, VoteFactory>();

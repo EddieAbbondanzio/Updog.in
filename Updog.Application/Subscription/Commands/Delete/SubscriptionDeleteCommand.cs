@@ -1,10 +1,7 @@
 using Updog.Domain;
 
 namespace Updog.Application {
-    /// <summary>
-    /// Parameters to create a new subscription for a space.
-    /// </summary>
-    public sealed class SubscriptionCreateParams : IAuthenticatedActionParams {
+    public sealed class SubscriptionDeleteCommand : ICommand {
         #region Properties
         /// <summary>
         /// The name of the space.
@@ -19,7 +16,7 @@ namespace Updog.Application {
         #endregion
 
         #region Constructor(s)
-        public SubscriptionCreateParams(string space, User user) {
+        public SubscriptionDeleteCommand(string space, User user) {
             Space = space;
             User = user;
         }

@@ -19,12 +19,12 @@ namespace Updog.Api {
     [ApiController]
     public sealed class SubscriptionController : ApiController {
         #region Fields
-        private SubscriptionCreator subscriptionCreator;
-        private SubscriptionDeleter subscriptionDeleter;
+        private CommandHandler<SubscriptionCreateCommand> subscriptionCreator;
+        private CommandHandler<SubscriptionDeleteCommand> subscriptionDeleter;
         #endregion
 
         #region Constructor(s)
-        public SubscriptionController(SubscriptionCreator subscriptionCreator, SubscriptionDeleter subscriptionDeleter) {
+        public SubscriptionController(CommandHandler<SubscriptionCreateCommand> subscriptionCreator, CommandHandler<SubscriptionDeleteCommand> subscriptionDeleter) {
             this.subscriptionCreator = subscriptionCreator;
             this.subscriptionDeleter = subscriptionDeleter;
         }
@@ -37,12 +37,8 @@ namespace Updog.Api {
         /// <param name="spaceName">The name of the space.</param>
         [HttpPost("{spaceName}")]
         public async Task<ActionResult> SubscribeToSpace(string spaceName) {
-            var result = await subscriptionCreator.Handle(new SubscriptionCreateParams(spaceName, User!));
-
-            return result.Match<ActionResult>(
-                sub => Ok(sub),
-                fail => BadRequest(fail)
-            );
+            await subscriptionCreator.Execute(new SubscriptionCreateCommand(spaceName, User!), ActionResultBuilder);
+            return ActionResultBuilder.Build();
         }
 
         /// <summary>
@@ -51,12 +47,8 @@ namespace Updog.Api {
         /// <param name="spaceName">The name of the space to cancel.</param>
         [HttpDelete("{spaceName}")]
         public async Task<ActionResult> DesubscribeFromSpace(string spaceName) {
-            var failable = await subscriptionDeleter.Handle(new SubscriptionDeleteParams(spaceName, User!));
-
-            return failable.Match<ActionResult>(
-                fail => BadRequest(fail),
-                () => Ok()
-            );
+            await subscriptionDeleter.Execute(new SubscriptionDeleteCommand(spaceName, User!), ActionResultBuilder);
+            return ActionResultBuilder.Build();
         }
         #endregion
     }
