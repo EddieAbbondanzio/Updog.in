@@ -8,9 +8,9 @@ namespace Updog.Application {
     /// <summary>
     /// Validator to validate new posts being created.
     /// </summary>
-    internal sealed class SpaceCreateValidator : FluentValidatorAdapter<SpaceCreateParams> {
+    internal sealed class SpaceCreateCommandValidator : FluentValidatorAdapter<SpaceCreateCommand> {
         #region Constructor(s)
-        public SpaceCreateValidator() {
+        public SpaceCreateCommandValidator() {
             RuleFor(s => s.User).NotNull().WithMessage("User performing the action is null.");
 
             RuleFor(s => s.Name).NotNull().WithMessage("Name is required.");

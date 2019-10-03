@@ -1,27 +1,27 @@
 using Updog.Domain;
 
 namespace Updog.Application {
-    /// <summary>
-    /// Parameters to update a space.
-    /// </summary>
-    public sealed class SpaceUpdateParams : IAuthenticatedActionParams {
+    public sealed class SpaceCreateCommand : ICommand {
         #region Properties
         /// <summary>
-        /// The name of the space to update.
+        /// The desired name of the subspace.
         /// </summary>
-        /// <value></value>
         public string Name { get; }
 
         /// <summary>
-        /// The new description of the space.
+        /// The description of the space.
         /// </summary>
+        /// <value></value>
         public string Description { get; }
 
+        /// <summary>
+        /// The user performing the action.
+        /// </summary>
         public User User { get; }
         #endregion
 
         #region Constructor(s)
-        public SpaceUpdateParams(string name, string description, User user) {
+        public SpaceCreateCommand(User user, string name, string description) {
             Name = name;
             Description = description;
             User = user;

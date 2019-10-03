@@ -25,10 +25,15 @@ namespace Updog.Application {
             //Try to pull in the subscription
             Subscription? sub = await subRepo.FindByUserAndSpace(context.Input.User.Username, context.Input.Space);
 
-            if (sub == null) {
-                context.Output.BadInput($"Subscription does not exist");
+            if (sub != null) {
+                context.Output.BadInput("Subscription already exists");
                 return;
             }
+
+            sub = new Subscription() {
+                User = context.Input.User,
+                Space = space
+            };
 
             await subRepo.Add(sub);
 
