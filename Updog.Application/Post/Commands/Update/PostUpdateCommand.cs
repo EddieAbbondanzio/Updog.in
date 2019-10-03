@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters to update a post.
     /// </summary>
-    public sealed class PostUpdateParams : IAuthenticatedActionParams {
+    public sealed class PostUpdateCommand : ICommand {
         #region Properties
         /// <summary>
         /// The user doing the update.
@@ -24,12 +24,12 @@ namespace Updog.Application {
 
         #region Constructor(s)
         /// <summary>
-        /// Create a new set of update params for a post.
+        /// Create a new set of update Command for a post.
         /// </summary>
         /// <param name="user">The user updating the post.</param>
         /// <param name="postId">The post ID.</param>
         /// <param name="body">The text of the post.</param>
-        public PostUpdateParams(User user, int postId, string body) {
+        public PostUpdateCommand(User user, int postId, string body) {
             User = user;
             PostId = postId;
             Body = body;

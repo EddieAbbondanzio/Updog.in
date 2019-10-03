@@ -9,13 +9,11 @@ namespace Updog.Infrastructure {
     /// </summary>
     public class EventBus : IEventBus {
         #region Fields
-        private IDatabase database;
         private IServiceProvider serviceProvider;
         #endregion
 
         #region Constructor(s)
-        public EventBus(IDatabase database, IServiceProvider serviceProvider) {
-            this.database = database;
+        public EventBus(IServiceProvider serviceProvider) {
             this.serviceProvider = serviceProvider;
         }
         #endregion

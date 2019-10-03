@@ -114,13 +114,13 @@ namespace Updog.Api {
             services.AddSingleton<IPostViewMapper, PostViewMapper>();
             services.AddSingleton<PermissionHandler<Post>, PostPermissionHandler>();
             services.AddSingleton<IPostRecordMapper, PostRecordMapper>();
-            services.AddTransient<PostCreator>();
-            services.AddTransient<PostFinderById>();
-            services.AddTransient<PostFinderBySpace>();
-            services.AddTransient<PostFinderByUser>();
-            services.AddTransient<PostFinderByNew>();
-            services.AddTransient<PostDeleter>();
-            services.AddTransient<PostUpdater>();
+            services.AddTransient<CommandHandler<PostCreateCommand>, PostCreateCommandHandler>();
+            services.AddTransient<CommandHandler<PostUpdateCommand>, PostUpdateCommandHandler>();
+            services.AddTransient<CommandHandler<PostDeleteCommand>, PostDeleteCommandHandler>();
+            services.AddTransient<QueryHandler<PostFindByIdQuery>, PostFindByIdQueryHandler>();
+            services.AddTransient<QueryHandler<PostFindBySpaceQuery>, PostFindBySpaceQueryHandler>();
+            services.AddTransient<QueryHandler<PostFindByUserQuery>, PostFindByUserQueryHandler>();
+            services.AddTransient<QueryHandler<PostFindByNewQuery>, PostFindByNewQueryHandler>();
 
             services.AddSingleton<PermissionHandler<Comment>, CommentPermissionHandler>();
             services.AddSingleton<ICommentViewMapper, CommentViewMapper>();

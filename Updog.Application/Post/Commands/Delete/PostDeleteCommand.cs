@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters to delete a post.
     /// </summary>
-    public sealed class PostDeleteParams : IAuthenticatedActionParams {
+    public sealed class PostDeleteCommand : ICommand {
         #region Properties
         /// <summary>
         /// The user that wants to delete the post.
@@ -24,7 +24,7 @@ namespace Updog.Application {
         /// </summary>
         /// <param name="user">The uer doing it.</param>
         /// <param name="postId">The ID of the post.</param>
-        public PostDeleteParams(User user, int postId) {
+        public PostDeleteCommand(User user, int postId) {
             User = user;
             PostId = postId;
         }

@@ -4,7 +4,7 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters to add a new post.
     /// </summary>
-    public sealed class PostCreateParams : IAuthenticatedActionParams {
+    public sealed class PostCreateCommand : ICommand {
         #region Properties
         public PostType Type { get; }
 
@@ -19,7 +19,7 @@ namespace Updog.Application {
         #endregion
 
         #region Constructor(s)
-        public PostCreateParams(PostType type, string title, string body, string space, User user) {
+        public PostCreateCommand(PostType type, string title, string body, string space, User user) {
             Type = type;
             Title = title;
             Body = body;

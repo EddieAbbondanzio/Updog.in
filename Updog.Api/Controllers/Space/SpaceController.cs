@@ -24,11 +24,11 @@ namespace Updog.Api {
         private QueryHandler<DefaultSpaceQuery> spaceFinderDefault;
         private CommandHandler<SpaceCreateCommand> spaceCreator;
         private CommandHandler<SpaceUpdateCommand> spaceUpdater;
-        private PostFinderBySpace postFinderBySpace;
+        private QueryHandler<PostFindBySpaceQuery> postFinderBySpace;
         #endregion
 
         #region Constructor(s)
-        public SpaceController(QueryHandler<SpaceFindQuery> spaceFinder, QueryHandler<SpaceFindByNameQuery> spaceFinderByName, QueryHandler<SubscribedSpaceQuery> subscriptionFinder, QueryHandler<DefaultSpaceQuery> spaceFinderDefault, CommandHandler<SpaceCreateCommand> spaceCreator, CommandHandler<SpaceUpdateCommand> spaceUpdater, PostFinderBySpace postFinderBySpace) {
+        public SpaceController(QueryHandler<SpaceFindQuery> spaceFinder, QueryHandler<SpaceFindByNameQuery> spaceFinderByName, QueryHandler<SubscribedSpaceQuery> subscriptionFinder, QueryHandler<DefaultSpaceQuery> spaceFinderDefault, CommandHandler<SpaceCreateCommand> spaceCreator, CommandHandler<SpaceUpdateCommand> spaceUpdater, QueryHandler<PostFindBySpaceQuery> postFinderBySpace) {
             this.spaceFinder = spaceFinder;
             this.spaceFinderByName = spaceFinderByName;
             this.subsriptionFinderByUser = subscriptionFinder;
@@ -108,15 +108,8 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{name}/post/new")]
         public async Task<ActionResult> FindPosts(string name, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            await this.postFinderBySpace.Execute(new PostFinderBySpace<string>(name, User, new PaginationInfo(pageNumber, pageSize)));
-
-            return result.Match<ActionResult>(
-                posts => {
-                    SetContentRangeHeader(posts.Pagination);
-                    return Ok(posts);
-                },
-                fail => BadRequest(fail)
-            );
+            await this.postFinderBySpace.Execute(new PostFindBySpaceQuery(name, User, new PaginationInfo(pageNumber, pageSize)), ActionResultBuilder);
+            return ActionResultBuilder.Build();
         }
         #endregion
     }

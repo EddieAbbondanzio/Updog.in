@@ -18,17 +18,17 @@ namespace Updog.Api {
     [ApiController]
     public sealed class PostController : ApiController {
         #region Fields
-        private PostFinderByNew postFinderByNew;
-        private PostFinderById postFinderById;
-        private PostFinderByUser postFinderByUser;
-        private CommentFinderByPost commentFinderByPost;
-        private PostCreator postCreator;
-        private PostUpdater postUpdater;
-        private PostDeleter postDeleter;
+        private QueryHandler<PostFindByNewQuery> postFinderByNew;
+        private QueryHandler<PostFindByIdQuery> postFinderById;
+        private QueryHandler<PostFindByUserQuery> postFinderByUser;
+        private QueryHandler<CommentFindByPostQuery> commentFinderByPost;
+        private CommandHandler<PostCreateCommand> postCreator;
+        private CommandHandler<PostUpdateCommand> postUpdater;
+        private CommandHandler<PostDeleteCommand> postDeleter;
         #endregion
 
         #region Constructor(s)
-        public PostController(PostFinderByNew postFinderByNew, PostFinderById postFinderById, PostFinderByUser postFinderByUser, CommentFinderByPost commentFinderByPost, PostCreator postAdder, PostUpdater postUpdater, PostDeleter postDeleter) {
+        public PostController(QueryHandler<PostFindByNewQuery> postFinderByNew, QueryHandler<PostFindByIdQuery> postFinderById, QueryHandler<PostFindByUserQuery> postFinderByUser, QueryHandler<CommentFindByPostQuery> commentFinderByPost, CommandHandler<PostCreateCommand> postAdder, CommandHandler<PostUpdateCommand> postUpdater, CommandHandler<PostDeleteCommand> postDeleter) {
             this.postFinderByNew = postFinderByNew;
             this.postFinderById = postFinderById;
             this.postFinderByUser = postFinderByUser;
@@ -43,15 +43,8 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("new")]
         public async Task<ActionResult> FindByNew([FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            var findResult = await postFinderByNew.Handle(new FindParams(User, new PaginationInfo(pageNumber, pageSize)));
-
-            return findResult.Match<ActionResult>(
-                posts => {
-                    SetContentRangeHeader(posts.Pagination);
-                    return Ok(posts);
-                },
-                fail => BadRequest(fail)
-            );
+            await postFinderByNew.Execute(new PostFindByNewQuery(User, new PaginationInfo(pageNumber, pageSize)), ActionResultBuilder);
+            return ActionResultBuilder.Build();
         }
 
         /// <summary>
@@ -62,12 +55,8 @@ namespace Updog.Api {
         [HttpGet("{id}")]
         [HttpHead("{id}")]
         public async Task<ActionResult> FindById(int id) {
-            var findResult = await postFinderById.Handle(new FindByValueParams<int>(id, User));
-
-            return findResult.Match<ActionResult>(
-                post => post != null ? Ok(post) : NotFound() as ActionResult,
-                fail => BadRequest(fail)
-            );
+            await postFinderById.Execute(new PostFindByIdQuery(id, User), ActionResultBuilder);
+            return ActionResultBuilder.Build();
         }
 
 
@@ -78,26 +67,15 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{postId}/comment")]
         public async Task<ActionResult> FindComments(int postId) {
-            var findResult = await commentFinderByPost.Handle(new FindByValueParams<int>(postId, User));
-
-            return findResult.Match<ActionResult>(
-                comments => Ok(comments),
-                fail => BadRequest(fail)
-            );
+            await commentFinderByPost.Execute(new CommentFindByPostQuery(postId, User), ActionResultBuilder);
+            return ActionResultBuilder.Build();
         }
 
         [AllowAnonymous]
         [HttpGet("user/{username}")]
         public async Task<ActionResult> FindByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            var findResult = await postFinderByUser.Handle(new FindByValueParams<string>(username, User, new PaginationInfo(pageNumber, pageSize)));
-
-            return findResult.Match<ActionResult>(
-                posts => {
-                    SetContentRangeHeader(posts.Pagination);
-                    return Ok(posts);
-                },
-                fail => BadRequest(fail)
-            );
+            await postFinderByUser.Execute(new PostFindByUserQuery(username, User, new PaginationInfo(pageNumber, pageSize)), ActionResultBuilder);
+            return ActionResultBuilder.Build();
         }
 
         /// <summary>
@@ -105,12 +83,8 @@ namespace Updog.Api {
         /// </summary>
         [HttpPost]
         public async Task<ActionResult> Create([FromBody]PostCreateRequest payload) {
-            var createResult = await postCreator.Handle(new PostCreateParams(payload.Type, payload.Title, payload.Body, payload.Space, User!));
-
-            return createResult.Match<ActionResult>(
-                newPost => Ok(newPost),
-                fail => BadRequest(fail)
-            );
+            await postCreator.Execute(new PostCreateCommand(payload.Type, payload.Title, payload.Body, payload.Space, User!), ActionResultBuilder);
+            return ActionResultBuilder.Build();
         }
 
         /// <summary>
@@ -118,12 +92,8 @@ namespace Updog.Api {
         /// </summary>
         [HttpPatch("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody]PostUpdateRequest payload) {
-            var updateResult = await postUpdater.Handle(new PostUpdateParams(User!, id, payload.Body));
-
-            return updateResult.Match<ActionResult>(
-                updatedPost => Ok(updatedPost),
-                fail => BadRequest(fail)
-            );
+            await postUpdater.Execute(new PostUpdateCommand(User!, id, payload.Body), ActionResultBuilder);
+            return ActionResultBuilder.Build();
         }
 
         /// <summary>
@@ -131,12 +101,8 @@ namespace Updog.Api {
         /// </summary>
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id) {
-            var deleteResult = await postDeleter.Handle(new PostDeleteParams(User!, id));
-
-            return deleteResult.Match<ActionResult>(
-                deletedPost => Ok(deletedPost),
-                fail => BadRequest(fail)
-            );
+            await postDeleter.Execute(new PostDeleteCommand(User!, id), ActionResultBuilder);
+            return ActionResultBuilder.Build();
         }
         #endregion
     }
