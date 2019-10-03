@@ -125,12 +125,12 @@ namespace Updog.Api {
             services.AddSingleton<PermissionHandler<Comment>, CommentPermissionHandler>();
             services.AddSingleton<ICommentViewMapper, CommentViewMapper>();
             services.AddSingleton<ICommentRecordMapper, CommentRecordMapper>();
-            services.AddTransient<CommentCreator>();
-            services.AddTransient<CommentFinderById>();
-            services.AddTransient<CommentFinderByPost>();
-            services.AddTransient<CommentFinderByUser>();
-            services.AddTransient<CommentDeleter>();
-            services.AddTransient<CommentUpdater>();
+            services.AddTransient<QueryHandler<CommentFindByIdQuery>, CommentFindByIdQueryHandler>();
+            services.AddTransient<QueryHandler<CommentFindByPostQuery>, CommentFindByPostQueryHandler>();
+            services.AddTransient<QueryHandler<CommentFindByUserQuery>, CommentFindByUserQueryHandler>();
+            services.AddTransient<CommandHandler<CommentCreateCommand>, CommentCreateCommandHandler>();
+            services.AddTransient<CommandHandler<CommentUpdateCommand>, CommentUpdateCommandHandler>();
+            services.AddTransient<CommandHandler<CommentDeleteCommand>, CommentDeleteCommandHandler>();
 
             services.AddSingleton<PermissionHandler<Space>, SpacePermissionHandler>();
             services.AddSingleton<ISpaceViewMapper, SpaceViewMapper>();

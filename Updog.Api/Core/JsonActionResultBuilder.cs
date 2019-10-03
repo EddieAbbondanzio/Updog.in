@@ -17,30 +17,20 @@ namespace Updog.Api {
         #endregion
 
         #region Publics
-        /// <summary>
-        /// Build a 200 OK result that has a body.
-        /// </summary>
-        /// <param name="output">The payload.</param>
-        /// <typeparam name="TResult">The type of payload.</typeparam>
+        public void Success() => new OkResult();
         public void Success<TResult>(TResult? output = null) where TResult : class => JsonResult(200, output);
 
-        /// <summary>
-        /// Build a 404 Not Found result.
-        /// </summary>
-        /// <param name="message">The error message.</param>
+        public void NotFound() => JsonResult(404, "Not found");
         public void NotFound<TResult>(TResult? output = null) where TResult : class => JsonResult(404, output);
 
-        /// <summary>
-        /// Build a 400 Bad Request result.
-        /// </summary>
-        /// <param name="message">The error message.</param>
+        public void BadInput() => JsonResult(400, "Bad input");
         public void BadInput<TResult>(TResult? output = null) where TResult : class => JsonResult(400, output);
 
-        /// <summary>
-        /// Build a 401 Unauthorized result.
-        /// </summary>
-        /// <param name="message">The error message.</param>
+        public void Unauthorized() => JsonResult(401, "Unauthorized");
         public void Unauthorized<TResult>(TResult? output = null) where TResult : class => JsonResult(401, output);
+
+        public void InvalidOperation() => JsonResult(400, "Invalid operation");
+        public void InvalidOperation<TResult>(TResult? output = null) where TResult : class => JsonResult(400, output);
 
         /// <summary>
         /// Get the ActionResult built by the builder.

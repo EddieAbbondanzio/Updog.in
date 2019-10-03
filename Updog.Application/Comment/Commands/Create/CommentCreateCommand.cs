@@ -1,10 +1,7 @@
 using Updog.Domain;
 
 namespace Updog.Application {
-    /// <summary>
-    /// Parameters to add a new comment.
-    /// </summary>
-    public sealed class CommentCreateParams : IAuthenticatedActionParams {
+    public sealed class CommentCreateCommand : ICommand {
         #region Properties
         /// <summary>
         /// The ID of the post it belongs to.
@@ -35,7 +32,7 @@ namespace Updog.Application {
         /// <param name="user">The user that made the post.</param>
         /// <param name="body">The text body of the comment.</param>
         /// <param name="parentId">The parent comment</param>
-        public CommentCreateParams(int postId, User user, string body, int parentId = 0) {
+        public CommentCreateCommand(int postId, User user, string body, int parentId = 0) {
             PostId = postId;
             Body = body;
             User = user;

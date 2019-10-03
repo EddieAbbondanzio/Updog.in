@@ -19,7 +19,7 @@ namespace Updog.Api {
             try {
 
                 var adminConfig = host.Services.GetService<IAdminConfig>();
-                var admin = host.Services.GetService<AdminRegistrar>().Handle(adminConfig);
+                var admin = host.Services.GetService<CommandHandler<AdminRegisterOrUpdateCommand>>().Execute(new AdminRegisterOrUpdateCommand(adminConfig), new ConsoleOutputPort());
             } catch {
                 Console.WriteLine("Failed to create admin account");
             }
