@@ -100,14 +100,16 @@ namespace Updog.Api {
 
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
 
+            services.AddSingleton<IUserFactory, UserFactory>();
             services.AddSingleton<IUserViewMapper, UserViewMapper>();
             services.AddSingleton<IUserRecordMapper, UserRecordMapper>();
-            services.AddTransient<UserFinderByUsername>();
-            services.AddTransient<UserLoginInteractor>();
-            services.AddTransient<UserRegistrar>();
-            services.AddTransient<UserUpdater>();
-            services.AddTransient<UserPasswordUpdater>();
-            services.AddTransient<AdminRegistrar>();
+            services.AddTransient<QueryHandler<FindUserByUsernameQuery>, FindUserByUsernameQueryHandler>();
+            services.AddTransient<QueryHandler<IsUsernameAvailableQuery>, IsUsernameAvailableQueryHandler>();
+            services.AddTransient<CommandHandler<RegisterUserCommand>, RegisterUserCommandHandler>();
+            services.AddTransient<CommandHandler<LoginUserCommand>, LoginUserCommandHandler>();
+            services.AddTransient<CommandHandler<UserUpdateCommand>, UserUpdateCommandHandler>();
+            services.AddTransient<CommandHandler<UserUpdatePasswordCommand>, UserUpdatePasswordCommandHandler>();
+            services.AddTransient<CommandHandler<AdminRegisterOrUpdateCommand>, AdminRegisterOrUpdateCommandHandler>();
 
             services.AddSingleton<IPostViewMapper, PostViewMapper>();
             services.AddSingleton<PermissionHandler<Post>, PostPermissionHandler>();
@@ -147,8 +149,8 @@ namespace Updog.Api {
 
             services.AddSingleton<IVoteViewMapper, VoteViewMapper>();
             services.AddSingleton<IVoteFactory, VoteFactory>();
-            services.AddTransient<VoteOnPostCommandHandler>();
-            services.AddTransient<VoteOnCommentCommandHandler>();
+            services.AddTransient<CommandHandler<VoteOnPostCommand>, VoteOnPostCommandHandler>();
+            services.AddTransient<CommandHandler<VoteOnCommentCommand>, VoteOnCommentCommandHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

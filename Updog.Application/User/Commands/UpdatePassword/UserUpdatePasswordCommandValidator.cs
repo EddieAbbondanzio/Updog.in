@@ -6,8 +6,8 @@ namespace Updog.Application {
     /// <summary>
     /// Validator to validate that a password is safe to update.
     /// </summary>
-    internal sealed class UserPasswordUpdateValidator : FluentValidatorAdapter<UserPasswordUpdateParams> {
-        public UserPasswordUpdateValidator() {
+    internal sealed class UserUpdatePasswordCommandValidator : FluentValidatorAdapter<UserUpdatePasswordCommand> {
+        public UserUpdatePasswordCommandValidator() {
             RuleFor(reg => reg.User).NotNull().WithMessage("User is required.");
 
             RuleFor(reg => reg.CurrentPassword).NotNull().WithMessage("Current password is required.");

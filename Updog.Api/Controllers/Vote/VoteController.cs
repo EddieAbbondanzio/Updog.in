@@ -18,12 +18,12 @@ namespace Updog.Api {
     [ApiController]
     public sealed class VoteController : ApiController {
         #region Fields
-        private VoteOnPostCommandHandler voteOnPostHandler;
-        private VoteOnCommentCommandHandler voteOnCommentHandler;
+        private CommandHandler<VoteOnPostCommand> voteOnPostHandler;
+        private CommandHandler<VoteOnCommentCommand> voteOnCommentHandler;
         #endregion
 
         #region Constructor(s)
-        public VoteController(VoteOnPostCommandHandler voteOnPostHandler, VoteOnCommentCommandHandler voteOnCommentHandler) {
+        public VoteController(CommandHandler<VoteOnPostCommand> voteOnPostHandler, CommandHandler<VoteOnCommentCommand> voteOnCommentHandler) {
             this.voteOnPostHandler = voteOnPostHandler;
             this.voteOnCommentHandler = voteOnCommentHandler;
         }

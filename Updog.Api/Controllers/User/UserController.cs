@@ -14,8 +14,9 @@ namespace Updog.Api {
     [ApiController]
     public sealed class UserController : ApiController {
         #region Fields
-        private UserFinderByUsername userFinder;
-        private UserRegistrar userRegistrar;
+        private QueryHandler<FindUserByUsernameQuery> userFinder;
+        private QueryHandler<IsUsernameAvailableQuery> usernameChecker;
+        private CommandHandler<RegisterUserCommand> userRegistrar;
         #endregion
 
         #region Constructor(s)
@@ -23,33 +24,31 @@ namespace Updog.Api {
         /// Create a new user controller.
         /// </summary>
         public UserController(
-                UserFinderByUsername userFinder,
-                UserRegistrar userRegistrar
+                QueryHandler<FindUserByUsernameQuery> userFinder,
+                QueryHandler<IsUsernameAvailableQuery> usernameChecker,
+                CommandHandler<RegisterUserCommand> userRegistrar
             ) {
             this.userFinder = userFinder;
+            this.usernameChecker = usernameChecker;
             this.userRegistrar = userRegistrar;
         }
         #endregion
 
         #region Publics
+        [HttpHead("{username}")]
+        public async Task<ActionResult> IsUsernameAvailable(string username) {
+            await usernameChecker.Execute(new IsUsernameAvailableQuery(username), ActionResultBuilder);
+            return ActionResultBuilder.Build();
+        }
+
         /// <summary>
         /// Retrieve a user from the backend via their username.
         /// </summary>
         /// <param name="username">The username of the user to look for.</param>
         [HttpGet("{username}")]
-        [HttpHead("{username}")]
         public async Task<ActionResult> FindByUsername(string username) {
-            // When checking for username availability, see if the username is banned first.
-            if (Request.Method.Equals("HEAD") && User.IsUsernameBanned(username)) {
-                return BadRequest("Username is unavailable");
-            }
-
-            var result = await userFinder.Handle(new FindByValueParams<string>(username, user: User));
-
-            return result.Match<ActionResult>(
-                user => user != null ? Ok(user) : NotFound() as ActionResult,
-                fail => BadRequest(fail)
-            );
+            await userFinder.Execute(new FindUserByUsernameQuery(username, User), ActionResultBuilder);
+            return ActionResultBuilder.Build();
         }
 
         /// <summary>
@@ -58,12 +57,8 @@ namespace Updog.Api {
         /// <param name="registration">The new user registration</param>
         [HttpPost]
         public async Task<ActionResult> Register([FromBody] UserRegisterRequest req) {
-            var result = await userRegistrar.Handle(new UserRegisterParams(req.Username, req.Password, req.Email));
-
-            return result.Match<ActionResult>(
-                login => Ok(login),
-                fail => BadRequest(fail)
-            );
+            await userRegistrar.Execute(new RegisterUserCommand(new UserRegistration(req.Username, req.Password, req.Email)), ActionResultBuilder);
+            return ActionResultBuilder.Build();
         }
         #endregion
     }
