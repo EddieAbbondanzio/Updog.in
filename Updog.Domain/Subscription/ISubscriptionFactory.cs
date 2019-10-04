@@ -1,6 +1,6 @@
 using Updog.Domain;
 
-namespace Updog.Application {
+namespace Updog.Domain {
     public interface ISubscriptionFactory : IFactory<Subscription> {
         Subscription CreateFor(User user, Space space);
     }

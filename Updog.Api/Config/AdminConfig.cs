@@ -1,4 +1,4 @@
-using Updog.Application;
+using Updog.Domain;
 
 namespace Updog.Api {
     public sealed class AdminConfig : IAdminConfig {

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Updog.Domain;
-using Updog.Application.Paging;
+using Updog.Domain.Paging;
 
-namespace Updog.Application {
+namespace Updog.Domain {
     /// <summary>
     /// CRUD interface for managing pots in the database.
     /// </summary>

@@ -1,3 +1,5 @@
+using Updog.Domain;
+
 namespace Updog.Application {
     public sealed class AdminRegisterOrUpdateCommand : ICommand {
         #region Properties

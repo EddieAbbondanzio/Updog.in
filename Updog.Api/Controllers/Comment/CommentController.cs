@@ -7,8 +7,8 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Updog.Application;
-using Updog.Application.Paging;
 using Updog.Domain;
+using Updog.Domain.Paging;
 
 namespace Updog.Api {
     /// <summary>

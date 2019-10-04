@@ -2,12 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Updog.Application;
 using System.Threading.Tasks;
 using Updog.Domain;
-using System;
-using FluentValidation;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
-using Updog.Application.Paging;
-using System.Collections.Generic;
+using Updog.Domain.Paging;
 
 namespace Updog.Api {
     /// <summary>
@@ -85,7 +81,7 @@ namespace Updog.Api {
         /// <param name="request">The incoming reuqest</param>
         [HttpPost]
         public async Task<ActionResult> CreateSpace(SpaceCreateRequest request) {
-            await spaceCreator.Execute(new SpaceCreateCommand(User!, request.Name, request.Description), ActionResultBuilder);
+            await spaceCreator.Execute(new SpaceCreateCommand(new SpaceCreationData(request.Name, request.Description), User!), ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
 

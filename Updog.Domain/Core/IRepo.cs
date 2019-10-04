@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Updog.Domain;
 
-namespace Updog.Application {
+namespace Updog.Domain {
     public interface IRepo { }
 
     /// <summary>

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Updog.Domain;
 
-namespace Updog.Application {
+namespace Updog.Domain {
     /// <summary>
     /// CRUD interface for managing votes in the database.
     /// </summary>

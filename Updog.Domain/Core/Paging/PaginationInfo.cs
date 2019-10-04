@@ -1,6 +1,6 @@
 using System;
 
-namespace Updog.Application.Paging {
+namespace Updog.Domain.Paging {
     /// <summary>
     /// Paging info.
     /// </summary>

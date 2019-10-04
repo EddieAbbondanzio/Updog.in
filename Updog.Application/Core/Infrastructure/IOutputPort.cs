@@ -2,6 +2,10 @@
 using Updog.Application.Validation;
 
 namespace Updog.Application {
+    public interface IFack {
+        void Success<TResult>(TResult result);
+    }
+
     /// <summary>
     /// Interface for the presenter layer to implement.
     /// </summary>

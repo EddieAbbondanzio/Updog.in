@@ -20,14 +20,14 @@ namespace Updog.Application {
         [Validate(typeof(SpaceCreateCommandValidator))]
         protected async override Task ExecuteCommand(ExecutionContext<SpaceCreateCommand> context) {
             ISpaceRepo spaceRepo = context.Database.GetRepo<ISpaceRepo>();
-            Space? existing = await spaceRepo.FindByName(context.Input.Name);
+            Space? existing = await spaceRepo.FindByName(context.Input.CreationData.Name);
 
             if (existing != null) {
-                context.Output.BadInput($"Space name {context.Input.Name} is already taken");
+                context.Output.BadInput($"Space name {context.Input.CreationData.Name} is already taken");
                 return;
             }
 
-            Space s = spaceFactory.CreateFromCommand(context.Input);
+            Space s = spaceFactory.Create(context.Input.CreationData, context.Input.User);
 
             await spaceRepo.Add(s);
             context.Output.Success(spaceMapper.Map(s));

@@ -27,7 +27,7 @@ namespace Updog.Infrastructure {
         public async Task Dispatch<TEvent>(TEvent domainEvent) where TEvent : IDomainEvent {
             IDomainEventHandler<TEvent>[]? handlers = serviceProvider.GetService(typeof(IDomainEventHandler<TEvent>[])) as IDomainEventHandler<TEvent>[];
 
-            if (handlers?.Length > 0) {
+            if (handlers != null && handlers.Length > 0) {
                 for (int i = 0; i < handlers.Length; i++) {
                     await handlers[i].Handle(domainEvent);
                 }

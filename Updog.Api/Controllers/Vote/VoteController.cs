@@ -6,7 +6,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Updog.Application;
-using Updog.Application.Paging;
 using Updog.Domain;
 
 namespace Updog.Api {

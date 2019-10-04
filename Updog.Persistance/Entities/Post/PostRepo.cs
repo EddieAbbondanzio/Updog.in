@@ -6,7 +6,7 @@ using Dapper;
 using System.Linq;
 using System;
 using System.Collections.Generic;
-using Updog.Application.Paging;
+using Updog.Domain.Paging;
 
 namespace Updog.Persistance {
     /// <summary>

@@ -3,10 +3,10 @@ using Updog.Domain;
 
 namespace Updog.Application {
     public sealed class SpaceFactory : ISpaceFactory {
-        public Space CreateFromCommand(SpaceCreateCommand command) => new Space() {
-            Name = command.Name,
-            Description = command.Description,
-            User = command.User,
+        public Space Create(SpaceCreationData creationData, User user) => new Space() {
+            Name = creationData.Name,
+            Description = creationData.Description,
+            User = user,
             CreationDate = DateTime.UtcNow
         };
     }

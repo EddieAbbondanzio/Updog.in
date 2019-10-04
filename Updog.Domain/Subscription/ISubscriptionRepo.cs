@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Updog.Domain;
 
-namespace Updog.Application {
+namespace Updog.Domain {
     /// <summary>
     /// CRUD interface for managing subscriptions in the database.
     /// </summary>

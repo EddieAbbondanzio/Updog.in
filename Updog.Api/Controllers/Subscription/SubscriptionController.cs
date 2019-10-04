@@ -2,13 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Updog.Application;
 using System.Threading.Tasks;
-using Updog.Domain;
-using System;
-using FluentValidation;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
-using Updog.Application.Paging;
-using System.Collections.Generic;
 
 namespace Updog.Api {
     /// <summary>

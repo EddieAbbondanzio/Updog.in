@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Updog.Application;
-using Updog.Application.Paging;
+using Updog.Domain.Paging;
 using Updog.Domain;
 
 namespace Updog.Persistance {

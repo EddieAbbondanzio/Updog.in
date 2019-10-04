@@ -1,4 +1,4 @@
-namespace Updog.Application {
+namespace Updog.Domain {
     public interface IAdminConfig {
         #region Properties
         string Username { get; }

@@ -1,4 +1,4 @@
-namespace Updog.Application.Paging {
+namespace Updog.Domain.Paging {
     /// <summary>
     /// Implementation for request params that support paging the results.
     /// </summary>

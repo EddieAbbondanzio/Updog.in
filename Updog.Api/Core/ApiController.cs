@@ -1,6 +1,6 @@
 using Updog.Domain;
 using Microsoft.AspNetCore.Mvc;
-using Updog.Application.Paging;
+using Updog.Domain.Paging;
 using System.Net;
 using Updog.Application.Validation;
 

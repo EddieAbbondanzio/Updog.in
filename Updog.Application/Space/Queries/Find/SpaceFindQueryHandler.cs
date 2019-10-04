@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Updog.Application.Paging;
+using Updog.Domain.Paging;
 using Updog.Domain;
 
 namespace Updog.Application {

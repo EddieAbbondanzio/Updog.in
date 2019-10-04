@@ -1,6 +1,6 @@
 using Updog.Domain;
 
-namespace Updog.Application {
+namespace Updog.Domain {
     public interface IUserFactory : IFactory<User> {
         #region Publics
         User CreateFromRegistration(UserRegistration registration);

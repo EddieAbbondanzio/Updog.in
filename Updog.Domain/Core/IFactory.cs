@@ -1,3 +1,3 @@
-namespace Updog.Application {
+namespace Updog.Domain {
     public interface IFactory<TResource> { }
 }

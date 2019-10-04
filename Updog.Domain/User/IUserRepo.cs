@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Updog.Domain;
 
-namespace Updog.Application {
+namespace Updog.Domain {
     /// <summary>
     /// CRUD interface for managing user's in the database.
     /// </summary>

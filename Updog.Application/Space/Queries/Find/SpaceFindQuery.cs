@@ -1,9 +1,9 @@
-using Updog.Application.Paging;
+using Updog.Domain.Paging;
 
 namespace Updog.Application {
     public sealed class SpaceFindQuery : IQuery {
         #region Properties
-        public Paging.PaginationInfo Paging { get; }
+        public PaginationInfo Paging { get; }
         #endregion
 
         #region Constructor(s)

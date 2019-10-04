@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Reflection;
 using Updog.Application;
+using Updog.Domain;
 
 namespace Updog.Application {
     /// <summary>

@@ -63,7 +63,8 @@ namespace Updog.Application.Tests {
         [TestMethod]
         public async Task CantDeletePostIfUserIsNotCreator() {
             User other = new User() {
-                Id = 5
+                Id = 5,
+                Username = "FAKE2"
             };
 
             Post p = new Post() {

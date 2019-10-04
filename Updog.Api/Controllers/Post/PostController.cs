@@ -7,7 +7,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Updog.Application.Paging;
+using Updog.Domain.Paging;
 
 namespace Updog.Api {
     /// <summary>

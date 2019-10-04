@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Updog.Application.Paging;
+using Updog.Domain.Paging;
 using Updog.Domain;
 
-namespace Updog.Application {
+namespace Updog.Domain {
     /// <summary>
     /// Marker interface for now.
     /// </summary>

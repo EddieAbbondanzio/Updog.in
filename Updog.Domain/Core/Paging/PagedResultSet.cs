@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Updog.Application.Paging {
+namespace Updog.Domain.Paging {
     /// <summary>
     /// Result set that had paging applied to it.
     /// </summary>
