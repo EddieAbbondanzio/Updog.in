@@ -112,6 +112,7 @@ namespace Updog.Api {
             services.AddTransient<CommandHandler<AdminRegisterOrUpdateCommand>, AdminRegisterOrUpdateCommandHandler>();
 
             services.AddSingleton<IPostViewMapper, PostViewMapper>();
+            services.AddSingleton<IPostFactory, PostFactory>();
             services.AddSingleton<PermissionHandler<Post>, PostPermissionHandler>();
             services.AddSingleton<IPostRecordMapper, PostRecordMapper>();
             services.AddTransient<CommandHandler<PostCreateCommand>, PostCreateCommandHandler>();
@@ -123,6 +124,7 @@ namespace Updog.Api {
             services.AddTransient<QueryHandler<PostFindByNewQuery>, PostFindByNewQueryHandler>();
 
             services.AddSingleton<PermissionHandler<Comment>, CommentPermissionHandler>();
+            services.AddSingleton<ICommentFactory, CommentFactory>();
             services.AddSingleton<ICommentViewMapper, CommentViewMapper>();
             services.AddSingleton<ICommentRecordMapper, CommentRecordMapper>();
             services.AddTransient<QueryHandler<CommentFindByIdQuery>, CommentFindByIdQueryHandler>();
@@ -134,6 +136,7 @@ namespace Updog.Api {
 
             services.AddSingleton<PermissionHandler<Space>, SpacePermissionHandler>();
             services.AddSingleton<ISpaceViewMapper, SpaceViewMapper>();
+            services.AddSingleton<ISpaceFactory, SpaceFactory>();
             services.AddTransient<ISpaceRecordMapper, SpaceRecordMapper>();
             services.AddTransient<QueryHandler<DefaultSpaceQuery>, DefaultSpaceQueryHandler>();
             services.AddTransient<QueryHandler<SpaceFindByNameQuery>, SpaceFindByNameQueryHandler>();
@@ -142,6 +145,7 @@ namespace Updog.Api {
             services.AddTransient<CommandHandler<SpaceUpdateCommand>, SpaceUpdateCommandHandler>();
 
             services.AddSingleton<ISubscriptionViewMapper, SubscriptionViewMapper>();
+            services.AddSingleton<ISubscriptionFactory, SubscriptionFactory>();
             services.AddSingleton<ISubscriptionRecordMapper, SubscriptionRecordMapper>();
             services.AddTransient<QueryHandler<SubscribedSpaceQuery>, SubscribedSpaceQueryHandler>();
             services.AddTransient<CommandHandler<SubscriptionCreateCommand>, SubscriptionCreateCommandHandler>();

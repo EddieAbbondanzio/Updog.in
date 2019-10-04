@@ -9,15 +9,15 @@ namespace Updog.Application {
     internal sealed class CommentCreateCommandValidator : FluentValidatorAdapter<CommentCreateCommand> {
         #region Constructor(s)
         public CommentCreateCommandValidator() {
-            RuleFor(c => c.PostId).GreaterThan(0).WithMessage("Post Id is required.");
+            RuleFor(c => c.CreationData.PostId).GreaterThan(0).WithMessage("Post Id is required.");
 
             RuleFor(c => c.User).NotNull().WithMessage("User performing the action is null.");
 
-            RuleFor(c => c.Body).NotNull().WithMessage("Body is required.");
+            RuleFor(c => c.CreationData.Body).NotNull().WithMessage("Body is required.");
 
-            RuleFor(c => c.Body).NotNull().WithMessage("Body is required.");
-            RuleFor(c => c.Body).NotEmpty().WithMessage("Body is required.");
-            RuleFor(c => c.Body).MaximumLength(Comment.BodyMaxLength).WithMessage($"Body must be {Comment.BodyMaxLength} characters or less.");
+            RuleFor(c => c.CreationData.Body).NotNull().WithMessage("Body is required.");
+            RuleFor(c => c.CreationData.Body).NotEmpty().WithMessage("Body is required.");
+            RuleFor(c => c.CreationData.Body).MaximumLength(Comment.BodyMaxLength).WithMessage($"Body must be {Comment.BodyMaxLength} characters or less.");
         }
         #endregion
     }

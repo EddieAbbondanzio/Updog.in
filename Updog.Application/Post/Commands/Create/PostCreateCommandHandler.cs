@@ -5,11 +5,14 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class PostCreateCommandHandler : CommandHandler<PostCreateCommand> {
         #region Fields
+        private IPostFactory postFactory;
+
         private IPostViewMapper postMapper;
         #endregion
 
         #region Constructor(s)
-        public PostCreateCommandHandler(IDatabase database, IPostViewMapper postMapper) : base(database) {
+        public PostCreateCommandHandler(IDatabase database, IPostFactory postFactory, IPostViewMapper postMapper) : base(database) {
+            this.postFactory = postFactory;
             this.postMapper = postMapper;
         }
         #endregion
@@ -21,20 +24,13 @@ namespace Updog.Application {
             IPostRepo postRepo = context.Database.GetRepo<IPostRepo>();
             IVoteRepo voteRepo = context.Database.GetRepo<IVoteRepo>();
 
-            Space? space = await spaceRepo.FindByName(context.Input.Space);
+            Space? space = await spaceRepo.FindByName(context.Input.CreationData.Space);
             if (space == null) {
-                context.Output.InvalidOperation($"No space with name ${context.Input.Space} found.");
+                context.Output.InvalidOperation($"No space with name ${context.Input.CreationData.Space} found.");
                 return;
             }
 
-            Post post = new Post() {
-                Type = context.Input.Type,
-                Title = context.Input.Title,
-                Body = context.Input.Body,
-                User = context.Input.User,
-                CreationDate = DateTime.UtcNow,
-                Space = space
-            };
+            Post post = postFactory.Create(context.Input.CreationData, space, context.Input.User);
 
             if (post.Type == PostType.Link && !System.Text.RegularExpressions.Regex.IsMatch(post.Body, Regex.UrlProtocol)) {
                 post.Body = $"http://{post.Body}";

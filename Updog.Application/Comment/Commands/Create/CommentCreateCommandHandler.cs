@@ -5,11 +5,14 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class CommentCreateCommandHandler : CommandHandler<CommentCreateCommand> {
         #region Fields
+        private ICommentFactory commentFactory;
+
         private ICommentViewMapper commentMapper;
         #endregion
 
         #region Constructor(s)
-        public CommentCreateCommandHandler(IDatabase database, ICommentViewMapper commentMapper) : base(database) {
+        public CommentCreateCommandHandler(IDatabase database, ICommentFactory commentFactory, ICommentViewMapper commentMapper) : base(database) {
+            this.commentFactory = commentFactory;
             this.commentMapper = commentMapper;
         }
         #endregion
@@ -22,23 +25,18 @@ namespace Updog.Application {
             IVoteRepo voteRepo = context.Database.GetRepo<IVoteRepo>();
 
             // Locate the post to ensure it actually exists.
-            Post? post = await postRepo.FindById(context.Input.PostId);
+            Post? post = await postRepo.FindById(context.Input.CreationData.PostId);
 
             if (post == null) {
                 context.Output.InvalidOperation();
                 return;
             }
 
-            Comment comment = new Comment() {
-                User = context.Input.User,
-                PostId = post.Id,
-                Body = context.Input.Body,
-                CreationDate = DateTime.UtcNow
-            };
+            Comment comment = commentFactory.Create(context.Input.CreationData, context.Input.User);
 
             // Set the parent comment if needed.
-            if (context.Input.ParentId != 0) {
-                comment.Parent = await commentRepo.FindById(context.Input.ParentId);
+            if (context.Input.CreationData.ParentId != 0) {
+                comment.Parent = await commentRepo.FindById(context.Input.CreationData.ParentId);
             }
 
             // Update the comment count cache on the post.

@@ -5,13 +5,13 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class SpaceCreateCommandHandler : CommandHandler<SpaceCreateCommand> {
         #region Fields
-        private PermissionHandler<Space> spacePermissionHandler;
+        private ISpaceFactory spaceFactory;
         private ISpaceViewMapper spaceMapper;
         #endregion
 
         #region Constructor(s)
-        public SpaceCreateCommandHandler(IDatabase database, PermissionHandler<Space> spacePermissionHandler, ISpaceViewMapper spaceMapper) : base(database) {
-            this.spacePermissionHandler = spacePermissionHandler;
+        public SpaceCreateCommandHandler(IDatabase database, ISpaceFactory spaceFactory, ISpaceViewMapper spaceMapper) : base(database) {
+            this.spaceFactory = spaceFactory;
             this.spaceMapper = spaceMapper;
         }
         #endregion
@@ -27,12 +27,7 @@ namespace Updog.Application {
                 return;
             }
 
-            Space s = new Space() {
-                Name = context.Input.Name,
-                Description = context.Input.Description,
-                User = context.Input.User,
-                CreationDate = DateTime.UtcNow
-            };
+            Space s = spaceFactory.CreateFromCommand(context.Input);
 
             await spaceRepo.Add(s);
             context.Output.Success(spaceMapper.Map(s));

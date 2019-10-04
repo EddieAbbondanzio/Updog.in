@@ -6,24 +6,14 @@ namespace Updog.Application {
     /// </summary>
     public sealed class PostCreateCommand : ICommand {
         #region Properties
-        public PostType Type { get; }
-
-        public string Title { get; }
-
-        public string Body { get; }
-
-        public string Space { get; }
+        public PostCreationData CreationData { get; }
 
         public User User { get; }
-
         #endregion
 
         #region Constructor(s)
-        public PostCreateCommand(PostType type, string title, string body, string space, User user) {
-            Type = type;
-            Title = title;
-            Body = body;
-            Space = space;
+        public PostCreateCommand(PostCreationData creationData, User user) {
+            CreationData = creationData;
             User = user;
         }
         #endregion

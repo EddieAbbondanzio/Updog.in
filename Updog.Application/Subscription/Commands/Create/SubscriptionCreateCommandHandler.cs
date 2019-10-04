@@ -3,8 +3,14 @@ using Updog.Domain;
 
 namespace Updog.Application {
     public sealed class SubscriptionCreateCommandHandler : CommandHandler<SubscriptionCreateCommand> {
+        #region Fields
+        private ISubscriptionFactory subscriptionFactory;
+        #endregion
+
         #region Constructor(s)
-        public SubscriptionCreateCommandHandler(IDatabase database) : base(database) { }
+        public SubscriptionCreateCommandHandler(IDatabase database, ISubscriptionFactory subscriptionFactory) : base(database) {
+            this.subscriptionFactory = subscriptionFactory;
+        }
         #endregion
 
         #region Publics
@@ -30,10 +36,7 @@ namespace Updog.Application {
                 return;
             }
 
-            sub = new Subscription() {
-                User = context.Input.User,
-                Space = space
-            };
+            sub = subscriptionFactory.CreateFor(context.Input.User, space);
 
             await subRepo.Add(sub);
 

@@ -60,7 +60,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpPost]
         public async Task<ActionResult> CreateComment([FromBody]CommentCreateRequest body) {
-            await commentCreator.Execute(new CommentCreateCommand(body.PostId, User!, body.Body, body.ParentId), ActionResultBuilder);
+            await commentCreator.Execute(new CommentCreateCommand(new CommentCreationData(body.PostId, body.Body, body.ParentId), User!), ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
 
