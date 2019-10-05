@@ -29,6 +29,12 @@ namespace Updog.Domain {
         /// </summary>
         /// <returns>The list of default spaces.</returns>
         Task<IEnumerable<Space>> FindDefault();
+
+        /// <summary>
+        /// Get all of the susbcribed spaces of the user.
+        /// </summary>
+        /// <returns>The list of spaces subscribed by the user.</returns>
+        Task<IEnumerable<Space>> FindSubscribed(User user);
         #endregion
     }
 }

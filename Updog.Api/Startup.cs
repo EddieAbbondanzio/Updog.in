@@ -144,7 +144,6 @@ namespace Updog.Api {
             services.AddTransient<CommandHandler<SpaceCreateCommand>, SpaceCreateCommandHandler>();
             services.AddTransient<CommandHandler<SpaceUpdateCommand>, SpaceUpdateCommandHandler>();
 
-            services.AddSingleton<ISubscriptionViewMapper, SubscriptionViewMapper>();
             services.AddSingleton<ISubscriptionFactory, SubscriptionFactory>();
             services.AddSingleton<ISubscriptionRecordMapper, SubscriptionRecordMapper>();
             services.AddTransient<QueryHandler<SubscribedSpaceQuery>, SubscribedSpaceQueryHandler>();

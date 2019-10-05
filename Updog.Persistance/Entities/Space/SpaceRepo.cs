@@ -79,7 +79,14 @@ namespace Updog.Persistance {
                 @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id WHERE IsDefault = TRUE",
                 (SpaceRecord s, UserRecord u) => mapper.Map(Tuple.Create(s, u))
             );
+        }
 
+        public async Task<IEnumerable<Space>> FindSubscribed(User user) {
+            return await Connection.QueryAsync<SpaceRecord, UserRecord, Space>(
+                @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id LEFT JOIN Subscription ON Space.Id = Subscription.SpaceId WHERE Subscription.UserId = @Id",
+                (SpaceRecord s, UserRecord u) => mapper.Map(Tuple.Create(s, u)),
+                user
+            );
         }
 
         /// <summary>

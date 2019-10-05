@@ -8,11 +8,14 @@ namespace Updog.Application {
     public sealed class RegisterUserCommandHandler : CommandHandler<RegisterUserCommand> {
         #region Fields
         IUserFactory userFactory;
+
+        ISubscriptionFactory subscriptionFactory;
         private IAuthenticationTokenHandler tokenHandler;
         private IUserViewMapper userMapper;
 
-        public RegisterUserCommandHandler(IDatabase database, IUserFactory userFactory, IAuthenticationTokenHandler tokenHandler, IUserViewMapper userMapper) : base(database) {
+        public RegisterUserCommandHandler(IDatabase database, IUserFactory userFactory, ISubscriptionFactory subcriptionFactory, IAuthenticationTokenHandler tokenHandler, IUserViewMapper userMapper) : base(database) {
             this.userFactory = userFactory;
+            this.subscriptionFactory = subcriptionFactory;
             this.tokenHandler = tokenHandler;
             this.userMapper = userMapper;
         }
@@ -45,14 +48,7 @@ namespace Updog.Application {
 
             // Subscribe the user to the default spaces.
             IEnumerable<Space> defaultSpaces = await spaceRepo.FindDefault();
-            IEnumerable<Subscription> defaultSubscriptions = defaultSpaces.Select(space => new Subscription() { User = user, Space = space });
-
-            foreach (Subscription s in defaultSubscriptions) {
-                await subRepo.Add(s);
-
-                s.Space.SubscriptionCount++;
-                await spaceRepo.Update(s.Space);
-            }
+            IEnumerable<Subscription> defaultSubscriptions = defaultSpaces.Select(space => subscriptionFactory.CreateFor(user, space));
 
             UserView userView = userMapper.Map(user);
             string authToken = tokenHandler.IssueToken(user);

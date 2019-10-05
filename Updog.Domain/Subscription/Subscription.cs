@@ -12,12 +12,12 @@ namespace Updog.Domain {
         /// <summary>
         /// The space the subscription is for.
         /// </summary>
-        public Space Space { get; set; } = null!;
+        public int SpaceId { get; set; }
 
         /// <summary>
         /// The user it belongs to.
         /// </summary>
-        public User User { get; set; } = null!;
+        public int UserId { get; set; }
         #endregion
 
         #region Publics

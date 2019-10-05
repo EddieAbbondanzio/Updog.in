@@ -43,6 +43,7 @@ namespace Updog.Application {
             space.SubscriptionCount++;
 
             await spaceRepo.Update(space);
+            context.Output.Success();
         }
         #endregion
     }
