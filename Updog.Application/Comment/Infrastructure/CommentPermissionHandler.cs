@@ -17,7 +17,7 @@ namespace Updog.Application {
             switch (action) {
                 case PermissionAction.UpdateComment:
                 case PermissionAction.DeleteComment:
-                    return user.Equals(comment.User);
+                    return user.Id == comment.UserId;
                 default:
                     throw new NotSupportedException();
             }

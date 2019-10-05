@@ -16,7 +16,7 @@ namespace Updog.Application {
             switch (action) {
                 case PermissionAction.UpdatePost:
                 case PermissionAction.DeletePost:
-                    return user.Equals(post.User);
+                    return user.Id == post.UserId;
                 default:
                     throw new NotSupportedException();
             }

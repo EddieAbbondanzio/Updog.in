@@ -14,7 +14,7 @@ namespace Updog.Domain {
         /// <summary>
         /// The user it belongs to.
         /// </summary>
-        public User User { get; set; } = null!;
+        public int UserId { get; set; }
 
         /// <summary>
         /// The vote resource type it is.
@@ -51,15 +51,6 @@ namespace Updog.Domain {
                     Downvotes++;
                     break;
             }
-
-            switch (EntityType) {
-                case VotableEntityType.Comment:
-                    User.CommentKarma += (int)vote;
-                    break;
-                case VotableEntityType.Post:
-                    User.PostKarma += (int)vote;
-                    break;
-            };
         }
 
         /// <summary>
@@ -75,15 +66,6 @@ namespace Updog.Domain {
                     Downvotes--;
                     break;
             }
-
-            switch (EntityType) {
-                case VotableEntityType.Comment:
-                    User.CommentKarma -= (int)vote;
-                    break;
-                case VotableEntityType.Post:
-                    User.PostKarma -= (int)vote;
-                    break;
-            };
         }
         #endregion
     }

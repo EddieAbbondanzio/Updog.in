@@ -8,7 +8,7 @@ namespace Updog.Application {
             PostId = data.PostId,
             Body = data.Body,
             CreationDate = DateTime.UtcNow,
-            User = user
+            UserId = user.Id,
         };
         #endregion
     }

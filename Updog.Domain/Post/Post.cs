@@ -4,7 +4,7 @@ namespace Updog.Domain {
     /// <summary>
     /// A post of the website.
     /// </summary>
-    public sealed class Post : VotableEntity, ISoftDeletable {
+    public sealed class Post : VotableEntity, IUserEntity, ISoftDeletable {
         #region Constants
         /// <summary>
         /// The max # of characters allowed in a post title.
@@ -28,7 +28,7 @@ namespace Updog.Domain {
         /// <summary>
         /// The sub space it was submitted to.
         /// </summary>
-        public Space Space { get; set; } = null!;
+        public int SpaceId { get; set; }
 
         /// <summary>
         /// The content type of the post.

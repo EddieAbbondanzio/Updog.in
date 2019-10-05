@@ -38,47 +38,40 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="source">The source record.</param>
         /// <returns>The entity.</returns>
-        public Post Map(Tuple<PostRecord, UserRecord, SpaceRecord> source) {
-            return new Post() {
-                Id = source.Item1.Id,
-                User = userMapper.Map(source.Item2),
-                Type = source.Item1.Type,
-                Title = source.Item1.Title,
-                Body = source.Item1.Body,
-                CreationDate = source.Item1.CreationDate,
-                WasUpdated = source.Item1.WasUpdated,
-                WasDeleted = source.Item1.WasDeleted,
-                CommentCount = source.Item1.CommentCount,
-                Space = spaceMapper.Map(source.Item3),
-                Upvotes = source.Item1.Upvotes,
-                Downvotes = source.Item1.Downvotes
-            };
-        }
+        public Post Map(PostRecord source) => new Post() {
+            Id = source.Id,
+            UserId = source.UserId,
+            Type = source.Type,
+            Title = source.Title,
+            Body = source.Body,
+            CreationDate = source.CreationDate,
+            WasUpdated = source.WasUpdated,
+            WasDeleted = source.WasDeleted,
+            CommentCount = source.CommentCount,
+            SpaceId = source.SpaceId,
+            Upvotes = source.Upvotes,
+            Downvotes = source.Downvotes
+        };
+
         /// <summary>
         /// Convert the post back into it's record form.
         /// </summary>
         /// <param name="destination">The entity/</param>
         /// <returns>The rebuilt record.</returns>
-        public Tuple<PostRecord, UserRecord, SpaceRecord> Reverse(Post destination) {
-            PostRecord p = new PostRecord {
-                Id = destination.Id,
-                UserId = destination.User.Id,
-                Type = destination.Type,
-                Title = destination.Title,
-                Body = destination.Body,
-                CreationDate = destination.CreationDate,
-                WasUpdated = destination.WasUpdated,
-                WasDeleted = destination.WasDeleted,
-                CommentCount = destination.CommentCount,
-                Upvotes = destination.Upvotes,
-                Downvotes = destination.Downvotes,
-                SpaceId = destination.Space.Id
-            };
-
-            UserRecord u = userMapper.Reverse(destination.User);
-            SpaceRecord s = spaceMapper.Reverse(destination.Space);
-            return Tuple.Create(p, u, s);
-        }
+        public PostRecord Reverse(Post destination) => new PostRecord {
+            Id = destination.Id,
+            UserId = destination.UserId,
+            Type = destination.Type,
+            Title = destination.Title,
+            Body = destination.Body,
+            CreationDate = destination.CreationDate,
+            WasUpdated = destination.WasUpdated,
+            WasDeleted = destination.WasDeleted,
+            CommentCount = destination.CommentCount,
+            Upvotes = destination.Upvotes,
+            Downvotes = destination.Downvotes,
+            SpaceId = destination.SpaceId
+        };
         #endregion
     }
 }

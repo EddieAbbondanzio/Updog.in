@@ -9,8 +9,8 @@ namespace Updog.Application {
             Title = creationData.Title,
             Body = creationData.Body,
             CreationDate = DateTime.UtcNow,
-            Space = space,
-            User = user
+            SpaceId = space.Id,
+            UserId = user.Id
         };
         #endregion
     }

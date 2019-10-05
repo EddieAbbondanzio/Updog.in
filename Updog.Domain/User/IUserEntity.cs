@@ -7,7 +7,7 @@ namespace Updog.Domain {
         /// <summary>
         /// The user it belongs to.
         /// </summary>
-        User User { get; }
+        int UserId { get; }
         #endregion
     }
 }

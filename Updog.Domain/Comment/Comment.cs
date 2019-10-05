@@ -5,13 +5,16 @@ namespace Updog.Domain {
     /// <summary>
     /// A comment associated with a post.
     /// </summary>
-    public sealed class Comment : VotableEntity, ISoftDeletable {
+    public sealed class Comment : VotableEntity, IUserEntity, ISoftDeletable {
         #region Constants
         /// <summary>
         /// The maximum number of characters in a comment body.
         /// </summary>
         public const int BodyMaxLength = 10_000;
 
+        /// <summary>
+        /// Number of comments to get per page.
+        /// </summary>
         public const int PageSize = 500;
         #endregion
 

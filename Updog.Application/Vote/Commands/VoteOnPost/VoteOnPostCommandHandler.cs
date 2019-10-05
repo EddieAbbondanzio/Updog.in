@@ -18,7 +18,6 @@ namespace Updog.Application {
         protected async override Task ExecuteCommand(ExecutionContext<VoteOnPostCommand> context) {
             IVoteRepo voteRepo = context.Database.GetRepo<IVoteRepo>();
             IPostRepo postRepo = context.Database.GetRepo<IPostRepo>();
-            IUserRepo userRepo = context.Database.GetRepo<IUserRepo>();
 
             // Pull in the post.
             Post? post = await postRepo.FindById(context.Input.PostId);
@@ -33,7 +32,6 @@ namespace Updog.Application {
 
             await voteRepo.Add(newVote);
             await postRepo.Update(post);
-            await userRepo.Update(post.User);
         }
         #endregion
     }

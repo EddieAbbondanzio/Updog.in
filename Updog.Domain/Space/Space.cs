@@ -55,6 +55,9 @@ namespace Updog.Domain {
         /// </summary>
         public bool IsDefault { get; set; }
 
+        /// <summary>
+        /// Human readable description of what the space is about.
+        /// </summary>
         public string Description { get; set; } = "";
         #endregion
 

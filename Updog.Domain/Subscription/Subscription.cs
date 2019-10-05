@@ -2,7 +2,7 @@ namespace Updog.Domain {
     /// <summary>
     /// A subscription for a sub space.
     /// </summary>
-    public sealed class Subscription : IEntity {
+    public sealed class Subscription : IEntity, IUserEntity {
         #region Properties
         /// <summary>
         /// The unique ID of the subscription.
