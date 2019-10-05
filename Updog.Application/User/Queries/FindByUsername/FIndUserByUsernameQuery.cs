@@ -1,18 +1,9 @@
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class FindUserByUsernameQuery : IQuery {
+    public sealed class FindUserByUsernameQuery : AnonymousQuery {
         #region Properties
-        public User? User { get; }
-
-        public string Username { get; }
-        #endregion
-
-        #region Constructor(s)
-        public FindUserByUsernameQuery(string username, User? user) {
-            Username = username;
-            User = user;
-        }
+        public string Username { get; set; } = "";
         #endregion
     }
 }

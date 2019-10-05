@@ -1,0 +1,2 @@
+namespace Updog.Domain {
+}

@@ -5,15 +5,9 @@ namespace Updog.Application {
     /// <summary>
     /// Request object to create a new user with the system.
     /// </summary>
-    public sealed class RegisterUserCommand : ICommand {
+    public sealed class RegisterUserCommand : AnonymousCommand {
         #region Properties
-        public UserRegistration Registration { get; }
-        #endregion
-
-        #region Constructor(s)
-        public RegisterUserCommand(UserRegistration registration) {
-            Registration = registration;
-        }
+        public UserRegistration Registration { get; set; } = null!;
         #endregion
     }
 }

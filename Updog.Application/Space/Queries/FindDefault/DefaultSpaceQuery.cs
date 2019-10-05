@@ -1,5 +1,5 @@
 
 namespace Updog.Application {
-    public sealed class DefaultSpaceQuery : IQuery {
+    public sealed class DefaultSpaceQuery : AnonymousQuery {
     }
 }

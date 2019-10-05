@@ -1,9 +1,9 @@
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class PostFindByIdQuery : AnonymousQuery {
+    public abstract class AuthenticatedQuery : IQuery {
         #region Properties
-        public int PostId { get; set; }
+        public User User { get; set; } = null!;
         #endregion
     }
 }

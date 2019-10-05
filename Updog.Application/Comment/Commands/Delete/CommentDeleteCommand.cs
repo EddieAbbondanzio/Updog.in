@@ -4,18 +4,9 @@ namespace Updog.Application {
     /// <summary>
     /// Parameters to delete a comment.
     /// </summary>
-    public sealed class CommentDeleteCommand : ICommand {
+    public sealed class CommentDeleteCommand : AuthenticatedCommand {
         #region Properties
-        public int CommentId { get; }
-
-        public User User { get; }
-        #endregion
-
-        #region Constructor(s)
-        public CommentDeleteCommand(User user, int comment) {
-            User = user;
-            CommentId = comment;
-        }
+        public int CommentId { get; set; }
         #endregion
     }
 }

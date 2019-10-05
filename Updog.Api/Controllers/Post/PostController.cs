@@ -43,7 +43,10 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("new")]
         public async Task<ActionResult> FindByNew([FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            await postFinderByNew.Execute(new PostFindByNewQuery(User, new PaginationInfo(pageNumber, pageSize)), ActionResultBuilder);
+            await postFinderByNew.Execute(new PostFindByNewQuery() {
+                User = User,
+                Paging = new PaginationInfo(pageNumber, pageSize)
+            }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
 
@@ -55,7 +58,10 @@ namespace Updog.Api {
         [HttpGet("{id}")]
         [HttpHead("{id}")]
         public async Task<ActionResult> FindById(int id) {
-            await postFinderById.Execute(new PostFindByIdQuery(id, User), ActionResultBuilder);
+            await postFinderById.Execute(new PostFindByIdQuery() {
+                PostId = id,
+                User = User!
+            }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
 
@@ -67,14 +73,21 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{postId}/comment")]
         public async Task<ActionResult> FindComments(int postId) {
-            await commentFinderByPost.Execute(new CommentFindByPostQuery(postId, User), ActionResultBuilder);
+            await commentFinderByPost.Execute(new CommentFindByPostQuery() {
+                PostId = postId,
+                User = User
+            }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
 
         [AllowAnonymous]
         [HttpGet("user/{username}")]
         public async Task<ActionResult> FindByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            await postFinderByUser.Execute(new PostFindByUserQuery(username, User, new PaginationInfo(pageNumber, pageSize)), ActionResultBuilder);
+            await postFinderByUser.Execute(new PostFindByUserQuery() {
+                Username = username,
+                User = User,
+                Paging = new PaginationInfo(pageNumber, pageSize)
+            }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
 
@@ -83,7 +96,10 @@ namespace Updog.Api {
         /// </summary>
         [HttpPost]
         public async Task<ActionResult> Create([FromBody]PostCreateRequest payload) {
-            await postCreator.Execute(new PostCreateCommand(new PostCreationData(payload.Type, payload.Title, payload.Body, payload.Space), User!), ActionResultBuilder);
+            await postCreator.Execute(new PostCreateCommand() {
+                CreationData = new PostCreationData(payload.Type, payload.Title, payload.Body, payload.Space),
+                User = User!
+            }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
 
@@ -92,7 +108,11 @@ namespace Updog.Api {
         /// </summary>
         [HttpPatch("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody]PostUpdateRequest payload) {
-            await postUpdater.Execute(new PostUpdateCommand(User!, id, payload.Body), ActionResultBuilder);
+            await postUpdater.Execute(new PostUpdateCommand() {
+                User = User!,
+                PostId = id,
+                Body = payload.Body
+            }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
 
@@ -101,7 +121,10 @@ namespace Updog.Api {
         /// </summary>
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id) {
-            await postDeleter.Execute(new PostDeleteCommand(User!, id), ActionResultBuilder);
+            await postDeleter.Execute(new PostDeleteCommand() {
+                User = User!,
+                PostId = id
+            }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
         #endregion

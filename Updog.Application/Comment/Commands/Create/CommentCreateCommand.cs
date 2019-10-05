@@ -1,21 +1,10 @@
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class CommentCreateCommand : ICommand {
+    public sealed class CommentCreateCommand : AuthenticatedCommand {
         #region Properties
-        public CommentCreationData CreationData { get; }
-
-        /// <summary>
-        /// The user that is creating the comment.
-        /// </summary>
-        public User User { get; }
+        public CommentCreationData CreationData { get; set; } = null!;
         #endregion
 
-        #region Constructor(s)
-        public CommentCreateCommand(CommentCreationData creationData, User user) {
-            CreationData = creationData;
-            User = user;
-        }
-        #endregion
     }
 }

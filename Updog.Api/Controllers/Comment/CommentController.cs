@@ -44,14 +44,14 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{commentId}")]
         public async Task<ActionResult> GetComment(int commentId) {
-            await commentFinderById.Execute(new CommentFindByIdQuery(commentId, User), ActionResultBuilder);
+            await commentFinderById.Execute(new CommentFindByIdQuery() { CommentId = commentId, User = User }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
 
         [AllowAnonymous]
         [HttpGet("user/{username}")]
         public async Task<ActionResult> GetCommentsByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery]int pageSize = Comment.PageSize) {
-            await commentFinderByUser.Execute(new CommentFindByUserQuery(username, User, new PaginationInfo(pageNumber, pageSize)), ActionResultBuilder);
+            await commentFinderByUser.Execute(new CommentFindByUserQuery() { Username = username, User = User, Paging = new PaginationInfo(pageNumber, pageSize) }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
 
@@ -60,7 +60,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpPost]
         public async Task<ActionResult> CreateComment([FromBody]CommentCreateRequest body) {
-            await commentCreator.Execute(new CommentCreateCommand(new CommentCreationData(body.PostId, body.Body, body.ParentId), User!), ActionResultBuilder);
+            await commentCreator.Execute(new CommentCreateCommand() { CreationData = new CommentCreationData(body.PostId, body.Body, body.ParentId), User = User! }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
 
@@ -69,7 +69,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpPatch("{commentId}")]
         public async Task<ActionResult> Update(int commentId, [FromBody]CommentUpdateRequest request) {
-            await commentUpdater.Execute(new CommentUpdateCommand(User!, commentId, request.Body), ActionResultBuilder);
+            await commentUpdater.Execute(new CommentUpdateCommand() { User = User!, CommentId = commentId, Body = request.Body }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
 
@@ -78,7 +78,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpDelete("{commentId}")]
         public async Task<ActionResult> DeleteComment(int commentId) {
-            await commentDeleter.Execute(new CommentDeleteCommand(User!, commentId), ActionResultBuilder);
+            await commentDeleter.Execute(new CommentDeleteCommand() { User = User!, CommentId = commentId }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
         #endregion

@@ -1,18 +1,9 @@
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class CommentFindByIdQuery : IQuery {
+    public sealed class CommentFindByIdQuery : AnonymousQuery {
         #region Properties
-        public int CommentId { get; }
-
-        public User? User { get; }
-        #endregion
-
-        #region Constructor(s)
-        public CommentFindByIdQuery(int commentId, User? user = null) {
-            CommentId = commentId;
-            User = user;
-        }
+        public int CommentId { get; set; }
         #endregion
     }
 }

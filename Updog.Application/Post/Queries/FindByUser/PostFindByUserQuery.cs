@@ -2,20 +2,10 @@ using Updog.Domain;
 using Updog.Domain.Paging;
 
 namespace Updog.Application {
-    public sealed class PostFindByUserQuery : IQuery {
+    public sealed class PostFindByUserQuery : AnonymousQuery, IPagableQuery {
         #region Properties
-        public string Username { get; }
-
-        public User? User { get; }
-
-        public PaginationInfo? Paging { get; }
-        #endregion
-        #region Constructor(s)
-        public PostFindByUserQuery(string username, User? user = null, PaginationInfo? paging = null) {
-            Username = username;
-            User = user;
-            Paging = paging;
-        }
+        public string Username { get; set; } = "";
+        public PaginationInfo Paging { get; set; } = new PaginationInfo(0, Post.PageSize);
         #endregion
     }
 }

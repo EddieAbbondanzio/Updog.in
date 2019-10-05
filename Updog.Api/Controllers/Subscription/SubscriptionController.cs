@@ -31,7 +31,10 @@ namespace Updog.Api {
         /// <param name="spaceName">The name of the space.</param>
         [HttpPost("{spaceName}")]
         public async Task<ActionResult> SubscribeToSpace(string spaceName) {
-            await subscriptionCreator.Execute(new SubscriptionCreateCommand(spaceName, User!), ActionResultBuilder);
+            await subscriptionCreator.Execute(new SubscriptionCreateCommand() {
+                Space = spaceName,
+                User = User!
+            }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
 
@@ -41,7 +44,10 @@ namespace Updog.Api {
         /// <param name="spaceName">The name of the space to cancel.</param>
         [HttpDelete("{spaceName}")]
         public async Task<ActionResult> DesubscribeFromSpace(string spaceName) {
-            await subscriptionDeleter.Execute(new SubscriptionDeleteCommand(spaceName, User!), ActionResultBuilder);
+            await subscriptionDeleter.Execute(new SubscriptionDeleteCommand() {
+                Space = spaceName,
+                User = User!
+            }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
         #endregion

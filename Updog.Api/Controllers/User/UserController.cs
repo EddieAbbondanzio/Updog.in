@@ -37,7 +37,9 @@ namespace Updog.Api {
         #region Publics
         [HttpHead("{username}")]
         public async Task<ActionResult> IsUsernameAvailable(string username) {
-            await usernameChecker.Execute(new IsUsernameAvailableQuery(username), ActionResultBuilder);
+            await usernameChecker.Execute(new IsUsernameAvailableQuery() {
+                Username = username
+            }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
 
@@ -47,7 +49,10 @@ namespace Updog.Api {
         /// <param name="username">The username of the user to look for.</param>
         [HttpGet("{username}")]
         public async Task<ActionResult> FindByUsername(string username) {
-            await userFinder.Execute(new FindUserByUsernameQuery(username, User), ActionResultBuilder);
+            await userFinder.Execute(new FindUserByUsernameQuery() {
+                Username = username,
+                User = User!
+            }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
 
@@ -57,7 +62,9 @@ namespace Updog.Api {
         /// <param name="registration">The new user registration</param>
         [HttpPost]
         public async Task<ActionResult> Register([FromBody] UserRegisterRequest req) {
-            await userRegistrar.Execute(new RegisterUserCommand(new UserRegistration(req.Username, req.Password, req.Email)), ActionResultBuilder);
+            await userRegistrar.Execute(new RegisterUserCommand() {
+                Registration = new UserRegistration(req.Username, req.Password, req.Email)
+            }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
         #endregion

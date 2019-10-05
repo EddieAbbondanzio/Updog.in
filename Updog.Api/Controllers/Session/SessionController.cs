@@ -32,7 +32,9 @@ namespace Updog.Api {
         /// <param name="loginRequest">The credentials to authenticate under.</param>
         [HttpPost]
         public async Task<ActionResult> Login([FromBody]SessionLoginRequest loginRequest) {
-            await loginUserInteractor.Execute(new LoginUserCommand(new UserCredentials(loginRequest.Username, loginRequest.Password)), ActionResultBuilder);
+            await loginUserInteractor.Execute(new LoginUserCommand() {
+                Credentials = new UserCredentials(loginRequest.Username, loginRequest.Password)
+            }, ActionResultBuilder);
             return ActionResultBuilder.Build();
         }
 

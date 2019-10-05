@@ -19,7 +19,7 @@ namespace Updog.Application {
         protected async override Task ExecuteQuery(ExecutionContext<SubscribedSpaceQuery> context) {
             ISubscriptionRepo subRepo = context.Database.GetRepo<ISubscriptionRepo>();
 
-            IEnumerable<Subscription> subs = await subRepo.FindByUser(context.Input.Username);
+            IEnumerable<Subscription> subs = await subRepo.FindByUser(context.Input.User.Username);
             context.Output.Success(subs.Select(s => spaceMapper.Map(s.Space)));
         }
         #endregion

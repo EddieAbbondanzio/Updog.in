@@ -2,7 +2,7 @@ using Updog.Domain;
 
 namespace Updog.Application {
     /// <summary>
-    /// Marker interface for query parameters.
+    /// Interface for commands to implement.
     /// </summary>
-    public interface IQuery { }
+    public interface ICommand : IAction { }
 }

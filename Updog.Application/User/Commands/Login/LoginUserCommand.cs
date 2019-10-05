@@ -1,16 +1,9 @@
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class LoginUserCommand : ICommand {
+    public sealed class LoginUserCommand : AnonymousCommand {
         #region Properties
-        public UserCredentials Credentials { get; }
+        public UserCredentials Credentials { get; set; } = null!;
         #endregion
-
-        #region Constructor(s)
-        public LoginUserCommand(UserCredentials credentials) {
-            Credentials = credentials;
-        }
-        #endregion
-
     }
 }

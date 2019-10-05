@@ -27,7 +27,7 @@ namespace Updog.Application {
 
             // Check that the email is free first.
             if (!String.IsNullOrWhiteSpace(context.Input.Registration.Email)) {
-                User? emailInUse = await userRepo.FindByEmail(context.Input.Registration.Email);
+                User? emailInUse = await userRepo.FindByEmail(context.Input.Registration.Email!);
                 if (emailInUse != null) {
                     context.Output.BadInput("Email is already in use");
                     return;

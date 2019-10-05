@@ -1,13 +1,7 @@
 namespace Updog.Application {
-    public sealed class SpaceFindByNameQuery : IQuery {
+    public sealed class SpaceFindByNameQuery : AnonymousQuery {
         #region Properties
-        public string Name { get; }
-        #endregion
-
-        #region Constructor(s)
-        public SpaceFindByNameQuery(string name) {
-            Name = name;
-        }
+        public string Name { get; set; } = "";
         #endregion
     }
 }

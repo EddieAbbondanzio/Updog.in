@@ -1,25 +1,13 @@
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class SubscriptionDeleteCommand : ICommand {
+    public sealed class SubscriptionDeleteCommand : AuthenticatedCommand {
         #region Properties
         /// <summary>
         /// The name of the space.
         /// </summary>
         /// <value></value>
-        public string Space { get; }
-
-        /// <summary>
-        /// The user performing the action.
-        /// </summary>
-        public User User { get; }
-        #endregion
-
-        #region Constructor(s)
-        public SubscriptionDeleteCommand(string space, User user) {
-            Space = space;
-            User = user;
-        }
+        public string Space { get; set; } = null!;
         #endregion
     }
 }

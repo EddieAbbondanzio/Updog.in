@@ -1,18 +1,9 @@
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class UserUpdateCommand : ICommand {
+    public sealed class UserUpdateCommand : AuthenticatedCommand {
         #region Properties
-        public User User { get; }
-
-        public string Email { get; }
-        #endregion
-
-        #region Constructor(s)
-        public UserUpdateCommand(User user, string email) {
-            User = user;
-            Email = email;
-        }
+        public string Email { get; set; } = "";
         #endregion
     }
 }

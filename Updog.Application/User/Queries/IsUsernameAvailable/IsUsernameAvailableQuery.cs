@@ -1,15 +1,9 @@
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class IsUsernameAvailableQuery : IQuery {
+    public sealed class IsUsernameAvailableQuery : AnonymousQuery {
         #region Properties
-        public string Username { get; }
-        #endregion
-
-        #region Constructor(s)
-        public IsUsernameAvailableQuery(string username) {
-            Username = username;
-        }
+        public string Username { get; set; } = "";
         #endregion
     }
 }
