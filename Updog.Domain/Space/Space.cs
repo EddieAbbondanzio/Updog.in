@@ -42,7 +42,7 @@ namespace Updog.Domain {
         /// <summary>
         /// The user that created the space.
         /// </summary>
-        public User User { get; set; } = null!;
+        public int UserId { get; set; }
 
         /// <summary>
         /// The number of subscribers the space has.

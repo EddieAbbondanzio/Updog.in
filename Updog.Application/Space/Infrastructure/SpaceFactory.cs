@@ -6,7 +6,7 @@ namespace Updog.Application {
         public Space Create(SpaceCreationData creationData, User user) => new Space() {
             Name = creationData.Name,
             Description = creationData.Description,
-            User = user,
+            UserId = user.Id,
             CreationDate = DateTime.UtcNow
         };
     }

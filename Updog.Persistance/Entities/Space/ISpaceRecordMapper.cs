@@ -5,4 +5,4 @@ using Updog.Persistance;
 /// <summary>
 /// Mapper to convert space records to entities and back.
 /// </summary>
-public interface ISpaceRecordMapper : IReversableMapper<Tuple<SpaceRecord, UserRecord>, Space> { }
+public interface ISpaceRecordMapper : IReversableMapper<SpaceRecord, Space> { }

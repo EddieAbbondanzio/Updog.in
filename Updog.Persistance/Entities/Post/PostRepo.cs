@@ -22,7 +22,7 @@ namespace Updog.Persistance {
 
         #region Constructor(s)
         public PostRepo(DatabaseContext context) : base(context) {
-            this._postMapper = new PostRecordMapper(new UserRecordMapper(), new SpaceRecordMapper(new UserRecordMapper()));
+            this._postMapper = new PostRecordMapper(new UserRecordMapper(), new SpaceRecordMapper());
         }
         #endregion
 
@@ -34,17 +34,16 @@ namespace Updog.Persistance {
         /// <param name="pageSize">Page size.</param>
         /// <returns>The result set.</returns>
         public async Task<PagedResultSet<Post>> FindNewest(int pageNumber, int pageSize) {
-            IEnumerable<Post> posts = await Connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, UserRecord, Post>(
+            IEnumerable<Post> posts = await Connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, Post>(
                 @"SELECT * FROM Post
                     LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
-                    LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     ORDER BY Post.CreationDate DESC
                     WHERE WasDeleted = FALSE
                     LIMIT @Limit
                     OFFSET @Offset",
-                (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
-                    return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec) => {
+                    return _postMapper.Map(Tuple.Create(postRec, userRec, spaceRec));
                 },
                 BuildPaginationParams(pageNumber, pageSize)
             );
@@ -66,17 +65,16 @@ namespace Updog.Persistance {
         /// <returns>The collection of their posts (if any).</returns>
 
         public async Task<PagedResultSet<Post>> FindByUser(string username, int pageNumber, int pageSize) {
-            IEnumerable<Post> posts = await Connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, UserRecord, Post>(
+            IEnumerable<Post> posts = await Connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, Post>(
                 @"SELECT * FROM Post
                     LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
-                    LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     WHERE u1.Username = @Username AND Post.WasDeleted = FALSE
                     ORDER BY Post.CreationDate DESC
                     LIMIT @Limit
                     OFFSET @Offset",
-                (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
-                    return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec) => {
+                    return _postMapper.Map(Tuple.Create(postRec, userRec, spaceRec));
                 },
                 BuildPaginationParams(new { Username = username }, pageNumber, pageSize)
             );
@@ -99,17 +97,16 @@ namespace Updog.Persistance {
         /// <param name="pageSize">Page size.</param>
         /// <returns>The result set.</returns>
         public async Task<PagedResultSet<Post>> FindBySpace(string space, int pageNumber, int pageSize) {
-            IEnumerable<Post> posts = await Connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, UserRecord, Post>(
+            IEnumerable<Post> posts = await Connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, Post>(
                 @"SELECT * FROM Post
                     LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
-                    LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     WHERE LOWER(Space.Name) = LOWER(@Name) AND Post.WasDeleted = FALSE
                     ORDER BY Post.CreationDate DESC
                     LIMIT @Limit
                     OFFSET @Offset",
-                (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
-                    return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec) => {
+                    return _postMapper.Map(Tuple.Create(postRec, userRec, spaceRec));
                 },
                 BuildPaginationParams(new { Name = space }, pageNumber, pageSize)
             );
@@ -129,17 +126,16 @@ namespace Updog.Persistance {
         /// <param name="pageSize">Page size.</param>
         /// <returns>The result set.</returns>
         public async Task<PagedResultSet<Post>> FindByNew(int pageNumber, int pageSize) {
-            IEnumerable<Post> posts = await Connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, UserRecord, Post>(
+            IEnumerable<Post> posts = await Connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, Post>(
                 @"SELECT * FROM Post
                     LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
-                    LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     WHERE Post.WasDeleted = FALSE
                     ORDER BY Post.CreationDate DESC
                     LIMIT @Limit
                     OFFSET @Offset",
-                (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
-                    return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec) => {
+                    return _postMapper.Map(Tuple.Create(postRec, userRec, spaceRec));
                 },
                 BuildPaginationParams(pageNumber, pageSize)
             );
@@ -158,14 +154,13 @@ namespace Updog.Persistance {
         /// <param name="id">The ID of the post.</param>
         /// <returns>The post (if found).</returns>
         public async Task<Post?> FindById(int id) {
-            return (await Connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, UserRecord, Post>(
+            return (await Connection.QueryAsync<PostRecord, UserRecord, SpaceRecord, Post>(
                 @"SELECT * FROM Post 
                     LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
                     LEFT JOIN Space ON Space.Id = Post.SpaceId
-                    LEFT JOIN ""User"" u2 ON u2.Id = Space.UserId
                     WHERE Post.Id = @Id AND Post.WasDeleted = FALSE;",
-                (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec, UserRecord spaceOwner) => {
-                    return _postMapper.Map(Tuple.Create(postRec, userRec, Tuple.Create(spaceRec, spaceOwner)));
+                (PostRecord postRec, UserRecord userRec, SpaceRecord spaceRec) => {
+                    return _postMapper.Map(Tuple.Create(postRec, userRec, spaceRec));
                 },
                 new { Id = id }
             )).FirstOrDefault();

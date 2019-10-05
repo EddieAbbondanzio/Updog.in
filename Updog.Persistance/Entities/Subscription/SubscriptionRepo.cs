@@ -43,7 +43,7 @@ namespace Updog.Persistance {
         /// <returns>The subscriptions found (if any)</returns>
         public async Task<IEnumerable<Subscription>> FindByUser(string username) {
             var subs = await Connection.QueryAsync<SubscriptionRecord>(
-                @"SELECT Subscription.UserId, Subscription.SpaceId FROM Subscription 
+                @"SELECT Subscription.* FROM Subscription 
                     LEFT JOIN ""User"" u1 ON u1.Id = Subscription.UserId
                     WHERE u1.Username = @Username;",
                 new { Username = username }
@@ -60,7 +60,7 @@ namespace Updog.Persistance {
         /// <returns>The subscription found (if any).</returns>
         public async Task<Subscription?> FindByUserAndSpace(string username, string spaceName) {
             var sub = (await Connection.QueryAsync<SubscriptionRecord>(
-                @"SELECT Subscription.UserId, Subscription.SpaceId FROM Subscription 
+                @"SELECT Subscription.* FROM Subscription 
                     LEFT JOIN ""User"" u1 ON u1.Id = Subscription.UserId
                     LEFT JOIN Space ON Space.Id = Subscription.SpaceId
                     WHERE u1.Username = @Username AND Space.Name = @Name;",

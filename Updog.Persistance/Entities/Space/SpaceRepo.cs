@@ -19,7 +19,7 @@ namespace Updog.Persistance {
 
         #region Constructor(s)
         public SpaceRepo(DatabaseContext context) : base(context) {
-            this.mapper = new SpaceRecordMapper(new UserRecordMapper());
+            this.mapper = new SpaceRecordMapper();
         }
         #endregion
 
@@ -30,11 +30,12 @@ namespace Updog.Persistance {
         /// <param name="id">The ID to look for.</param>
         /// <returns>The space found (if any).</returns>
         public async Task<Space?> FindById(int id) {
-            return (await Connection.QueryAsync<SpaceRecord, UserRecord, Space>(
-                @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id WHERE Space.Id = @Id",
-                (SpaceRecord s, UserRecord u) => mapper.Map(Tuple.Create(s, u)),
+            var space = (await Connection.QueryAsync<SpaceRecord>(
+                @"SELECT * FROM Space WHERE Space.Id = @Id",
                 new { Id = id }
             )).FirstOrDefault();
+
+            return space != null ? mapper.Map(space) : null;
         }
 
         /// <summary>
@@ -43,11 +44,12 @@ namespace Updog.Persistance {
         /// <param name="name">The name of the space to look for.</param>
         /// <returns>The space found (if any).</returns>
         public async Task<Space?> FindByName(string name) {
-            return (await Connection.QueryAsync<SpaceRecord, UserRecord, Space>(
+            var space = (await Connection.QueryAsync<SpaceRecord>(
                 @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id WHERE LOWER(Space.Name) = LOWER(@Name)",
-                (SpaceRecord s, UserRecord u) => mapper.Map(Tuple.Create(s, u)),
                 new { Name = name }
             )).FirstOrDefault();
+
+            return space != null ? mapper.Map(space) : null;
         }
 
         /// <summary>
@@ -57,9 +59,8 @@ namespace Updog.Persistance {
         /// <param name="pageSize">The page size.</param>
         /// <returns>The pages found.</returns>
         public async Task<PagedResultSet<Space>> Find(int pageNumber, int pageSize) {
-            IEnumerable<Space> spaces = await Connection.QueryAsync<SpaceRecord, UserRecord, Space>(
-                @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id LIMIT @Limit OFFSET @Offset",
-                (SpaceRecord s, UserRecord u) => mapper.Map(Tuple.Create(s, u)),
+            var spaces = await Connection.QueryAsync<SpaceRecord>(
+                @"SELECT * FROM Space LIMIT @Limit OFFSET @Offset",
                 BuildPaginationParams(pageNumber, pageSize)
             );
 
@@ -67,7 +68,7 @@ namespace Updog.Persistance {
                 "SELECT COUNT(*) FROM Space"
             );
 
-            return new PagedResultSet<Space>(spaces, new PaginationInfo(pageNumber, Math.Min(spaces.Count(), pageSize), totalCount));
+            return new PagedResultSet<Space>(spaces.Select(s => mapper.Map(s)), new PaginationInfo(pageNumber, Math.Min(spaces.Count(), pageSize), totalCount));
         }
 
         /// <summary>
@@ -75,18 +76,20 @@ namespace Updog.Persistance {
         /// </summary>
         /// <returns>The default spaces.</returns>
         public async Task<IEnumerable<Space>> FindDefault() {
-            return await Connection.QueryAsync<SpaceRecord, UserRecord, Space>(
-                @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id WHERE IsDefault = TRUE",
-                (SpaceRecord s, UserRecord u) => mapper.Map(Tuple.Create(s, u))
+            var defaults = await Connection.QueryAsync<SpaceRecord>(
+                @"SELECT * FROM Space WHERE IsDefault = TRUE"
             );
+
+            return defaults.Select(s => mapper.Map(s));
         }
 
         public async Task<IEnumerable<Space>> FindSubscribed(User user) {
-            return await Connection.QueryAsync<SpaceRecord, UserRecord, Space>(
+            var subscribes = await Connection.QueryAsync<SpaceRecord>(
                 @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id LEFT JOIN Subscription ON Space.Id = Subscription.SpaceId WHERE Subscription.UserId = @Id",
-                (SpaceRecord s, UserRecord u) => mapper.Map(Tuple.Create(s, u)),
                 user
             );
+
+            return subscribes.Select(s => mapper.Map(s));
         }
 
         /// <summary>
@@ -94,7 +97,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="entity">The space to add.</param>
         public async Task Add(Space entity) {
-            SpaceRecord rec = mapper.Reverse(entity).Item1;
+            SpaceRecord rec = mapper.Reverse(entity);
 
             entity.Id = await Connection.QueryFirstOrDefaultAsync<int>(
                 @"INSERT INTO Space(
@@ -128,7 +131,7 @@ namespace Updog.Persistance {
                         SubscriptionCount = @SubscriptionCount,
                         UserId = @UserId
                     WHERE Id = @Id",
-                mapper.Reverse(entity).Item1
+                mapper.Reverse(entity)
             );
         }
 
@@ -139,7 +142,7 @@ namespace Updog.Persistance {
         public async Task Delete(Space entity) {
             await Connection.ExecuteAsync(
                 @"DELETE FROM Space WHERE Id = @Id",
-                mapper.Reverse(entity).Item1
+                mapper.Reverse(entity)
             );
         }
         #endregion

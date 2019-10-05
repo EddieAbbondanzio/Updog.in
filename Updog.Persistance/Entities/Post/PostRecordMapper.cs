@@ -38,7 +38,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="source">The source record.</param>
         /// <returns>The entity.</returns>
-        public Post Map(Tuple<PostRecord, UserRecord, Tuple<SpaceRecord, UserRecord>> source) {
+        public Post Map(Tuple<PostRecord, UserRecord, SpaceRecord> source) {
             return new Post() {
                 Id = source.Item1.Id,
                 User = userMapper.Map(source.Item2),
@@ -59,7 +59,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="destination">The entity/</param>
         /// <returns>The rebuilt record.</returns>
-        public Tuple<PostRecord, UserRecord, Tuple<SpaceRecord, UserRecord>> Reverse(Post destination) {
+        public Tuple<PostRecord, UserRecord, SpaceRecord> Reverse(Post destination) {
             PostRecord p = new PostRecord {
                 Id = destination.Id,
                 UserId = destination.User.Id,
@@ -76,7 +76,7 @@ namespace Updog.Persistance {
             };
 
             UserRecord u = userMapper.Reverse(destination.User);
-            Tuple<SpaceRecord, UserRecord> s = spaceMapper.Reverse(destination.Space);
+            SpaceRecord s = spaceMapper.Reverse(destination.Space);
             return Tuple.Create(p, u, s);
         }
         #endregion
