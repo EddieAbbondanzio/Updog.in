@@ -17,13 +17,13 @@ namespace Updog.Application {
         #endregion
 
         #region Fields
-        private Dictionary<Type, Type> repoMap;
+        private IServiceProvider serviceProvider;
         #endregion
 
         #region Constructor(s)
-        public DatabaseContext(DbConnection connection, Dictionary<Type, Type> repoMap) {
+        public DatabaseContext(DbConnection connection, IServiceProvider serviceProvider) {
             Connection = connection;
-            this.repoMap = repoMap;
+            this.serviceProvider = serviceProvider;
         }
         #endregion
 
@@ -32,18 +32,7 @@ namespace Updog.Application {
         /// Resolve a repo.
         /// </summary>
         /// <typeparam name="TRepo">The repo type to resolve.</typeparam>
-        public TRepo GetRepo<TRepo>() where TRepo : class, IRepo {
-            Type resolveType = typeof(TRepo);
-
-            if (!repoMap.ContainsKey(resolveType)) {
-                throw new NotFoundException($"No repo found for type {typeof(TRepo).Name}. Did you correctly register it?");
-            }
-
-            Type repoType = repoMap[resolveType];
-
-            // It's safe to assume the repo type will be a DatabaseRepo<T> since we can only register these.
-            return (TRepo)Activator.CreateInstance(repoType, this) as TRepo;
-        }
+        public TRepo GetRepo<TRepo>() where TRepo : class, IRepo => (TRepo)serviceProvider.GetService(typeof(TRepo));
 
         public void Dispose() => Connection.Dispose();
         #endregion

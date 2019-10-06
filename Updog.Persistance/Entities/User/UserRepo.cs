@@ -18,7 +18,7 @@ namespace Updog.Persistance {
         #endregion
 
         #region Constructor(s)
-        public UserRepo(DatabaseContext context) : base(context) {
+        public UserRepo(IDatabase database) : base(database) {
             this.userMapper = new UserRecordMapper();
         }
         #endregion

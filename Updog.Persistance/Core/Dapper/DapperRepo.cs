@@ -18,7 +18,7 @@ namespace Updog.Persistance {
         /// Create a new database based repo.
         /// </summary>
         /// <param name="database">The database to work with.</param>
-        public DapperRepo(DatabaseContext context) : base(context) { }
+        public DapperRepo(IDatabase database) : base(database) { }
         #endregion
 
         #region Privates

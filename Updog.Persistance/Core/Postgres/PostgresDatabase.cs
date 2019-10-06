@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.Common;
 using Npgsql;
 using Updog.Application;
@@ -20,7 +21,7 @@ namespace Updog.Persistance {
         /// Create a new database.
         /// </summary>
         /// <param name="connection">The connection config.</param>
-        public PostgresDatabase(IDatabaseConfig config) : base(config) {
+        public PostgresDatabase(IDatabaseConfig config, IServiceProvider serviceProivder) : base(serviceProivder) {
             NpgsqlConnectionStringBuilder connBuilder = new NpgsqlConnectionStringBuilder() {
                 Host = config.Host,
                 Port = config.Port,
@@ -34,12 +35,7 @@ namespace Updog.Persistance {
         #endregion
 
         #region Publics
-        public override DatabaseContext GetContext() {
-            var connection = new NpgsqlConnection(this.connection);
-            connection.Open();
-
-            return new DatabaseContext(connection, RepoMap);
-        }
+        protected override DbConnection GetConnection() => new NpgsqlConnection(this.connection);
         #endregion
     }
 }

@@ -30,7 +30,7 @@ namespace Updog.Application.Tests {
         [TestMethod]
         public async Task CanEditPostIfUserMatchesCreator() {
             Post p = new Post() {
-                User = user
+                UserId = 200
             };
 
             Assert.IsTrue(await permissionHandler.HasPermission(user, PermissionAction.UpdatePost, p));
@@ -43,7 +43,7 @@ namespace Updog.Application.Tests {
             };
 
             Post p = new Post() {
-                User = user
+                UserId = 203
             };
 
             bool hasPerms = await permissionHandler.HasPermission(other, PermissionAction.UpdatePost, p);
@@ -53,7 +53,7 @@ namespace Updog.Application.Tests {
         [TestMethod]
         public async Task CanDeletePostIfUserMatchesCreator() {
             Post p = new Post() {
-                User = user
+                UserId = 3
             };
 
             Assert.IsTrue(await permissionHandler.HasPermission(user, PermissionAction.DeletePost, p));
@@ -68,7 +68,7 @@ namespace Updog.Application.Tests {
             };
 
             Post p = new Post() {
-                User = user
+                UserId = 1992
             };
 
             Assert.IsFalse(await permissionHandler.HasPermission(other, PermissionAction.DeletePost, p));

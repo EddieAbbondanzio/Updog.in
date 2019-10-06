@@ -28,9 +28,7 @@ namespace Updog.Application {
 
         #region Publics2
         public CommentView Map(Comment comment) {
-            UserView u = userMapper.Map(comment.User);
-            VoteView? v = comment.Vote != null ? voteMapper.Map(comment.Vote) : null;
-            CommentView cv = new CommentView(comment.Id, u, comment.PostId, comment.Body, comment.CreationDate, comment.WasUpdated, comment.WasDeleted, comment.Upvotes, comment.Downvotes, v);
+            CommentView cv = new CommentView(comment.Id, null!, comment.PostId, comment.Body, comment.CreationDate, comment.WasUpdated, comment.WasDeleted, comment.Upvotes, comment.Downvotes, null!);
 
             if (comment.Children.Count > 0) {
                 foreach (Comment c in comment.Children) {

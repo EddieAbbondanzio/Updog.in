@@ -17,7 +17,7 @@ namespace Updog.Persistance {
         #endregion
 
         #region Constructor(s)
-        public SubscriptionRepo(DatabaseContext context) : base(context) {
+        public SubscriptionRepo(IDatabase database) : base(database) {
             mapper = new SubscriptionRecordMapper();
         }
         #endregion

@@ -13,8 +13,8 @@ namespace Updog.Application {
         #endregion
 
         #region Constructor(s)
-        public DatabaseRepo(DatabaseContext context) {
-            this.context = context;
+        public DatabaseRepo(IDatabase database) {
+            this.context = database.GetContext();
         }
         #endregion
 
@@ -29,7 +29,7 @@ namespace Updog.Application {
     /// <typeparam name="TEntity">The type of entity stored.</typeparam>
     public abstract class DatabaseRepo<TEntity> : DatabaseRepo where TEntity : class, IEntity {
         #region Constructor(s)
-        public DatabaseRepo(DatabaseContext context) : base(context) { }
+        public DatabaseRepo(IDatabase database) : base(database) { }
         #endregion
 
         #region Publics

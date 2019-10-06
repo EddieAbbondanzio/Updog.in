@@ -80,15 +80,14 @@ namespace Updog.Api {
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            IDatabase db = new PostgresDatabase(Configuration.GetSection("Database").Get<DatabaseConfig>());
-            db.RegisterRepo<IUserRepo, UserRepo>();
-            db.RegisterRepo<IPostRepo, PostRepo>();
-            db.RegisterRepo<ICommentRepo, CommentRepo>();
-            db.RegisterRepo<ISpaceRepo, SpaceRepo>();
-            db.RegisterRepo<ISubscriptionRepo, SubscriptionRepo>();
-            db.RegisterRepo<IVoteRepo, VoteRepo>();
+            services.AddSingleton<IDatabase, PostgresDatabase>();
+            services.AddTransient<IUserRepo, UserRepo>();
+            services.AddTransient<IPostRepo, PostRepo>();
+            services.AddTransient<ICommentRepo, CommentRepo>();
+            services.AddTransient<ISpaceRepo, SpaceRepo>();
+            services.AddTransient<ISubscriptionRepo, SubscriptionRepo>();
+            services.AddTransient<IVoteRepo, VoteRepo>();
 
-            services.AddSingleton<IDatabase>(db);
             services.AddSingleton<IEventBus, EventBus>();
 
             services.ConfigurePoco<IDatabaseConfig, DatabaseConfig>(Configuration.GetSection("Database"));
