@@ -1,12 +1,13 @@
 
 using System;
+using Updog.Application;
 using Updog.Domain;
 using Updog.Persistance;
 
 /// <summary>
 /// Mapper to convert a space record (DTO) to business entity.
 /// </summary>
-public sealed class SpaceRecordMapper : ISpaceRecordMapper {
+public sealed class SpaceRecordMapper : IReversableMapper<SpaceRecord, Space> {
     #region Publics
     /// <summary>
     /// Map a record to it's entity.

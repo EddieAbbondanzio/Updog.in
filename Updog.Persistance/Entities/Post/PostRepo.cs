@@ -17,12 +17,12 @@ namespace Updog.Persistance {
         /// <summary>
         /// Mapper to convert the post record into its entity.
         /// </summary>
-        private IPostRecordMapper mapper;
+        private IReversableMapper<PostRecord, Post> mapper;
         #endregion
 
         #region Constructor(s)
         public PostRepo(IDatabase database) : base(database) {
-            this.mapper = new PostRecordMapper(new UserRecordMapper(), new SpaceRecordMapper());
+            this.mapper = new PostRecordMapper();
         }
         #endregion
 

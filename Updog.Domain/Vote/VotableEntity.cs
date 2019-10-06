@@ -30,11 +30,6 @@ namespace Updog.Domain {
         /// How many downvotes the resource has recieved.
         /// </summary>
         public int Downvotes { get; set; }
-
-        /// <summary>
-        /// The vote state for the user viewing the entity.
-        /// </summary>
-        public Vote? Vote { get; set; } = null!;
         #endregion
 
         #region Publics

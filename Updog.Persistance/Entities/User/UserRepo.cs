@@ -14,7 +14,7 @@ namespace Updog.Persistance {
         /// <summary>
         /// Mapper to convert the user to it's record.
         /// </summary>
-        private IUserRecordMapper userMapper;
+        private IReversableMapper<UserRecord, User> userMapper;
         #endregion
 
         #region Constructor(s)

@@ -14,7 +14,7 @@ namespace Updog.Persistance {
     /// </summary>
     public sealed class SpaceRepo : DapperRepo<Space>, ISpaceRepo {
         #region Fields
-        private ISpaceRecordMapper mapper;
+        private IReversableMapper<SpaceRecord, Space> mapper;
         #endregion
 
         #region Constructor(s)

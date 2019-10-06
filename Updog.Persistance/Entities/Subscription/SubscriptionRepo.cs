@@ -13,7 +13,7 @@ namespace Updog.Persistance {
     /// </summary>
     public sealed class SubscriptionRepo : DapperRepo<Subscription>, ISubscriptionRepo {
         #region Fields
-        private ISubscriptionRecordMapper mapper;
+        private IReversableMapper<SubscriptionRecord, Subscription> mapper;
         #endregion
 
         #region Constructor(s)

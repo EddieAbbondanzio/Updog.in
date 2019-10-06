@@ -12,11 +12,11 @@ namespace Updog.Persistance {
     /// CRUD interface for managing votes in the database.
     /// </summary>
     public sealed class VoteRepo : DapperRepo<Vote>, IVoteRepo {
-        private IVoteRecordMapper voteMapper;
+        private IReversableMapper<VoteRecord, Vote> mapper;
 
         #region Constructor(s)
         public VoteRepo(IDatabase database) : base(database) {
-            voteMapper = new VoteRecordMapper(new UserRecordMapper());
+            mapper = new VoteRecordMapper();
         }
         #endregion
 
@@ -27,13 +27,14 @@ namespace Updog.Persistance {
         /// <param name="id">The ID to look for.</param>
         /// <returns>The matching vote found.</returns>
         public async Task<Vote?> FindById(int id) {
-            return (await Connection.QueryAsync<VoteRecord, UserRecord, Vote>(
+            var vote = (await Connection.QueryAsync<VoteRecord>(
                 @"SELECT * FROM Vote 
                     JOIN ""User"" u ON u.Id = Vote.UserId 
                     WHERE Vote.Id = @Id",
-                (VoteRecord voteRec, UserRecord userRec) => voteMapper.Map(Tuple.Create(voteRec, userRec)),
                 new { Id = id }
             )).FirstOrDefault();
+
+            return vote != null ? mapper.Map(vote) : null;
         }
 
         /// <summary>
@@ -43,13 +44,14 @@ namespace Updog.Persistance {
         /// <param name="commentId">The ID of the comment.</param>
         /// <returns>The vote found (if any).</returns>
         public async Task<Vote?> FindByUserAndComment(string username, int commentId) {
-            return (await Connection.QueryAsync<VoteRecord, UserRecord, Vote>(
+            var vote = (await Connection.QueryAsync<VoteRecord>(
                 @"SELECT * FROM Vote 
                     JOIN ""User"" u ON u.Id = Vote.UserId 
                     WHERE u.Username = @Username AND Vote.ResourceType = @ResourceType AND Vote.ResourceId = @CommentId",
-                (VoteRecord voteRec, UserRecord userRec) => voteMapper.Map(Tuple.Create(voteRec, userRec)),
                 new { Username = username, CommentId = commentId, ResourceType = VotableEntityType.Comment }
             )).FirstOrDefault();
+
+            return vote != null ? mapper.Map(vote) : null;
         }
 
         /// <summary>
@@ -59,13 +61,14 @@ namespace Updog.Persistance {
         /// <param name="postId">The post ID></param>
         /// <returns>The vote found (if any).</returns>
         public async Task<Vote?> FindByUserAndPost(string username, int postId) {
-            return (await Connection.QueryAsync<VoteRecord, UserRecord, Vote>(
+            var vote = (await Connection.QueryAsync<VoteRecord>(
                 @"SELECT * FROM Vote 
                     JOIN ""User"" U ON U.Id = Vote.UserId 
                     WHERE u.Username = @Username AND Vote.ResourceType = @ResourceType AND Vote.ResourceId = @PostId",
-                (VoteRecord voteRec, UserRecord userRec) => voteMapper.Map(Tuple.Create(voteRec, userRec)),
                 new { Username = username, PostId = postId, ResourceType = VotableEntityType.Post }
             )).FirstOrDefault();
+
+            return vote != null ? mapper.Map(vote) : null;
         }
 
         /// <summary>
@@ -77,7 +80,7 @@ namespace Updog.Persistance {
                 @"INSERT INTO Vote 
                     (UserId, ResourceId, ResourceType, Direction) 
                     VALUES (@UserId, @ResourceId, @ResourceType, @Direction) RETURNING Id;",
-                    voteMapper.Reverse(vote).Item1);
+                    mapper.Reverse(vote));
         }
 
         /// <summary>
@@ -92,7 +95,7 @@ namespace Updog.Persistance {
                     ResourceType = @ResourceType, 
                     Direction = @Direction
                     WHERE Vote.Id = @Id",
-                    voteMapper.Reverse(vote).Item1
+                    mapper.Reverse(vote)
             );
         }
 
@@ -103,7 +106,7 @@ namespace Updog.Persistance {
         public async Task Delete(Vote vote) {
             await Connection.ExecuteAsync(
                 @"DELETE FROM Vote WHERE Vote.ID = @Id",
-                voteMapper.Reverse(vote).Item1
+                mapper.Reverse(vote)
             );
         }
         #endregion

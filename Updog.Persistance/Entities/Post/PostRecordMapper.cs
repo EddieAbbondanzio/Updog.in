@@ -7,31 +7,7 @@ namespace Updog.Persistance {
     /// <summary>
     /// Mapper to convert a post record into it's entity and back.
     /// </summary>
-    public sealed class PostRecordMapper : IPostRecordMapper {
-        #region Fields
-        /// <summary>
-        /// Mapper to convert user records to entities and back.
-        /// </summary>
-        private IUserRecordMapper userMapper;
-
-        /// <summary>
-        /// Mapper to convert space records to entities and back.
-        /// </summary>
-        private ISpaceRecordMapper spaceMapper;
-        #endregion
-
-        #region Constructor(s)
-        /// <summary>
-        /// Create a new post record mapper.
-        /// </summary>
-        /// <param name="userMapper">The user record mapper.</param>
-        /// <param name="spaceMapper">The space record mapper.</param>
-        public PostRecordMapper(IUserRecordMapper userMapper, ISpaceRecordMapper spaceMapper) {
-            this.userMapper = userMapper;
-            this.spaceMapper = spaceMapper;
-        }
-        #endregion
-
+    public sealed class PostRecordMapper : IReversableMapper<PostRecord, Post> {
         #region Publics
         /// <summary>
         /// Convert the record into it's entity form.

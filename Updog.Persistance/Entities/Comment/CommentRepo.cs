@@ -17,7 +17,7 @@ namespace Updog.Persistance {
         /// <summary>
         /// Mapper to convert comments into their record and back to entity.
         /// </summary>
-        private ICommentRecordMapper mapper;
+        private IReversableMapper<CommentRecord, Comment> mapper;
         #endregion
 
         #region Constructor(s)

@@ -6,7 +6,7 @@ namespace Updog.Persistance {
     /// <summary>
     /// Mapper to convert a record to its entity.
     /// </summary>
-    public sealed class CommentRecordMapper : ICommentRecordMapper {
+    public sealed class CommentRecordMapper : IReversableMapper<CommentRecord, Comment> {
         #region Publics
         /// <summary>
         /// Convert the record into it's entity.

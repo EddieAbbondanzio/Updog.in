@@ -1,11 +1,12 @@
 using System;
+using Updog.Application;
 using Updog.Domain;
 
 namespace Updog.Persistance {
     /// <summary>
     /// Mapper to convert the subscription record to it's entity.
     /// </summary>
-    public sealed class SubscriptionRecordMapper : ISubscriptionRecordMapper {
+    public sealed class SubscriptionRecordMapper : IReversableMapper<SubscriptionRecord, Subscription> {
         #region Publics
         public Subscription Map(SubscriptionRecord source) => new Subscription() {
             Id = source.Id,

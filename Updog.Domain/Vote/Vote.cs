@@ -2,7 +2,7 @@ namespace Updog.Domain {
     /// <summary>
     /// A vote entity on a post, or comment.
     /// </summary>
-    public sealed class Vote : IEntity {
+    public sealed class Vote : IEntity, IUserEntity {
         #region Properties
         /// <summary>
         /// The unqiue ID of the vote.
@@ -12,8 +12,7 @@ namespace Updog.Domain {
         /// <summary>
         /// THe user it belongs to.
         /// </summary>
-        /// <value></value>
-        public User User { get; set; } = null!;
+        public int UserId { get; set; }
 
         /// <summary>
         /// The type of resource that was voted on.
