@@ -88,7 +88,7 @@ namespace Updog.Api {
         [HttpPost]
         public async Task<ActionResult> CreateSpace(SpaceCreateRequest request) {
             await spaceCreator.Execute(new SpaceCreateCommand() {
-                CreationData = new SpaceCreationData(request.Name, request.Description),
+                CreationData = new SpaceCreateData(request.Name, request.Description),
                 User = User!
             }, ActionResultBuilder);
             return ActionResultBuilder.Build();

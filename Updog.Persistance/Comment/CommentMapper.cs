@@ -15,18 +15,17 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="source">The initial row.</param>
         /// <returns>The resulting entity.</returns>
-        public Comment Map(CommentRecord source) => new Comment() {
-            Id = source.Id,
-            UserId = source.UserId,
-            PostId = source.PostId,
-            ParentId = source.ParentId,
-            Body = source.Body,
-            CreationDate = source.CreationDate,
-            WasUpdated = source.WasUpdated,
-            WasDeleted = source.WasDeleted,
-            Upvotes = source.Upvotes,
-            Downvotes = source.Downvotes
-        };
+        public Comment Map(CommentRecord source) => new Comment(
+            source.Id,
+            source.UserId,
+            source.PostId,
+            source.ParentId,
+            source.Body,
+            new VoteStats(source.Upvotes, source.Downvotes),
+            source.CreationDate,
+            source.WasUpdated,
+            source.WasDeleted
+        );
 
         /// <summary>
         /// Convert the entity back to it's row.
@@ -41,8 +40,8 @@ namespace Updog.Persistance {
             CreationDate = destination.CreationDate,
             WasUpdated = destination.WasUpdated,
             WasDeleted = destination.WasDeleted,
-            Upvotes = destination.Upvotes,
-            Downvotes = destination.Downvotes
+            Upvotes = destination.Votes.Upvotes,
+            Downvotes = destination.Votes.Downvotes
         };
         #endregion
     }

@@ -8,7 +8,7 @@ namespace Updog.Application {
         #endregion
 
         #region Constructor(s)
-        public VoteOnPostCommandHandler(IVoteFactory voteFactory, IDatabase database) : base(database) {
+        public VoteOnPostCommandHandler(IVoteFactory voteFactory, IDatabase database) {
             this.voteFactory = voteFactory;
         }
         #endregion

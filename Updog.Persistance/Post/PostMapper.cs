@@ -16,20 +16,19 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="source">The source record.</param>
         /// <returns>The entity.</returns>
-        public Post Map(PostRecord source) => new Post() {
-            Id = source.Id,
-            UserId = source.UserId,
-            Type = source.Type,
-            Title = source.Title,
-            Body = source.Body,
-            CreationDate = source.CreationDate,
-            WasUpdated = source.WasUpdated,
-            WasDeleted = source.WasDeleted,
-            CommentCount = source.CommentCount,
-            SpaceId = source.SpaceId,
-            Upvotes = source.Upvotes,
-            Downvotes = source.Downvotes
-        };
+        public Post Map(PostRecord source) => new Post(
+            source.Id,
+            source.UserId,
+            source.SpaceId,
+            source.Type,
+            source.Title,
+            source.Body,
+            source.CreationDate,
+            source.CommentCount,
+            new VoteStats(source.Upvotes, source.Downvotes),
+            source.WasUpdated,
+            source.WasDeleted
+        );
 
         /// <summary>
         /// Convert the post back into it's record form.
@@ -46,8 +45,8 @@ namespace Updog.Persistance {
             WasUpdated = destination.WasUpdated,
             WasDeleted = destination.WasDeleted,
             CommentCount = destination.CommentCount,
-            Upvotes = destination.Upvotes,
-            Downvotes = destination.Downvotes,
+            Upvotes = destination.Votes.Upvotes,
+            Downvotes = destination.Votes.Downvotes,
             SpaceId = destination.SpaceId
         };
         #endregion

@@ -87,8 +87,6 @@ namespace Updog.Persistance {
                     WHERE Id = @Id",
                 commentRec
             );
-
-            entity.WasUpdated = true;
         }
 
         /// <summary>
@@ -98,8 +96,6 @@ namespace Updog.Persistance {
         public override async Task Delete(Comment entity) {
             CommentRecord commentRec = this.mapper.Reverse(entity);
             await Connection.ExecuteAsync(@"UPDATE Comment SET WasDeleted = TRUE Where Id = @Id", commentRec);
-
-            entity.WasDeleted = true;
         }
         #endregion
     }

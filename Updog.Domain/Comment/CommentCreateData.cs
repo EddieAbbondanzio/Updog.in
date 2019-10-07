@@ -1,5 +1,5 @@
 namespace Updog.Domain {
-    public sealed class CommentCreationData : IValueObject {
+    public sealed class CommentCreateData : IValueObject {
         #region Properties
         /// <summary>
         /// The ID of the post it belongs to.
@@ -18,7 +18,7 @@ namespace Updog.Domain {
         #endregion
 
         #region Constructor(s)
-        public CommentCreationData(int postId, string body, int parentId = 0) {
+        public CommentCreateData(int postId, string body, int parentId = 0) {
             PostId = postId;
             Body = body;
             ParentId = parentId;

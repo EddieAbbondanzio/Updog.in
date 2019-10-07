@@ -4,7 +4,7 @@ namespace Updog.Domain {
     /// <summary>
     /// A post of the website.
     /// </summary>
-    public sealed class Post : VotableEntity, IUserEntity, ISoftDeletable {
+    public sealed class Post : IEntity, IUserEntity, IVotableEntity, IAuditableEntity {
         #region Constants
         /// <summary>
         /// The max # of characters allowed in a post title.
@@ -23,51 +23,60 @@ namespace Updog.Domain {
         #endregion
 
         #region Properties
-        public override VotableEntityType EntityType => VotableEntityType.Post;
-
-        /// <summary>
-        /// The sub space it was submitted to.
-        /// </summary>
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public VoteStats Votes { get; set; } = new VoteStats();
+        VotableEntityType IVotableEntity.VotableEntityType => VotableEntityType.Post;
         public int SpaceId { get; set; }
-
-        /// <summary>
-        /// The content type of the post.
-        /// </summary>
         public PostType Type { get; set; }
-
-        /// <summary>
-        /// The title of the post.
-        /// </summary>
-        /// <value></value>
         public string Title { get; set; } = "";
+        public string Body {
+            get => body;
+            set {
+                if (Type == PostType.Link) {
+                    throw new InvalidOperationException();
+                }
 
-        /// <summary>
-        /// The body of the post. Either a URL or text body.
-        /// </summary>
-        public string Body { get; set; } = "";
+                if (WasDeleted) {
+                    throw new InvalidOperationException("Post was already deleted");
+                }
 
-        /// <summary>
-        /// When the post was created.
-        /// </summary>
-        /// <value></value>
-        public DateTime CreationDate { get; set; }
-
-        /// <summary>
-        /// If the post was editted by a user.
-        /// </summary>
-        public bool WasUpdated { get; set; }
-
-        /// <summary>
-        /// If the post was deleted by a user.
-        /// </summary>
-        /// <value></value>
-        public bool WasDeleted { get; set; }
-
-        /// <summary>
-        /// The number of comments on the post.
-        /// </summary>
-        /// <value></value>
+                WasUpdated = true;
+                body = value;
+            }
+        }
+        public DateTime CreationDate { get; set; } = DateTime.UtcNow;
+        public bool WasUpdated { get; private set; }
+        public bool WasDeleted { get; private set; }
         public int CommentCount { get; set; }
+        #endregion
+
+        #region Fields
+        private string body = "";
+        #endregion
+
+        #region Constructor(s)
+        public Post(PostCreateData creationData, User user) {
+            Type = creationData.Type;
+            Title = creationData.Title;
+            Body = creationData.Body;
+            SpaceId = creationData.SpaceId;
+            UserId = user.Id;
+        }
+
+        public Post(int id, int userId, int spaceId, PostType type, string title, string body, DateTime creationDate, int commentCount, VoteStats votes, bool wasUpdated = false, bool wasDeleted = false) {
+            Id = id;
+            UserId = userId;
+            SpaceId = spaceId;
+            Type = type;
+            Title = title;
+            Body = body;
+            CreationDate = creationDate;
+            CommentCount = commentCount;
+            Votes = votes;
+            WasUpdated = wasUpdated;
+            WasDeleted = wasDeleted;
+        }
         #endregion
 
         #region Publics

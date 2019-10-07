@@ -24,9 +24,9 @@ namespace Updog.Application {
             IPostRepo postRepo = context.Database.GetRepo<IPostRepo>();
             IVoteRepo voteRepo = context.Database.GetRepo<IVoteRepo>();
 
-            Space? space = await spaceRepo.FindByName(context.Input.CreationData.Space);
+            Space? space = await spaceRepo.FindByName(context.Input.CreationData.SpaceId);
             if (space == null) {
-                context.Output.InvalidOperation($"No space with name ${context.Input.CreationData.Space} found.");
+                context.Output.InvalidOperation($"No space with name ${context.Input.CreationData.SpaceId} found.");
                 return;
             }
 

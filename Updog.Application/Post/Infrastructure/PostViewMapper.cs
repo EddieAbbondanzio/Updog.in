@@ -33,8 +33,7 @@ namespace Updog.Application {
 
         #region Publics
         public PostView Map(Post post) {
-            // VoteView? voteView = post.Vote != null ? voteMapper.Map(post.Vote) : null;
-            return new PostView(post.Id, post.Type, post.Title, post.Body, null!, null!, post.CreationDate, post.CommentCount, post.WasUpdated, post.WasDeleted, post.Upvotes, post.Downvotes, null!);
+            return new PostView(post.Id, post.Type, post.Title, post.Body, null!, null!, post.CreationDate, post.CommentCount, post.WasUpdated, post.WasDeleted, post.Votes.Upvotes, post.Votes.Downvotes, null!);
         }
         #endregion
     }

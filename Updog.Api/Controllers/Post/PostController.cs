@@ -97,7 +97,7 @@ namespace Updog.Api {
         [HttpPost]
         public async Task<ActionResult> Create([FromBody]PostCreateRequest payload) {
             await postCreator.Execute(new PostCreateCommand() {
-                CreationData = new PostCreationData(payload.Type, payload.Title, payload.Body, payload.Space),
+                CreationData = new PostCreateData(payload.Type, payload.Title, payload.Body, payload.Space),
                 User = User!
             }, ActionResultBuilder);
             return ActionResultBuilder.Build();

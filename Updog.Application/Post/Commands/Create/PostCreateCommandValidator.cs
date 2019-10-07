@@ -19,8 +19,8 @@ namespace Updog.Application {
             RuleFor(p => p.CreationData.Body).NotEmpty().WithMessage("Body is required.");
             RuleFor(p => p.CreationData.Body).MaximumLength(Post.BodyMaxLength).WithMessage($"Body must be {Post.BodyMaxLength} characters or less.");
 
-            RuleFor(p => p.CreationData.Space).NotNull().WithMessage("Space is required.");
-            RuleFor(p => p.CreationData.Space).NotEmpty().WithMessage("Space is required.");
+            RuleFor(p => p.CreationData.SpaceId).NotNull().WithMessage("Space is required.");
+            RuleFor(p => p.CreationData.SpaceId).NotEmpty().WithMessage("Space is required.");
 
             RuleFor(p => p.User).NotNull().WithMessage("User performing the action is null.");
         }

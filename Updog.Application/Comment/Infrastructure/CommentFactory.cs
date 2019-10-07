@@ -4,12 +4,7 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class CommentFactory : ICommentFactory {
         #region Publics
-        public Comment Create(CommentCreationData data, User user) => new Comment() {
-            PostId = data.PostId,
-            Body = data.Body,
-            CreationDate = DateTime.UtcNow,
-            UserId = user.Id,
-        };
+        public Comment Create(CommentCreateData data, User user) => new Comment(data, user);
         #endregion
     }
 }

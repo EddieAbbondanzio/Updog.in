@@ -64,8 +64,6 @@ namespace Updog.Persistance {
                     WHERE Id = @Id",
                 mapper.Reverse(post)
             );
-
-            post.WasUpdated = true;
         }
 
         public override async Task Delete(Post post) {
@@ -73,8 +71,6 @@ namespace Updog.Persistance {
                 @"UPDATE Post SET WasDeleted = TRUE WHERE Id = @Id",
                 mapper.Reverse(post)
             );
-
-            post.WasDeleted = true;
         }
         #endregion
     }

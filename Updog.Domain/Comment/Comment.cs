@@ -5,7 +5,7 @@ namespace Updog.Domain {
     /// <summary>
     /// A comment associated with a post.
     /// </summary>
-    public sealed class Comment : VotableEntity, IUserEntity, ISoftDeletable {
+    public sealed class Comment : IEntity, IUserEntity, IVotableEntity, IAuditableEntity {
         #region Constants
         /// <summary>
         /// The maximum number of characters in a comment body.
@@ -19,45 +19,51 @@ namespace Updog.Domain {
         #endregion
 
         #region Properties
-        public override VotableEntityType EntityType => VotableEntityType.Comment;
-
-        /// <summary>
-        /// The parent post.
-        /// </summary>
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public VoteStats Votes { get; set; } = new VoteStats();
+        VotableEntityType IVotableEntity.VotableEntityType => VotableEntityType.Comment;
         public int PostId { get; set; }
-
-        /// <summary>
-        /// The parent comment (if null it is a top level comment).
-        /// </summary>
         public int ParentId { get; set; }
-
-        /// <summary>
-        /// The text of the comment.
-        /// </summary>
         public string Body {
             get => body;
-            set { WasUpdated = true; body = value; }
+            set {
+                if (WasDeleted) {
+                    throw new InvalidOperationException();
+                }
+
+                WasUpdated = true;
+                body = value;
+            }
         }
-
-        /// <summary>
-        /// The date the comment was made.
-        /// </summary>
-        /// <value></value>
-        public DateTime CreationDate { get; set; }
-
-        /// <summary>
-        /// Flag to show if the comment was updated.
-        /// </summary>
+        public DateTime CreationDate { get; set; } = DateTime.UtcNow;
         public bool WasUpdated { get; private set; }
-
-        /// <summary>
-        /// Soft delete flag.
-        /// </summary>
-        public bool WasDeleted { get; set; }
+        public bool WasDeleted { get; private set; }
         #endregion
 
         #region Fields
         private string body = "";
+        #endregion
+
+        #region Constructor(s)
+        public Comment(CommentCreateData creationData, User user) {
+            PostId = creationData.PostId;
+            Body = creationData.Body;
+            CreationDate = DateTime.UtcNow;
+            UserId = user.Id;
+        }
+
+        public Comment(int id, int userId, int postId, int parentId, string body, VoteStats votes, DateTime creationDate, bool wasUpdated, bool wasDeleted) {
+            Id = id;
+            UserId = userId;
+            PostId = postId;
+            ParentId = parentId;
+            Body = body;
+            Votes = votes;
+            CreationDate = creationDate;
+            WasUpdated = wasUpdated;
+            WasDeleted = wasDeleted;
+        }
         #endregion
 
         #region Publics

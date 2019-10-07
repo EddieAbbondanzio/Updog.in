@@ -3,23 +3,13 @@ using System.Threading.Tasks;
 using Updog.Domain;
 
 namespace Updog.Domain {
-    public abstract class DatabaseRepo {
-        #region Properties
-        protected DbConnection Connection => context.Connection;
-        #endregion
-
-        #region Fields
-        private DatabaseContext context;
-        #endregion
-
+    public abstract class DatabaseRepo : DatabaseInteractor {
         #region Constructor(s)
-        public DatabaseRepo(IDatabase database) {
-            this.context = database.GetContext();
-        }
+        public DatabaseRepo(IDatabase database) : base(database) { }
         #endregion
 
         #region Privates
-        protected TRepo GetRepo<TRepo>() where TRepo : class, IRepo => context.GetRepo<TRepo>();
+        protected TRepo GetRepo<TRepo>() where TRepo : class, IRepo => Context.GetRepo<TRepo>();
         #endregion
     }
 

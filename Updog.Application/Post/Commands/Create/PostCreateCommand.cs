@@ -6,7 +6,7 @@ namespace Updog.Application {
     /// </summary>
     public sealed class PostCreateCommand : AuthenticatedCommand {
         #region Properties
-        public PostCreationData CreationData { get; set; } = null!;
+        public PostCreateData CreationData { get; set; } = null!;
         #endregion
     }
 }
