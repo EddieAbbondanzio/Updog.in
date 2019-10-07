@@ -34,7 +34,10 @@ namespace Updog.Domain {
         /// <summary>
         /// The text of the comment.
         /// </summary>
-        public string Body { get; set; } = "";
+        public string Body {
+            get => body;
+            set { WasUpdated = true; body = value; }
+        }
 
         /// <summary>
         /// The date the comment was made.
@@ -45,12 +48,16 @@ namespace Updog.Domain {
         /// <summary>
         /// Flag to show if the comment was updated.
         /// </summary>
-        public bool WasUpdated { get; set; }
+        public bool WasUpdated { get; private set; }
 
         /// <summary>
         /// Soft delete flag.
         /// </summary>
         public bool WasDeleted { get; set; }
+        #endregion
+
+        #region Fields
+        private string body = "";
         #endregion
 
         #region Publics

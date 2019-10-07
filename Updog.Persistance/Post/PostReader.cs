@@ -18,6 +18,34 @@ namespace Updog.Persistance {
         #endregion
 
         #region Publics
+        public async Task<PostReadView?> FindById(int id, User? user = null) {
+            var post = await Connection.QueryFirstOrDefaultAsync<PostRecord>(
+                @"SELECT * FROM Post
+                ORDER BY Post.CreationDate DESC
+                WHERE WasDeleted = FALSE
+                LIMIT @Limit
+                OFFSET @Offset",
+                new {
+                    Id = id
+                }
+            );
+
+            //Get total count
+            int totalCount = await Connection.ExecuteScalarAsync<int>(
+                "SELECT COUNT(*) FROM Post;"
+            );
+
+            IUserReader userReader = GetReader<IUserReader>();
+            ISpaceReader spaceReader = GetReader<ISpaceReader>();
+
+            PostReadView view = mapper.Map(post);
+
+            view.User = (await userReader.FindById(post.UserId))!;
+            view.Space = (await spaceReader.FindById(post.SpaceId))!;
+
+            return view;
+        }
+
         public async Task<PagedResultSet<PostReadView>> FindByNew(PaginationInfo paging, User? user = null) {
             var posts = await Connection.QueryAsync<PostRecord>(
                 @"SELECT * FROM Post

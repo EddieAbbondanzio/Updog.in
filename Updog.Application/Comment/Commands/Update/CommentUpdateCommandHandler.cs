@@ -33,7 +33,6 @@ namespace Updog.Application {
             }
 
             comment.Body = context.Input.Body;
-            comment.WasUpdated = true;
 
             await commentRepo.Update(comment);
             context.Output.Success(commentMapper.Map(comment));

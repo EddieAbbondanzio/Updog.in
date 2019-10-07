@@ -4,6 +4,14 @@ using Updog.Domain.Paging;
 namespace Updog.Domain {
     public interface IPostReader : IReader<PostReadView> {
         /// <summary>
+        /// Find a post via it's ID.
+        /// </summary>
+        /// <param name="id">The id of the post.</param>
+        /// <param name="user">The user performing the look up.</param>
+        /// <returns>The matching post found.</returns>
+        Task<PostReadView?> FindById(int id, User? user = null);
+
+        /// <summary>
         /// Find posts for a specific user.
         /// </summary>
         /// <param name="username">The username to look for.</param>

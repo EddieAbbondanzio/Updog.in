@@ -7,33 +7,24 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class PostFindByIdQueryHandler : QueryHandler<PostFindByIdQuery> {
         #region Fields
-        private IPostViewMapper postMapper;
+        private IPostReader postReader;
         #endregion
 
         #region Constructor(s)
-        public PostFindByIdQueryHandler(IDatabase database, IPostViewMapper postMapper) : base(database) {
-            this.postMapper = postMapper;
+        public PostFindByIdQueryHandler(IPostReader postReader) {
+            this.postReader = postReader;
         }
         #endregion
 
         #region Publics
         protected async override Task ExecuteQuery(ExecutionContext<PostFindByIdQuery> context) {
-            IPostRepo postRepo = context.Database.GetRepo<IPostRepo>();
-            IVoteRepo voteRepo = context.Database.GetRepo<IVoteRepo>();
+            PostReadView? post = await postReader.FindById(context.Input.PostId);
 
-            Post? post = await postRepo.FindById(context.Input.PostId);
-
-            if (post == null) {
+            if (post != null) {
+                context.Output.Success(post);
+            } else {
                 context.Output.NotFound();
-                return;
             }
-
-            //Pull in the vote if needed.
-            if (context.Input.User != null) {
-                post.Vote = await voteRepo.FindByUserAndPost(context.Input.User.Username, context.Input.PostId);
-            }
-
-            context.Output.Success(postMapper.Map(post));
         }
         #endregion
     }

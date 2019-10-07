@@ -7,29 +7,19 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class PostFindByUserQueryHandler : QueryHandler<PostFindByUserQuery> {
         #region Fields
-        private IPostViewMapper postMapper;
+        private IPostReader postReader;
         #endregion
 
         #region Constructor(s)
-        public PostFindByUserQueryHandler(IDatabase database, IPostViewMapper postMapper) : base(database) {
-            this.postMapper = postMapper;
+        public PostFindByUserQueryHandler(IPostReader postReader) {
+            this.postReader = postReader;
         }
         #endregion
 
         #region Publics
         protected async override Task ExecuteQuery(ExecutionContext<PostFindByUserQuery> context) {
-            IPostRepo postRepo = context.Database.GetRepo<IPostRepo>();
-            IVoteRepo voteRepo = context.Database.GetRepo<IVoteRepo>();
-
-            PagedResultSet<Post> posts = await postRepo.FindByUser(context.Input.Username, context.Input.Paging?.PageNumber ?? 0, context.Input.Paging?.PageSize ?? Post.PageSize);
-
-            if (context.Input.User != null) {
-                foreach (Post p in posts) {
-                    p.Vote = await voteRepo.FindByUserAndPost(context.Input.User.Username, p.Id);
-                }
-            }
-
-            context.Output.Success(new PagedResultSet<PostView>(posts.Items.Select(p => postMapper.Map(p)), posts.Pagination));
+            PagedResultSet<PostReadView> posts = await postReader.FindByUser(context.Input.Username, context.Input.Paging, context.Input.User);
+            context.Output.Success(posts);
         }
         #endregion
     }

@@ -6,19 +6,18 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class SubscribedSpaceQueryHandler : QueryHandler<SubscribedSpaceQuery> {
         #region Fields
-        private ISpaceViewMapper spaceMapper;
+        private ISpaceReader spaceReader;
         #endregion
 
         #region Constructor(s)
-        public SubscribedSpaceQueryHandler(IDatabase database, ISpaceViewMapper spaceMapper) : base(database) {
-            this.spaceMapper = spaceMapper;
+        public SubscribedSpaceQueryHandler(ISpaceReader spaceReader) {
+            this.spaceReader = spaceReader;
         }
         #endregion
 
         #region Publics
         protected async override Task ExecuteQuery(ExecutionContext<SubscribedSpaceQuery> context) {
-            ISpaceRepo spaceRepo = context.Database.GetRepo<ISpaceRepo>();
-            var spaces = await spaceRepo.FindSubscribed(context.Input.User);
+            var spaces = await spaceReader.FindSubscribed(context.Input.User);
             context.Output.Success(spaces);
         }
         #endregion

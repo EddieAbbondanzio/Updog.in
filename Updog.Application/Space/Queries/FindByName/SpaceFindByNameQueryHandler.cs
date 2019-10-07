@@ -6,25 +6,23 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class SpaceFindByNameQueryHandler : QueryHandler<SpaceFindByNameQuery> {
         #region Fields
-        private ISpaceViewMapper spaceMapper;
+        private ISpaceReader spaceReader;
         #endregion
 
         #region Constructor(s)
-        public SpaceFindByNameQueryHandler(IDatabase database, ISpaceViewMapper spaceMapper) : base(database) {
-            this.spaceMapper = spaceMapper;
+        public SpaceFindByNameQueryHandler(ISpaceReader spaceReader) {
+            this.spaceReader = spaceReader;
         }
         #endregion
 
         #region Publics
         protected async override Task ExecuteQuery(ExecutionContext<SpaceFindByNameQuery> context) {
-            ISpaceRepo spaceRepo = context.Database.GetRepo<ISpaceRepo>();
+            SpaceReadView? space = await spaceReader.FindByName(context.Input.Name);
 
-            Space? space = await spaceRepo.FindByName(context.Input.Name);
-
-            if (space == null) {
-                context.Output.NotFound($"No space with name: {context.Input.Name} found.");
+            if (space != null) {
+                context.Output.Success(space);
             } else {
-                context.Output.Success(spaceMapper.Map(space));
+                context.Output.NotFound();
             }
         }
         #endregion
