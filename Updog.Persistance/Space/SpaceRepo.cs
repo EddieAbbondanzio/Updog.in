@@ -24,11 +24,6 @@ namespace Updog.Persistance {
         #endregion
 
         #region Publics
-        /// <summary>
-        /// Find a space by it's numeric ID.
-        /// </summary>
-        /// <param name="id">The ID to look for.</param>
-        /// <returns>The space found (if any).</returns>
         public override async Task<Space?> FindById(int id) {
             var space = (await Connection.QueryAsync<SpaceRecord>(
                 @"SELECT * FROM Space WHERE Space.Id = @Id",
@@ -38,12 +33,7 @@ namespace Updog.Persistance {
             return space != null ? mapper.Map(space) : null;
         }
 
-        /// <summary>
-        /// Find a space by it's unique name..
-        /// </summary>
-        /// <param name="name">The name of the space to look for.</param>
-        /// <returns>The space found (if any).</returns>
-        public override async Task<Space?> FindByName(string name) {
+        public async Task<Space?> FindByName(string name) {
             var space = (await Connection.QueryAsync<SpaceRecord>(
                 @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id WHERE LOWER(Space.Name) = LOWER(@Name)",
                 new { Name = name }
@@ -52,29 +42,22 @@ namespace Updog.Persistance {
             return space != null ? mapper.Map(space) : null;
         }
 
-        /// <summary>
-        /// Get a list of spaces.
-        /// </summary>
-        /// <param name="pageNumber">The 0 based index of the page.</param>
-        /// <param name="pageSize">The page size.</param>
-        /// <returns>The pages found.</returns>
-        public override async Task<PagedResultSet<Space>> Find(int pageNumber, int pageSize) {
+        public async Task<PagedResultSet<Space>> Find(PaginationInfo paging) {
             var spaces = await Connection.QueryAsync<SpaceRecord>(
                 @"SELECT * FROM Space LIMIT @Limit OFFSET @Offset",
-                BuildPaginationParams(pageNumber, pageSize)
+                new {
+                    Limit = paging.PageSize,
+                    Offset = paging.Offset
+                }
             );
 
             int totalCount = await Connection.ExecuteScalarAsync<int>(
                 "SELECT COUNT(*) FROM Space"
             );
 
-            return new PagedResultSet<Space>(spaces.Select(s => mapper.Map(s)), new PaginationInfo(pageNumber, Math.Min(spaces.Count(), pageSize), totalCount));
+            return new PagedResultSet<Space>(spaces.Select(s => mapper.Map(s)), new PaginationInfo(paging.PageNumber, Math.Min(spaces.Count(), paging.PageSize), totalCount));
         }
 
-        /// <summary>
-        /// Find all of the default spaces.
-        /// </summary>
-        /// <returns>The default spaces.</returns>
         public async Task<IEnumerable<Space>> FindDefault() {
             var defaults = await Connection.QueryAsync<SpaceRecord>(
                 @"SELECT * FROM Space WHERE IsDefault = TRUE"
@@ -92,10 +75,6 @@ namespace Updog.Persistance {
             return subscribes.Select(s => mapper.Map(s));
         }
 
-        /// <summary>
-        /// Add a new space to the database.
-        /// </summary>
-        /// <param name="entity">The space to add.</param>
         public override async Task Add(Space entity) {
             SpaceRecord rec = mapper.Reverse(entity);
 
@@ -118,10 +97,6 @@ namespace Updog.Persistance {
             );
         }
 
-        /// <summary>
-        /// Update an existing space in the database.
-        /// </summary>
-        /// <param name="entity">The space to update.</param>
         public override async Task Update(Space entity) {
             await Connection.ExecuteAsync(
                 @"UPDATE Space SET 
@@ -135,10 +110,6 @@ namespace Updog.Persistance {
             );
         }
 
-        /// <summary>
-        /// Delete an existing space from the database.
-        /// </summary>
-        /// <param name="entity">The space to delete.</param>
         public override async Task Delete(Space entity) {
             await Connection.ExecuteAsync(
                 @"DELETE FROM Space WHERE Id = @Id",

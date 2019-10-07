@@ -12,10 +12,9 @@ namespace Updog.Domain {
         /// <summary>
         /// Get a list of spaces.
         /// </summary>
-        /// <param name="pageNumber">The 0 based index of the page.</param>
-        /// <param name="pageSize">The page size.</param>
+        /// <param name="paging">Pagination details.</param>
         /// <returns>The pages found.</returns>
-        Task<PagedResultSet<Space>> Find(int pageNumber, int pageSize);
+        Task<PagedResultSet<Space>> Find(PaginationInfo paging);
 
         /// <summary>
         /// Find a space via it's unique name.
