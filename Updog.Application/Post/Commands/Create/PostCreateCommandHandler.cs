@@ -41,14 +41,13 @@ namespace Updog.Application {
             await postRepo.Add(post);
 
             Vote upvote = new Vote() {
-                User = context.Input.User,
+                UserId = context.Input.User.Id,
                 ResourceId = post.Id,
                 ResourceType = VotableEntityType.Post,
                 Direction = VoteDirection.Up
             };
 
             await voteRepo.Add(upvote);
-            post.Vote = upvote;
 
             context.Output.Success(postMapper.Map(post));
         }

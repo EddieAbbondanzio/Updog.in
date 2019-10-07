@@ -11,12 +11,6 @@ namespace Updog.Application {
         public TAction Input { get; }
 
         /// <summary>
-        /// Active connection with the database.
-        /// </summary>
-        /// <value></value>
-        public DatabaseContext Database { get; }
-
-        /// <summary>
         /// Output port to send data back to.
         /// </summary>
         public IOutputPort Output { get; }
@@ -27,11 +21,9 @@ namespace Updog.Application {
         /// Create a new ExecutionContext
         /// </summary>
         /// <param name="input">The action input</param>
-        /// <param name="database">The active database context.</param>
         /// <param name="output">The output port to return data to.</param>
-        public ExecutionContext(TAction input, DatabaseContext database, IOutputPort output) {
+        public ExecutionContext(TAction input, IOutputPort output) {
             Input = input;
-            Database = database;
             Output = output;
         }
         #endregion

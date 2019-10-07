@@ -27,7 +27,7 @@ namespace Updog.Application {
                 return;
             }
 
-            Vote newVote = voteFactory.ForComment(context.Input.User, context.Input.CommentId, context.Input.Vote);
+            Vote newVote = voteFactory.CreateForComment(context.Input.User, context.Input.CommentId, context.Input.Vote);
             comment.AddVote(newVote.Direction);
 
             await voteRepo.Add(newVote);

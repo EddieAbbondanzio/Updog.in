@@ -46,7 +46,7 @@ namespace Updog.Application {
             await commentRepo.Add(comment);
 
             Vote upvote = new Vote() {
-                User = context.Input.User,
+                UserId = context.Input.User.Id,
                 ResourceId = comment.Id,
                 ResourceType = VotableEntityType.Comment,
                 Direction = VoteDirection.Up
@@ -55,7 +55,6 @@ namespace Updog.Application {
             await postRepo.Update(post);
             await voteRepo.Add(upvote);
 
-            comment.Vote = upvote;
 
             context.Output.Success(commentMapper.Map(comment));
         }

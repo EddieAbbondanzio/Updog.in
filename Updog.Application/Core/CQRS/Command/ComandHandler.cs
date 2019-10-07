@@ -10,7 +10,6 @@ namespace Updog.Application {
     /// </summary>
     public abstract class CommandHandler<TCommand> : IActionHandler<TCommand> where TCommand : class, ICommand {
         #region Fields
-        private IDatabase database;
         /// <summary>
         /// The validator to use on the input before handling it.
         /// </summary>
@@ -18,9 +17,7 @@ namespace Updog.Application {
         #endregion
 
         #region Constructor(s)
-        public CommandHandler(IDatabase database) {
-            this.database = database;
-
+        public CommandHandler() {
             Validate? attribute = GetValidateAttribute();
             if (attribute != null) {
                 validator = GetValidatorInstance(attribute.Validator);
@@ -41,12 +38,7 @@ namespace Updog.Application {
             }
 
             // Finally, execute the command.
-            using (var context = database.GetContext()) {
-                using (var transaction = context.Connection.BeginTransaction()) {
-                    await ExecuteCommand(new ExecutionContext<TCommand>(command, context, outputPort));
-                    transaction.Commit();
-                }
-            }
+            await ExecuteCommand(new ExecutionContext<TCommand>(command, outputPort));
         }
         #endregion
 

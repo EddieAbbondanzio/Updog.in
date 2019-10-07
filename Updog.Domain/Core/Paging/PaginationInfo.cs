@@ -21,6 +21,11 @@ namespace Updog.Domain.Paging {
         /// The total number of pages available based on the current page size.
         /// </summary>
         public int TotalRecordCount { get; }
+
+        /// <summary>
+        /// The offset of the first record.
+        /// </summary>
+        public int Offset => PageNumber * PageSize;
         #endregion
 
         #region Constructor(s)

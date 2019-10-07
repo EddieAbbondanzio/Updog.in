@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.Common;
 using Npgsql;
-using Updog.Application;
+using Updog.Domain;
 
 namespace Updog.Persistance {
     /// <summary>

@@ -29,12 +29,7 @@ namespace Updog.Domain {
         /// <summary>
         /// The parent comment (if null it is a top level comment).
         /// </summary>
-        public Comment? Parent { get; set; }
-
-        /// <summary>
-        /// The comment children.
-        /// </summary>
-        public List<Comment> Children { get; set; } = new List<Comment>();
+        public int ParentId { get; set; }
 
         /// <summary>
         /// The text of the comment.
@@ -59,20 +54,6 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
-        /// <summary>
-        /// Get the child count of every root and nested child comment.
-        /// </summary>
-        public int ChildCount() {
-            int count = Children.Count;
-
-            foreach (Comment child in Children) {
-                count += child.ChildCount();
-            }
-
-            return count;
-        }
-
-
         /// <summary>
         /// Check to see if the comment is equal to another object.
         /// </summary>
