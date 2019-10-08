@@ -27,7 +27,6 @@ namespace Updog.Domain {
             return p;
         }
 
-
         public async Task<Post> Update(PostUpdateData updateData, User user) {
             Post? p = await repo.FindById(updateData.PostId);
 

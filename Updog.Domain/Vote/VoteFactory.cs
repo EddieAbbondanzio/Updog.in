@@ -1,6 +1,6 @@
 using Updog.Domain;
 
-namespace Updog.Application {
+namespace Updog.Domain {
     public sealed class VoteFactory : IVoteFactory {
         #region Publics
         public Vote CreateForComment(User user, int commentId, VoteDirection direction) => new Vote() {

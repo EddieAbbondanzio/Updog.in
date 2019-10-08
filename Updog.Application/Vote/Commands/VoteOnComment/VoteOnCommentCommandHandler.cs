@@ -4,34 +4,20 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class VoteOnCommentCommandHandler : CommandHandler<VoteOnCommentCommand> {
         #region Fields
-        private IVoteFactory voteFactory;
+        private IVoteService service;
         #endregion
 
         #region Constructor(s)
-        public VoteOnCommentCommandHandler(IVoteFactory voteFactory, IDatabase database) : base(database) {
-            this.voteFactory = voteFactory;
+        public VoteOnCommentCommandHandler(IVoteService service) {
+            this.service = service;
         }
         #endregion
 
         #region Private
         [Validate(typeof(VoteOnCommentCommandValidator))]
-        protected async override Task ExecuteCommand(ExecutionContext<VoteOnCommentCommand> context) {
-            IVoteRepo voteRepo = context.Database.GetRepo<IVoteRepo>();
-            ICommentRepo commentRepo = context.Database.GetRepo<ICommentRepo>();
-
-            // Pull in the comment.
-            Comment? comment = await commentRepo.FindById(context.Input.CommentId);
-
-            if (comment == null) {
-                context.Output.BadInput($"No comment with Id: {context.Input.CommentId} exist.");
-                return;
-            }
-
-            Vote newVote = voteFactory.CreateForComment(context.Input.User, context.Input.CommentId, context.Input.Vote);
-            comment.AddVote(newVote.Direction);
-
-            await voteRepo.Add(newVote);
-            await commentRepo.Update(comment);
+        protected async override Task<CommandResult> ExecuteCommand(VoteOnCommentCommand command) {
+            Vote v = await service.VoteOnComment(new VoteOnCommentData(command.CommentId, command.Vote), command.User);
+            return new InsertResult(true, v.Id);
         }
         #endregion
     }
