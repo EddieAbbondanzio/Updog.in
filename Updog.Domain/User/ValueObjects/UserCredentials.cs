@@ -1,5 +1,5 @@
 namespace Updog.Domain {
-    public class UserCredentials {
+    public class UserCredentials : IValueObject {
         #region Properties
         public string Username { get; }
 

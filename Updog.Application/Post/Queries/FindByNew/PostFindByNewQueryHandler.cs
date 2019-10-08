@@ -5,7 +5,7 @@ using Updog.Domain.Paging;
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class PostFindByNewQueryHandler : QueryHandler<PostFindByNewQuery> {
+    public sealed class PostFindByNewQueryHandler : QueryHandler<PostFindByNewQuery, PagedResultSet<PostReadView>> {
         #region Fields
         private IPostReader postReader;
         #endregion
@@ -17,10 +17,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        protected async override Task ExecuteQuery(ExecutionContext<PostFindByNewQuery> context) {
-            PagedResultSet<PostReadView> posts = await postReader.FindByNew(context.Input.Paging, context.Input.User);
-            context.Output.Success(posts);
-        }
+        protected async override Task<PagedResultSet<PostReadView>> ExecuteQuery(PostFindByNewQuery query) => await postReader.FindByNew(query.Paging, query.User);
         #endregion
     }
 }

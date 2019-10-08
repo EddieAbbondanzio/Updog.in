@@ -1,5 +1,5 @@
 namespace Updog.Domain {
-    public sealed class VoteStats {
+    public sealed class VoteStats : IValueObject {
         #region Properties
         public int Upvotes { get; private set; }
         public int Downvotes { get; private set; }

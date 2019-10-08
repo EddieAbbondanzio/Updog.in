@@ -5,13 +5,11 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class PostUpdateCommandHandler : CommandHandler<PostUpdateCommand> {
         #region Fields
-        private IPostViewMapper postMapper;
-
         private PermissionHandler<Post> permissionHandler;
         #endregion
 
         #region Constructor(s)
-        public PostUpdateCommandHandler(IDatabase database, IPostViewMapper postMapper, PermissionHandler<Post> permissionHandler) : base(database) {
+        public PostUpdateCommandHandler(IDatabase database, IPostViewMapper postMapper, PermissionHandler<Post> permissionHandler) {
             this.postMapper = postMapper;
             this.permissionHandler = permissionHandler;
         }

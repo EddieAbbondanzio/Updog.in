@@ -1,5 +1,5 @@
 namespace Updog.Domain {
-    public sealed class UserRegistration {
+    public sealed class UserRegistration : IValueObject {
         #region Properties
         /// <summary>
         /// The username they want.

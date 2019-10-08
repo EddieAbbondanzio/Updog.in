@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Updog.Application;
+using Updog.Domain;
 
 namespace Updog.Infrastructure {
     /// <summary>
