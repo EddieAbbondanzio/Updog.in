@@ -5,7 +5,7 @@ using Updog.Domain.Paging;
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class CommentFindByIdQueryHandler : QueryHandler<CommentFindByIdQuery> {
+    public sealed class CommentFindByIdQueryHandler : QueryHandler<CommentFindByIdQuery, CommentReadView?> {
         #region Fields
         private ICommentReader commentReader;
         #endregion
@@ -17,15 +17,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        protected async override Task ExecuteQuery(ExecutionContext<CommentFindByIdQuery> context) {
-            CommentReadView? comment = await commentReader.FindById(context.Input.CommentId, context.Input.User);
-
-            if (comment == null) {
-                context.Output.NotFound();
-            } else {
-                context.Output.Success(comment);
-            }
-        }
+        protected async override Task<CommentReadView?> ExecuteQuery(CommentFindByIdQuery query) => await commentReader.FindById(query.CommentId, query.User);
         #endregion
     }
 }

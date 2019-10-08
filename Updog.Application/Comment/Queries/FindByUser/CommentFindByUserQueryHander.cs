@@ -5,7 +5,7 @@ using Updog.Domain.Paging;
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class CommentFindByUserQueryHandler : QueryHandler<CommentFindByUserQuery> {
+    public sealed class CommentFindByUserQueryHandler : QueryHandler<CommentFindByUserQuery, PagedResultSet<CommentReadView>> {
         #region Fields
         private ICommentReader commentReader;
         #endregion
@@ -17,10 +17,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        protected async override Task ExecuteQuery(ExecutionContext<CommentFindByUserQuery> context) {
-            PagedResultSet<CommentReadView> comments = await commentReader.FindByUser(context.Input.Username, context.Input.Paging, context.Input.User);
-            context.Output.Success(comments);
-        }
+        protected async override Task<PagedResultSet<CommentReadView>> ExecuteQuery(CommentFindByUserQuery query) => await commentReader.FindByUser(query.Username, query.Paging, query.User);
         #endregion
     }
 }

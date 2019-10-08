@@ -49,6 +49,7 @@ namespace Updog.Domain {
         public Comment(CommentCreateData creationData, User user) {
             PostId = creationData.PostId;
             Body = creationData.Body;
+            ParentId = creationData.ParentId;
             CreationDate = DateTime.UtcNow;
             UserId = user.Id;
         }
@@ -67,6 +68,10 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
+        public void Delete() {
+            this.WasDeleted = true;
+        }
+
         /// <summary>
         /// Check to see if the comment is equal to another object.
         /// </summary>
@@ -95,6 +100,5 @@ namespace Updog.Domain {
         /// <returns>The unique hashcode.</returns>
         public override int GetHashCode() => Id;
         #endregion
-
     }
 }

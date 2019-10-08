@@ -5,37 +5,20 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class CommentUpdateCommandHandler : CommandHandler<CommentUpdateCommand> {
         #region Fields
-        private PermissionHandler<Comment> permissionHandler;
-        private ICommentViewMapper commentMapper;
+        private ICommentService service;
         #endregion
 
         #region Constructor(s)
-        public CommentUpdateCommandHandler(IDatabase database, PermissionHandler<Comment> permissionHandler, ICommentViewMapper commentMapper) : base(database) {
-            this.permissionHandler = permissionHandler;
-            this.commentMapper = commentMapper;
+        public CommentUpdateCommandHandler(ICommentService service) {
+            this.service = service;
         }
         #endregion
 
         #region Publics
         [Validate(typeof(CommentUpdateCommandValidator))]
-        protected async override Task ExecuteCommand(ExecutionContext<CommentUpdateCommand> context) {
-            ICommentRepo commentRepo = context.Database.GetRepo<ICommentRepo>();
-            Comment? comment = await commentRepo.FindById(context.Input.CommentId);
-
-            if (comment == null) {
-                context.Output.NotFound();
-                return;
-            }
-
-            if (!(await this.permissionHandler.HasPermission(context.Input.User, PermissionAction.UpdateComment, comment))) {
-                context.Output.InvalidOperation();
-                return;
-            }
-
-            comment.Body = context.Input.Body;
-
-            await commentRepo.Update(comment);
-            context.Output.Success(commentMapper.Map(comment));
+        protected async override Task<CommandResult> ExecuteCommand(CommentUpdateCommand command) {
+            Comment c = await service.Delete(new CommentDeleteData(command.CommentId), command.User);
+            return new CommandResult(true);
         }
         #endregion
     }

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Updog.Application {
+namespace Updog.Domain {
     /// <summary>
     /// Bus for propogating events to help keep modules loosely coupled with each other.
     /// </summary>

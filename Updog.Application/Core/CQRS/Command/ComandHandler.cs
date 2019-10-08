@@ -8,7 +8,7 @@ namespace Updog.Application {
     /// Command to create, update, or delete resource(s). Automatically wraps the
     /// action in a transaction.
     /// </summary>
-    public abstract class CommandHandler<TCommand> : IActionHandler<TCommand> where TCommand : class, ICommand {
+    public abstract class CommandHandler<TCommand> : IActionHandler<TCommand, CommandResult> where TCommand : class, ICommand {
         #region Fields
         /// <summary>
         /// The validator to use on the input before handling it.
@@ -26,24 +26,24 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        public async Task Execute(TCommand command, IOutputPort outputPort) {
+        public async Task<CommandResult> Execute(TCommand command) {
             // If the command handler has a validator, check to see if input is valid first.
             if (validator != null) {
                 var result = await validator.ValidateAsync(command);
 
                 if (!result.IsValid) {
-                    outputPort.BadInput(result);
-                    return;
+                    return new CommandResult(false);
                 }
             }
 
             // Finally, execute the command.
-            await ExecuteCommand(new ExecutionContext<TCommand>(command, outputPort));
+            await ExecuteCommand(command);
+            return new CommandResult(true);
         }
         #endregion
 
         #region Privates
-        protected abstract Task ExecuteCommand(ExecutionContext<TCommand> context);
+        protected abstract Task<CommandResult> ExecuteCommand(TCommand command);
 
         /// <summary>
         /// Get the custom validate attrbitute from the handle method

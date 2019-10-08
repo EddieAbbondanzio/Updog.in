@@ -4,15 +4,13 @@ namespace Updog.Application {
     /// <summary>
     /// Interface for read actions to implement.
     /// </summary>
-    public abstract class QueryHandler<TQuery> : IActionHandler<TQuery> where TQuery : class, IQuery {
+    public abstract class QueryHandler<TQuery, TOutput> : IActionHandler<TQuery, TOutput> where TQuery : class, IQuery {
         #region Publics
-        public async Task Execute(TQuery query, IOutputPort outputPort) {
-            await ExecuteQuery(new ExecutionContext<TQuery>(query, outputPort));
-        }
+        public async Task<TOutput> Execute(TQuery query) => await ExecuteQuery(query);
         #endregion
 
         #region Privates
-        protected abstract Task ExecuteQuery(ExecutionContext<TQuery> context);
+        protected abstract Task<TOutput> ExecuteQuery(TQuery query);
         #endregion
     }
 }

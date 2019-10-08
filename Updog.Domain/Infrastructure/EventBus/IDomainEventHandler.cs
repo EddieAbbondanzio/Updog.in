@@ -1,7 +1,7 @@
 
 using System.Threading.Tasks;
 
-namespace Updog.Application {
+namespace Updog.Domain {
     /// <summary>
     /// Handler to process a domain event.
     /// </summary>
