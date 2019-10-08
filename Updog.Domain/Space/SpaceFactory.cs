@@ -1,7 +1,7 @@
 using System;
 using Updog.Domain;
 
-namespace Updog.Application {
+namespace Updog.Domain {
     public sealed class SpaceFactory : ISpaceFactory {
         public Space Create(SpaceCreateData creationData, User user) => new Space() {
             Name = creationData.Name,

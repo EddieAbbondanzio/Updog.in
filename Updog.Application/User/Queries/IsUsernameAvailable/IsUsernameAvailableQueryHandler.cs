@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class IsUsernameAvailableQueryHandler : QueryHandler<IsUsernameAvailableQuery> {
+    public sealed class IsUsernameAvailableQueryHandler : QueryHandler<IsUsernameAvailableQuery, bool> {
         #region Fields
         private IUserReader userReader;
         #endregion
@@ -15,15 +15,7 @@ namespace Updog.Application {
 
         #region Publics
         [Validate(typeof(IsUsernameAvailableQueryValidator))]
-        protected async override Task ExecuteQuery(ExecutionContext<IsUsernameAvailableQuery> context) {
-            UserReadView? user = await userReader.FindByUsername(context.Input.Username);
-
-            if (user == null) {
-                context.Output.NotFound($"No user with username {context.Input.Username} found");
-            } else {
-                context.Output.Success();
-            }
-        }
+        protected async override Task<bool> ExecuteQuery(IsUsernameAvailableQuery command) => (await userReader.FindByUsername(command.Username)) == null;
         #endregion
     }
 }

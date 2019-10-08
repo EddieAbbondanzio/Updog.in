@@ -5,7 +5,7 @@ using Updog.Domain.Paging;
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class SpaceFindQueryHandler : QueryHandler<SpaceFindQuery> {
+    public sealed class SpaceFindQueryHandler : QueryHandler<SpaceFindQuery, PagedResultSet<SpaceReadView>> {
         #region Fields
         private ISpaceReader spaceReader;
         #endregion
@@ -17,10 +17,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        protected async override Task ExecuteQuery(ExecutionContext<SpaceFindQuery> context) {
-            var spaces = await spaceReader.Find(context.Input.Paging);
-            context.Output.Success(spaces);
-        }
+        protected async override Task<PagedResultSet<SpaceReadView>> ExecuteQuery(SpaceFindQuery command) => await spaceReader.Find(command.Paging);
         #endregion
     }
 }

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class SpaceFindByNameQueryHandler : QueryHandler<SpaceFindByNameQuery> {
+    public sealed class SpaceFindByNameQueryHandler : QueryHandler<SpaceFindByNameQuery, SpaceReadView?> {
         #region Fields
         private ISpaceReader spaceReader;
         #endregion
@@ -16,15 +16,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        protected async override Task ExecuteQuery(ExecutionContext<SpaceFindByNameQuery> context) {
-            SpaceReadView? space = await spaceReader.FindByName(context.Input.Name);
-
-            if (space != null) {
-                context.Output.Success(space);
-            } else {
-                context.Output.NotFound();
-            }
-        }
+        protected async override Task<SpaceReadView?> ExecuteQuery(SpaceFindByNameQuery command) => await spaceReader.FindByName(command.Name);
         #endregion
     }
 }

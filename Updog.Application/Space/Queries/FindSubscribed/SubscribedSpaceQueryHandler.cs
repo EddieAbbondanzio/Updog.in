@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class SubscribedSpaceQueryHandler : QueryHandler<SubscribedSpaceQuery> {
+    public sealed class SubscribedSpaceQueryHandler : QueryHandler<SubscribedSpaceQuery, IEnumerable<SpaceReadView>> {
         #region Fields
         private ISpaceReader spaceReader;
         #endregion
@@ -16,10 +16,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        protected async override Task ExecuteQuery(ExecutionContext<SubscribedSpaceQuery> context) {
-            var spaces = await spaceReader.FindSubscribed(context.Input.User);
-            context.Output.Success(spaces);
-        }
+        protected async override Task<IEnumerable<SpaceReadView>> ExecuteQuery(SubscribedSpaceQuery command) => await spaceReader.FindSubscribed(command.User);
         #endregion
     }
 }

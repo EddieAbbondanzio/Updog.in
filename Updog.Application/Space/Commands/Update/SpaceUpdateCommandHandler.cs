@@ -4,37 +4,20 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class SpaceUpdateCommandHandler : CommandHandler<SpaceUpdateCommand> {
         #region Fields
-        private PermissionHandler<Space> spacePermissionHandler;
-        private ISpaceViewMapper spaceMapper;
+        private ISpaceService service;
         #endregion
 
         #region Constructor(s)
-        public SpaceUpdateCommandHandler(IDatabase database, PermissionHandler<Space> spacePermissionHandler, ISpaceViewMapper spaceMapper) : base(database) {
-            this.spacePermissionHandler = spacePermissionHandler;
-            this.spaceMapper = spaceMapper;
+        public SpaceUpdateCommandHandler(ISpaceService service) {
+            this.service = service;
         }
         #endregion
 
         #region Publics
         [Validate(typeof(SpaceUpdateCommandValidator))]
-        protected async override Task ExecuteCommand(ExecutionContext<SpaceUpdateCommand> context) {
-            ISpaceRepo spaceRepo = context.Database.GetRepo<ISpaceRepo>();
-
-            Space? s = await spaceRepo.FindByName(context.Input.Name);
-
-            if (s == null) {
-                context.Output.BadInput($"No space with name: {context.Input.Name} exists");
-                return;
-            }
-
-            if (!(await this.spacePermissionHandler.HasPermission(context.Input.User, PermissionAction.UpdateSpace, s))) {
-                context.Output.Unauthorized("Unauthorized");
-                return;
-            }
-
-            s.Description = context.Input.Description;
-            await spaceRepo.Update(s);
-            context.Output.Success(spaceMapper.Map(s));
+        protected async override Task<CommandResult> ExecuteCommand(SpaceUpdateCommand command) {
+            Space s = await service.Update(new SpaceUpdateData(command.Name, command.Description), command.User);
+            return new CommandResult(true);
         }
         #endregion
     }
