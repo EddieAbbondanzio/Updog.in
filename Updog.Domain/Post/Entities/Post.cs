@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 
 namespace Updog.Domain {
     /// <summary>
@@ -24,35 +25,17 @@ namespace Updog.Domain {
 
         #region Properties
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public int UserId { get; }
         public VoteStats Votes { get; set; } = new VoteStats();
         VotableEntityType IVotableEntity.VotableEntityType => VotableEntityType.Post;
-        public int SpaceId { get; set; }
-        public PostType Type { get; set; }
-        public string Title { get; set; } = "";
-        public string Body {
-            get => body;
-            set {
-                if (Type == PostType.Link) {
-                    throw new InvalidOperationException();
-                }
-
-                if (WasDeleted) {
-                    throw new InvalidOperationException("Post was already deleted");
-                }
-
-                WasUpdated = true;
-                body = value;
-            }
-        }
+        public int SpaceId { get; }
+        public PostType Type { get; }
+        public string Title { get; }
+        public string Body { get; private set; } = "";
         public DateTime CreationDate { get; set; } = DateTime.UtcNow;
         public bool WasUpdated { get; private set; }
         public bool WasDeleted { get; private set; }
         public int CommentCount { get; set; }
-        #endregion
-
-        #region Fields
-        private string body = "";
         #endregion
 
         #region Constructor(s)
@@ -62,6 +45,10 @@ namespace Updog.Domain {
             Body = creationData.Body;
             SpaceId = creationData.SpaceId;
             UserId = user.Id;
+
+            if (Type == PostType.Link && !Regex.IsMatch(Body, RegexPattern.UrlProtocol)) {
+                Body = $"http://{Body}";
+            }
         }
 
         public Post(int id, int userId, int spaceId, PostType type, string title, string body, DateTime creationDate, int commentCount, VoteStats votes, bool wasUpdated = false, bool wasDeleted = false) {
@@ -76,10 +63,31 @@ namespace Updog.Domain {
             Votes = votes;
             WasUpdated = wasUpdated;
             WasDeleted = wasDeleted;
+
+            if (Type == PostType.Link && !Regex.IsMatch(Body, RegexPattern.UrlProtocol)) {
+                Body = $"http://{Body}";
+            }
         }
         #endregion
 
         #region Publics
+        public void Update(PostUpdateData updateData) {
+            if (Type == PostType.Link) {
+                throw new InvalidOperationException();
+            }
+
+            if (WasDeleted) {
+                throw new InvalidOperationException("Post was already deleted");
+            }
+
+            WasUpdated = true;
+            Body = updateData.Body;
+        }
+
+        public void Delete() {
+            WasDeleted = true;
+        }
+
         /// <summary>
         /// Check t osee if the post matches another object.
         /// </summary>

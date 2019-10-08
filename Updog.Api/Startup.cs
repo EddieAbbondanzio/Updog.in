@@ -108,8 +108,8 @@ namespace Updog.Api {
 
             services.AddTransient<IPostRepo, PostRepo>();
             services.AddTransient<IPostReader, PostReader>();
+            services.AddTransient<IPostService, PostService>();
             services.AddSingleton<IPostMapper, PostMapper>();
-            services.AddSingleton<IPostViewMapper, PostViewMapper>();
             services.AddSingleton<IPostFactory, PostFactory>();
             services.AddSingleton<PermissionHandler<Post>, PostPermissionHandler>();
             services.AddTransient<CommandHandler<PostCreateCommand>, PostCreateCommandHandler>();
@@ -122,6 +122,7 @@ namespace Updog.Api {
 
             services.AddTransient<ICommentRepo, CommentRepo>();
             services.AddTransient<ICommentReader, CommentReader>();
+            services.AddTransient<ICommentService, CommentService>();
             services.AddSingleton<ICommentMapper, CommentMapper>();
             services.AddSingleton<PermissionHandler<Comment>, CommentPermissionHandler>();
             services.AddSingleton<ICommentFactory, CommentFactory>();

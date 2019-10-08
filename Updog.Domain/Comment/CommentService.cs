@@ -35,7 +35,7 @@ namespace Updog.Domain {
                 throw new InvalidOperationException();
             }
 
-            c.Body = updateData.Body;
+            c.Update(updateData.Body);
             await repo.Update(c);
 
             await bus.Dispatch(new CommentUpdateEvent(c));

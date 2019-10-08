@@ -20,29 +20,15 @@ namespace Updog.Domain {
 
         #region Properties
         public int Id { get; set; }
-        public int UserId { get; set; }
-        public VoteStats Votes { get; set; } = new VoteStats();
+        public int UserId { get; }
+        public VoteStats Votes { get; }
         VotableEntityType IVotableEntity.VotableEntityType => VotableEntityType.Comment;
-        public int PostId { get; set; }
-        public int ParentId { get; set; }
-        public string Body {
-            get => body;
-            set {
-                if (WasDeleted) {
-                    throw new InvalidOperationException();
-                }
-
-                WasUpdated = true;
-                body = value;
-            }
-        }
-        public DateTime CreationDate { get; set; } = DateTime.UtcNow;
+        public int PostId { get; }
+        public int ParentId { get; }
+        public string Body { get; private set; }
+        public DateTime CreationDate { get; }
         public bool WasUpdated { get; private set; }
         public bool WasDeleted { get; private set; }
-        #endregion
-
-        #region Fields
-        private string body = "";
         #endregion
 
         #region Constructor(s)
@@ -52,6 +38,7 @@ namespace Updog.Domain {
             ParentId = creationData.ParentId;
             CreationDate = DateTime.UtcNow;
             UserId = user.Id;
+            Votes = new VoteStats();
         }
 
         public Comment(int id, int userId, int postId, int parentId, string body, VoteStats votes, DateTime creationDate, bool wasUpdated, bool wasDeleted) {
@@ -68,8 +55,18 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
+        public void Update(string body) {
+            if (WasDeleted) {
+                throw new InvalidOperationException();
+            }
+
+            WasUpdated = true;
+            Body = body;
+        }
+
         public void Delete() {
             this.WasDeleted = true;
+            Body = "[deleted]";
         }
 
         /// <summary>

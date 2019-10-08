@@ -5,51 +5,20 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class PostCreateCommandHandler : CommandHandler<PostCreateCommand> {
         #region Fields
-        private IPostFactory postFactory;
-
-        private IPostViewMapper postMapper;
+        private IPostService service;
         #endregion
 
         #region Constructor(s)
-        public PostCreateCommandHandler(IDatabase database, IPostFactory postFactory, IPostViewMapper postMapper) : base(database) {
-            this.postFactory = postFactory;
-            this.postMapper = postMapper;
+        public PostCreateCommandHandler(IPostService service) {
+            this.service = service;
         }
         #endregion
 
         #region Publics
         [Validate(typeof(PostCreateCommandValidator))]
-        protected async override Task ExecuteCommand(ExecutionContext<PostCreateCommand> context) {
-            ISpaceRepo spaceRepo = context.Database.GetRepo<ISpaceRepo>();
-            IPostRepo postRepo = context.Database.GetRepo<IPostRepo>();
-            IVoteRepo voteRepo = context.Database.GetRepo<IVoteRepo>();
-
-            Space? space = await spaceRepo.FindByName(context.Input.CreationData.SpaceId);
-            if (space == null) {
-                context.Output.InvalidOperation($"No space with name ${context.Input.CreationData.SpaceId} found.");
-                return;
-            }
-
-            Post post = postFactory.Create(context.Input.CreationData, space, context.Input.User);
-
-            if (post.Type == PostType.Link && !System.Text.RegularExpressions.Regex.IsMatch(post.Body, Regex.UrlProtocol)) {
-                post.Body = $"http://{post.Body}";
-            }
-
-            // Not liking these count caches. Makes no sense?
-            post.Upvotes++;
-            await postRepo.Add(post);
-
-            Vote upvote = new Vote() {
-                UserId = context.Input.User.Id,
-                ResourceId = post.Id,
-                ResourceType = VotableEntityType.Post,
-                Direction = VoteDirection.Up
-            };
-
-            await voteRepo.Add(upvote);
-
-            context.Output.Success(postMapper.Map(post));
+        protected async override Task<CommandResult> ExecuteCommand(PostCreateCommand command) {
+            Post p = await service.Create(command.CreationData, command.User);
+            return new InsertResult(true, p.Id);
         }
         #endregion
     }
