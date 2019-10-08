@@ -26,6 +26,7 @@ namespace Updog.Domain {
 
             Vote newVote = factory.CreateForComment(user, data.CommentId, data.VoteDirection);
             await repo.Add(newVote);
+            await bus.Dispatch(new VoteOnCommentEvent(newVote));
 
             return newVote;
         }
@@ -39,6 +40,7 @@ namespace Updog.Domain {
 
             Vote newVote = factory.CreateForPost(user, data.PostId, data.VoteDirection);
             await repo.Add(newVote);
+            await bus.Dispatch(new VoteOnPostEvent(newVote));
 
             return newVote;
         }

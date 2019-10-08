@@ -7,7 +7,7 @@ namespace Updog.Application {
         /// The name of the space.
         /// </summary>
         /// <value></value>
-        public string Space { get; set; } = null!;
+        public string Space { get; set; } = "";
         #endregion
     }
 }
