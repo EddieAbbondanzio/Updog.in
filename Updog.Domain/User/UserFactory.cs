@@ -1,6 +1,6 @@
 using Updog.Domain;
 
-namespace Updog.Application {
+namespace Updog.Domain {
     public sealed class UserFactory : IUserFactory {
         #region Fields
         private IPasswordHasher passwordHasher;

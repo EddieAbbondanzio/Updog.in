@@ -1,6 +1,6 @@
 using System;
 
-namespace Updog.Application {
+namespace Updog.Domain {
     /// <summary>
     /// Utility methods for strings.
     /// </summary>

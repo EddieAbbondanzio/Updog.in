@@ -17,7 +17,7 @@ namespace Updog.Application {
             RuleFor(cmd => cmd.Registration.Username).NotNull().WithMessage("Username is required.");
             RuleFor(cmd => cmd.Registration.Username).MinimumLength(User.UsernameMinLength).WithMessage($"Username must be at least {User.UsernameMinLength} characters.");
             RuleFor(cmd => cmd.Registration.Username).MaximumLength(User.UsernameMaxLength).WithMessage($"Username must be less than {User.UsernameMaxLength} characters.");
-            RuleFor(cmd => cmd.Registration.Username).Matches(Regex.UrlSafe).WithMessage("Username may only contain letters, numbers, underscores, or hypens.");
+            RuleFor(cmd => cmd.Registration.Username).Matches(RegexPattern.UrlSafe).WithMessage("Username may only contain letters, numbers, underscores, or hypens.");
             RuleFor(cmd => cmd.Registration.Username).Must((username) => !User.IsUsernameBanned(username)).WithMessage("Username is unavailable.");
 
             // Password

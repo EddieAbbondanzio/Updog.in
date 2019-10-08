@@ -1,15 +1,15 @@
 using Updog.Domain;
 
-namespace Updog.Application {
+namespace Updog.Domain {
     /// <summary>
     /// User login record and the issued auth token.
     /// </summary>
-    public sealed class UserLogin {
+    public sealed class UserLogin : IValueObject {
         #region Properties
         /// <summary>
         /// The user it belongs to.
         /// </summary>
-        public UserView User { get; }
+        public int UserId { get; }
 
         /// <summary>
         /// The auth token they were issued.
@@ -19,13 +19,8 @@ namespace Updog.Application {
         #endregion
 
         #region Constructor(s)
-        /// <summary>
-        /// Create  new user login.
-        /// </summary>
-        /// <param name="user">The user of the login.</param>
-        /// <param name="authToken">Their JWT.</param>
-        public UserLogin(UserView user, string authToken) {
-            User = user;
+        public UserLogin(int userId, string authToken) {
+            UserId = userId;
             AuthToken = authToken;
         }
         #endregion

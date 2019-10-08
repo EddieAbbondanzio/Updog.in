@@ -1,4 +1,5 @@
 using Updog.Application;
+using Updog.Domain;
 
 namespace Updog.Infrastructure {
     /// <summary>

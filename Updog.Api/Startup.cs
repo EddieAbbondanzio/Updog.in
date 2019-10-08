@@ -95,6 +95,7 @@ namespace Updog.Api {
 
             services.AddTransient<IUserRepo, UserRepo>();
             services.AddTransient<IUserReader, UserReader>();
+            services.AddTransient<IUserService, UserService>();
             services.AddSingleton<IUserMapper, UserMapper>();
             services.AddSingleton<IUserFactory, UserFactory>();
             services.AddSingleton<IUserViewMapper, UserViewMapper>();
@@ -137,7 +138,6 @@ namespace Updog.Api {
             services.AddTransient<ISpaceReader, SpaceReader>();
             services.AddSingleton<ISpaceMapper, SpaceMapper>();
             services.AddSingleton<PermissionHandler<Space>, SpacePermissionHandler>();
-            services.AddSingleton<ISpaceViewMapper, SpaceViewMapper>();
             services.AddSingleton<ISpaceFactory, SpaceFactory>();
             services.AddTransient<QueryHandler<DefaultSpaceQuery>, DefaultSpaceQueryHandler>();
             services.AddTransient<QueryHandler<SpaceFindByNameQuery>, SpaceFindByNameQueryHandler>();
@@ -156,7 +156,6 @@ namespace Updog.Api {
             services.AddTransient<IVoteReader, VoteReader>();
             services.AddSingleton<IVoteReadViewMapper, VoteReadViewMapper>();
             services.AddSingleton<IVoteMapper, VoteMapper>();
-            services.AddSingleton<IVoteViewMapper, VoteViewMapper>();
             services.AddSingleton<IVoteFactory, VoteFactory>();
             services.AddTransient<CommandHandler<VoteOnPostCommand>, VoteOnPostCommandHandler>();
             services.AddTransient<CommandHandler<VoteOnCommentCommand>, VoteOnCommentCommandHandler>();

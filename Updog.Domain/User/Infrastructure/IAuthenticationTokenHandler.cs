@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Updog.Domain;
 
-namespace Updog.Application {
+namespace Updog.Domain {
     /// <summary>
     /// Handler for issuing and validating bearer tokens.
     /// </summary>

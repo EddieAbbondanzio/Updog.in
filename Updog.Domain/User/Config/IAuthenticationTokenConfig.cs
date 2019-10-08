@@ -1,4 +1,4 @@
-namespace Updog.Infrastructure {
+namespace Updog.Domain {
     /// <summary>
     /// Configuration settings for the auth token handler.
     /// </summary>
