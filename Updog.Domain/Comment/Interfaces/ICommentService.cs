@@ -2,8 +2,8 @@ using System.Threading.Tasks;
 
 namespace Updog.Domain {
     public interface ICommentService : IService<Comment> {
-        Task<Comment> Create(CommentCreateData createData, User user);
-        Task<Comment> Update(CommentUpdateData updateData, User user);
-        Task<Comment> Delete(CommentDeleteData deleteData, User user);
+        Task<Comment> Create(CommentCreate create, User user);
+        Task<Comment> Update(int commentId, CommentUpdate update, User user);
+        Task<Comment> Delete(int commentId, User user);
     }
 }

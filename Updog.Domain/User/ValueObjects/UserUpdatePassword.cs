@@ -1,5 +1,5 @@
 namespace Updog.Domain {
-    public sealed class UserUpdatePasswordData : IValueObject {
+    public sealed class UserUpdatePassword : IValueObject {
         #region Properties
         public string CurrentPassword { get; }
 
@@ -7,7 +7,7 @@ namespace Updog.Domain {
         #endregion
 
         #region Constructor(s)
-        public UserUpdatePasswordData(string currentPassword, string newPassword) {
+        public UserUpdatePassword(string currentPassword, string newPassword) {
             CurrentPassword = currentPassword;
             NewPassword = newPassword;
         }

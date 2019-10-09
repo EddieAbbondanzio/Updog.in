@@ -11,17 +11,15 @@ namespace Updog.Domain {
             this.passwordHasher = passwordHasher;
         }
         #endregion
-        public User CreateFromRegistration(UserRegistration registration) => new User() {
-            Username = registration.Username,
-            PasswordHash = passwordHasher.Hash(registration.Password),
-            Email = StringUtils.NullifyWhiteSpace(registration.Email),
-            JoinedDate = System.DateTime.UtcNow
-        };
 
-        public User CreateFromAdminConfig(IAdminConfig config) => new User() {
-            Username = config.Username,
-            PasswordHash = passwordHasher.Hash(config.Password),
-            JoinedDate = System.DateTime.UtcNow
-        };
+        #region Publics
+        public User CreateFromRegistration(UserRegistration registration) => new User(registration.Username, Hash(registration.Password), registration.Email);
+
+        public User CreateFromAdminConfig(IAdminConfig config) => new User(config.Username, Hash(config.Password));
+        #endregion
+
+        #region Privates
+        public string Hash(string password) => passwordHasher.Hash(password);
+        #endregion
     }
 }

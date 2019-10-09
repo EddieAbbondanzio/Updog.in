@@ -4,7 +4,7 @@ namespace Updog.Domain {
     /// <summary>
     /// Subforum for collecting similar themed posts.
     /// </summary>
-    public partial class Space : IEntity {
+    public partial class Space : IEntity, IUserEntity, IUpdatable<SpaceUpdate> {
         #region Constants
         /// <summary>
         /// The number of spaces per page when searching for them.
@@ -23,45 +23,40 @@ namespace Updog.Domain {
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Unique ID of the space.
-        /// </summary>
-        /// <value></value>
         public int Id { get; set; }
-
-        /// <summary>
-        /// The name of the subspace.
-        /// </summary>
-        public string Name { get; set; } = "";
-
-        /// <summary>
-        /// Date and time the space was created.
-        /// </summary>
-        public DateTime CreationDate { get; set; }
-
-        /// <summary>
-        /// The user that created the space.
-        /// </summary>
-        public int UserId { get; set; }
-
-        /// <summary>
-        /// The number of subscribers the space has.
-        /// </summary>
-        public int SubscriptionCount { get; set; }
-
-        /// <summary>
-        /// If the space is considered a default space for all new users
-        /// to subscribe to.
-        /// </summary>
+        public int UserId { get; }
+        public string Name { get; }
+        public string Description { get; private set; }
+        public DateTime CreationDate { get; }
+        public int SuscriberCount { get; }
         public bool IsDefault { get; set; }
+        #endregion
 
-        /// <summary>
-        /// Human readable description of what the space is about.
-        /// </summary>
-        public string Description { get; set; } = "";
+        #region Constructor(s)
+        public Space(SpaceCreate createData, User user) {
+            UserId = user.Id;
+            Name = createData.Name;
+            Description = createData.Description;
+            CreationDate = DateTime.UtcNow;
+            IsDefault = createData.IsDefault;
+        }
+
+        public Space(int id, int userId, string name, string description, DateTime creationDate, int subscriberCount, bool isDefault) {
+            Id = id;
+            UserId = userId;
+            Name = name;
+            Description = description;
+            CreationDate = creationDate;
+            SuscriberCount = subscriberCount;
+            IsDefault = isDefault;
+        }
         #endregion
 
         #region Publics
+        public void Update(SpaceUpdate update) {
+            Description = update.Description;
+        }
+
         /// <summary>
         /// Check to see if another object matches the current space.
         /// </summary>

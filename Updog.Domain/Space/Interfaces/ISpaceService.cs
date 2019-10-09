@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace Updog.Domain {
     public interface ISpaceService : IService<Space> {
-        Task<Space> Create(SpaceCreateData data, User user);
-        Task<Space> Update(SpaceUpdateData data, User user);
+        Task<Space> Create(SpaceCreate data, User user);
+        Task<Space> Update(string space, SpaceUpdate update, User user);
     }
 }

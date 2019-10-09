@@ -23,7 +23,7 @@ namespace Updog.Persistance {
             Description = source.Description,
             UserId = source.UserId,
             CreationDate = source.CreationDate,
-            SubscriptionCount = source.SubscriptionCount,
+            SuscriberCount = source.SubscriptionCount,
             IsDefault = source.IsDefault
         };
 
@@ -37,7 +37,7 @@ namespace Updog.Persistance {
             Name = destination.Name,
             Description = destination.Description,
             CreationDate = destination.CreationDate,
-            SubscriptionCount = destination.SubscriptionCount,
+            SubscriptionCount = destination.SuscriberCount,
             IsDefault = destination.IsDefault,
             UserId = destination.UserId
         };

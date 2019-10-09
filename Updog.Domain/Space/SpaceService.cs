@@ -18,7 +18,7 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
-        public async Task<Space> Create(SpaceCreateData data, User user) {
+        public async Task<Space> Create(SpaceCreate data, User user) {
             Space s = factory.Create(data, user);
 
             await repo.Add(s);
@@ -27,15 +27,16 @@ namespace Updog.Domain {
             return s;
         }
 
-        public async Task<Space> Update(SpaceUpdateData data, User user) {
-            Space? s = await repo.FindByName(data.Space);
+        public async Task<Space> Update(string space, SpaceUpdate update, User user) {
+            Space? s = await repo.FindByName(space);
 
             if (s == null) {
                 throw new InvalidOperationException();
             };
 
-            s.Description = data.Description;
+            s.Update(update);
             await repo.Update(s);
+
             await bus.Dispatch(new SpaceUpdateEvent(s));
 
             return s;

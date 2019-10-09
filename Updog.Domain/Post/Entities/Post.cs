@@ -5,7 +5,7 @@ namespace Updog.Domain {
     /// <summary>
     /// A post of the website.
     /// </summary>
-    public sealed class Post : IEntity, IUserEntity, IVotableEntity, IAuditableEntity {
+    public sealed class Post : IEntity, IUserEntity, IVotableEntity, IAuditableEntity, IUpdatable<PostUpdate>, IDeletable {
         #region Constants
         /// <summary>
         /// The max # of characters allowed in a post title.
@@ -39,11 +39,11 @@ namespace Updog.Domain {
         #endregion
 
         #region Constructor(s)
-        public Post(PostCreateData creationData, User user) {
-            Type = creationData.Type;
-            Title = creationData.Title;
-            Body = creationData.Body;
-            SpaceId = creationData.SpaceId;
+        public Post(PostCreateData createData, User user) {
+            Type = createData.Type;
+            Title = createData.Title;
+            Body = createData.Body;
+            SpaceId = createData.SpaceId;
             UserId = user.Id;
 
             if (Type == PostType.Link && !Regex.IsMatch(Body, RegexPattern.UrlProtocol)) {
@@ -71,7 +71,7 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
-        public void Update(PostUpdateData updateData) {
+        public void Update(PostUpdate update) {
             if (Type == PostType.Link) {
                 throw new InvalidOperationException();
             }
@@ -81,10 +81,11 @@ namespace Updog.Domain {
             }
 
             WasUpdated = true;
-            Body = updateData.Body;
+            Body = update.Body;
         }
 
         public void Delete() {
+            Body = "[deleted]";
             WasDeleted = true;
         }
 

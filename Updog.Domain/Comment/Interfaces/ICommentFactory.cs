@@ -2,6 +2,6 @@ using Updog.Domain;
 
 namespace Updog.Domain {
     public interface ICommentFactory {
-        Comment Create(CommentCreateData data, User user);
+        Comment Create(CommentCreate data, User user);
     }
 }

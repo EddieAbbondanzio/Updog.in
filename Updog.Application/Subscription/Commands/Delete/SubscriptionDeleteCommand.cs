@@ -3,11 +3,11 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class SubscriptionDeleteCommand : AuthenticatedCommand {
         #region Properties
-        public SubscriptionDeleteData Data { get; }
+        public SubscriptionDelete Data { get; }
         #endregion
 
         #region Constructor(s)
-        public SubscriptionDeleteCommand(SubscriptionDeleteData data, User user) : base(user) {
+        public SubscriptionDeleteCommand(SubscriptionDelete data, User user) : base(user) {
             Data = data;
         }
         #endregion

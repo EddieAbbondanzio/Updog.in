@@ -1,14 +1,11 @@
 namespace Updog.Domain {
-    public sealed class PostUpdateData : IValueObject {
+    public sealed class CommentUpdate : IValueObject {
         #region Properties
-        public int PostId { get; }
-
         public string Body { get; }
         #endregion
 
         #region Constructor(s)
-        public PostUpdateData(int postId, string body) {
-            PostId = postId;
+        public CommentUpdate(string body) {
             Body = body;
         }
         #endregion

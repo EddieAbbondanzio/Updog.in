@@ -6,7 +6,7 @@ namespace Updog.Domain {
     /// <summary>
     /// A user of the site.
     /// </summary>
-    public partial class User : ClaimsPrincipal, IEntity {
+    public partial class User : ClaimsPrincipal, IEntity, IUpdatable<UserUpdate> {
         #region Constants
         /// <summary>
         /// Minimum number of characters in a password.
@@ -18,43 +18,38 @@ namespace Updog.Domain {
         #endregion
 
         #region Properties
-        /// <summary>
-        /// The unique ID of the user.
-        /// </summary>
         public int Id { get; set; }
+        public string Username { get; }
+        public string? Email { get; private set; }
+        public string PasswordHash { get; set; }
+        public DateTime JoinedDate { get; }
+        public int PostKarma { get; private set; }
+        public int CommentKarma { get; private set; }
+        #endregion
 
-        /// <summary>
-        /// The unique display name of the user.
-        /// </summary>
-        public string Username { get; set; } = "";
+        #region Constructor(s)
+        public User(string username, string passwordHash, string? email = null) {
+            Username = username;
+            PasswordHash = passwordHash;
+            Email = email;
+        }
 
-        /// <summary>
-        /// Contact email (if any)
-        /// </summary>
-        public string? Email { get; set; }
-
-        /// <summary>
-        /// Super secret hash of the password.
-        /// </summary>
-        public string PasswordHash { get; set; } = "";
-
-        /// <summary>
-        /// Date the user registered.
-        /// </summary>
-        public DateTime JoinedDate { get; set; }
-
-        /// <summary>
-        /// The karma count for posts.
-        /// </summary>
-        public int PostKarma { get; set; }
-
-        /// <summary>
-        /// The karma count for comments.
-        /// </summary>
-        public int CommentKarma { get; set; }
+        public User(int id, string username, string email, string passwordHash, DateTime joinedDate, int postKarma, int commentKarma) {
+            Id = id;
+            Username = username;
+            Email = email;
+            PasswordHash = passwordHash;
+            JoinedDate = joinedDate;
+            PostKarma = postKarma;
+            CommentKarma = commentKarma;
+        }
         #endregion
 
         #region Publics
+        public void Update(UserUpdate update) {
+            this.Email = update.Email;
+        }
+
         /// <summary>
         /// Check to see if another object matches the current user.
         /// </summary>

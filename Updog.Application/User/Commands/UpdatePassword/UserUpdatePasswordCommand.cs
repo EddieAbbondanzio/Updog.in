@@ -6,11 +6,11 @@ namespace Updog.Application {
     /// </summary>
     public sealed class UserUpdatePasswordCommand : AuthenticatedCommand {
         #region Properties
-        public UserUpdatePasswordData Data { get; }
+        public UserUpdatePassword Data { get; }
         #endregion
 
         #region Constructor(s)
-        public UserUpdatePasswordCommand(UserUpdatePasswordData data, User user) : base(user) {
+        public UserUpdatePasswordCommand(UserUpdatePassword data, User user) : base(user) {
             Data = data;
         }
         #endregion

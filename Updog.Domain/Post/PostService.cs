@@ -27,22 +27,22 @@ namespace Updog.Domain {
             return p;
         }
 
-        public async Task<Post> Update(PostUpdateData updateData, User user) {
-            Post? p = await repo.FindById(updateData.PostId);
+        public async Task<Post> Update(int postId, PostUpdate update, User user) {
+            Post? p = await repo.FindById(postId);
 
             if (p == null) {
                 throw new InvalidOperationException();
             }
 
-            p.Update(updateData);
+            p.Update(update);
             await repo.Update(p);
 
             await bus.Dispatch(new PostUpdateEvent(p));
             return p;
         }
 
-        public async Task<Post> Delete(PostDeleteData deleteData, User user) {
-            Post? p = await repo.FindById(deleteData.PostId);
+        public async Task<Post> Delete(int postId, User user) {
+            Post? p = await repo.FindById(postId);
 
             if (p == null) {
                 throw new InvalidOperationException();

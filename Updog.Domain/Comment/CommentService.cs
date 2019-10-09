@@ -19,8 +19,8 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
-        public async Task<Comment> Create(CommentCreateData createData, User user) {
-            Comment c = factory.Create(createData, user);
+        public async Task<Comment> Create(CommentCreate create, User user) {
+            Comment c = factory.Create(create, user);
             await repo.Add(c);
 
             await bus.Dispatch(new CommentCreateEvent(c));
@@ -28,14 +28,14 @@ namespace Updog.Domain {
             return c;
         }
 
-        public async Task<Comment> Update(CommentUpdateData updateData, User user) {
-            Comment? c = await repo.FindById(updateData.CommentId);
+        public async Task<Comment> Update(int commentId, CommentUpdate update, User user) {
+            Comment? c = await repo.FindById(commentId);
 
             if (c == null) {
                 throw new InvalidOperationException();
             }
 
-            c.Update(updateData.Body);
+            c.Update(new CommentUpdate(update.Body));
             await repo.Update(c);
 
             await bus.Dispatch(new CommentUpdateEvent(c));
@@ -43,8 +43,8 @@ namespace Updog.Domain {
             return c;
         }
 
-        public async Task<Comment> Delete(CommentDeleteData deleteData, User user) {
-            Comment? c = await repo.FindById(deleteData.CommentId);
+        public async Task<Comment> Delete(int commentId, User user) {
+            Comment? c = await repo.FindById(commentId);
 
             if (c == null) {
                 throw new InvalidOperationException();

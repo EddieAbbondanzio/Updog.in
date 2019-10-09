@@ -1,14 +1,11 @@
 namespace Updog.Domain {
-    public sealed class SpaceUpdateData : IValueObject {
+    public sealed class SpaceUpdate : IValueObject {
         #region Properties
-        public string Space { get; }
-
         public string Description { get; }
         #endregion
 
         #region Constructor(s)
-        public SpaceUpdateData(string space, string description) {
-            Space = space;
+        public SpaceUpdate(string description) {
             Description = description;
         }
         #endregion

@@ -5,7 +5,7 @@ namespace Updog.Domain {
     /// <summary>
     /// A comment associated with a post.
     /// </summary>
-    public sealed class Comment : IEntity, IUserEntity, IVotableEntity, IAuditableEntity {
+    public sealed class Comment : IEntity, IUserEntity, IVotableEntity, IAuditableEntity, IUpdatable<CommentUpdate>, IDeletable {
         #region Constants
         /// <summary>
         /// The maximum number of characters in a comment body.
@@ -32,7 +32,7 @@ namespace Updog.Domain {
         #endregion
 
         #region Constructor(s)
-        public Comment(CommentCreateData creationData, User user) {
+        public Comment(CommentCreate creationData, User user) {
             PostId = creationData.PostId;
             Body = creationData.Body;
             ParentId = creationData.ParentId;
@@ -55,13 +55,13 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
-        public void Update(string body) {
+        public void Update(CommentUpdate update) {
             if (WasDeleted) {
                 throw new InvalidOperationException();
             }
 
             WasUpdated = true;
-            Body = body;
+            Body = update.Body;
         }
 
         public void Delete() {

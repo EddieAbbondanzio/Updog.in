@@ -20,8 +20,8 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
-        public async Task<Subscription> CreateSubscription(SubscriptionCreateData data, User user) {
-            Space? space = await spaceRepo.FindByName(data.Space);
+        public async Task<Subscription> CreateSubscription(SubscriptionCreate create, User user) {
+            Space? space = await spaceRepo.FindByName(create.Space);
 
             if (space == null) {
                 throw new InvalidOperationException();
@@ -34,8 +34,8 @@ namespace Updog.Domain {
             return s;
         }
 
-        public async Task<Subscription> DeleteSubscription(SubscriptionDeleteData data, User user) {
-            Subscription? s = await repo.FindByUserAndSpace(user.Username, data.Space);
+        public async Task<Subscription> DeleteSubscription(string space, User user) {
+            Subscription? s = await repo.FindByUserAndSpace(user.Username, space);
 
             if (s == null) {
                 throw new InvalidOperationException();
