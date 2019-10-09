@@ -37,8 +37,7 @@ namespace Updog.Application {
             }
 
             // Finally, execute the command.
-            await ExecuteCommand(command);
-            return new CommandResult(true);
+            return await ExecuteCommand(command);
         }
         #endregion
 

@@ -28,7 +28,7 @@ namespace Updog.Domain {
         public string Name { get; }
         public string Description { get; private set; }
         public DateTime CreationDate { get; }
-        public int SuscriberCount { get; }
+        public int SuscriberCount { get; set; }
         public bool IsDefault { get; set; }
         #endregion
 

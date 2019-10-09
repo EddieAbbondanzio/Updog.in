@@ -6,12 +6,14 @@ namespace Updog.Application {
     /// </summary>
     public sealed class SpaceUpdateCommand : AuthenticatedCommand {
         #region Properties
-        public SpaceUpdateData Data { get; }
+        public string Space { get; }
+        public SpaceUpdate Update { get; }
         #endregion
 
         #region Constructor(s)
-        public SpaceUpdateCommand(SpaceUpdateData data, User user) : base(user) {
-            Data = data;
+        public SpaceUpdateCommand(string space, SpaceUpdate update, User user) : base(user) {
+            Space = space;
+            Update = update;
         }
         #endregion
     }

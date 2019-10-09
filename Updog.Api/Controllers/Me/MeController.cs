@@ -41,11 +41,7 @@ namespace Updog.Api {
         /// <param name="updateRequest">The new user info.</param>
         [HttpPut]
         public async Task<ActionResult> Update([FromBody] MeUpdateRequest updateRequest) {
-            await userUpdater.Execute(new UserUpdateCommand() {
-                User = User!,
-                Email = updateRequest.Email
-            });
-
+            await userUpdater.Execute(new UserUpdateCommand(new UserUpdate(updateRequest.Email), User!));
             return Ok();
         }
 
@@ -55,12 +51,7 @@ namespace Updog.Api {
         /// <param name="updatePasswordRequest">The new password.</param>
         [HttpPut("password")]
         public async Task<ActionResult> UpdatePassword([FromBody] MeUpdatePasswordRequest updatePasswordRequest) {
-            await passwordUpdater.Execute(new UserUpdatePasswordCommand() {
-                User = User!,
-                CurrentPassword = updatePasswordRequest.CurrentPassword,
-                NewPassword = updatePasswordRequest.NewPassword
-            });
-
+            await passwordUpdater.Execute(new UserUpdatePasswordCommand(new UserUpdatePassword(updatePasswordRequest.CurrentPassword, updatePasswordRequest.NewPassword), User!));
             return Ok();
         }
         #endregion

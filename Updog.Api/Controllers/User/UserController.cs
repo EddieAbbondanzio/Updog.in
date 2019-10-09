@@ -14,6 +14,7 @@ namespace Updog.Api {
     [ApiController]
     public sealed class UserController : ApiController {
         #region Fields
+        private IEventBus bus;
         private QueryHandler<FindUserByUsernameQuery, UserReadView?> userFinder;
         private QueryHandler<IsUsernameAvailableQuery, bool> usernameChecker;
         private CommandHandler<RegisterUserCommand> userRegistrar;
@@ -24,10 +25,12 @@ namespace Updog.Api {
         /// Create a new user controller.
         /// </summary>
         public UserController(
+            IEventBus bus,
                 QueryHandler<FindUserByUsernameQuery, UserReadView?> userFinder,
                 QueryHandler<IsUsernameAvailableQuery, bool> usernameChecker,
                 CommandHandler<RegisterUserCommand> userRegistrar
             ) {
+            this.bus = bus;
             this.userFinder = userFinder;
             this.usernameChecker = usernameChecker;
             this.userRegistrar = userRegistrar;
@@ -64,10 +67,18 @@ namespace Updog.Api {
         /// <param name="registration">The new user registration</param>
         [HttpPost]
         public async Task<ActionResult> Register([FromBody] UserRegisterRequest req) {
+            UserLogin? login = null;
+
+            bus.Listen<UserRegisterEvent>((IDomainEvent e) => {
+                UserRegisterEvent registerEvent = (UserRegisterEvent)e;
+                login = registerEvent.Login;
+            });
+
             await userRegistrar.Execute(new RegisterUserCommand() {
                 Registration = new UserRegistration(req.Username, req.Password, req.Email)
             });
-            return Ok();
+
+            return login != null ? Ok(login) : Unauthorized() as ActionResult;
         }
         #endregion
     }

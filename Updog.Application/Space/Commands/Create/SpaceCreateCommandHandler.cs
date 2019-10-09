@@ -18,7 +18,7 @@ namespace Updog.Application {
         [Validate(typeof(SpaceCreateCommandValidator))]
         protected async override Task<CommandResult> ExecuteCommand(SpaceCreateCommand command) {
             Space s = await service.Create(command.Data, command.User);
-            return new InsertResult(true, s.Id);
+            return new CommandResult(true, s.Id);
         }
         #endregion
     }

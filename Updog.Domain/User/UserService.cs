@@ -50,7 +50,11 @@ namespace Updog.Domain {
 
             if (passwordHasher.Verify(credentials.Password, user.PasswordHash)) {
                 string authToken = tokenHandler.IssueToken(user);
-                return new UserLogin(user.Id, authToken);
+
+                UserLogin login = new UserLogin(user.Id, "");
+                await bus.Dispatch(new UserLoginEvent(user, login));
+
+                return login;
             } else {
                 return null;
             }

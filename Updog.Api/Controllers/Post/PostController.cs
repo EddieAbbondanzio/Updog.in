@@ -122,11 +122,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpPatch("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody]PostUpdateRequest payload) {
-            await postUpdater.Execute(new PostUpdateCommand() {
-                User = User!,
-                PostId = id,
-                Body = payload.Body
-            });
+            await postUpdater.Execute(new PostUpdateCommand(id, new PostUpdate(payload.Body), User!));
 
             return Ok();
         }
@@ -136,10 +132,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id) {
-            await postDeleter.Execute(new PostDeleteCommand() {
-                User = User!,
-                PostId = id
-            });
+            await postDeleter.Execute(new PostDeleteCommand(id, User!));
 
             return Ok();
         }

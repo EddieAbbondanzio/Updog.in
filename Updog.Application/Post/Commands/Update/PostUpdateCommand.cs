@@ -6,12 +6,14 @@ namespace Updog.Application {
     /// </summary>
     public sealed class PostUpdateCommand : AuthenticatedCommand {
         #region Properties
-        public PostUpdateData Data { get; }
+        public int PostId { get; }
+        public PostUpdate Update { get; }
         #endregion
 
         #region Constructor(s)
-        public PostUpdateCommand(PostUpdateData data, User user) : base(user) {
-            Data = data;
+        public PostUpdateCommand(int postId, PostUpdate update, User user) : base(user) {
+            PostId = postId;
+            Update = update;
         }
         #endregion
     }

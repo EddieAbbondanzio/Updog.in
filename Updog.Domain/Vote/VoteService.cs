@@ -17,7 +17,7 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
-        public async Task<Vote> VoteOnComment(VoteOnCommentData data, User user) {
+        public async Task<Vote> VoteOnComment(VoteOnComment data, User user) {
             Vote? oldVote = await repo.FindByUserAndComment(user.Username, data.CommentId);
 
             if (oldVote != null) {
@@ -31,7 +31,7 @@ namespace Updog.Domain {
             return newVote;
         }
 
-        public async Task<Vote> VoteOnPost(VoteOnPostData data, User user) {
+        public async Task<Vote> VoteOnPost(VoteOnPost data, User user) {
             Vote? oldVote = await repo.FindByUserAndPost(user.Username, data.PostId);
 
             if (oldVote != null) {

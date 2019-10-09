@@ -13,12 +13,14 @@ namespace Updog.Api {
     [ApiController]
     public sealed class SessionController : ApiController {
         #region Fields
+        private IEventBus bus;
         private CommandHandler<LoginUserCommand> loginCommand;
 
         #endregion
 
         #region Constructor(s)
-        public SessionController(CommandHandler<LoginUserCommand> loginCommand) {
+        public SessionController(IEventBus bus, CommandHandler<LoginUserCommand> loginCommand) {
+            this.bus = bus;
             this.loginCommand = loginCommand;
         }
         #endregion
@@ -29,12 +31,19 @@ namespace Updog.Api {
         /// </summary>
         /// <param name="loginRequest">The credentials to authenticate under.</param>
         [HttpPost]
-        public async Task<ActionResult> Login([FromBody]SessionLoginRequest loginRequest) {
+        public async Task<IActionResult> Login([FromBody]SessionLoginRequest loginRequest) {
+            UserLogin? login = null;
+
+            bus.Listen<UserLoginEvent>((IDomainEvent e) => {
+                UserLoginEvent loginEvent = (UserLoginEvent)e;
+                login = loginEvent.Login;
+            });
+
             var result = await loginCommand.Execute(new LoginUserCommand() {
                 Credentials = new UserCredentials(loginRequest.Username, loginRequest.Password)
             });
 
-            return Ok(result);
+            return login != null ? Ok(login) : Unauthorized() as IActionResult;
         }
 
         /// <summary>

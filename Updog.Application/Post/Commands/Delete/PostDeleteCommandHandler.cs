@@ -17,7 +17,7 @@ namespace Updog.Application {
         #region Publics
         [Validate(typeof(PostDeleteCommandValidator))]
         protected async override Task<CommandResult> ExecuteCommand(PostDeleteCommand command) {
-            Post p = await service.Delete(command.Data, command.User);
+            Post p = await service.Delete(command.PostId, command.User);
             return new CommandResult(true);
         }
         #endregion

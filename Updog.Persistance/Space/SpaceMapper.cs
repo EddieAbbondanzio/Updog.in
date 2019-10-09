@@ -17,15 +17,15 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="source">The record to convert.</param>
         /// <returns>The created entity.</returns>
-        public Space Map(SpaceRecord source) => new Space() {
-            Id = source.Id,
-            Name = source.Name,
-            Description = source.Description,
-            UserId = source.UserId,
-            CreationDate = source.CreationDate,
-            SuscriberCount = source.SubscriptionCount,
-            IsDefault = source.IsDefault
-        };
+        public Space Map(SpaceRecord source) => new Space(
+            source.Id,
+            source.UserId,
+            source.Name,
+            source.Description,
+            source.CreationDate,
+            source.SubscriptionCount,
+            source.IsDefault
+        );
 
         /// <summary>
         /// Reverse the entity back into it's record.

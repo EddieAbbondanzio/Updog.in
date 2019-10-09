@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Updog.Domain;
 
@@ -16,12 +17,7 @@ namespace Updog.Application {
         [Validate(typeof(LoginUserCommandValidator))]
         protected async override Task<CommandResult> ExecuteCommand(LoginUserCommand command) {
             UserLogin? login = await service.Login(command.Credentials);
-
-            if (login != null) {
-                return new DataResult<UserLogin>(true, login);
-            } else {
-                return new CommandResult(false);
-            }
+            return new CommandResult(login != null);
         }
     }
 }

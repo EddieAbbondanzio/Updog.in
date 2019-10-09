@@ -21,7 +21,8 @@ namespace Updog.Application {
             UserLogin? login = await service.Register(command.Registration);
 
             if (login != null) {
-                return new DataResult<UserLogin>(true, login);
+                throw new Exception();
+                // return new DataResult<UserLogin>(true, login);
             } else {
                 return new CommandResult(false);
             }

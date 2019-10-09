@@ -1,5 +1,5 @@
 namespace Updog.Domain {
-    public sealed class VoteOnCommentData : IValueObject {
+    public sealed class VoteOnComment : IValueObject {
         #region Properties
         public int CommentId { get; }
 
@@ -7,7 +7,7 @@ namespace Updog.Domain {
         #endregion
 
         #region Constructor(s)
-        public VoteOnCommentData(int commentId, VoteDirection voteDirection) {
+        public VoteOnComment(int commentId, VoteDirection voteDirection) {
             CommentId = commentId;
             VoteDirection = voteDirection;
         }

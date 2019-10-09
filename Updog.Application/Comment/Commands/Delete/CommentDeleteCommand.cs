@@ -6,12 +6,12 @@ namespace Updog.Application {
     /// </summary>
     public sealed class CommentDeleteCommand : AuthenticatedCommand {
         #region Properties
-        public CommentDeleteData Data { get; }
+        public int CommentId { get; }
         #endregion
 
         #region Constructor(s)
-        public CommentDeleteCommand(CommentDeleteData data, User user) : base(user) {
-            Data = data;
+        public CommentDeleteCommand(int commentId, User user) : base(user) {
+            CommentId = commentId;
         }
         #endregion
     }

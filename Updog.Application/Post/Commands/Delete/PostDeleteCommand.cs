@@ -6,16 +6,12 @@ namespace Updog.Application {
     /// </summary>
     public sealed class PostDeleteCommand : AuthenticatedCommand {
         #region Properties
-        /// <summary>
-        /// The ID of the post to delete.
-        /// </summary>
-        /// <value></value>
-        public PostDeleteData Data { get; }
+        public int PostId { get; }
         #endregion
 
         #region Constructor(s)
-        public PostDeleteCommand(PostDeleteData data, User user) : base(user) {
-            Data = data;
+        public PostDeleteCommand(int postId, User user) : base(user) {
+            PostId = postId;
         }
         #endregion
     }

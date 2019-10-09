@@ -3,11 +3,11 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class VoteOnPostCommand : AuthenticatedCommand {
         #region Properties
-        public VoteOnPostData Data { get; }
+        public VoteOnPost Data { get; }
         #endregion
 
         #region Constructor(s)
-        public VoteOnPostCommand(VoteOnPostData data, User user) : base(user) {
+        public VoteOnPostCommand(VoteOnPost data, User user) : base(user) {
             Data = data;
         }
         #endregion

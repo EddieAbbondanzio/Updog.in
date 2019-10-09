@@ -14,15 +14,15 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="source">The record to convert.</param>
         /// <returns>The rebuilt user entity.</returns>
-        public User Map(UserRecord source) => new User() {
-            Id = source.Id,
-            Username = source.Username,
-            Email = source.Email,
-            PasswordHash = source.PasswordHash,
-            JoinedDate = source.JoinedDate,
-            PostKarma = source.PostKarma,
-            CommentKarma = source.CommentKarma
-        };
+        public User Map(UserRecord source) => new User(
+            source.Id,
+            source.Username,
+            source.Email,
+            source.PasswordHash,
+            source.JoinedDate,
+            source.PostKarma,
+            source.CommentKarma
+        );
 
         /// <summary>
         /// Reverse the user entity back into it's record.

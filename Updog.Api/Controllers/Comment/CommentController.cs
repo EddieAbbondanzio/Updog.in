@@ -62,7 +62,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpPost]
         public async Task<ActionResult> CreateComment([FromBody]CommentCreateRequest body) {
-            var result = await commentCreator.Execute(new CommentCreateCommand() { CreationData = new CommentCreate(body.PostId, body.Body, body.ParentId), User = User! });
+            var result = await commentCreator.Execute(new CommentCreateCommand(new CommentCreate(body.PostId, body.Body, body.ParentId), User!));
             return Ok(result);
         }
 
@@ -71,7 +71,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpPatch("{commentId}")]
         public async Task<ActionResult> Update(int commentId, [FromBody]CommentUpdateRequest request) {
-            await commentUpdater.Execute(new CommentUpdateCommand() { User = User!, CommentId = commentId, Body = request.Body });
+            await commentUpdater.Execute(new CommentUpdateCommand(commentId, new CommentUpdate(request.Body), User!));
             return Ok();
         }
 
@@ -80,7 +80,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpDelete("{commentId}")]
         public async Task<ActionResult> DeleteComment(int commentId) {
-            await commentDeleter.Execute(new CommentDeleteCommand() { User = User!, CommentId = commentId });
+            await commentDeleter.Execute(new CommentDeleteCommand(commentId, User!));
             return Ok();
         }
         #endregion
