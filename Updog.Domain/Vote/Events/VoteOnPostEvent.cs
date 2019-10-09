@@ -1,12 +1,16 @@
 namespace Updog.Domain {
     public sealed class VoteOnPostEvent : IDomainEvent {
         #region Properties
-        public Vote Vote { get; }
+        public int PostId { get; }
+        public Vote NewVote { get; }
+        public Vote? OldVote { get; }
         #endregion
 
         #region Constructor(s)
-        public VoteOnPostEvent(Vote v) {
-            Vote = v;
+        public VoteOnPostEvent(int postId, Vote newVote, Vote? oldVote = null) {
+            PostId = postId;
+            OldVote = oldVote;
+            NewVote = newVote;
         }
         #endregion
     }

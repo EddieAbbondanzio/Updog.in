@@ -112,6 +112,7 @@ namespace Updog.Api {
             services.AddTransient<IPostService, PostService>();
             services.AddSingleton<IPostMapper, PostMapper>();
             services.AddSingleton<IPostFactory, PostFactory>();
+            services.AddTransient<IDomainEventHandler<VoteOnPostEvent>, VoteOnPostEventHandler>();
             services.AddTransient<QueryHandler<PostFindByIdQuery, PostReadView?>, PostFindByIdQueryHandler>();
             services.AddTransient<QueryHandler<PostFindBySpaceQuery, PagedResultSet<PostReadView>>, PostFindBySpaceQueryHandler>();
             services.AddTransient<QueryHandler<PostFindByUserQuery, PagedResultSet<PostReadView>>, PostFindByUserQueryHandler>();
@@ -126,6 +127,7 @@ namespace Updog.Api {
             services.AddTransient<ICommentService, CommentService>();
             services.AddSingleton<ICommentMapper, CommentMapper>();
             services.AddSingleton<ICommentFactory, CommentFactory>();
+            services.AddTransient<IDomainEventHandler<VoteOnCommentEvent>, VoteOnCommentEventHandler>();
             services.AddTransient<QueryHandler<CommentFindByIdQuery, CommentReadView?>, CommentFindByIdQueryHandler>();
             services.AddTransient<QueryHandler<CommentFindByPostQuery, IEnumerable<CommentReadView>>, CommentFindByPostQueryHandler>();
             services.AddTransient<QueryHandler<CommentFindByUserQuery, PagedResultSet<CommentReadView>>, CommentFindByUserQueryHandler>();
