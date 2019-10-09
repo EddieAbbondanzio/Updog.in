@@ -10,12 +10,12 @@ namespace Updog.Application {
         public UserUpdatePasswordCommandValidator() {
             RuleFor(reg => reg.User).NotNull().WithMessage("User is required.");
 
-            RuleFor(reg => reg.CurrentPassword).NotNull().WithMessage("Current password is required.");
-            RuleFor(reg => reg.CurrentPassword).NotEmpty().WithMessage("Current password is required.");
+            // RuleFor(reg => reg.CurrentPassword).NotNull().WithMessage("Current password is required.");
+            // RuleFor(reg => reg.CurrentPassword).NotEmpty().WithMessage("Current password is required.");
 
-            RuleFor(reg => reg.NewPassword).NotNull().WithMessage("Password is required.");
-            RuleFor(reg => reg.NewPassword).NotEmpty().WithMessage("Password is required.");
-            RuleFor(reg => reg.NewPassword).MinimumLength(User.PasswordMinLength).WithMessage($"Password must be at least {User.PasswordMinLength} characters.");
+            // RuleFor(reg => reg.NewPassword).NotNull().WithMessage("Password is required.");
+            // RuleFor(reg => reg.NewPassword).NotEmpty().WithMessage("Password is required.");
+            // RuleFor(reg => reg.NewPassword).MinimumLength(User.PasswordMinLength).WithMessage($"Password must be at least {User.PasswordMinLength} characters.");
         }
     }
 }

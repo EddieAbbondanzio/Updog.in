@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Updog.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Updog.Domain.Paging;
+using System.Collections.Generic;
 
 namespace Updog.Api {
     /// <summary>
@@ -14,17 +15,25 @@ namespace Updog.Api {
     [ApiController]
     public sealed class SpaceController : ApiController {
         #region Fields
-        private QueryHandler<SpaceFindQuery> spaceFinder;
-        private QueryHandler<SpaceFindByNameQuery> spaceFinderByName;
-        private QueryHandler<SubscribedSpaceQuery> subsriptionFinderByUser;
-        private QueryHandler<DefaultSpaceQuery> spaceFinderDefault;
+        private QueryHandler<SpaceFindQuery, SpaceReadView?> spaceFinder;
+        private QueryHandler<SpaceFindByNameQuery, SpaceReadView?> spaceFinderByName;
+        private QueryHandler<SubscribedSpaceQuery, IEnumerable<SpaceReadView>> subsriptionFinderByUser;
+        private QueryHandler<DefaultSpaceQuery, IEnumerable<SpaceReadView>> spaceFinderDefault;
         private CommandHandler<SpaceCreateCommand> spaceCreator;
         private CommandHandler<SpaceUpdateCommand> spaceUpdater;
-        private QueryHandler<PostFindBySpaceQuery> postFinderBySpace;
+        private QueryHandler<PostFindBySpaceQuery, PagedResultSet<PostReadView>> postFinderBySpace;
         #endregion
 
         #region Constructor(s)
-        public SpaceController(QueryHandler<SpaceFindQuery> spaceFinder, QueryHandler<SpaceFindByNameQuery> spaceFinderByName, QueryHandler<SubscribedSpaceQuery> subscriptionFinder, QueryHandler<DefaultSpaceQuery> spaceFinderDefault, CommandHandler<SpaceCreateCommand> spaceCreator, CommandHandler<SpaceUpdateCommand> spaceUpdater, QueryHandler<PostFindBySpaceQuery> postFinderBySpace) {
+        public SpaceController(
+            QueryHandler<SpaceFindQuery, SpaceReadView?> spaceFinder,
+            QueryHandler<SpaceFindByNameQuery, SpaceReadView?> spaceFinderByName,
+            QueryHandler<SubscribedSpaceQuery, IEnumerable<SpaceReadView>> subscriptionFinder,
+            QueryHandler<DefaultSpaceQuery, IEnumerable<SpaceReadView>> spaceFinderDefault,
+            CommandHandler<SpaceCreateCommand> spaceCreator,
+            CommandHandler<SpaceUpdateCommand> spaceUpdater,
+            QueryHandler<PostFindBySpaceQuery, PagedResultSet<PostReadView>> postFinderBySpace
+        ) {
             this.spaceFinder = spaceFinder;
             this.spaceFinderByName = spaceFinderByName;
             this.subsriptionFinderByUser = subscriptionFinder;
@@ -42,8 +51,9 @@ namespace Updog.Api {
         [HttpGet("default")]
         [AllowAnonymous]
         public async Task<ActionResult> GetDefaultSpaces() {
-            await spaceFinderDefault.Execute(new DefaultSpaceQuery(), ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            // await spaceFinderDefault.Execute(new DefaultSpaceQuery(), ActionResultBuilder);
+            // return ActionResultBuilder.Build();
+            return Ok();
         }
 
         /// <summary>
@@ -51,19 +61,21 @@ namespace Updog.Api {
         /// </summary>
         [HttpGet("subscribed")]
         public async Task<ActionResult> GetSubscribedSpaces() {
-            await subsriptionFinderByUser.Execute(new SubscribedSpaceQuery() {
-                User = User!
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            // await subsriptionFinderByUser.Execute(new SubscribedSpaceQuery() {
+            //     User = User!
+            // }, ActionResultBuilder);
+            // return ActionResultBuilder.Build();
+            return Ok();
         }
 
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult> Find([FromQuery]int pageNumber, [FromQuery] int pageSize = Space.PageSize) {
-            await this.spaceFinder.Execute(new SpaceFindQuery() {
-                Paging = new PaginationInfo(pageNumber, pageSize)
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            // await this.spaceFinder.Execute(new SpaceFindQuery() {
+            //     Paging = new PaginationInfo(pageNumber, pageSize)
+            // }, ActionResultBuilder);
+            // return ActionResultBuilder.Build();
+            return Ok();
         }
 
 
@@ -75,10 +87,11 @@ namespace Updog.Api {
         [HttpGet("{name}")]
         [AllowAnonymous]
         public async Task<ActionResult> FindByName(string name) {
-            await spaceFinderByName.Execute(new SpaceFindByNameQuery() {
-                Name = name
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            // await spaceFinderByName.Execute(new SpaceFindByNameQuery() {
+            //     Name = name
+            // }, ActionResultBuilder);
+            // return ActionResultBuilder.Build();
+            return Ok();
         }
 
         /// <summary>
@@ -87,11 +100,12 @@ namespace Updog.Api {
         /// <param name="request">The incoming reuqest</param>
         [HttpPost]
         public async Task<ActionResult> CreateSpace(SpaceCreateRequest request) {
-            await spaceCreator.Execute(new SpaceCreateCommand() {
-                CreationData = new SpaceCreateData(request.Name, request.Description),
-                User = User!
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            // await spaceCreator.Execute(new SpaceCreateCommand() {
+            //     CreationData = new SpaceCreateData(request.Name, request.Description),
+            //     User = User!
+            // }, ActionResultBuilder);
+            // return ActionResultBuilder.Build();
+            return Ok();
         }
 
         /// <summary>
@@ -99,12 +113,13 @@ namespace Updog.Api {
         /// </summary>
         [HttpPatch("{name}")]
         public async Task<ActionResult> UpdateSpace(string name, SpaceUpdateRequest request) {
-            await spaceUpdater.Execute(new SpaceUpdateCommand() {
-                User = User!,
-                Name = name,
-                Description = request.Description
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            // await spaceUpdater.Execute(new SpaceUpdateCommand() {
+            //     User = User!,
+            //     Name = name,
+            //     Description = request.Description
+            // }, ActionResultBuilder);
+            // return ActionResultBuilder.Build();
+            return Ok();
         }
 
         /// <summary>
@@ -117,12 +132,14 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{name}/post/new")]
         public async Task<ActionResult> FindPosts(string name, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            await this.postFinderBySpace.Execute(new PostFindBySpaceQuery() {
-                Space = name,
-                User = User!,
-                Paging = new PaginationInfo(pageNumber, pageSize)
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            // await this.postFinderBySpace.Execute(new PostFindBySpaceQuery() {
+            //     Space = name,
+            //     User = User!,
+            //     Paging = new PaginationInfo(pageNumber, pageSize)
+            // }, ActionResultBuilder);
+            // return ActionResultBuilder.Build();
+
+            return Ok();
         }
         #endregion
     }

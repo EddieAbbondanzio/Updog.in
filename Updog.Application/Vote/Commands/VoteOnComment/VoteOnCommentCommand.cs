@@ -3,8 +3,13 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class VoteOnCommentCommand : AuthenticatedCommand {
         #region Properties
-        public int CommentId { get; set; }
-        public VoteDirection Vote { get; set; } = VoteDirection.Neutral;
+        public VoteOnCommentData Data { get; }
+        #endregion
+
+        #region Constructor(s)
+        public VoteOnCommentCommand(VoteOnCommentData data, User user) : base(user) {
+            Data = data;
+        }
         #endregion
     }
 }

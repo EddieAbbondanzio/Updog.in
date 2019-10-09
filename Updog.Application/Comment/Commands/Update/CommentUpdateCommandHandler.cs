@@ -17,7 +17,7 @@ namespace Updog.Application {
         #region Publics
         [Validate(typeof(CommentUpdateCommandValidator))]
         protected async override Task<CommandResult> ExecuteCommand(CommentUpdateCommand command) {
-            Comment c = await service.Delete(new CommentDeleteData(command.CommentId), command.User);
+            Comment c = await service.Update(command.Data, command.User);
             return new CommandResult(true);
         }
         #endregion

@@ -14,8 +14,8 @@ namespace Updog.Api {
     [ApiController]
     public sealed class UserController : ApiController {
         #region Fields
-        private QueryHandler<FindUserByUsernameQuery> userFinder;
-        private QueryHandler<IsUsernameAvailableQuery> usernameChecker;
+        private QueryHandler<FindUserByUsernameQuery, UserReadView?> userFinder;
+        private QueryHandler<IsUsernameAvailableQuery, bool> usernameChecker;
         private CommandHandler<RegisterUserCommand> userRegistrar;
         #endregion
 
@@ -24,8 +24,8 @@ namespace Updog.Api {
         /// Create a new user controller.
         /// </summary>
         public UserController(
-                QueryHandler<FindUserByUsernameQuery> userFinder,
-                QueryHandler<IsUsernameAvailableQuery> usernameChecker,
+                QueryHandler<FindUserByUsernameQuery, UserReadView?> userFinder,
+                QueryHandler<IsUsernameAvailableQuery, bool> usernameChecker,
                 CommandHandler<RegisterUserCommand> userRegistrar
             ) {
             this.userFinder = userFinder;
@@ -37,10 +37,11 @@ namespace Updog.Api {
         #region Publics
         [HttpHead("{username}")]
         public async Task<ActionResult> IsUsernameAvailable(string username) {
-            await usernameChecker.Execute(new IsUsernameAvailableQuery() {
+            var result = await usernameChecker.Execute(new IsUsernameAvailableQuery() {
                 Username = username
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            });
+
+            return Ok();
         }
 
         /// <summary>
@@ -52,8 +53,9 @@ namespace Updog.Api {
             await userFinder.Execute(new FindUserByUsernameQuery() {
                 Username = username,
                 User = User!
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            });
+
+            return Ok();
         }
 
         /// <summary>
@@ -64,8 +66,8 @@ namespace Updog.Api {
         public async Task<ActionResult> Register([FromBody] UserRegisterRequest req) {
             await userRegistrar.Execute(new RegisterUserCommand() {
                 Registration = new UserRegistration(req.Username, req.Password, req.Email)
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            });
+            return Ok();
         }
         #endregion
     }

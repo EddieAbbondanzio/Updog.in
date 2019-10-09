@@ -1,3 +1,4 @@
+using Updog.Domain;
 using Updog.Infrastructure;
 
 namespace Updog.Api {

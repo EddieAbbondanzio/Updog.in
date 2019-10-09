@@ -35,12 +35,13 @@ namespace Updog.Api {
         /// <param name="vote">The vote type.</param>
         [HttpPost("post/{postId}/{vote}")]
         public async Task<ActionResult> VoteOnPost(int postId, VoteDirection vote) {
-            await voteOnPostHandler.Execute(new VoteOnPostCommand() {
+            var result = await voteOnPostHandler.Execute(new VoteOnPostCommand() {
                 User = User!,
                 PostId = postId,
                 Vote = vote
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            });
+
+            return Ok(result);
         }
 
         /// <summary>
@@ -50,12 +51,13 @@ namespace Updog.Api {
         /// <param name="vote">The vote type.</param>
         [HttpPost("comment/{commentId}/{vote}")]
         public async Task<ActionResult> VoteOnComment(int commentId, VoteDirection vote) {
-            await voteOnCommentHandler.Execute(new VoteOnCommentCommand() {
+            var result = await voteOnCommentHandler.Execute(new VoteOnCommentCommand() {
                 User = User!,
                 CommentId = commentId,
                 Vote = vote
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            });
+
+            return Ok(result);
         }
     }
 }

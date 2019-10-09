@@ -34,8 +34,9 @@ namespace Updog.Api {
             await subscriptionCreator.Execute(new SubscriptionCreateCommand() {
                 Space = spaceName,
                 User = User!
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            });
+
+            return Ok();
         }
 
         /// <summary>
@@ -47,8 +48,9 @@ namespace Updog.Api {
             await subscriptionDeleter.Execute(new SubscriptionDeleteCommand() {
                 Space = spaceName,
                 User = User!
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            });
+
+            return Ok();
         }
         #endregion
     }

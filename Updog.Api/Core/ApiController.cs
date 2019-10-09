@@ -14,8 +14,6 @@ namespace Updog.Api {
         /// The current user of the site interacting with the API.
         /// </summary>
         public new User? User => base.User as User;
-
-        protected JsonActionResultBuilder ActionResultBuilder { get; } = new JsonActionResultBuilder();
         #endregion
 
         #region Helpers

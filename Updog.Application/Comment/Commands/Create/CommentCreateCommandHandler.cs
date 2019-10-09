@@ -17,7 +17,7 @@ namespace Updog.Application {
         #region Publics
         [Validate(typeof(CommentCreateCommandValidator))]
         protected async override Task<CommandResult> ExecuteCommand(CommentCreateCommand command) {
-            Comment c = await service.Create(command.CreationData, command.User);
+            Comment c = await service.Create(command.Data, command.User);
             return new InsertResult(true, c.Id);
         }
         #endregion

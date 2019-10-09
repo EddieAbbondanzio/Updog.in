@@ -16,7 +16,7 @@ namespace Updog.Application {
         #region Publics
         [Validate(typeof(SubscriptionCreateCommandValidator))]
         protected async override Task<CommandResult> ExecuteCommand(SubscriptionCreateCommand command) {
-            Subscription s = await service.CreateSubscription(new SubscriptionCreateData(command.Space), command.User);
+            Subscription s = await service.CreateSubscription(command.Data, command.User);
             return new InsertResult(true, s.Id);
         }
         #endregion

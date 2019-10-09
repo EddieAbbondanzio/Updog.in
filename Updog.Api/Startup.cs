@@ -98,7 +98,6 @@ namespace Updog.Api {
             services.AddTransient<IUserService, UserService>();
             services.AddSingleton<IUserMapper, UserMapper>();
             services.AddSingleton<IUserFactory, UserFactory>();
-            services.AddSingleton<IUserViewMapper, UserViewMapper>();
             services.AddTransient<QueryHandler<FindUserByUsernameQuery>, FindUserByUsernameQueryHandler>();
             services.AddTransient<QueryHandler<IsUsernameAvailableQuery>, IsUsernameAvailableQueryHandler>();
             services.AddTransient<CommandHandler<RegisterUserCommand>, RegisterUserCommandHandler>();
@@ -113,13 +112,14 @@ namespace Updog.Api {
             services.AddSingleton<IPostMapper, PostMapper>();
             services.AddSingleton<IPostFactory, PostFactory>();
             services.AddSingleton<PermissionHandler<Post>, PostPermissionHandler>();
-            services.AddTransient<CommandHandler<PostCreateCommand>, PostCreateCommandHandler>();
-            services.AddTransient<CommandHandler<PostUpdateCommand>, PostUpdateCommandHandler>();
-            services.AddTransient<CommandHandler<PostDeleteCommand>, PostDeleteCommandHandler>();
             services.AddTransient<QueryHandler<PostFindByIdQuery>, PostFindByIdQueryHandler>();
             services.AddTransient<QueryHandler<PostFindBySpaceQuery>, PostFindBySpaceQueryHandler>();
             services.AddTransient<QueryHandler<PostFindByUserQuery>, PostFindByUserQueryHandler>();
             services.AddTransient<QueryHandler<PostFindByNewQuery>, PostFindByNewQueryHandler>();
+            services.AddTransient<CommandHandler<PostCreateCommand>, PostCreateCommandHandler>();
+            services.AddTransient<CommandHandler<PostUpdateCommand>, PostUpdateCommandHandler>();
+            services.AddTransient<CommandHandler<PostDeleteCommand>, PostDeleteCommandHandler>();
+
 
             services.AddTransient<ICommentRepo, CommentRepo>();
             services.AddTransient<ICommentReader, CommentReader>();
@@ -136,6 +136,7 @@ namespace Updog.Api {
 
             services.AddTransient<ISpaceRepo, SpaceRepo>();
             services.AddTransient<ISpaceReader, SpaceReader>();
+            services.AddTransient<ISpaceService, SpaceService>();
             services.AddSingleton<ISpaceMapper, SpaceMapper>();
             services.AddSingleton<PermissionHandler<Space>, SpacePermissionHandler>();
             services.AddSingleton<ISpaceFactory, SpaceFactory>();
@@ -146,6 +147,7 @@ namespace Updog.Api {
             services.AddTransient<CommandHandler<SpaceUpdateCommand>, SpaceUpdateCommandHandler>();
 
             services.AddTransient<ISubscriptionRepo, SubscriptionRepo>();
+            services.AddTransient<ISubscriptionService, SubscriptionService>();
             services.AddSingleton<ISubscriptionMapper, SubscriptionMapper>();
             services.AddSingleton<ISubscriptionFactory, SubscriptionFactory>();
             services.AddTransient<QueryHandler<SubscribedSpaceQuery>, SubscribedSpaceQueryHandler>();
@@ -154,6 +156,7 @@ namespace Updog.Api {
 
             services.AddTransient<IVoteRepo, VoteRepo>();
             services.AddTransient<IVoteReader, VoteReader>();
+            services.AddTransient<IVoteService, VoteService>();
             services.AddSingleton<IVoteReadViewMapper, VoteReadViewMapper>();
             services.AddSingleton<IVoteMapper, VoteMapper>();
             services.AddSingleton<IVoteFactory, VoteFactory>();

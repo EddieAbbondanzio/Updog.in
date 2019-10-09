@@ -18,17 +18,24 @@ namespace Updog.Api {
     [ApiController]
     public sealed class PostController : ApiController {
         #region Fields
-        private QueryHandler<PostFindByNewQuery> postFinderByNew;
-        private QueryHandler<PostFindByIdQuery> postFinderById;
-        private QueryHandler<PostFindByUserQuery> postFinderByUser;
-        private QueryHandler<CommentFindByPostQuery> commentFinderByPost;
+        private QueryHandler<PostFindByNewQuery, PagedResultSet<PostReadView>> postFinderByNew;
+        private QueryHandler<PostFindByIdQuery, PostReadView> postFinderById;
+        private QueryHandler<PostFindByUserQuery, PagedResultSet<PostReadView>> postFinderByUser;
+        private QueryHandler<CommentFindByPostQuery, IEnumerable<CommentReadView>> commentFinderByPost;
         private CommandHandler<PostCreateCommand> postCreator;
         private CommandHandler<PostUpdateCommand> postUpdater;
         private CommandHandler<PostDeleteCommand> postDeleter;
         #endregion
 
         #region Constructor(s)
-        public PostController(QueryHandler<PostFindByNewQuery> postFinderByNew, QueryHandler<PostFindByIdQuery> postFinderById, QueryHandler<PostFindByUserQuery> postFinderByUser, QueryHandler<CommentFindByPostQuery> commentFinderByPost, CommandHandler<PostCreateCommand> postAdder, CommandHandler<PostUpdateCommand> postUpdater, CommandHandler<PostDeleteCommand> postDeleter) {
+        public PostController(
+            QueryHandler<PostFindByNewQuery, PagedResultSet<PostReadView>> postFinderByNew,
+            QueryHandler<PostFindByIdQuery, PostReadView> postFinderById,
+            QueryHandler<PostFindByUserQuery, PagedResultSet<PostReadView>> postFinderByUser,
+            QueryHandler<CommentFindByPostQuery, IEnumerable<CommentReadView>> commentFinderByPost,
+            CommandHandler<PostCreateCommand> postAdder, CommandHandler<PostUpdateCommand> postUpdater,
+            CommandHandler<PostDeleteCommand> postDeleter
+        ) {
             this.postFinderByNew = postFinderByNew;
             this.postFinderById = postFinderById;
             this.postFinderByUser = postFinderByUser;
@@ -43,11 +50,13 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("new")]
         public async Task<ActionResult> FindByNew([FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            await postFinderByNew.Execute(new PostFindByNewQuery() {
+            var posts = await postFinderByNew.Execute(new PostFindByNewQuery() {
                 User = User,
                 Paging = new PaginationInfo(pageNumber, pageSize)
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            });
+
+            SetContentRangeHeader(posts.Pagination);
+            return Ok(posts);
         }
 
         /// <summary>
@@ -58,11 +67,12 @@ namespace Updog.Api {
         [HttpGet("{id}")]
         [HttpHead("{id}")]
         public async Task<ActionResult> FindById(int id) {
-            await postFinderById.Execute(new PostFindByIdQuery() {
+            var post = await postFinderById.Execute(new PostFindByIdQuery() {
                 PostId = id,
                 User = User!
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            });
+
+            return post != null ? Ok(post) : NotFound() as ActionResult;
         }
 
 
@@ -73,22 +83,25 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{postId}/comment")]
         public async Task<ActionResult> FindComments(int postId) {
-            await commentFinderByPost.Execute(new CommentFindByPostQuery() {
+            var comments = await commentFinderByPost.Execute(new CommentFindByPostQuery() {
                 PostId = postId,
                 User = User
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            });
+
+            return Ok(comments);
         }
 
         [AllowAnonymous]
         [HttpGet("user/{username}")]
         public async Task<ActionResult> FindByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            await postFinderByUser.Execute(new PostFindByUserQuery() {
+            var posts = await postFinderByUser.Execute(new PostFindByUserQuery() {
                 Username = username,
                 User = User,
                 Paging = new PaginationInfo(pageNumber, pageSize)
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            });
+
+            SetContentRangeHeader(posts.Pagination);
+            return Ok(posts);
         }
 
         /// <summary>
@@ -96,11 +109,12 @@ namespace Updog.Api {
         /// </summary>
         [HttpPost]
         public async Task<ActionResult> Create([FromBody]PostCreateRequest payload) {
-            await postCreator.Execute(new PostCreateCommand() {
-                CreationData = new PostCreateData(payload.Type, payload.Title, payload.Body, payload.Space),
-                User = User!
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            // var result = await postCreator.Execute(new PostCreateCommand() {
+            //     CreationData = new PostCreateData(payload.Type, payload.Title, payload.Body, payload.Space),
+            //     User = User!
+            // });
+
+            return Ok(null!);
         }
 
         /// <summary>
@@ -112,8 +126,9 @@ namespace Updog.Api {
                 User = User!,
                 PostId = id,
                 Body = payload.Body
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            });
+
+            return Ok();
         }
 
         /// <summary>
@@ -124,8 +139,9 @@ namespace Updog.Api {
             await postDeleter.Execute(new PostDeleteCommand() {
                 User = User!,
                 PostId = id
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            });
+
+            return Ok();
         }
         #endregion
     }

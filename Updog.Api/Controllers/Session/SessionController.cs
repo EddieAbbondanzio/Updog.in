@@ -13,15 +13,13 @@ namespace Updog.Api {
     [ApiController]
     public sealed class SessionController : ApiController {
         #region Fields
-        private CommandHandler<LoginUserCommand> loginUserInteractor;
+        private CommandHandler<LoginUserCommand> loginCommand;
 
-        private IUserViewMapper userViewMapper;
         #endregion
 
         #region Constructor(s)
-        public SessionController(CommandHandler<LoginUserCommand> loginUserInteractor, IUserViewMapper userViewMapper) {
-            this.loginUserInteractor = loginUserInteractor;
-            this.userViewMapper = userViewMapper;
+        public SessionController(CommandHandler<LoginUserCommand> loginCommand) {
+            this.loginCommand = loginCommand;
         }
         #endregion
 
@@ -32,10 +30,11 @@ namespace Updog.Api {
         /// <param name="loginRequest">The credentials to authenticate under.</param>
         [HttpPost]
         public async Task<ActionResult> Login([FromBody]SessionLoginRequest loginRequest) {
-            await loginUserInteractor.Execute(new LoginUserCommand() {
+            var result = await loginCommand.Execute(new LoginUserCommand() {
                 Credentials = new UserCredentials(loginRequest.Username, loginRequest.Password)
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            });
+
+            return Ok(result);
         }
 
         /// <summary>
@@ -48,9 +47,7 @@ namespace Updog.Api {
             * Dirty work is done by the auth filter.
             * Down the road this can be tweaked to support rolling tokens...
             */
-            UserView user = userViewMapper.Map(User!);
-
-            return Ok(new UserLogin(user, authorization.Split(" ")[1]));
+            return Ok(new UserLogin(User!.Id, authorization.Split(" ")[1]));
         }
         #endregion
     }

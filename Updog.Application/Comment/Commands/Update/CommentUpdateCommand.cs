@@ -6,8 +6,13 @@ namespace Updog.Application {
     /// </summary>
     public sealed class CommentUpdateCommand : AuthenticatedCommand {
         #region Properties
-        public int CommentId { get; set; }
-        public string Body { get; set; } = "";
+        public CommentUpdateData Data { get; }
+        #endregion
+
+        #region Constructor(s)
+        public CommentUpdateCommand(CommentUpdateData data, User user) : base(user) {
+            Data = data;
+        }
         #endregion
     }
 }

@@ -10,7 +10,13 @@ namespace Updog.Application {
         /// The ID of the post to delete.
         /// </summary>
         /// <value></value>
-        public int PostId { get; set; }
+        public PostDeleteData Data { get; }
+        #endregion
+
+        #region Constructor(s)
+        public PostDeleteCommand(PostDeleteData data, User user) : base(user) {
+            Data = data;
+        }
         #endregion
     }
 }

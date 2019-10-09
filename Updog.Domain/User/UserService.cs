@@ -79,30 +79,30 @@ namespace Updog.Domain {
             return login;
         }
 
-        public async Task<User> Update(UserUpdateData data) {
-            User? user = await repo.FindByEmail(data.Email);
+        public async Task<User> Update(UserUpdateData data, User user) {
+            User? existing = await repo.FindByEmail(data.Email);
 
-            if (!user?.Equals(data.User) ?? false) {
+            if (!existing?.Equals(user) ?? false) {
                 throw new InvalidOperationException();
             }
 
             // Good to go, update and save off the change.
-            user!.Email = data.Email;
+            existing!.Email = data.Email;
 
-            await repo.Update(user);
-            await bus.Dispatch(new UserUpdateEvent(user));
+            await repo.Update(existing);
+            await bus.Dispatch(new UserUpdateEvent(existing));
 
-            return user;
+            return existing;
         }
 
-        public async Task<User> UpdatePassword(UserPasswordUpdateData data) {
+        public async Task<User> UpdatePassword(UserUpdatePasswordData data, User user) {
             //Verify the old password is a match first
-            bool isMatch = passwordHasher.Verify(data.CurrentPassword, data.User.PasswordHash);
+            bool isMatch = passwordHasher.Verify(data.CurrentPassword, user.PasswordHash);
 
             if (isMatch) {
-                data.User.PasswordHash = passwordHasher.Hash(data.NewPassword);
-                await repo.Update(data.User);
-                return data.User;
+                user.PasswordHash = passwordHasher.Hash(data.NewPassword);
+                await repo.Update(user);
+                return user;
             } else {
                 throw new InvalidOperationException();
             }

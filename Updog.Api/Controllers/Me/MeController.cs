@@ -44,8 +44,9 @@ namespace Updog.Api {
             await userUpdater.Execute(new UserUpdateCommand() {
                 User = User!,
                 Email = updateRequest.Email
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            });
+
+            return Ok();
         }
 
         /// <summary>
@@ -58,8 +59,9 @@ namespace Updog.Api {
                 User = User!,
                 CurrentPassword = updatePasswordRequest.CurrentPassword,
                 NewPassword = updatePasswordRequest.NewPassword
-            }, ActionResultBuilder);
-            return ActionResultBuilder.Build();
+            });
+
+            return Ok();
         }
         #endregion
     }

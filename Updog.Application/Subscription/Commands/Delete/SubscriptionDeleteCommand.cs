@@ -3,11 +3,13 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class SubscriptionDeleteCommand : AuthenticatedCommand {
         #region Properties
-        /// <summary>
-        /// The name of the space.
-        /// </summary>
-        /// <value></value>
-        public string Space { get; set; } = "";
+        public SubscriptionDeleteData Data { get; }
+        #endregion
+
+        #region Constructor(s)
+        public SubscriptionDeleteCommand(SubscriptionDeleteData data, User user) : base(user) {
+            Data = data;
+        }
         #endregion
     }
 }

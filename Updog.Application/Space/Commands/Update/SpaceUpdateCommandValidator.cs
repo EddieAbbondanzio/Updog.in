@@ -10,9 +10,9 @@ namespace Updog.Application {
         public SpaceUpdateCommandValidator() {
             RuleFor(s => s.User).NotNull().WithMessage("User performing the action is null.");
 
-            RuleFor(s => s.Description).NotNull().WithMessage("Description is required.");
-            RuleFor(s => s.Description).NotEmpty().WithMessage("Description is required.");
-            RuleFor(s => s.Description).MaximumLength(Space.DescriptionMaxLength).WithMessage($"Description must be {Space.DescriptionMaxLength} characters or less.");
+            // RuleFor(s => s.Description).NotNull().WithMessage("Description is required.");
+            // RuleFor(s => s.Description).NotEmpty().WithMessage("Description is required.");
+            // RuleFor(s => s.Description).MaximumLength(Space.DescriptionMaxLength).WithMessage($"Description must be {Space.DescriptionMaxLength} characters or less.");
         }
     }
 }
