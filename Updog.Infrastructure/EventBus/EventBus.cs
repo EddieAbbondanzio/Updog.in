@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -25,12 +26,10 @@ namespace Updog.Infrastructure {
         /// <param name="domainEvent">The domain event to dispatch.</param>
         /// <typeparam name="TEvent">The type of event.</typeparam>
         public async Task Dispatch<TEvent>(TEvent domainEvent) where TEvent : IDomainEvent {
-            IDomainEventHandler<TEvent>[]? handlers = serviceProvider.GetService(typeof(IDomainEventHandler<TEvent>[])) as IDomainEventHandler<TEvent>[];
+            IEnumerable<IDomainEventHandler<TEvent>> handlers = serviceProvider.GetServices<IDomainEventHandler<TEvent>>(); //  serviceProvider.GetService(typeof(IDomainEventHandler<TEvent>).GetType()) as IDomainEventHandler<TEvent>[];
 
-            if (handlers != null && handlers.Length > 0) {
-                for (int i = 0; i < handlers.Length; i++) {
-                    await handlers[i].Handle(domainEvent);
-                }
+            foreach (IDomainEventHandler<TEvent> handler in handlers) {
+                await handler.Handle(domainEvent);
             }
         }
         #endregion
