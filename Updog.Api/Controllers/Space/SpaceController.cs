@@ -51,7 +51,7 @@ namespace Updog.Api {
         [HttpGet("default")]
         [AllowAnonymous]
         public async Task<IActionResult> GetDefaultSpaces() {
-            var spaces = await spaceFinderDefault.Execute(new DefaultSpaceQuery());
+            var spaces = await spaceFinderDefault.Execute(new DefaultSpaceQuery(User));
             return Ok(spaces);
         }
 
@@ -60,9 +60,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpGet("subscribed")]
         public async Task<IActionResult> GetSubscribedSpaces() {
-            var spaces = await subsriptionFinderByUser.Execute(new SubscribedSpaceQuery() {
-                User = User!
-            });
+            var spaces = await subsriptionFinderByUser.Execute(new SubscribedSpaceQuery(User!));
 
             return Ok(spaces);
         }
@@ -70,9 +68,7 @@ namespace Updog.Api {
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Find([FromQuery]int pageNumber, [FromQuery] int pageSize = Space.PageSize) {
-            var spaces = await this.spaceFinder.Execute(new SpaceFindQuery() {
-                Paging = new PaginationInfo(pageNumber, pageSize)
-            });
+            var spaces = await this.spaceFinder.Execute(new SpaceFindQuery(new PaginationInfo(pageNumber, pageSize), User));
 
             SetContentRangeHeader(spaces.Pagination);
             return Ok(spaces);
@@ -87,9 +83,7 @@ namespace Updog.Api {
         [HttpGet("{name}")]
         [AllowAnonymous]
         public async Task<IActionResult> FindByName(string name) {
-            var space = await spaceFinderByName.Execute(new SpaceFindByNameQuery() {
-                Name = name
-            });
+            var space = await spaceFinderByName.Execute(new SpaceFindByNameQuery(name, User));
 
             return space != null ? Ok(space) : NotFound() as IActionResult;
         }
@@ -123,11 +117,7 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{name}/post/new")]
         public async Task<IActionResult> FindPosts(string name, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            var posts = await this.postFinderBySpace.Execute(new PostFindBySpaceQuery() {
-                Space = name,
-                User = User!,
-                Paging = new PaginationInfo(pageNumber, pageSize)
-            });
+            var posts = await this.postFinderBySpace.Execute(new PostFindBySpaceQuery(name, new PaginationInfo(pageNumber, pageSize), User));
 
             SetContentRangeHeader(posts.Pagination);
             return Ok(posts);

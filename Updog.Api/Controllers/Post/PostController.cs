@@ -50,10 +50,7 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("new")]
         public async Task<ActionResult> FindByNew([FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            var posts = await postFinderByNew.Execute(new PostFindByNewQuery() {
-                User = User,
-                Paging = new PaginationInfo(pageNumber, pageSize)
-            });
+            var posts = await postFinderByNew.Execute(new PostFindByNewQuery(new PaginationInfo(pageNumber, pageSize), User));
 
             SetContentRangeHeader(posts.Pagination);
             return Ok(posts);
@@ -67,10 +64,7 @@ namespace Updog.Api {
         [HttpGet("{id}")]
         [HttpHead("{id}")]
         public async Task<ActionResult> FindById(int id) {
-            var post = await postFinderById.Execute(new PostFindByIdQuery() {
-                PostId = id,
-                User = User!
-            });
+            var post = await postFinderById.Execute(new PostFindByIdQuery(id, User));
 
             return post != null ? Ok(post) : NotFound() as ActionResult;
         }
@@ -83,23 +77,14 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{postId}/comment")]
         public async Task<ActionResult> FindComments(int postId) {
-            var comments = await commentFinderByPost.Execute(new CommentFindByPostQuery() {
-                PostId = postId,
-                User = User
-            });
-
+            var comments = await commentFinderByPost.Execute(new CommentFindByPostQuery(postId, User!));
             return Ok(comments);
         }
 
         [AllowAnonymous]
         [HttpGet("user/{username}")]
         public async Task<ActionResult> FindByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            var posts = await postFinderByUser.Execute(new PostFindByUserQuery() {
-                Username = username,
-                User = User,
-                Paging = new PaginationInfo(pageNumber, pageSize)
-            });
-
+            var posts = await postFinderByUser.Execute(new PostFindByUserQuery(username, new PaginationInfo(pageNumber, pageSize), User));
             SetContentRangeHeader(posts.Pagination);
             return Ok(posts);
         }

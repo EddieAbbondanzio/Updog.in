@@ -34,7 +34,7 @@ namespace Updog.Domain {
             Email = email;
         }
 
-        public User(int id, string username, string email, string passwordHash, DateTime joinedDate, int postKarma, int commentKarma) {
+        public User(int id, string username, string? email, string passwordHash, DateTime joinedDate, int postKarma, int commentKarma) {
             Id = id;
             Username = username;
             Email = email;

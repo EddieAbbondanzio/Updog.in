@@ -40,9 +40,7 @@ namespace Updog.Api {
         #region Publics
         [HttpHead("{username}")]
         public async Task<IActionResult> IsUsernameAvailable(string username) {
-            var isFree = await usernameChecker.Execute(new IsUsernameAvailableQuery() {
-                Username = username
-            });
+            var isFree = await usernameChecker.Execute(new IsUsernameAvailableQuery(username, User));
 
             return isFree ? NotFound() : Ok() as IActionResult;
         }
@@ -53,10 +51,7 @@ namespace Updog.Api {
         /// <param name="username">The username of the user to look for.</param>
         [HttpGet("{username}")]
         public async Task<IActionResult> FindByUsername(string username) {
-            var user = await userFinder.Execute(new FindUserByUsernameQuery() {
-                Username = username,
-                User = User!
-            });
+            var user = await userFinder.Execute(new FindUserByUsernameQuery(username, User));
 
             return user != null ? Ok(user) : NotFound() as IActionResult;
         }

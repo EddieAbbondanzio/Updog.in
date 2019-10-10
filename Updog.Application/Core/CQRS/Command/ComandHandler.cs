@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Updog.Application.Validation;
@@ -32,7 +33,10 @@ namespace Updog.Application {
                 var result = await validator.ValidateAsync(command);
 
                 if (!result.IsValid) {
-                    return CommandResult.Failure();
+                    /*
+                    * No sense in returning back all the errors.
+                    */
+                    return CommandResult.Failure(result.Failures.First().ErrorMessage);
                 }
             }
 

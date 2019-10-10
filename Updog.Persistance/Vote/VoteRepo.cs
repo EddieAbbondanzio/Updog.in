@@ -16,7 +16,7 @@ namespace Updog.Persistance {
 
         #region Constructor(s)
         public VoteRepo(IDatabase database, IVoteMapper mapper) : base(database) {
-            mapper = mapper;
+            this.mapper = mapper;
         }
         #endregion
 

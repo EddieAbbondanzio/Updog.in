@@ -44,14 +44,14 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{commentId}")]
         public async Task<IActionResult> GetComment(int commentId) {
-            CommentReadView? comment = await commentFinderById.Execute(new CommentFindByIdQuery() { CommentId = commentId, User = User });
+            CommentReadView? comment = await commentFinderById.Execute(new CommentFindByIdQuery(commentId, User!));
             return comment != null ? Ok(comment) : NotFound() as IActionResult;
         }
 
         [AllowAnonymous]
         [HttpGet("user/{username}")]
         public async Task<IActionResult> GetCommentsByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery]int pageSize = Comment.PageSize) {
-            PagedResultSet<CommentReadView> comments = await commentFinderByUser.Execute(new CommentFindByUserQuery() { Username = username, User = User, Paging = new PaginationInfo(pageNumber, pageSize) });
+            PagedResultSet<CommentReadView> comments = await commentFinderByUser.Execute(new CommentFindByUserQuery(username, new PaginationInfo(pageNumber, pageSize), User));
 
             SetContentRangeHeader(comments.Pagination);
             return Ok(comments);
