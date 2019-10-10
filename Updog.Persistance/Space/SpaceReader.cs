@@ -77,7 +77,14 @@ namespace Updog.Persistance {
                 @"SELECT * FROM Space WHERE IsDefault = TRUE"
             );
 
-            return defaults.Select(s => mapper.Map(s));
+            var views = defaults.Select(s => mapper.Map(s)).ToArray();
+            IUserReader userReader = GetReader<IUserReader>();
+
+            for (int i = 0; i < views.Length; i++) {
+                views[i].User = (await userReader.FindById(defaults.ElementAt(i).UserId))!;
+            }
+
+            return views;
         }
 
         public async Task<IEnumerable<SpaceReadView>> FindSubscribed(User user) {
@@ -86,7 +93,14 @@ namespace Updog.Persistance {
                 user
             );
 
-            return subscribes.Select(s => mapper.Map(s));
+            var views = subscribes.Select(s => mapper.Map(s)).ToArray();
+            IUserReader userReader = GetReader<IUserReader>();
+
+            for (int i = 0; i < views.Length; i++) {
+                views[i].User = (await userReader.FindById(subscribes.ElementAt(i).UserId))!;
+            }
+
+            return views;
         }
         #endregion
     }
