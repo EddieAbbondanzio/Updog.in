@@ -41,37 +41,33 @@ namespace Updog.Domain {
             return user;
         }
 
-        public async Task<UserLogin?> Login(UserCredentials credentials) {
+        public async Task<UserLogin> Login(UserCredentials credentials) {
             User? user = await repo.FindByUsername(credentials.Username);
 
-            if (user == null) {
-                return null;
+            //If no use was found, or the password doesn't match the one on file, fail.
+            if (user == null || !passwordHasher.Verify(credentials.Password, user.PasswordHash)) {
+                throw new UnauthorizedAccessException();
             }
 
-            if (passwordHasher.Verify(credentials.Password, user.PasswordHash)) {
-                string authToken = tokenHandler.IssueToken(user);
+            UserLogin login = new UserLogin(user.Id, tokenHandler.IssueToken(user));
+            await bus.Dispatch(new UserLoginEvent(user, login));
 
-                UserLogin login = new UserLogin(user.Id, "");
-                await bus.Dispatch(new UserLoginEvent(user, login));
-
-                return login;
-            } else {
-                return null;
-            }
+            return login;
         }
 
-        public async Task<UserLogin?> Register(UserRegistration registration) {
-            // Check that the email is free first.
+        public async Task<UserLogin> Register(UserRegistration registration) {
+            // If registration provided an email, check to see if it's available.
             if (!String.IsNullOrWhiteSpace(registration.Email)) {
                 User? emailInUse = await repo.FindByEmail(registration.Email!);
                 if (emailInUse != null) {
-                    return null;
+                    throw new EmailAlreadyInUseException();
                 }
             }
 
+            // Check to see if the username is unique.
             User? usernameInUse = await repo.FindByUsername(registration.Username);
             if (usernameInUse != null) {
-                return null;
+                throw new UsernameAlreadyInUseException();
             }
 
             User user = factory.CreateFromRegistration(registration);
@@ -101,15 +97,13 @@ namespace Updog.Domain {
 
         public async Task<User> UpdatePassword(UserUpdatePassword data, User user) {
             //Verify the old password is a match first
-            bool isMatch = passwordHasher.Verify(data.CurrentPassword, user.PasswordHash);
-
-            if (isMatch) {
-                user.PasswordHash = passwordHasher.Hash(data.NewPassword);
-                await repo.Update(user);
-                return user;
-            } else {
-                throw new InvalidOperationException();
+            if (!passwordHasher.Verify(data.CurrentPassword, user.PasswordHash)) {
+                throw new UnauthorizedAccessException();
             }
+
+            user.PasswordHash = passwordHasher.Hash(data.NewPassword);
+            await repo.Update(user);
+            return user;
         }
         #endregion
     }

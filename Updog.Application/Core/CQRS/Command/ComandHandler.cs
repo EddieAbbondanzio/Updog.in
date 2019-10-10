@@ -32,7 +32,7 @@ namespace Updog.Application {
                 var result = await validator.ValidateAsync(command);
 
                 if (!result.IsValid) {
-                    return new CommandResult(false);
+                    return CommandResult.Failure();
                 }
             }
 
@@ -43,6 +43,10 @@ namespace Updog.Application {
 
         #region Privates
         protected abstract Task<CommandResult> ExecuteCommand(TCommand command);
+
+        protected CommandResult Success(int insertId = 0) => CommandResult.Success(insertId);
+
+        protected CommandResult Failure(string? error = null) => CommandResult.Failure(error);
 
         /// <summary>
         /// Get the custom validate attrbitute from the handle method

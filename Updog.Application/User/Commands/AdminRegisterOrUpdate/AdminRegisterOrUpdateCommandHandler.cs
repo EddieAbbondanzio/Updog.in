@@ -18,7 +18,7 @@ namespace Updog.Application {
 
         protected async override Task<CommandResult> ExecuteCommand(AdminRegisterOrUpdateCommand command) {
             User admin = await service.AdminRegisterOrUpdate(command.Config);
-            return new CommandResult(true);
+            return Success();
         }
     }
 }

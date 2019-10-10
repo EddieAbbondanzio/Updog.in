@@ -18,14 +18,15 @@ namespace Updog.Application {
 
         [Validate(typeof(RegisterUserCommandValidator))]
         protected async override Task<CommandResult> ExecuteCommand(RegisterUserCommand command) {
-            UserLogin? login = await service.Register(command.Registration);
-
-            if (login != null) {
-                throw new Exception();
-                // return new DataResult<UserLogin>(true, login);
-            } else {
-                return new CommandResult(false);
+            try {
+                UserLogin login = await service.Register(command.Registration);
+                return Success();
+            } catch (UsernameAlreadyInUseException) {
+                return Failure("Username is unavailable.");
+            } catch (EmailAlreadyInUseException) {
+                return Failure("Email is already in use.");
             }
+
         }
     }
 }

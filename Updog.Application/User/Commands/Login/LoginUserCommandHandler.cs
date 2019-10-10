@@ -16,8 +16,12 @@ namespace Updog.Application {
 
         [Validate(typeof(LoginUserCommandValidator))]
         protected async override Task<CommandResult> ExecuteCommand(LoginUserCommand command) {
-            UserLogin? login = await service.Login(command.Credentials);
-            return new CommandResult(login != null);
+            try {
+                UserLogin login = await service.Login(command.Credentials);
+                return Success();
+            } catch (UnauthorizedAccessException) {
+                return Failure();
+            }
         }
     }
 }
