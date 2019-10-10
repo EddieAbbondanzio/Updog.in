@@ -31,7 +31,7 @@ namespace Updog.Domain {
             Post? p = await repo.FindById(postId);
 
             if (p == null) {
-                throw new InvalidOperationException();
+                throw new NotFoundException($"No post with Id {postId} found.");
             }
 
             p.Update(update);
@@ -45,7 +45,7 @@ namespace Updog.Domain {
             Post? p = await repo.FindById(postId);
 
             if (p == null) {
-                throw new InvalidOperationException();
+                throw new NotFoundException($"No post with Id {postId} found.");
             }
 
             p.Delete();

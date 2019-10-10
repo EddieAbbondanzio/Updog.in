@@ -17,8 +17,12 @@ namespace Updog.Application {
         #region Publics
         [Validate(typeof(PostUpdateCommandValidator))]
         protected async override Task<CommandResult> ExecuteCommand(PostUpdateCommand command) {
-            Post p = await service.Update(command.PostId, command.Update, command.User);
-            return new CommandResult(true);
+            try {
+                Post p = await service.Update(command.PostId, command.Update, command.User);
+                return Success();
+            } catch (NotFoundException e) {
+                return Failure(e.Message);
+            }
         }
         #endregion
     }

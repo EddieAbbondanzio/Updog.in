@@ -32,10 +32,10 @@ namespace Updog.Domain {
             Comment? c = await repo.FindById(commentId);
 
             if (c == null) {
-                throw new InvalidOperationException();
+                throw new NotFoundException($"No comment with Id: {commentId} found.");
             }
 
-            c.Update(new CommentUpdate(update.Body));
+            c.Update(update);
             await repo.Update(c);
 
             await bus.Dispatch(new CommentUpdateEvent(c));
@@ -47,7 +47,7 @@ namespace Updog.Domain {
             Comment? c = await repo.FindById(commentId);
 
             if (c == null) {
-                throw new InvalidOperationException();
+                throw new NotFoundException($"No comment with Id: {commentId} found.");
             }
 
             c.Delete();
