@@ -17,8 +17,12 @@ namespace Updog.Application {
         #region Publics
         [Validate(typeof(SpaceCreateCommandValidator))]
         protected async override Task<CommandResult> ExecuteCommand(SpaceCreateCommand command) {
-            Space s = await service.Create(command.Data, command.User);
-            return new CommandResult(true, s.Id);
+            try {
+                Space s = await service.Create(command.Data, command.User);
+                return Success(s.Id);
+            } catch (SpaceNameAlreadyInUseException e) {
+                return Failure(e.Message);
+            }
         }
         #endregion
     }

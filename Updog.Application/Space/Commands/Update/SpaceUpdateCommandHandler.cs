@@ -16,8 +16,12 @@ namespace Updog.Application {
         #region Publics
         [Validate(typeof(SpaceUpdateCommandValidator))]
         protected async override Task<CommandResult> ExecuteCommand(SpaceUpdateCommand command) {
-            Space s = await service.Update(command.Space, command.Update, command.User);
-            return new CommandResult(true);
+            try {
+                Space s = await service.Update(command.Space, command.Update, command.User);
+                return Success();
+            } catch (NotFoundException e) {
+                return Failure(e.Message);
+            }
         }
         #endregion
     }

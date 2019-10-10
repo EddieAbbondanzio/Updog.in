@@ -19,6 +19,12 @@ namespace Updog.Domain {
 
         #region Publics
         public async Task<Space> Create(SpaceCreate data, User user) {
+            // Check if name is available.
+            Space? existing = await repo.FindByName(data.Name);
+            if (existing != null) {
+                throw new SpaceNameAlreadyInUseException($"{data.Name} is unavailable.");
+            }
+
             Space s = factory.Create(data, user);
 
             await repo.Add(s);
@@ -31,7 +37,7 @@ namespace Updog.Domain {
             Space? s = await repo.FindByName(space);
 
             if (s == null) {
-                throw new InvalidOperationException();
+                throw new NotFoundException($"No space with name {space} found.");
             };
 
             s.Update(update);
