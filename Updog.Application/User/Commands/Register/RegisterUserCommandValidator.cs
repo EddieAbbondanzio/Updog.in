@@ -3,7 +3,7 @@ using Updog.Domain;
 using FluentValidation;
 using FluentValidation.Results;
 using System.Linq;
-using Updog.Application.Validation;
+using Updog.Application;
 
 namespace Updog.Application {
     /// <summary>

@@ -69,7 +69,6 @@ namespace Updog.Api {
             return post != null ? Ok(post) : NotFound() as ActionResult;
         }
 
-
         /// <summary>
         /// Get all the comments of a post.
         /// </summary>

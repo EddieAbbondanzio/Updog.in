@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Updog.Application.Validation {
+namespace Updog.Application {
     public interface IValidator {
         ValidationResult Validate(object resource);
 

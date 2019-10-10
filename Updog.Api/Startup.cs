@@ -98,6 +98,7 @@ namespace Updog.Api {
             services.AddTransient<IUserReader, UserReader>();
             services.AddTransient<IUserService, UserService>();
             services.AddSingleton<IUserMapper, UserMapper>();
+            services.AddSingleton<IUserReadViewMapper, UserReadViewMapper>();
             services.AddSingleton<IUserFactory, UserFactory>();
             services.AddTransient<QueryHandler<FindUserByUsernameQuery, UserReadView?>, FindUserByUsernameQueryHandler>();
             services.AddTransient<QueryHandler<IsUsernameAvailableQuery, bool>, IsUsernameAvailableQueryHandler>();
@@ -111,6 +112,7 @@ namespace Updog.Api {
             services.AddTransient<IPostReader, PostReader>();
             services.AddTransient<IPostService, PostService>();
             services.AddSingleton<IPostMapper, PostMapper>();
+            services.AddSingleton<IPostReadViewMapper, PostReadViewMapper>();
             services.AddSingleton<IPostFactory, PostFactory>();
             services.AddTransient<IDomainEventHandler<VoteOnPostEvent>, VoteOnPostEventHandler>();
             services.AddTransient<QueryHandler<PostFindByIdQuery, PostReadView?>, PostFindByIdQueryHandler>();
@@ -126,6 +128,7 @@ namespace Updog.Api {
             services.AddTransient<ICommentReader, CommentReader>();
             services.AddTransient<ICommentService, CommentService>();
             services.AddSingleton<ICommentMapper, CommentMapper>();
+            services.AddSingleton<ICommentReadViewMapper, CommentReadViewMapper>();
             services.AddSingleton<ICommentFactory, CommentFactory>();
             services.AddTransient<IDomainEventHandler<VoteOnCommentEvent>, VoteOnCommentEventHandler>();
             services.AddTransient<QueryHandler<CommentFindByIdQuery, CommentReadView?>, CommentFindByIdQueryHandler>();
@@ -139,6 +142,7 @@ namespace Updog.Api {
             services.AddTransient<ISpaceReader, SpaceReader>();
             services.AddTransient<ISpaceService, SpaceService>();
             services.AddSingleton<ISpaceMapper, SpaceMapper>();
+            services.AddSingleton<ISpaceReadViewMapper, SpaceReadViewMapper>();
             services.AddSingleton<ISpaceFactory, SpaceFactory>();
             services.AddTransient<IDomainEventHandler<SubscriptionCreateEvent>, SubscriptionCreateEventHandler>();
             services.AddTransient<IDomainEventHandler<SubscriptionDeleteEvent>, SubscriptionDeleteEventHandler>();

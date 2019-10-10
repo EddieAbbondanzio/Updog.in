@@ -2,12 +2,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
+using Updog.Application;
 
-namespace Updog.Application.Validation {
+namespace Updog.Application {
     /// <summary>
     /// Base class for validators to implement.
     /// </summary>
-    internal abstract class FluentValidatorAdapter<TResource> : AbstractValidator<TResource>, IValidator<TResource> {
+    internal abstract class FluentValidatorAdapter<TResource> : AbstractValidator<TResource>, Application.IValidator<TResource> {
         #region Publics
         public new async Task<ValidationResult> ValidateAsync(TResource resource, CancellationToken token = default(CancellationToken)) {
             var result = await base.ValidateAsync(resource);

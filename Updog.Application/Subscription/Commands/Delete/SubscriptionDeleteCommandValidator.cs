@@ -1,5 +1,5 @@
 using FluentValidation;
-using Updog.Application.Validation;
+using Updog.Application;
 
 namespace Updog.Application {
     internal sealed class SubscriptionDeleteCommandValidator : FluentValidatorAdapter<SubscriptionDeleteCommand> {

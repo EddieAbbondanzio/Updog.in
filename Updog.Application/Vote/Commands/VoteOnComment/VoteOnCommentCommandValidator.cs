@@ -1,5 +1,5 @@
 using FluentValidation;
-using Updog.Application.Validation;
+using Updog.Application;
 using Updog.Domain;
 
 namespace Updog.Application {

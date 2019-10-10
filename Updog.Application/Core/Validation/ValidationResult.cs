@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Updog.Application.Validation {
+namespace Updog.Application {
     public sealed class ValidationResult {
         #region Properties
         /// <summary>

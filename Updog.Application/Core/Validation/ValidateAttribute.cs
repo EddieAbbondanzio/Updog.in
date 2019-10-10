@@ -1,5 +1,4 @@
 using System;
-using Updog.Application.Validation;
 
 namespace Updog.Application {
     /// <summary>

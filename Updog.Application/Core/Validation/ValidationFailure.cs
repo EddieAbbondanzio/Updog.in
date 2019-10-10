@@ -1,4 +1,4 @@
-namespace Updog.Application.Validation {
+namespace Updog.Application {
     /// <summary>
     /// Property and error for a resource that failed validation.
     /// </summary>

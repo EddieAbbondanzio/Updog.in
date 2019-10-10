@@ -21,8 +21,8 @@ namespace Updog.Persistance {
         public async Task<PostReadView?> FindById(int id, User? user = null) {
             var post = await Connection.QueryFirstOrDefaultAsync<PostRecord>(
                 @"SELECT * FROM Post
-                ORDER BY Post.CreationDate DESC
                 WHERE WasDeleted = FALSE
+                ORDER BY Post.CreationDate DESC
                 LIMIT @Limit
                 OFFSET @Offset",
                 new {
@@ -49,8 +49,8 @@ namespace Updog.Persistance {
         public async Task<PagedResultSet<PostReadView>> FindByNew(PaginationInfo paging, User? user = null) {
             var posts = await Connection.QueryAsync<PostRecord>(
                 @"SELECT * FROM Post
-                ORDER BY Post.CreationDate DESC
                 WHERE WasDeleted = FALSE
+                ORDER BY Post.CreationDate DESC
                 LIMIT @Limit
                 OFFSET @Offset",
                 new {

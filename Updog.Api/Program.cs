@@ -16,12 +16,11 @@ namespace Updog.Api {
     public class Program {
         public static async Task Main(string[] args) {
             var host = CreateWebHostBuilder(args).Build();
-            try {
 
-                var adminConfig = host.Services.GetService<IAdminConfig>();
-                var admin = host.Services.GetService<CommandHandler<AdminRegisterOrUpdateCommand>>().Execute(new AdminRegisterOrUpdateCommand() { Config = adminConfig });
-            } catch {
-                Console.WriteLine("Failed to create admin account");
+            var adminConfig = host.Services.GetService<IAdminConfig>();
+
+            using (var scope = host.Services.CreateScope()) {
+                var admin = scope.ServiceProvider.GetService<CommandHandler<AdminRegisterOrUpdateCommand>>().Execute(new AdminRegisterOrUpdateCommand(adminConfig));
             }
 
             await host.RunAsync();

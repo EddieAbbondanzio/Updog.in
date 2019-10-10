@@ -2,7 +2,6 @@ using Updog.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Updog.Domain.Paging;
 using System.Net;
-using Updog.Application.Validation;
 
 namespace Updog.Api {
     /// <summary>
