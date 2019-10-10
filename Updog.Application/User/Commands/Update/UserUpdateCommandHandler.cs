@@ -19,7 +19,7 @@ namespace Updog.Application {
             try {
                 User user = await service.Update(command.Data, command.User);
                 return Success();
-            } catch (InvalidOperationException) {
+            } catch (NotFoundException) {
                 return Failure("No user with matching Id found.");
             }
         }

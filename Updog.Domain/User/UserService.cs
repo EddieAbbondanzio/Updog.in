@@ -83,7 +83,7 @@ namespace Updog.Domain {
             User? existing = await repo.FindByEmail(update.Email);
 
             if (!existing?.Equals(user) ?? false) {
-                throw new InvalidOperationException();
+                throw new NotFoundException("User was not found.");
             }
 
             // Good to go, update and save off the change.

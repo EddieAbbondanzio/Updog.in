@@ -24,7 +24,7 @@ namespace Updog.Domain {
             Space? space = await spaceRepo.FindByName(create.Space);
 
             if (space == null) {
-                throw new InvalidOperationException();
+                throw new NotFoundException($"No space with name {create.Space} found.");
             }
 
             Subscription s = factory.CreateFor(user, space);
@@ -38,7 +38,7 @@ namespace Updog.Domain {
             Subscription? s = await repo.FindByUserAndSpace(user.Username, space);
 
             if (s == null) {
-                throw new InvalidOperationException();
+                throw new NotFoundException($"No subscription for {space} found.");
             }
 
             await repo.Delete(s);
