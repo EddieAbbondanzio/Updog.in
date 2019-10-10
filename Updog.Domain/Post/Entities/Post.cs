@@ -39,11 +39,11 @@ namespace Updog.Domain {
         #endregion
 
         #region Constructor(s)
-        public Post(PostCreateData createData, User user) {
+        public Post(PostCreate createData, Space space, User user) {
             Type = createData.Type;
             Title = createData.Title;
             Body = createData.Body;
-            SpaceId = createData.SpaceId;
+            SpaceId = space.Id;
             UserId = user.Id;
 
             if (Type == PostType.Link && !Regex.IsMatch(Body, RegexPattern.UrlProtocol)) {

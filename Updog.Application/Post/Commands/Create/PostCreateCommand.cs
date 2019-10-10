@@ -6,11 +6,13 @@ namespace Updog.Application {
     /// </summary>
     public sealed class PostCreateCommand : AuthenticatedCommand {
         #region Properties
-        public PostCreateData Data { get; }
+        public string Space { get; }
+        public PostCreate Data { get; }
         #endregion
 
         #region Constructor(s)
-        public PostCreateCommand(PostCreateData data, User user) : base(user) {
+        public PostCreateCommand(string space, PostCreate data, User user) : base(user) {
+            Space = space;
             Data = data;
         }
         #endregion

@@ -17,7 +17,7 @@ namespace Updog.Application {
         [Validate(typeof(UserUpdateCommandValidator))]
         protected async override Task<CommandResult> ExecuteCommand(UserUpdateCommand command) {
             try {
-                User user = await service.Update(command.Data, command.User);
+                User user = await service.Update(command.Update, command.User);
                 return Success();
             } catch (NotFoundException) {
                 return Failure("No user with matching Id found.");

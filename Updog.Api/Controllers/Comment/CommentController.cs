@@ -50,7 +50,7 @@ namespace Updog.Api {
 
         [AllowAnonymous]
         [HttpGet("user/{username}")]
-        public async Task<ActionResult> GetCommentsByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery]int pageSize = Comment.PageSize) {
+        public async Task<IActionResult> GetCommentsByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery]int pageSize = Comment.PageSize) {
             PagedResultSet<CommentReadView> comments = await commentFinderByUser.Execute(new CommentFindByUserQuery() { Username = username, User = User, Paging = new PaginationInfo(pageNumber, pageSize) });
 
             SetContentRangeHeader(comments.Pagination);
@@ -61,27 +61,27 @@ namespace Updog.Api {
         /// Create a new comment on a post.
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult> CreateComment([FromBody]CommentCreateRequest body) {
+        public async Task<IActionResult> CreateComment([FromBody]CommentCreateRequest body) {
             var result = await commentCreator.Execute(new CommentCreateCommand(new CommentCreate(body.PostId, body.Body, body.ParentId), User!));
-            return Ok(result);
+            return result.IsSuccess ? Ok(result) : BadRequest(result.Error) as IActionResult;
         }
 
         /// <summary>
         /// Edit a comment.
         /// </summary>
         [HttpPatch("{commentId}")]
-        public async Task<ActionResult> Update(int commentId, [FromBody]CommentUpdateRequest request) {
-            await commentUpdater.Execute(new CommentUpdateCommand(commentId, new CommentUpdate(request.Body), User!));
-            return Ok();
+        public async Task<IActionResult> Update(int commentId, [FromBody]CommentUpdateRequest request) {
+            var result = await commentUpdater.Execute(new CommentUpdateCommand(commentId, new CommentUpdate(request.Body), User!));
+            return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
         }
 
         /// <summary>
         /// Delete a comment.
         /// </summary>
         [HttpDelete("{commentId}")]
-        public async Task<ActionResult> DeleteComment(int commentId) {
-            await commentDeleter.Execute(new CommentDeleteCommand(commentId, User!));
-            return Ok();
+        public async Task<IActionResult> DeleteComment(int commentId) {
+            var result = await commentDeleter.Execute(new CommentDeleteCommand(commentId, User!));
+            return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
         }
         #endregion
     }

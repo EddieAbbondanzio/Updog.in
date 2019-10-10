@@ -39,12 +39,12 @@ namespace Updog.Api {
 
         #region Publics
         [HttpHead("{username}")]
-        public async Task<ActionResult> IsUsernameAvailable(string username) {
-            var result = await usernameChecker.Execute(new IsUsernameAvailableQuery() {
+        public async Task<IActionResult> IsUsernameAvailable(string username) {
+            var isFree = await usernameChecker.Execute(new IsUsernameAvailableQuery() {
                 Username = username
             });
 
-            return Ok();
+            return isFree ? NotFound() : Ok() as IActionResult;
         }
 
         /// <summary>
@@ -52,13 +52,13 @@ namespace Updog.Api {
         /// </summary>
         /// <param name="username">The username of the user to look for.</param>
         [HttpGet("{username}")]
-        public async Task<ActionResult> FindByUsername(string username) {
-            await userFinder.Execute(new FindUserByUsernameQuery() {
+        public async Task<IActionResult> FindByUsername(string username) {
+            var user = await userFinder.Execute(new FindUserByUsernameQuery() {
                 Username = username,
                 User = User!
             });
 
-            return Ok();
+            return user != null ? Ok(user) : NotFound() as IActionResult;
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Updog.Api {
         /// </summary>
         /// <param name="registration">The new user registration</param>
         [HttpPost]
-        public async Task<ActionResult> Register([FromBody] UserRegisterRequest req) {
+        public async Task<IActionResult> Register([FromBody] UserRegisterRequest req) {
             UserLogin? login = null;
 
             bus.Listen<UserRegisterEvent>((IDomainEvent e) => {
@@ -74,11 +74,11 @@ namespace Updog.Api {
                 login = registerEvent.Login;
             });
 
-            await userRegistrar.Execute(new RegisterUserCommand() {
+            var result = await userRegistrar.Execute(new RegisterUserCommand() {
                 Registration = new UserRegistration(req.Username, req.Password, req.Email)
             });
 
-            return login != null ? Ok(login) : Unauthorized() as ActionResult;
+            return login != null ? Ok(login) : BadRequest(result.Error) as IActionResult;
         }
         #endregion
     }

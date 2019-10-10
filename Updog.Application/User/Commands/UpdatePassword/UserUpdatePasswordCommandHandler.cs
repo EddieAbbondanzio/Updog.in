@@ -17,7 +17,7 @@ namespace Updog.Application {
         [Validate(typeof(UserUpdatePasswordCommandValidator))]
         protected async override Task<CommandResult> ExecuteCommand(UserUpdatePasswordCommand command) {
             try {
-                User u = await service.UpdatePassword(command.Data, command.User);
+                User u = await service.UpdatePassword(command.UpdatePassword, command.User);
                 return Success();
             } catch (UnauthorizedAccessException) {
                 return Failure("Password does not match the one on file.");

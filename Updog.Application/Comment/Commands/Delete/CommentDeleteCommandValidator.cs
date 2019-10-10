@@ -10,7 +10,7 @@ namespace Updog.Application {
         public CommentDeleteCommandValidator() {
             RuleFor(c => c.User).NotNull().WithMessage("User performing the action is null.");
 
-            // RuleFor(c => c.CommentId).GreaterThan(0).WithMessage("Id of comment to delete is required.");
+            RuleFor(c => c.CommentId).GreaterThan(0).WithMessage("Id of comment to delete is required.");
         }
         #endregion
     }

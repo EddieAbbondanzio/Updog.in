@@ -14,7 +14,6 @@ namespace Updog.Application {
             RuleFor(c => c.User).NotNull().WithMessage("User performing the action is null.");
 
             RuleFor(c => c.Data.Body).NotNull().WithMessage("Body is required.");
-
             RuleFor(c => c.Data.Body).NotNull().WithMessage("Body is required.");
             RuleFor(c => c.Data.Body).NotEmpty().WithMessage("Body is required.");
             RuleFor(c => c.Data.Body).MaximumLength(Comment.BodyMaxLength).WithMessage($"Body must be {Comment.BodyMaxLength} characters or less.");

@@ -8,14 +8,14 @@ namespace Updog.Application {
     /// </summary>
     internal sealed class UserUpdatePasswordCommandValidator : FluentValidatorAdapter<UserUpdatePasswordCommand> {
         public UserUpdatePasswordCommandValidator() {
-            RuleFor(reg => reg.User).NotNull().WithMessage("User is required.");
+            RuleFor(c => c.User).NotNull().WithMessage("User is required.");
 
-            // RuleFor(reg => reg.CurrentPassword).NotNull().WithMessage("Current password is required.");
-            // RuleFor(reg => reg.CurrentPassword).NotEmpty().WithMessage("Current password is required.");
+            RuleFor(c => c.UpdatePassword.CurrentPassword).NotNull().WithMessage("Current password is required.");
+            RuleFor(c => c.UpdatePassword.CurrentPassword).NotEmpty().WithMessage("Current password is required.");
 
-            // RuleFor(reg => reg.NewPassword).NotNull().WithMessage("Password is required.");
-            // RuleFor(reg => reg.NewPassword).NotEmpty().WithMessage("Password is required.");
-            // RuleFor(reg => reg.NewPassword).MinimumLength(User.PasswordMinLength).WithMessage($"Password must be at least {User.PasswordMinLength} characters.");
+            RuleFor(c => c.UpdatePassword.NewPassword).NotNull().WithMessage("Password is required.");
+            RuleFor(c => c.UpdatePassword.NewPassword).NotEmpty().WithMessage("Password is required.");
+            RuleFor(c => c.UpdatePassword.NewPassword).MinimumLength(User.PasswordMinLength).WithMessage($"Password must be at least {User.PasswordMinLength} characters.");
         }
     }
 }

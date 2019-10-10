@@ -34,10 +34,9 @@ namespace Updog.Api {
         /// <param name="postId">The ID of the post to vote on.</param>
         /// <param name="vote">The vote type.</param>
         [HttpPost("post/{postId}/{vote}")]
-        public async Task<ActionResult> VoteOnPost(int postId, VoteDirection vote) {
+        public async Task<IActionResult> VoteOnPost(int postId, VoteDirection vote) {
             var result = await voteOnPostHandler.Execute(new VoteOnPostCommand(new VoteOnPost(postId, vote), User!));
-
-            return Ok(result);
+            return result.IsSuccess ? Ok() : BadRequest() as IActionResult;
         }
 
         /// <summary>
@@ -46,9 +45,9 @@ namespace Updog.Api {
         /// <param name="commentId">The Id of the comment to vote on.</param>
         /// <param name="vote">The vote type.</param>
         [HttpPost("comment/{commentId}/{vote}")]
-        public async Task<ActionResult> VoteOnComment(int commentId, VoteDirection vote) {
+        public async Task<IActionResult> VoteOnComment(int commentId, VoteDirection vote) {
             var result = await voteOnCommentHandler.Execute(new VoteOnCommentCommand(new VoteOnComment(commentId, vote), User!));
-            return Ok(result);
+            return result.IsSuccess ? Ok() : BadRequest() as IActionResult;
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Updog.Api {
                 Credentials = new UserCredentials(loginRequest.Username, loginRequest.Password)
             });
 
-            return login != null ? Ok(login) : Unauthorized() as IActionResult;
+            return login != null ? Ok(login) : Unauthorized(result.Error) as IActionResult;
         }
 
         /// <summary>

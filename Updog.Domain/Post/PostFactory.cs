@@ -4,7 +4,7 @@ using Updog.Domain;
 namespace Updog.Domain {
     public sealed class PostFactory : IPostFactory {
         #region Publics
-        public Post Create(PostCreateData creationData, User user) => new Post(creationData, user);
+        public Post Create(PostCreate creationData, Space space, User user) => new Post(creationData, space, user);
         #endregion
     }
 }

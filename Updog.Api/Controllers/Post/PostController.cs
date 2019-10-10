@@ -109,10 +109,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpPost]
         public async Task<ActionResult> Create([FromBody]PostCreateRequest payload) {
-            // var result = await postCreator.Execute(new PostCreateCommand() {
-            //     CreationData = new PostCreateData(payload.Type, payload.Title, payload.Body, payload.Space),
-            //     User = User!
-            // });
+            var result = await postCreator.Execute(new PostCreateCommand(payload.Space, new PostCreate(payload.Type, payload.Title, payload.Body), User!));
 
             return Ok(null!);
         }
@@ -121,20 +118,18 @@ namespace Updog.Api {
         /// Update a post.
         /// </summary>
         [HttpPatch("{id}")]
-        public async Task<ActionResult> Update(int id, [FromBody]PostUpdateRequest payload) {
-            await postUpdater.Execute(new PostUpdateCommand(id, new PostUpdate(payload.Body), User!));
-
-            return Ok();
+        public async Task<IActionResult> Update(int id, [FromBody]PostUpdateRequest payload) {
+            var result = await postUpdater.Execute(new PostUpdateCommand(id, new PostUpdate(payload.Body), User!));
+            return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
         }
 
         /// <summary>
         /// Delete a post.
         /// </summary>
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id) {
-            await postDeleter.Execute(new PostDeleteCommand(id, User!));
-
-            return Ok();
+        public async Task<IActionResult> Delete(int id) {
+            var result = await postDeleter.Execute(new PostDeleteCommand(id, User!));
+            return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
         }
         #endregion
     }

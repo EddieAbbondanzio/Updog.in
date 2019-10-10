@@ -18,8 +18,8 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
-        public async Task<Post> Create(PostCreateData createData, User user) {
-            Post p = factory.Create(createData, user);
+        public async Task<Post> Create(PostCreate createData, Space space, User user) {
+            Post p = factory.Create(createData, space, user);
             await repo.Add(p);
 
             await bus.Dispatch(new PostCreateEvent(p));
