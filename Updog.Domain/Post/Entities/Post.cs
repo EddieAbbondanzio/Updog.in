@@ -39,7 +39,7 @@ namespace Updog.Domain {
         #endregion
 
         #region Constructor(s)
-        public Post(PostCreate createData, Space space, User user) {
+        internal Post(PostCreate createData, Space space, User user) {
             Type = createData.Type;
             Title = createData.Title;
             Body = createData.Body;
@@ -51,7 +51,7 @@ namespace Updog.Domain {
             }
         }
 
-        public Post(int id, int userId, int spaceId, PostType type, string title, string body, DateTime creationDate, int commentCount, VoteStats votes, bool wasUpdated = false, bool wasDeleted = false) {
+        internal Post(int id, int userId, int spaceId, PostType type, string title, string body, DateTime creationDate, int commentCount, VoteStats votes, bool wasUpdated = false, bool wasDeleted = false) {
             Id = id;
             UserId = userId;
             SpaceId = spaceId;

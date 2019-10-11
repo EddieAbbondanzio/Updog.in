@@ -7,16 +7,14 @@ namespace Updog.Domain {
         private IEventBus bus;
         private IUserFactory factory;
         private IUserRepo repo;
-        private IPasswordHasher passwordHasher;
         private IAuthenticationTokenHandler tokenHandler;
         #endregion
 
         #region Constructor(s)
-        public UserService(IEventBus bus, IUserFactory factory, IUserRepo repo, IPasswordHasher passwordHasher, IAuthenticationTokenHandler tokenHandler) {
+        public UserService(IEventBus bus, IUserFactory factory, IUserRepo repo, IAuthenticationTokenHandler tokenHandler) {
             this.bus = bus;
             this.factory = factory;
             this.repo = repo;
-            this.passwordHasher = passwordHasher;
             this.tokenHandler = tokenHandler;
         }
         #endregion
@@ -27,8 +25,8 @@ namespace Updog.Domain {
 
             if (existingAdmin != null) {
                 // Check if we need to update the password to match the config one.
-                if (!passwordHasher.Verify(config.Password, existingAdmin.PasswordHash)) {
-                    existingAdmin.PasswordHash = passwordHasher.Hash(config.Password);
+                if (!existingAdmin.Authenticate(config.Password)) {
+                    existingAdmin.ResetPassword(config.Password);
                     await repo.Update(existingAdmin);
                 }
 
@@ -45,7 +43,7 @@ namespace Updog.Domain {
             User? user = await repo.FindByUsername(credentials.Username);
 
             //If no use was found, or the password doesn't match the one on file, fail.
-            if (user == null || !passwordHasher.Verify(credentials.Password, user.PasswordHash)) {
+            if (user == null || !user.Authenticate(credentials.Password)) {
                 throw new UnauthorizedAccessException();
             }
 
@@ -96,12 +94,7 @@ namespace Updog.Domain {
         }
 
         public async Task<User> UpdatePassword(UserUpdatePassword data, User user) {
-            //Verify the old password is a match first
-            if (!passwordHasher.Verify(data.CurrentPassword, user.PasswordHash)) {
-                throw new UnauthorizedAccessException();
-            }
-
-            user.PasswordHash = passwordHasher.Hash(data.NewPassword);
+            user.SetPassword(data.CurrentPassword, data.NewPassword);
             await repo.Update(user);
             return user;
         }

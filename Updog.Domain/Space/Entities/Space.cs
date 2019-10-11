@@ -33,7 +33,7 @@ namespace Updog.Domain {
         #endregion
 
         #region Constructor(s)
-        public Space(SpaceCreate createData, User user) {
+        internal Space(SpaceCreate createData, User user) {
             UserId = user.Id;
             Name = createData.Name;
             Description = createData.Description;
@@ -41,7 +41,7 @@ namespace Updog.Domain {
             IsDefault = createData.IsDefault;
         }
 
-        public Space(int id, int userId, string name, string description, DateTime creationDate, int subscriberCount, bool isDefault) {
+        internal Space(int id, int userId, string name, string description, DateTime creationDate, int subscriberCount, bool isDefault) {
             Id = id;
             UserId = userId;
             Name = name;

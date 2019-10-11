@@ -21,20 +21,26 @@ namespace Updog.Domain {
         public int Id { get; set; }
         public string Username { get; }
         public string? Email { get; private set; }
-        public string PasswordHash { get; set; }
+        public string PasswordHash { get; private set; }
         public DateTime JoinedDate { get; }
         public int PostKarma { get; private set; }
         public int CommentKarma { get; private set; }
         #endregion
 
+        #region Fields
+        private IPasswordHasher passwordHasher;
+        #endregion
+
         #region Constructor(s)
-        public User(string username, string passwordHash, string? email = null) {
+        internal User(IPasswordHasher passwordHasher, string username, string passwordHash, string? email = null) {
+            this.passwordHasher = passwordHasher;
             Username = username;
             PasswordHash = passwordHash;
             Email = email;
         }
 
-        public User(int id, string username, string? email, string passwordHash, DateTime joinedDate, int postKarma, int commentKarma) {
+        internal User(IPasswordHasher passwordHasher, int id, string username, string? email, string passwordHash, DateTime joinedDate, int postKarma, int commentKarma) {
+            this.passwordHasher = passwordHasher;
             Id = id;
             Username = username;
             Email = email;
@@ -46,6 +52,20 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
+        public void SetPassword(string currentPassword, string newPassword) {
+            if (!passwordHasher.Verify(currentPassword, PasswordHash)) {
+                throw new UnauthorizedAccessException();
+            }
+
+            PasswordHash = passwordHasher.Hash(newPassword);
+        }
+
+        public void ResetPassword(string newPassword) {
+            PasswordHash = passwordHasher.Hash(newPassword);
+        }
+
+        public bool Authenticate(string password) => passwordHasher.Verify(password, PasswordHash);
+
         public void Update(UserUpdate update) {
             this.Email = update.Email;
         }

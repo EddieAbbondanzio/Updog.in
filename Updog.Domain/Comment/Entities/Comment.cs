@@ -32,7 +32,7 @@ namespace Updog.Domain {
         #endregion
 
         #region Constructor(s)
-        public Comment(CommentCreate creationData, User user) {
+        internal Comment(CommentCreate creationData, User user) {
             PostId = creationData.PostId;
             Body = creationData.Body;
             ParentId = creationData.ParentId;
@@ -41,7 +41,7 @@ namespace Updog.Domain {
             Votes = new VoteStats();
         }
 
-        public Comment(int id, int userId, int postId, int parentId, string body, VoteStats votes, DateTime creationDate, bool wasUpdated, bool wasDeleted) {
+        internal Comment(int id, int userId, int postId, int parentId, string body, VoteStats votes, DateTime creationDate, bool wasUpdated, bool wasDeleted) {
             Id = id;
             UserId = userId;
             PostId = postId;

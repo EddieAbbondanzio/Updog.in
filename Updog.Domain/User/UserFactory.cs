@@ -13,9 +13,9 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
-        public User CreateFromRegistration(UserRegistration registration) => new User(registration.Username, Hash(registration.Password), registration.Email);
+        public User CreateFromRegistration(UserRegistration registration) => new User(passwordHasher, registration.Username, Hash(registration.Password), registration.Email);
 
-        public User CreateFromAdminConfig(IAdminConfig config) => new User(config.Username, Hash(config.Password));
+        public User CreateFromAdminConfig(IAdminConfig config) => new User(passwordHasher, config.Username, Hash(config.Password));
         #endregion
 
         #region Privates
