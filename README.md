@@ -71,6 +71,4 @@ Frontend source code is stored under `Updog.Client` and is a Vue.js project writ
 serve
 ```
 
-## Future Work
 
-Backend could use a switch to pub sub set up.
