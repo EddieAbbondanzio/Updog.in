@@ -2,14 +2,8 @@ namespace Updog.Domain {
     /// <summary>
     /// A flag to mark the type of content in the post.
     /// </summary>
-    public sealed class PostFlag : IEntity {
+    public sealed class PostFlag : Entity<PostFlag> {
         #region Properties
-        /// <summary>
-        /// The unique ID of the flag.
-        /// </summary>
-        /// <value></value>
-        public int Id { get; set; }
-
         /// <summary>
         /// The post it belongs to.
         /// </summary>

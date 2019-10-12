@@ -5,7 +5,7 @@ namespace Updog.Domain {
     /// <summary>
     /// A comment associated with a post.
     /// </summary>
-    public sealed class Comment : IEntity, IUserEntity, IVotableEntity, IAuditableEntity, IUpdatable<CommentUpdate>, IDeletable {
+    public sealed class Comment : Entity<Comment>, IUserEntity, IVotableEntity, IAuditableEntity, IUpdatable<CommentUpdate>, IDeletable {
         #region Constants
         /// <summary>
         /// The maximum number of characters in a comment body.
@@ -19,7 +19,6 @@ namespace Updog.Domain {
         #endregion
 
         #region Properties
-        public int Id { get; set; }
         public int UserId { get; }
         public VoteStats Votes { get; }
         VotableEntityType IVotableEntity.VotableEntityType => VotableEntityType.Comment;
@@ -68,34 +67,6 @@ namespace Updog.Domain {
             this.WasDeleted = true;
             Body = "[deleted]";
         }
-
-        /// <summary>
-        /// Check to see if the comment is equal to another object.
-        /// </summary>
-        /// <param name="obj">The other object to check.</param>
-        /// <returns>True if the other object matches the comment.</returns>
-        public override bool Equals(object obj) {
-            Comment? c = obj as Comment;
-
-            if (c == null) {
-                return false;
-            }
-
-            return Equals(c);
-        }
-
-        /// <summary>
-        /// Check to see if two comments are equivalent.
-        /// </summary>
-        /// <param name="c">The other comment to check.</param>
-        /// <returns>True if the comments match.</returns>
-        public bool Equals(Comment c) => c.Id == this.Id;
-
-        /// <summary>
-        /// Get a unique hashcode of the object.
-        /// </summary>
-        /// <returns>The unique hashcode.</returns>
-        public override int GetHashCode() => Id;
         #endregion
     }
 }

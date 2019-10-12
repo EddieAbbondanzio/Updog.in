@@ -1,29 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Updog.Application;
 using Updog.Infrastructure;
 using Updog.Persistance;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using FluentValidation;
+using Microsoft.Extensions.Hosting;
 using Dapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
 using Updog.Domain;
-using Microsoft.AspNetCore.Http;
 using System.Security.Principal;
 using Updog.Domain.Paging;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Updog.Api {
     public class Startup {
@@ -39,7 +33,10 @@ namespace Updog.Api {
             services.AddCors();
 
             // Set up the authentication
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opts => {
+            services.AddAuthentication(c => {
+                c.DefaultAuthenticateScheme = "Bearer";
+            }).AddJwtBearer(opts => {
+                // services.AddAuthorization(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opts => {
                 opts.TokenValidationParameters = new TokenValidationParameters() {
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
@@ -79,7 +76,7 @@ namespace Updog.Api {
                 };
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddSingleton<IDatabase, PostgresDatabase>();
 
@@ -165,7 +162,7 @@ namespace Updog.Api {
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             Console.WriteLine($"Hosting environment: {env.EnvironmentName}");
             Console.WriteLine($"Content root path: {env.ContentRootPath}");
 
@@ -177,7 +174,8 @@ namespace Updog.Api {
                 b.WithExposedHeaders("Content-Range");
             });
 
-            app.UseAuthentication();
+            app.UseRouting();
+            app.UseAuthorization();
 
             if (env.IsDevelopment()) {
                 app.UseHttpsRedirection();
@@ -188,8 +186,9 @@ namespace Updog.Api {
                 // app.UseHsts();
             }
 
-
-            app.UseMvc();
+            app.UseEndpoints(endpoints => {
+                endpoints.MapControllers();
+            });
 
             var builder = new ConfigurationBuilder().SetBasePath(env.ContentRootPath).AddJsonFile("appsettings.json");
         }

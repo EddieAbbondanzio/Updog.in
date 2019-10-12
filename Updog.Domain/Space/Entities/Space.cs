@@ -4,7 +4,7 @@ namespace Updog.Domain {
     /// <summary>
     /// Subforum for collecting similar themed posts.
     /// </summary>
-    public partial class Space : IEntity, IUserEntity, IUpdatable<SpaceUpdate> {
+    public partial class Space : Entity<Space>, IUserEntity, IUpdatable<SpaceUpdate> {
         #region Constants
         /// <summary>
         /// The number of spaces per page when searching for them.
@@ -23,7 +23,6 @@ namespace Updog.Domain {
         #endregion
 
         #region Properties
-        public int Id { get; set; }
         public int UserId { get; }
         public string Name { get; }
         public string Description { get; private set; }
@@ -56,34 +55,6 @@ namespace Updog.Domain {
         public void Update(SpaceUpdate update) {
             Description = update.Description;
         }
-
-        /// <summary>
-        /// Check to see if another object matches the current space.
-        /// </summary>
-        /// <param name="obj">The other object to check.</param>
-        /// <returns>True if the space matches the object.</returns>
-        public override bool Equals(object obj) {
-            Space? s = obj as Space;
-
-            if (s == null) {
-                return false;
-            }
-
-            return Equals(s);
-        }
-
-        /// <summary>
-        /// Check to see if the space matches another space.
-        /// </summary>
-        /// <param name="space">The other space to check.</param>
-        /// <returns>True if the spaces match.</returns>
-        public bool Equals(Space space) => Id == space.Id;
-
-        /// <summary>
-        /// Get a unique hashcode of the object.
-        /// </summary>
-        /// <returns>The unique hashcode.</returns>
-        public override int GetHashCode() => Id;
         #endregion
     }
 }
