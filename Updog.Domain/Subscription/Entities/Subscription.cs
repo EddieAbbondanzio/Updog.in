@@ -20,6 +20,19 @@ namespace Updog.Domain {
         public int UserId { get; set; }
         #endregion
 
+        #region Constructor(s)
+        internal Subscription(int id, int userId, int spaceId) {
+            Id = id;
+            UserId = userId;
+            SpaceId = spaceId;
+        }
+
+        internal Subscription(int userId, int spaceId) {
+            SpaceId = spaceId;
+            UserId = userId;
+        }
+        #endregion
+
         #region Publics
         /// <summary>
         /// Check to see if another object matches the current subscription.

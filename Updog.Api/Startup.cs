@@ -151,7 +151,6 @@ namespace Updog.Api {
 
             services.AddTransient<ISubscriptionRepo, SubscriptionRepo>();
             services.AddTransient<ISubscriptionService, SubscriptionService>();
-            services.AddSingleton<ISubscriptionMapper, SubscriptionMapper>();
             services.AddSingleton<ISubscriptionFactory, SubscriptionFactory>();
             services.AddTransient<CommandHandler<SubscriptionCreateCommand>, SubscriptionCreateCommandHandler>();
             services.AddTransient<CommandHandler<SubscriptionDeleteCommand>, SubscriptionDeleteCommandHandler>();
@@ -160,7 +159,6 @@ namespace Updog.Api {
             services.AddTransient<IVoteReader, VoteReader>();
             services.AddTransient<IVoteService, VoteService>();
             services.AddSingleton<IVoteReadViewMapper, VoteReadViewMapper>();
-            services.AddSingleton<IVoteMapper, VoteMapper>();
             services.AddSingleton<IVoteFactory, VoteFactory>();
             services.AddTransient<CommandHandler<VoteOnPostCommand>, VoteOnPostCommandHandler>();
             services.AddTransient<CommandHandler<VoteOnCommentCommand>, VoteOnCommentCommandHandler>();

@@ -30,6 +30,23 @@ namespace Updog.Domain {
         public VoteDirection Direction { get; set; }
         #endregion
 
+        #region Constructor(s)
+        internal Vote(int id, int userId, VotableEntityType resourceType, int resourceId, VoteDirection direction) {
+            Id = id;
+            UserId = userId;
+            ResourceType = resourceType;
+            ResourceId = resourceId;
+            Direction = direction;
+        }
+
+        internal Vote(int userId, VotableEntityType resourceType, int resourceId, VoteDirection direction) {
+            UserId = userId;
+            ResourceType = resourceType;
+            ResourceId = resourceId;
+            Direction = direction;
+        }
+        #endregion
+
         #region Publics
         /// <summary>
         /// Check to see if another object matches the current Vote.
