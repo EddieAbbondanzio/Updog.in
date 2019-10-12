@@ -14,33 +14,25 @@ namespace Updog.Persistance {
     /// </summary>
     public sealed class SpaceRepo : DatabaseRepo<Space>, ISpaceRepo {
         #region Fields
-        private ISpaceMapper mapper;
+        private ISpaceFactory factory;
         #endregion
 
         #region Constructor(s)
-        public SpaceRepo(IDatabase database, ISpaceMapper mapper) : base(database) {
-            this.mapper = mapper;
+        public SpaceRepo(IDatabase database, ISpaceFactory factory) : base(database) {
+            this.factory = factory;
         }
         #endregion
 
         #region Publics
-        public override async Task<Space?> FindById(int id) {
-            var space = (await Connection.QueryAsync<SpaceRecord>(
-                @"SELECT * FROM Space WHERE Space.Id = @Id",
-                new { Id = id }
-            )).FirstOrDefault();
+        public override async Task<Space?> FindById(int id) => (await Connection.QueryAsync<SpaceRecord>(
+            @"SELECT * FROM Space WHERE Space.Id = @Id",
+            new { Id = id }
+        )).Select(s => Map(s)).FirstOrDefault();
 
-            return space != null ? mapper.Map(space) : null;
-        }
-
-        public async Task<Space?> FindByName(string name) {
-            var space = (await Connection.QueryAsync<SpaceRecord>(
-                @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id WHERE LOWER(Space.Name) = LOWER(@Name)",
-                new { Name = name }
-            )).FirstOrDefault();
-
-            return space != null ? mapper.Map(space) : null;
-        }
+        public async Task<Space?> FindByName(string name) => (await Connection.QueryAsync<SpaceRecord>(
+            @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id WHERE LOWER(Space.Name) = LOWER(@Name)",
+            new { Name = name }
+        )).Select(s => Map(s)).FirstOrDefault();
 
         public async Task<PagedResultSet<Space>> Find(PaginationInfo paging) {
             var spaces = await Connection.QueryAsync<SpaceRecord>(
@@ -55,30 +47,19 @@ namespace Updog.Persistance {
                 "SELECT COUNT(*) FROM Space"
             );
 
-            return new PagedResultSet<Space>(spaces.Select(s => mapper.Map(s)), new PaginationInfo(paging.PageNumber, Math.Min(spaces.Count(), paging.PageSize), totalCount));
+            return new PagedResultSet<Space>(spaces.Select(s => Map(s)), new PaginationInfo(paging.PageNumber, Math.Min(spaces.Count(), paging.PageSize), totalCount));
         }
 
-        public async Task<IEnumerable<Space>> FindDefault() {
-            var defaults = await Connection.QueryAsync<SpaceRecord>(
-                @"SELECT * FROM Space WHERE IsDefault = TRUE"
-            );
+        public async Task<IEnumerable<Space>> FindDefault() => (await Connection.QueryAsync<SpaceRecord>(
+            @"SELECT * FROM Space WHERE IsDefault = TRUE"
+        )).Select(s => Map(s));
 
-            return defaults.Select(s => mapper.Map(s));
-        }
-
-        public async Task<IEnumerable<Space>> FindSubscribed(User user) {
-            var subscribes = await Connection.QueryAsync<SpaceRecord>(
+        public async Task<IEnumerable<Space>> FindSubscribed(User user) => (await Connection.QueryAsync<SpaceRecord>(
                 @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id LEFT JOIN Subscription ON Space.Id = Subscription.SpaceId WHERE Subscription.UserId = @Id",
                 user
-            );
+            )).Select(s => Map(s));
 
-            return subscribes.Select(s => mapper.Map(s));
-        }
-
-        public override async Task Add(Space entity) {
-            SpaceRecord rec = mapper.Reverse(entity);
-
-            entity.Id = await Connection.QueryFirstOrDefaultAsync<int>(
+        public override async Task Add(Space entity) => entity.Id = await Connection.QueryFirstOrDefaultAsync<int>(
                 @"INSERT INTO Space(
                         Name,
                         Description,
@@ -93,12 +74,10 @@ namespace Updog.Persistance {
                         @SubscriptionCount,
                         @UserId,
                         @IsDefault
-                        ) RETURNING Id;", rec
+                        ) RETURNING Id;", Reverse(entity)
             );
-        }
 
-        public override async Task Update(Space entity) {
-            await Connection.ExecuteAsync(
+        public override async Task Update(Space entity) => await Connection.ExecuteAsync(
                 @"UPDATE Space SET 
                         Name = @Name,
                         Description = @Description,
@@ -106,16 +85,27 @@ namespace Updog.Persistance {
                         SubscriptionCount = @SubscriptionCount,
                         UserId = @UserId
                     WHERE Id = @Id",
-                mapper.Reverse(entity)
+                Reverse(entity)
             );
-        }
 
-        public override async Task Delete(Space entity) {
-            await Connection.ExecuteAsync(
+        public override async Task Delete(Space entity) => await Connection.ExecuteAsync(
                 @"DELETE FROM Space WHERE Id = @Id",
-                mapper.Reverse(entity)
+                Reverse(entity)
             );
-        }
+        #endregion
+
+        #region Privates
+        private Space Map(SpaceRecord rec) => factory.Create(rec.Id, rec.UserId, rec.Name, rec.Description, rec.CreationDate, rec.SubscriptionCount, rec.IsDefault);
+
+        private SpaceRecord Reverse(Space space) => new SpaceRecord() {
+            Id = space.Id,
+            UserId = space.UserId,
+            Name = space.Name,
+            Description = space.Description,
+            CreationDate = space.CreationDate,
+            SubscriptionCount = space.SuscriberCount,
+            IsDefault = space.IsDefault
+        };
         #endregion
     }
 }

@@ -14,15 +14,12 @@ namespace Updog.Persistance {
     /// </summary>
     public sealed class CommentRepo : DatabaseRepo<Comment>, ICommentRepo {
         #region Fields
-        /// <summary>
-        /// Mapper to convert comments into their record and back to entity.
-        /// </summary>
-        private ICommentMapper mapper;
+        private ICommentFactory factory;
         #endregion
 
         #region Constructor(s)
-        public CommentRepo(IDatabase database, ICommentMapper mapper) : base(database) {
-            this.mapper = mapper;
+        private CommentRepo(IDatabase database, ICommentFactory factory) : base(database) {
+            this.factory = factory;
         }
         #endregion
 
@@ -33,7 +30,7 @@ namespace Updog.Persistance {
         /// <param name="commentId">The ID of the comment.</param>
         /// <returns>The comment found.</returns>
         public override async Task<Comment?> FindById(int commentId) {
-            var comments = await Connection.QueryAsync<CommentRecord>(
+            var comments = (await Connection.QueryAsync<CommentRecord>(
                 @"WITH RECURSIVE commenttree AS (
                     SELECT r.* FROM Comment r WHERE Id = @Id AND WasDeleted = FALSE
                     UNION ALL
@@ -43,37 +40,26 @@ namespace Updog.Persistance {
                     ) SELECT * FROM commenttree
                     LEFT JOIN ""User"" ON UserId = ""User"".Id ORDER BY ParentId, CreationDate ASC;",
                 new { Id = commentId }
-            );
+            )).Select(Map);
 
-            if (comments.Count() == 0) {
-                return null;
-            }
-
-            return mapper.Map(comments.ElementAt(0));
+            return comments.ElementAtOrDefault(0);
         }
 
         /// <summary>
         /// Add a new comment.
         /// </summary>
         /// <param name="entity">The comment to add.</param>
-        public override async Task Add(Comment entity) {
-            CommentRecord commentRec = this.mapper.Reverse(entity);
-
-            entity.Id = await Connection.QueryFirstOrDefaultAsync<int>(
+        public override async Task Add(Comment entity) => entity.Id = await Connection.QueryFirstOrDefaultAsync<int>(
                 @"INSERT INTO Comment (UserId, PostId, ParentId, Body, CreationDate, WasUpdated, WasDeleted, Upvotes, Downvotes) 
                     VALUES (@UserId, @PostId, @ParentId, @Body, @CreationDate, @WasUpdated, @WasDeleted, @Upvotes, @Downvotes) RETURNING Id;",
-                commentRec
+                Reverse(entity)
             );
-        }
 
         /// <summary>
         /// Update an existing comment.
         /// </summary>
         /// <param name="entity">The comment to update.</param>
-        public override async Task Update(Comment entity) {
-            CommentRecord commentRec = this.mapper.Reverse(entity);
-
-            await Connection.ExecuteAsync(
+        public override async Task Update(Comment entity) => await Connection.ExecuteAsync(
                 @"UPDATE Comment SET 
                     UserId = @UserId, 
                     PostId = @PostId, 
@@ -85,18 +71,38 @@ namespace Updog.Persistance {
                     Upvotes = @Upvotes,
                     Downvotes = @Downvotes
                     WHERE Id = @Id",
-                commentRec
+                Reverse(entity)
             );
-        }
 
         /// <summary>
         /// Delete an existing comment.
         /// </summary>
         /// <param name="entity">The comment to delete.</param>
-        public override async Task Delete(Comment entity) {
-            CommentRecord commentRec = this.mapper.Reverse(entity);
-            await Connection.ExecuteAsync(@"UPDATE Comment SET WasDeleted = TRUE Where Id = @Id", commentRec);
-        }
+        public override async Task Delete(Comment entity) => await Connection.ExecuteAsync(@"UPDATE Comment SET WasDeleted = TRUE Where Id = @Id", Reverse(entity));
+
+        #endregion
+
+        #region Privates
+        private Comment Map(CommentRecord rec) => factory.Create(
+            rec.Id,
+            rec.UserId,
+            rec.PostId,
+            rec.ParentId,
+            rec.Body,
+            new VoteStats(rec.Upvotes, rec.Downvotes), rec.CreationDate, rec.WasUpdated, rec.WasDeleted);
+
+        private CommentRecord Reverse(Comment comment) => new CommentRecord() {
+            Id = comment.Id,
+            UserId = comment.UserId,
+            PostId = comment.PostId,
+            ParentId = comment.ParentId,
+            Body = comment.Body,
+            CreationDate = comment.CreationDate,
+            WasUpdated = comment.WasUpdated,
+            WasDeleted = comment.WasDeleted,
+            Upvotes = comment.Votes.Upvotes,
+            Downvotes = comment.Votes.Downvotes
+        };
         #endregion
     }
 }
