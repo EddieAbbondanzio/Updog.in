@@ -14,34 +14,24 @@ namespace Updog.Api {
     [ApiController]
     public sealed class UserController : ApiController {
         #region Fields
+        private IMediator mediator;
         private IEventBus bus;
-        private QueryHandler<FindUserByUsernameQuery, UserReadView?> userFinder;
-        private QueryHandler<IsUsernameAvailableQuery, bool> usernameChecker;
-        private CommandHandler<RegisterUserCommand> userRegistrar;
         #endregion
 
         #region Constructor(s)
         /// <summary>
         /// Create a new user controller.
         /// </summary>
-        public UserController(
-            IEventBus bus,
-                QueryHandler<FindUserByUsernameQuery, UserReadView?> userFinder,
-                QueryHandler<IsUsernameAvailableQuery, bool> usernameChecker,
-                CommandHandler<RegisterUserCommand> userRegistrar
-            ) {
+        public UserController(IMediator mediator, IEventBus bus) {
+            this.mediator = mediator;
             this.bus = bus;
-            this.userFinder = userFinder;
-            this.usernameChecker = usernameChecker;
-            this.userRegistrar = userRegistrar;
         }
         #endregion
 
         #region Publics
         [HttpHead("{username}")]
         public async Task<IActionResult> IsUsernameAvailable(string username) {
-            var isFree = await usernameChecker.Execute(new IsUsernameAvailableQuery(username, User));
-
+            var isFree = await mediator.Query<IsUsernameAvailableQuery, bool>(new IsUsernameAvailableQuery(username, User));
             return isFree ? NotFound() : Ok() as IActionResult;
         }
 
@@ -51,8 +41,7 @@ namespace Updog.Api {
         /// <param name="username">The username of the user to look for.</param>
         [HttpGet("{username}")]
         public async Task<IActionResult> FindByUsername(string username) {
-            var user = await userFinder.Execute(new FindUserByUsernameQuery(username, User));
-
+            var user = await mediator.Query<FindUserByUsernameQuery, UserReadView>(new FindUserByUsernameQuery(username, User));
             return user != null ? Ok(user) : NotFound() as IActionResult;
         }
 
@@ -69,7 +58,7 @@ namespace Updog.Api {
                 login = registerEvent.Login;
             });
 
-            var result = await userRegistrar.Execute(new RegisterUserCommand() {
+            var result = await mediator.Command(new RegisterUserCommand() {
                 Registration = new UserRegistration(req.Username, req.Password, req.Email)
             });
 

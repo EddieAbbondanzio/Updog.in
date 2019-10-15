@@ -13,15 +13,14 @@ namespace Updog.Api {
     [ApiController]
     public sealed class SessionController : ApiController {
         #region Fields
+        private IMediator mediator;
         private IEventBus bus;
-        private CommandHandler<LoginUserCommand> loginCommand;
-
         #endregion
 
         #region Constructor(s)
-        public SessionController(IEventBus bus, CommandHandler<LoginUserCommand> loginCommand) {
+        public SessionController(IMediator mediator, IEventBus bus) {
+            this.mediator = mediator;
             this.bus = bus;
-            this.loginCommand = loginCommand;
         }
         #endregion
 
@@ -39,7 +38,7 @@ namespace Updog.Api {
                 login = loginEvent.Login;
             });
 
-            var result = await loginCommand.Execute(new LoginUserCommand() {
+            var result = await mediator.Command(new LoginUserCommand() {
                 Credentials = new UserCredentials(loginRequest.Username, loginRequest.Password)
             });
 

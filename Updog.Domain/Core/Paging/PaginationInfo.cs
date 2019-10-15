@@ -36,8 +36,8 @@ namespace Updog.Domain.Paging {
         /// <param name="pageSize">The size of the page.</param>
         /// <param name="totalRecordCount">Total available pages.</param>
         public PaginationInfo(int pageNumber, int pageSize, int totalRecordCount = 0) {
-            if (pageNumber <= 0) {
-                throw new ArgumentOutOfRangeException("Page number must be greater than 0.");
+            if (pageNumber < 0) {
+                throw new ArgumentOutOfRangeException("Page number must be positive.");
             }
 
             if (pageSize <= 0) {

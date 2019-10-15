@@ -13,14 +13,12 @@ namespace Updog.Api {
     [ApiController]
     public sealed class SubscriptionController : ApiController {
         #region Fields
-        private CommandHandler<SubscriptionCreateCommand> subscriptionCreator;
-        private CommandHandler<SubscriptionDeleteCommand> subscriptionDeleter;
+        private IMediator mediator;
         #endregion
 
         #region Constructor(s)
-        public SubscriptionController(CommandHandler<SubscriptionCreateCommand> subscriptionCreator, CommandHandler<SubscriptionDeleteCommand> subscriptionDeleter) {
-            this.subscriptionCreator = subscriptionCreator;
-            this.subscriptionDeleter = subscriptionDeleter;
+        public SubscriptionController(IMediator mediator) {
+            this.mediator = mediator;
         }
         #endregion
 
@@ -31,7 +29,7 @@ namespace Updog.Api {
         /// <param name="spaceName">The name of the space.</param>
         [HttpPost("{spaceName}")]
         public async Task<IActionResult> SubscribeToSpace(string spaceName) {
-            var result = await subscriptionCreator.Execute(new SubscriptionCreateCommand(new Domain.SubscriptionCreate(spaceName), User!));
+            var result = await mediator.Command(new SubscriptionCreateCommand(new Domain.SubscriptionCreate(spaceName), User!));
             return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
         }
 
@@ -41,7 +39,7 @@ namespace Updog.Api {
         /// <param name="spaceName">The name of the space to cancel.</param>
         [HttpDelete("{spaceName}")]
         public async Task<IActionResult> DesubscribeFromSpace(string spaceName) {
-            var result = await subscriptionDeleter.Execute(new SubscriptionDeleteCommand(spaceName, User!));
+            var result = await mediator.Command(new SubscriptionDeleteCommand(spaceName, User!));
             return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
         }
         #endregion

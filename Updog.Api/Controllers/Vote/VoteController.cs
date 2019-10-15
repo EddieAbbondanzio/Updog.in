@@ -17,14 +17,12 @@ namespace Updog.Api {
     [ApiController]
     public sealed class VoteController : ApiController {
         #region Fields
-        private CommandHandler<VoteOnPostCommand> voteOnPostHandler;
-        private CommandHandler<VoteOnCommentCommand> voteOnCommentHandler;
+        private IMediator mediator;
         #endregion
 
         #region Constructor(s)
-        public VoteController(CommandHandler<VoteOnPostCommand> voteOnPostHandler, CommandHandler<VoteOnCommentCommand> voteOnCommentHandler) {
-            this.voteOnPostHandler = voteOnPostHandler;
-            this.voteOnCommentHandler = voteOnCommentHandler;
+        public VoteController(IMediator mediator) {
+            this.mediator = mediator;
         }
         #endregion
 
@@ -35,7 +33,7 @@ namespace Updog.Api {
         /// <param name="vote">The vote type.</param>
         [HttpPost("post/{postId}/{vote}")]
         public async Task<IActionResult> VoteOnPost(int postId, VoteDirection vote) {
-            var result = await voteOnPostHandler.Execute(new VoteOnPostCommand(new VoteOnPost(postId, vote), User!));
+            var result = await mediator.Command(new VoteOnPostCommand(new VoteOnPost(postId, vote), User!));
             return result.IsSuccess ? Ok() : BadRequest() as IActionResult;
         }
 
@@ -46,7 +44,7 @@ namespace Updog.Api {
         /// <param name="vote">The vote type.</param>
         [HttpPost("comment/{commentId}/{vote}")]
         public async Task<IActionResult> VoteOnComment(int commentId, VoteDirection vote) {
-            var result = await voteOnCommentHandler.Execute(new VoteOnCommentCommand(new VoteOnComment(commentId, vote), User!));
+            var result = await mediator.Command(new VoteOnCommentCommand(new VoteOnComment(commentId, vote), User!));
             return result.IsSuccess ? Ok() : BadRequest() as IActionResult;
         }
     }

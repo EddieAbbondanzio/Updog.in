@@ -18,31 +18,12 @@ namespace Updog.Api {
     [ApiController]
     public sealed class PostController : ApiController {
         #region Fields
-        private QueryHandler<PostFindByNewQuery, PagedResultSet<PostReadView>> postFinderByNew;
-        private QueryHandler<PostFindByIdQuery, PostReadView> postFinderById;
-        private QueryHandler<PostFindByUserQuery, PagedResultSet<PostReadView>> postFinderByUser;
-        private QueryHandler<CommentFindByPostQuery, IEnumerable<CommentReadView>> commentFinderByPost;
-        private CommandHandler<PostCreateCommand> postCreator;
-        private CommandHandler<PostUpdateCommand> postUpdater;
-        private CommandHandler<PostDeleteCommand> postDeleter;
+        private IMediator mediator;
         #endregion
 
         #region Constructor(s)
-        public PostController(
-            QueryHandler<PostFindByNewQuery, PagedResultSet<PostReadView>> postFinderByNew,
-            QueryHandler<PostFindByIdQuery, PostReadView> postFinderById,
-            QueryHandler<PostFindByUserQuery, PagedResultSet<PostReadView>> postFinderByUser,
-            QueryHandler<CommentFindByPostQuery, IEnumerable<CommentReadView>> commentFinderByPost,
-            CommandHandler<PostCreateCommand> postAdder, CommandHandler<PostUpdateCommand> postUpdater,
-            CommandHandler<PostDeleteCommand> postDeleter
-        ) {
-            this.postFinderByNew = postFinderByNew;
-            this.postFinderById = postFinderById;
-            this.postFinderByUser = postFinderByUser;
-            this.commentFinderByPost = commentFinderByPost;
-            this.postCreator = postAdder;
-            this.postUpdater = postUpdater;
-            this.postDeleter = postDeleter;
+        public PostController(IMediator mediator) {
+            this.mediator = mediator;
         }
         #endregion
 
@@ -50,7 +31,12 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("new")]
         public async Task<ActionResult> FindByNew([FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            var posts = await postFinderByNew.Execute(new PostFindByNewQuery(new PaginationInfo(pageNumber, pageSize), User));
+            var posts = await mediator.Query<PostFindByNewQuery, PagedResultSet<PostReadView>>(
+                new PostFindByNewQuery(
+                    new PaginationInfo(pageNumber, pageSize),
+                    User
+                )
+            );
 
             SetContentRangeHeader(posts.Pagination);
             return Ok(posts);
@@ -64,7 +50,9 @@ namespace Updog.Api {
         [HttpGet("{id}")]
         [HttpHead("{id}")]
         public async Task<ActionResult> FindById(int id) {
-            var post = await postFinderById.Execute(new PostFindByIdQuery(id, User));
+            var post = await mediator.Query<PostFindByIdQuery, PagedResultSet<PostReadView>>(
+                new PostFindByIdQuery(id, User)
+            );
 
             return post != null ? Ok(post) : NotFound() as ActionResult;
         }
@@ -76,14 +64,20 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{postId}/comment")]
         public async Task<ActionResult> FindComments(int postId) {
-            var comments = await commentFinderByPost.Execute(new CommentFindByPostQuery(postId, User!));
+            var comments = await mediator.Query<CommentFindByPostQuery, IEnumerable<CommentReadView>>(
+                new CommentFindByPostQuery(postId, User!)
+            );
+
             return Ok(comments);
         }
 
         [AllowAnonymous]
         [HttpGet("user/{username}")]
         public async Task<ActionResult> FindByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            var posts = await postFinderByUser.Execute(new PostFindByUserQuery(username, new PaginationInfo(pageNumber, pageSize), User));
+            var posts = await mediator.Query<PostFindByUserQuery, PagedResultSet<PostReadView>>(
+                new PostFindByUserQuery(username, new PaginationInfo(pageNumber, pageSize), User)
+            );
+
             SetContentRangeHeader(posts.Pagination);
             return Ok(posts);
         }
@@ -93,7 +87,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpPost]
         public async Task<ActionResult> Create([FromBody]PostCreateRequest payload) {
-            var result = await postCreator.Execute(new PostCreateCommand(payload.Space, new PostCreate(payload.Type, payload.Title, payload.Body), User!));
+            var result = await mediator.Command(new PostCreateCommand(payload.Space, new PostCreate(payload.Type, payload.Title, payload.Body), User!));
 
             return Ok(null!);
         }
@@ -103,7 +97,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpPatch("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody]PostUpdateRequest payload) {
-            var result = await postUpdater.Execute(new PostUpdateCommand(id, new PostUpdate(payload.Body), User!));
+            var result = await mediator.Command(new PostUpdateCommand(id, new PostUpdate(payload.Body), User!));
             return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
         }
 
@@ -112,7 +106,7 @@ namespace Updog.Api {
         /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id) {
-            var result = await postDeleter.Execute(new PostDeleteCommand(id, User!));
+            var result = await mediator.Command(new PostDeleteCommand(id, User!));
             return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
         }
         #endregion

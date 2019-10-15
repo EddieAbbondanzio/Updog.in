@@ -63,6 +63,7 @@ namespace Updog.Api {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddSingleton<IDatabase, PostgresDatabase>();
+            services.AddSingleton<IMediator, Mediator>();
 
             services.AddScoped<IEventBus, EventBus>();
 
