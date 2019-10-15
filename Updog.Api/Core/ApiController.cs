@@ -12,7 +12,7 @@ namespace Updog.Api {
         /// <summary>
         /// The current user of the site interacting with the API.
         /// </summary>
-        public new User? User => base.User as User;
+        public new User? User => null!;
         #endregion
 
         #region Helpers

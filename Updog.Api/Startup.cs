@@ -33,10 +33,7 @@ namespace Updog.Api {
             services.AddCors();
 
             // Set up the authentication
-            services.AddAuthentication(c => {
-                c.DefaultAuthenticateScheme = "Bearer";
-            }).AddJwtBearer(opts => {
-                // services.AddAuthorization(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opts => {
+            services.AddAuthentication("Bearer").AddJwtBearer(opts => {
                 opts.TokenValidationParameters = new TokenValidationParameters() {
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
@@ -46,33 +43,6 @@ namespace Updog.Api {
                     ValidIssuer = Configuration["AuthenticationToken:Issuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AuthenticationToken:Secret"]))
 
-                };
-
-                opts.Events = new JwtBearerEvents() {
-                    OnTokenValidated = async (c) => {
-                        // Figure out the user ID the token belongs to.
-                        Claim subjectClaim = c.Principal.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier);
-                        int userId = Convert.ToInt32(subjectClaim.Value);
-
-                        // Retrieve the user, and cache the identity.
-                        IDatabase db = c.HttpContext.RequestServices.GetService<IDatabase>();
-
-                        using (var context = db.GetContext()) {
-                            IUserRepo userRepo = context.GetRepo<IUserRepo>();
-
-                            IIdentity identity = c.Principal.Identity;
-                            User? u = await userRepo.FindById(userId);
-
-                            if (u != null) {
-                                u.AddIdentity(identity as ClaimsIdentity);
-
-                                /*
-                                 * Don't attempt to set this via c.HttpContext.Principal, ASP.NET seems to overwrite this later on...
-                                 */
-                                c.Principal = u;
-                            }
-                        }
-                    }
                 };
             });
 

@@ -56,14 +56,14 @@ namespace Updog.Application {
         /// if it exists.
         /// </summary>
         /// <returns>The custom attribute.</returns>
-        private Validate? GetValidateAttribute() => GetType().GetMethod("ExecuteCommand", BindingFlags.Instance | BindingFlags.NonPublic).GetCustomAttribute<Validate>();
+        private Validate? GetValidateAttribute() => GetType().GetMethod("ExecuteCommand", BindingFlags.Instance | BindingFlags.NonPublic)?.GetCustomAttribute<Validate>();
 
         /// <summary>
         /// Generate a new instance of a validator from it's type.
         /// </summary>
         /// <param name="validator">The validator type to instantiate.</param>
         /// <returns>The newly created validator.</returns>
-        private IValidator GetValidatorInstance(Type validator) => (IValidator)Activator.CreateInstance(validator);
+        private IValidator GetValidatorInstance(Type validator) => (IValidator)Activator.CreateInstance(validator)!;
         #endregion
     }
 }

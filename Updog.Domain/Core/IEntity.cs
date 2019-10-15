@@ -38,7 +38,7 @@ namespace Updog.Domain {
         /// </summary>
         /// <param name="obj">The other object to check.</param>
         /// <returns>True if the other object matches the comment.</returns>
-        public override bool Equals(object obj) {
+        public override bool Equals(object? obj) {
             TEntity? c = obj as TEntity;
 
             if (c == null) {

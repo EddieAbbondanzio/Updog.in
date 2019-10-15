@@ -40,7 +40,7 @@ namespace Updog.Infrastructure {
                 await handler.Handle(domainEvent);
             }
 
-            List<Func<IDomainEvent, Task>> asyncListeners;
+            List<Func<IDomainEvent, Task>>? asyncListeners;
 
             if (asyncDynamicListeners.TryGetValue(eventType, out asyncListeners)) {
                 foreach (Func<IDomainEvent, Task> listener in asyncListeners) {
@@ -48,7 +48,7 @@ namespace Updog.Infrastructure {
                 }
             }
 
-            List<Action<IDomainEvent>> syncListeners;
+            List<Action<IDomainEvent>>? syncListeners;
             if (dynamicListeners.TryGetValue(eventType, out syncListeners)) {
                 foreach (Action<IDomainEvent> listener in syncListeners) {
                     listener(domainEvent);
@@ -57,7 +57,7 @@ namespace Updog.Infrastructure {
         }
 
         public void ListenAsync<TEvent>(Func<IDomainEvent, Task> listener) where TEvent : class, IDomainEvent {
-            List<Func<IDomainEvent, Task>> listeners;
+            List<Func<IDomainEvent, Task>>? listeners;
             Type eventType = typeof(TEvent);
 
             // If the dictionary doesn't hold any listeners for an event, create a new list for them.
@@ -70,7 +70,7 @@ namespace Updog.Infrastructure {
         }
 
         public void Listen<TEvent>(Action<IDomainEvent> listener) where TEvent : class, IDomainEvent {
-            List<Action<IDomainEvent>> listeners;
+            List<Action<IDomainEvent>>? listeners;
             Type eventType = typeof(TEvent);
 
             // If the dictionary doesn't hold any listeners for an event, create a new list for them.

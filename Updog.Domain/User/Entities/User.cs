@@ -6,7 +6,7 @@ namespace Updog.Domain {
     /// <summary>
     /// A user of the site.
     /// </summary>
-    public partial class User : ClaimsPrincipal, IEntity, IUpdatable<UserUpdate> {
+    public partial class User : Entity<User>, IUpdatable<UserUpdate> {
         #region Constants
         /// <summary>
         /// Minimum number of characters in a password.
@@ -18,7 +18,6 @@ namespace Updog.Domain {
         #endregion
 
         #region Properties
-        public int Id { get; set; }
         public string Username { get; }
         public string? Email { get; private set; }
         public string PasswordHash { get; private set; }
@@ -67,36 +66,8 @@ namespace Updog.Domain {
         public bool Authenticate(string password) => passwordHasher.Verify(password, PasswordHash);
 
         public void Update(UserUpdate update) {
-            this.Email = update.Email;
+            Email = update.Email;
         }
-
-        /// <summary>
-        /// Check to see if another object matches the current user.
-        /// </summary>
-        /// <param name="obj">The other object to check.</param>
-        /// <returns>True if the user matches the object.</returns>
-        public override bool Equals(object obj) {
-            User? u = obj as User;
-
-            if (u == null) {
-                return false;
-            }
-
-            return Equals(u);
-        }
-
-        /// <summary>
-        /// Check to see if the user matches another user.
-        /// </summary>
-        /// <param name="user">The other user to check.</param>
-        /// <returns>True if the user match.</returns>
-        public bool Equals(User user) => Id == user.Id;
-
-        /// <summary>
-        /// Get a unique hashcode of the object.
-        /// </summary>
-        /// <returns>The unique hashcode.</returns>
-        public override int GetHashCode() => Id;
         #endregion
     }
 }
