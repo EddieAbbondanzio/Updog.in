@@ -30,6 +30,7 @@ namespace Updog.Api {
         #region Publics
         [AllowAnonymous]
         [HttpGet("new")]
+        [ContentRangeHeader]
         public async Task<ActionResult> FindByNew([FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
             var posts = await mediator.Query<PostFindByNewQuery, PagedResultSet<PostReadView>>(
                 new PostFindByNewQuery(
@@ -38,7 +39,6 @@ namespace Updog.Api {
                 )
             );
 
-            SetContentRangeHeader(posts.Pagination);
             return Ok(posts);
         }
 
@@ -72,13 +72,13 @@ namespace Updog.Api {
         }
 
         [AllowAnonymous]
+        [ContentRangeHeader]
         [HttpGet("user/{username}")]
         public async Task<ActionResult> FindByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
             var posts = await mediator.Query<PostFindByUserQuery, PagedResultSet<PostReadView>>(
                 new PostFindByUserQuery(username, new PaginationInfo(pageNumber, pageSize), User)
             );
 
-            SetContentRangeHeader(posts.Pagination);
             return Ok(posts);
         }
 

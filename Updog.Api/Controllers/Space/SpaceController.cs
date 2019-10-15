@@ -46,11 +46,11 @@ namespace Updog.Api {
         }
 
         [HttpGet]
+        [ContentRangeHeader]
         [AllowAnonymous]
         public async Task<IActionResult> Find([FromQuery]int pageNumber, [FromQuery] int pageSize = Space.PageSize) {
             var spaces = await this.mediator.Query<SpaceFindQuery, PagedResultSet<SpaceReadView>>(new SpaceFindQuery(new PaginationInfo(pageNumber, pageSize), User));
 
-            SetContentRangeHeader(spaces.Pagination);
             return Ok(spaces);
         }
 
@@ -95,10 +95,10 @@ namespace Updog.Api {
         /// <param name="pageSize">Size of the page.</param>
         /// <returns>The posts found.</returns>
         [AllowAnonymous]
+        [ContentRangeHeader]
         [HttpGet("{name}/post/new")]
         public async Task<IActionResult> FindPosts(string name, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
             var posts = await this.mediator.Query<PostFindBySpaceQuery, PagedResultSet<PostReadView>>(new PostFindBySpaceQuery(name, new PaginationInfo(pageNumber, pageSize), User));
-            SetContentRangeHeader(posts.Pagination);
             return Ok(posts);
         }
         #endregion

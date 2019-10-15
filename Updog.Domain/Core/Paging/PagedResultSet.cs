@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace Updog.Domain.Paging {
+    public interface IPagedResultSet {
+        PaginationInfo Pagination { get; }
+    }
+
     /// <summary>
     /// Result set that had paging applied to it.
     /// </summary>
     /// <typeparam name="T">The resource being paged.</typeparam>
-    public sealed class PagedResultSet<T> : IEnumerable<T> {
+    public sealed class PagedResultSet<T> : IPagedResultSet, IEnumerable<T> {
         #region Properties
         /// <summary>
         /// Pagination info such as page number and page size,

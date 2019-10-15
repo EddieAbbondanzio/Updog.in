@@ -41,13 +41,13 @@ namespace Updog.Api {
         }
 
         [AllowAnonymous]
+        [ContentRangeHeader]
         [HttpGet("user/{username}")]
         public async Task<IActionResult> GetCommentsByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery]int pageSize = Comment.PageSize) {
             PagedResultSet<CommentReadView> comments = await mediator.Query<CommentFindByUserQuery, PagedResultSet<CommentReadView>>(
                 new CommentFindByUserQuery(username, new PaginationInfo(pageNumber, pageSize), User)
             );
 
-            SetContentRangeHeader(comments.Pagination);
             return Ok(comments);
         }
 
