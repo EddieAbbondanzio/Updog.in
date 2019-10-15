@@ -44,6 +44,20 @@ namespace Updog.Api {
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AuthenticationToken:Secret"]))
 
                 };
+
+                opts.Events = new JwtBearerEvents() {
+                    // When a JWT is validated, go out to the DB and pull in the relevant user.
+                    OnTokenValidated = async (c) => {
+                        IDatabase db = c.HttpContext.RequestServices.GetService<IDatabase>();
+
+                        using (var databaseContext = db.GetContext()) {
+                            IUserRepo userRepo = databaseContext.GetRepo<IUserRepo>();
+                            User? user = await userRepo.FindById(c.HttpContext.User.GetUserId());
+
+                            c.HttpContext.SetActiveUser(user);
+                        }
+                    }
+                };
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);

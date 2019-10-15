@@ -12,11 +12,11 @@ namespace Updog.Api {
         /// <summary>
         /// The current user of the site interacting with the API.
         /// </summary>
-        public new User? User => null!;
+        public new User? User => HttpContext.ActiveUser();
         #endregion
 
         #region Helpers
-        /// <summary>
+        /// <summary> 
         /// Set the "fancy" Content-Range header atop the HTTP response.
         /// </summary>
         /// <param name="paginationInfo">The pagination info to set.</param>
