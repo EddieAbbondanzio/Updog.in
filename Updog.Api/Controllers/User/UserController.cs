@@ -5,6 +5,7 @@ using Updog.Domain;
 using System;
 using FluentValidation;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Updog.Api {
     /// <summary>
@@ -43,6 +44,12 @@ namespace Updog.Api {
         public async Task<IActionResult> FindByUsername(string username) {
             var user = await mediator.Query<FindUserByUsernameQuery, UserReadView>(new FindUserByUsernameQuery(username, User));
             return user != null ? Ok(user) : NotFound() as IActionResult;
+        }
+
+        [HttpGet("{username}/moderator")]
+        public async Task<IActionResult> GetModeratorSpaces(string username) {
+            var spaces = await mediator.Query<FindSpacesUserModeratesQuery, IEnumerable<SpaceReadView>>(new FindSpacesUserModeratesQuery(username, User));
+            return Ok(spaces);
         }
 
         /// <summary>

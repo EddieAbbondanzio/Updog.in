@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Updog.Domain.Paging;
 
 namespace Updog.Api {
+    /// <summary>
+    /// Attribute to add the Content-Range header on the HTTP Response message.
+    /// Utilized by the front end to consume paged data sets.
+    /// </summary>
     public sealed class ContentRangeHeaderAttribute : Attribute, IResultFilter {
         public void OnResultExecuting(ResultExecutingContext context) {
             if (context.Result is ObjectResult objResult) {

@@ -5,6 +5,7 @@ using Updog.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Updog.Domain.Paging;
 using System.Collections.Generic;
+using System;
 
 namespace Updog.Api {
     /// <summary>
@@ -100,6 +101,25 @@ namespace Updog.Api {
         public async Task<IActionResult> FindPosts(string name, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
             var posts = await this.mediator.Query<PostFindBySpaceQuery, PagedResultSet<PostReadView>>(new PostFindBySpaceQuery(name, new PaginationInfo(pageNumber, pageSize), User));
             return Ok(posts);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("moderator")]
+        public async Task<IActionResult> GetModerators(string space) {
+            var mods = await mediator.Query<FindModeratorsBySpaceQuery, IEnumerable<UserReadView>>(new FindModeratorsBySpaceQuery(space, User));
+            return Ok(mods);
+        }
+
+        [HttpPost("moderator")]
+        public async Task<IActionResult> AddModerator(string space, string username) {
+            var result = await mediator.Command<AddModeratorToSpaceCommand>(new AddModeratorToSpaceCommand(space, username, User!));
+            return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
+        }
+
+        [HttpPost("moderator")]
+        public async Task<IActionResult> RemoveModerator(string space, string username) {
+            var result = await mediator.Command(new RemoveModeratorFromSpaceCommand(space, username, User!));
+            return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
         }
         #endregion
     }
