@@ -80,6 +80,15 @@ namespace Updog.Persistance {
         /// <param name="entity">The comment to delete.</param>
         public override async Task Delete(Comment entity) => await Connection.ExecuteAsync(@"UPDATE comment SET was_deleted = TRUE Where id = @Id", Reverse(entity));
 
+
+        public async Task<bool> IsOwner(int commentId, string username) {
+            var owner = await Connection.ExecuteScalarAsync<string>(
+                @"SELECT u.username FROM comment c 
+                    JOIN ""user"" u ON u.id = c.user_id 
+                    WHERE c.id = @Id",
+                new { Id = commentId });
+            return owner == username;
+        }
         #endregion
 
         #region Privates

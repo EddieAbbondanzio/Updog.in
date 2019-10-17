@@ -61,6 +61,15 @@ namespace Updog.Persistance {
             Reverse(post)
         );
 
+
+        public async Task<bool> IsOwner(int postId, string username) {
+            var owner = await Connection.ExecuteScalarAsync<string>(
+                @"SELECT u.username FROM post p 
+                    JOIN ""user"" u ON u.id = p.user_id 
+                    WHERE p.id = @Id",
+                new { Id = postId });
+            return owner == username;
+        }
         #endregion
 
         #region Privates

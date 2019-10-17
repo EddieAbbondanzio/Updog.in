@@ -7,5 +7,7 @@ namespace Updog.Domain {
     /// <summary>
     /// Marker interface for now.
     /// </summary>
-    public interface ICommentRepo : IRepo<Comment> { }
+    public interface ICommentRepo : IRepo<Comment> {
+        Task<bool> IsOwner(int commentId, string username);
+    }
 }

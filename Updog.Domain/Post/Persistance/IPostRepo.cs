@@ -8,5 +8,6 @@ namespace Updog.Domain {
     /// CRUD interface for managing pots in the database.
     /// </summary>
     public interface IPostRepo : IRepo<Post> {
+        Task<bool> IsOwner(int postId, string username);
     }
 }
