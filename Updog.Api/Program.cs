@@ -20,6 +20,10 @@ namespace Updog.Api {
             var adminConfig = host.Services.GetService<IAdminConfig>();
 
             using (var scope = host.Services.CreateScope()) {
+                // Perform any database migrations
+                scope.ServiceProvider.GetRequiredService<DatabaseMigrationRunner>().MigrateUp();
+
+                // Create the admin account.
                 var admin = scope.ServiceProvider.GetService<CommandHandler<AdminRegisterOrUpdateCommand>>().Execute(new AdminRegisterOrUpdateCommand(adminConfig));
             }
 

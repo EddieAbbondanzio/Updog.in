@@ -1,11 +1,10 @@
 using Updog.Domain;
-using Updog.Persistance;
 
-namespace Updog.Api {
+namespace Updog.Domain {
     /// <summary>
     /// Information used to connect to a database.
     /// </summary>
-    public sealed class DatabaseConfig : IDatabaseConfig {
+    public abstract class DatabaseConfig : IDatabaseConfig {
         #region Properties
         /// <summary>
         /// The IP address.
@@ -32,6 +31,10 @@ namespace Updog.Api {
         /// The name of the database.
         /// </summary>
         public string Database { get; set; } = "";
+        #endregion
+
+        #region Publics
+        public abstract string GetConnectionString();
         #endregion
     }
 }

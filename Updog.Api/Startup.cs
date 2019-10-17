@@ -62,18 +62,17 @@ namespace Updog.Api {
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
-            services.AddSingleton<IDatabase, PostgresDatabase>();
-            services.AddSingleton<IMediator, Mediator>();
 
-            services.AddScoped<IEventBus, EventBus>();
 
-            services.ConfigurePoco<IDatabaseConfig, DatabaseConfig>(Configuration.GetSection("Database"));
+            var dbConfig = services.ConfigurePoco<IDatabaseConfig, PostgresDatabaseConfig>(Configuration.GetSection("Database"));
             services.ConfigurePoco<IAuthenticationTokenConfig, AuthenticationTokenConfig>(Configuration.GetSection("AuthenticationToken"));
             services.ConfigurePoco<IAdminConfig, AdminConfig>(Configuration.GetSection("Admin"));
 
-
+            services.AddSingleton<IDatabase, PostgresDatabase>();
+            services.AddDatabaseMigrations(dbConfig.GetConnectionString());
+            services.AddSingleton<IMediator, Mediator>();
+            services.AddScoped<IEventBus, EventBus>();
             services.AddSingleton<IAuthenticationTokenHandler, JsonWebTokenHandler>();
-
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
 
             services.AddTransient<IUserRepo, UserRepo>();

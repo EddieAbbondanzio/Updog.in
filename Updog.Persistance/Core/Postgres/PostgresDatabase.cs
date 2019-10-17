@@ -22,15 +22,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="connection">The connection config.</param>
         public PostgresDatabase(IDatabaseConfig config, IServiceProvider serviceProivder) : base(serviceProivder) {
-            NpgsqlConnectionStringBuilder connBuilder = new NpgsqlConnectionStringBuilder() {
-                Host = config.Host,
-                Port = config.Port,
-                Username = config.User,
-                Password = config.Password,
-                Database = config.Database
-            };
-
-            connection = connBuilder.ToString();
+            connection = config.GetConnectionString();
         }
         #endregion
 

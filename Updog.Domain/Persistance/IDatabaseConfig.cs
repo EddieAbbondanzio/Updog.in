@@ -30,5 +30,9 @@ namespace Updog.Domain {
         /// </summary>
         string Database { get; set; }
         #endregion
+
+        #region Publics
+        string GetConnectionString();
+        #endregion
     }
 }
