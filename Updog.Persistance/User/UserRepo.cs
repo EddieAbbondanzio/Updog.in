@@ -31,7 +31,7 @@ namespace Updog.Persistance {
         /// <param name="id">The id to look for.</param>
         /// <returns>The user with the id.</returns>
         public override async Task<User?> FindById(int id) => (await Connection.QueryAsync<UserRecord>(
-                @"SELECT * FROM ""User"" WHERE Id = @Id;",
+                @"SELECT * FROM ""user"" WHERE id = @Id;",
                 new {
                     Id = id
                 }
@@ -43,7 +43,7 @@ namespace Updog.Persistance {
         /// <param name="username">The username to look for.</param>
         /// <returns>The user with the username.</returns>
         public async Task<User?> FindByUsername(string username) => (await Connection.QueryAsync<UserRecord>(
-                @"SELECT * FROM ""User"" WHERE LOWER(Username) = LOWER(@Username);",
+                @"SELECT * FROM ""user"" WHERE LOWER(username) = LOWER(@Username);",
                 new { Username = username }
         )).Select(u => Map(u)).FirstOrDefault();
 
@@ -53,7 +53,7 @@ namespace Updog.Persistance {
         /// <param name="email">The email to look for.</param>
         /// <returns>The user found (if any).</returns>
         public async Task<User?> FindByEmail(string email) => (await Connection.QueryAsync<UserRecord>(
-            @"SELECT * FROM ""User"" WHERE LOWER(Email) = LOWER(@Email);",
+            @"SELECT * FROM ""user"" WHERE LOWER(email) = LOWER(@Email);",
             new { Email = email }
         )).Select(u => Map(u)).FirstOrDefault();
 
@@ -63,7 +63,20 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="user">The user to add.</param>
         public override async Task Add(User user) => user.Id = await Connection.QueryFirstOrDefaultAsync<int>(
-                @"INSERT INTO ""User"" (Username, Email, PasswordHash, JoinedDate, PostKarma, CommentKarma) VALUES (@Username, @Email, @PasswordHash, @JoinedDate, @PostKarma, @CommentKarma) RETURNING Id;",
+                @"INSERT INTO ""user"" (
+                    username, 
+                    email, 
+                    password_hash, 
+                    joined_date, 
+                    post_karma, 
+                    comment_karma
+                    ) VALUES (
+                    @Username, 
+                    @Email, 
+                    @PasswordHash, 
+                    @JoinedDate, 
+                    @PostKarma, 
+                    @CommentKarma) RETURNING Id;",
                 Reverse(user)
             );
 
@@ -72,7 +85,14 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="user">The user to update.</param>
         public override async Task Update(User user) => await Connection.ExecuteAsync(
-                @"UPDATE ""User"" SET Username = @Username, Email = @Email, PasswordHash = @PasswordHash, JoinedDate = @JoinedDate, PostKarma = @PostKarma, CommentKarma = @CommentKarma WHERE Id = @Id;",
+                @"UPDATE ""user"" 
+                    SET username = @Username, 
+                    email = @Email, 
+                    password_hash = @PasswordHash, 
+                    joined_date = @JoinedDate, 
+                    post_karma = @PostKarma, 
+                    comment_karma = @CommentKarma 
+                    WHERE id = @Id;",
                 Reverse(user)
             );
 
@@ -81,7 +101,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="user">The user to delete.</param>
         public override async Task Delete(User user) => await Connection.ExecuteAsync(
-                @"DELETE FROM ""User"" WHERE Id = @Id;",
+                @"DELETE FROM ""user"" WHERE id = @Id;",
                 Reverse(user)
             );
         #endregion

@@ -25,16 +25,16 @@ namespace Updog.Persistance {
 
         #region Publics
         public override async Task<Post?> FindById(int id) => (await Connection.QueryAsync<PostRecord>(
-            @"SELECT * FROM Post 
-                LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
-                LEFT JOIN Space ON Space.Id = Post.SpaceId
-                WHERE Post.Id = @Id AND Post.WasDeleted = FALSE;",
+            @"SELECT * FROM post 
+                LEFT JOIN ""user"" u1 ON u1.id = post.user_id
+                LEFT JOIN space ON space.id = post.space_id
+                WHERE post.id = @Id AND post.was_deleted = FALSE;",
             new { Id = id }
         )).Select(p => Map(p)).FirstOrDefault();
 
         public override async Task Add(Post post) => post.Id = await Connection.QueryFirstOrDefaultAsync<int>(
-            @"INSERT INTO Post 
-                (Title, Body, Type, CreationDate, UserId, SpaceId, WasUpdated, WasDeleted, CommentCount, Upvotes, Downvotes) 
+            @"INSERT INTO post 
+                (title, body, type, creation_date, user_id, space_id, was_updated, was_deleted, comment_count, upvotes, downvotes) 
                 VALUES 
                 (@Title, @Body, @Type, @CreationDate, @UserId, @SpaceId, @WasUpdated, @WasDeleted, @CommentCount, @Upvotes, @Downvotes) RETURNING Id;",
             Reverse(post)
@@ -42,22 +42,22 @@ namespace Updog.Persistance {
 
         public override async Task Update(Post post) => await Connection.ExecuteAsync(
             @"UPDATE Post SET 
-                UserId = @UserId, 
-                Type = @Type, 
-                Title = @Title, 
-                Body = @Body, 
-                CreationDate = @CreationDate, 
-                WasUpdated = @WasUpdated, 
-                WasDeleted = @WasDeleted, 
-                CommentCount = @CommentCount,
-                Upvotes = @Upvotes,
-                Downvotes = @Downvotes
-                WHERE Id = @Id",
+                user_id = @UserId, 
+                type = @Type, 
+                title = @Title, 
+                body = @Body, 
+                creation_date = @CreationDate, 
+                was_updated = @WasUpdated, 
+                was_deleted = @WasDeleted, 
+                comment_count = @CommentCount,
+                upvotes = @Upvotes,
+                downvotes = @Downvotes
+                WHERE id = @Id",
             Reverse(post)
         );
 
         public override async Task Delete(Post post) => await Connection.ExecuteAsync(
-            @"UPDATE Post SET WasDeleted = TRUE WHERE Id = @Id",
+            @"UPDATE post SET was_deleted = TRUE WHERE id = @Id",
             Reverse(post)
         );
 

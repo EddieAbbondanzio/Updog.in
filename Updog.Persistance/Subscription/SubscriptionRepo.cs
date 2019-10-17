@@ -29,7 +29,7 @@ namespace Updog.Persistance {
         /// <param name="id">The ID to look for.</param>
         /// <returns>The subscription found.</returns>
         public override async Task<Subscription?> FindById(int id) => (await Connection.QueryAsync<SubscriptionRecord>(
-                @"SELECT * FROM Subscription WHERE Subscription.Id = @Id;",
+                @"SELECT * FROM subscription WHERE subscription.id = @Id;",
                 new { Id = id })).Select(s => Map(s)).FirstOrDefault();
 
         /// <summary>
@@ -38,9 +38,9 @@ namespace Updog.Persistance {
         /// <param name="username">The user that they belong to..</param>
         /// <returns>The subscriptions found (if any)</returns>
         public async Task<IEnumerable<Subscription>> FindByUser(string username) => (await Connection.QueryAsync<SubscriptionRecord>(
-                @"SELECT Subscription.* FROM Subscription 
-                    LEFT JOIN ""User"" u1 ON u1.Id = Subscription.UserId
-                    WHERE u1.Username = @Username;",
+                @"SELECT subscription.* FROM subscription 
+                    LEFT JOIN ""user"" u1 ON u1.id = subscription.user_id
+                    WHERE u1.username = @Username;",
                 new { Username = username }
             )).Select(s => Map(s));
 
@@ -51,10 +51,10 @@ namespace Updog.Persistance {
         /// <param name="space">The space it's for.</param>
         /// <returns>The subscription found (if any).</returns>
         public async Task<Subscription?> FindByUserAndSpace(string username, string spaceName) => (await Connection.QueryAsync<SubscriptionRecord>(
-                @"SELECT Subscription.* FROM Subscription 
-                    LEFT JOIN ""User"" u1 ON u1.Id = Subscription.UserId
-                    LEFT JOIN Space ON Space.Id = Subscription.SpaceId
-                    WHERE u1.Username = @Username AND Space.Name = @Name;",
+                @"SELECT subscription.* FROM subscription 
+                    LEFT JOIN ""user"" u1 ON u1.id = subscription.user_id
+                    LEFT JOIN space ON space.id = subscription.space_id
+                    WHERE u1.username = @Username AND space.name = @Name;",
                 new { Username = username, Name = spaceName }
             )).Select(s => Map(s)).FirstOrDefault();
 
@@ -63,8 +63,8 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="entity">The subscription to add.</param>
         public override async Task Add(Subscription entity) => await Connection.ExecuteAsync(
-                @"INSERT INTO Subscription 
-                        (SpaceId, UserId) 
+                @"INSERT INTO subscription 
+                        (space_id, user_id) 
                         VALUES(@SpaceId, @UserId)",
                 Reverse(entity)
             );
@@ -74,11 +74,11 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="entity">The subscription to update.</param>
         public override async Task Update(Subscription entity) => await Connection.ExecuteAsync(
-                @"UPDATE Subscription SET
-                        SpaceId = @SpaceId,
-                        UserId = @UserId,
-                        SubscriptionCount = @SubscriptionCount
-                        WHERE Id = @Id",
+                @"UPDATE subscription SET
+                        space_id = @SpaceId,
+                        user_id = @UserId,
+                        subscription_count = @SubscriptionCount
+                        WHERE id = @Id",
                 Reverse(entity)
             );
 
@@ -87,7 +87,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="entity">The subscription to delete.</param>
         public override async Task Delete(Subscription entity) => await Connection.ExecuteAsync(
-                @"DELETE FROM Subscription WHERE Id = @Id",
+                @"DELETE FROM subscription WHERE id = @Id",
                 Reverse(entity)
             );
         #endregion

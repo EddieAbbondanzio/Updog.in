@@ -5,17 +5,17 @@ namespace Updog.Persistance {
     [Migration(2019_10_16_6, "Add vote table.")]
     public class AddSubscriptionTableMigrate : Migration {
         public override void Up() {
-            Create.Table("Subscription")
-                .WithColumn("Id").AsInt32().PrimaryKey().NotNullable().Identity()
-                .WithColumn("UserId").AsInt32().NotNullable()
-                .WithColumn("SpaceId").AsInt32().NotNullable();
+            Create.Table("subscription")
+                .WithColumn("id").AsInt32().PrimaryKey().NotNullable().Identity()
+                .WithColumn("user_id").AsInt32().NotNullable()
+                .WithColumn("space_id").AsInt32().NotNullable();
 
-            Create.ForeignKey().FromTable("Subscription").ForeignColumn("UserId").ToTable("\"User\"").PrimaryColumn("Id");
-            Create.ForeignKey().FromTable("Subscription").ForeignColumn("SpaceId").ToTable("Space").PrimaryColumn("Id");
+            Create.ForeignKey().FromTable("subscription").ForeignColumn("user_id").ToTable("\"user\"").PrimaryColumn("id");
+            Create.ForeignKey().FromTable("subscription").ForeignColumn("space_id").ToTable("space").PrimaryColumn("id");
         }
 
         public override void Down() {
-            Delete.Table("Subscription");
+            Delete.Table("subscription");
         }
     }
 }

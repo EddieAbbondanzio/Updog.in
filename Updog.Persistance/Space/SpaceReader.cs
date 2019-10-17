@@ -15,7 +15,7 @@ namespace Updog.Persistance {
         #region Publics
         public async Task<PagedResultSet<SpaceReadView>> Find(PaginationInfo paging) {
             var spaces = await Connection.QueryAsync<SpaceRecord>(
-                @"SELECT * FROM Space LIMIT @Limit OFFSET @Offset",
+                @"SELECT * FROM space LIMIT @Limit OFFSET @Offset",
                 new {
                     Limit = paging.PageSize,
                     Offset = paging.Offset
@@ -23,7 +23,7 @@ namespace Updog.Persistance {
             );
 
             int totalCount = await Connection.ExecuteScalarAsync<int>(
-                "SELECT COUNT(*) FROM Space"
+                "SELECT COUNT(*) FROM space"
             );
 
             return new PagedResultSet<SpaceReadView>(spaces.Select(s => Map(s)), new PaginationInfo(paging.PageNumber, Math.Min(spaces.Count(), paging.PageSize), totalCount));
@@ -32,7 +32,7 @@ namespace Updog.Persistance {
 
         public async Task<SpaceReadView?> FindById(int id) {
             var space = (await Connection.QueryFirstOrDefaultAsync<SpaceRecord>(
-                @"SELECT * FROM Space WHERE Space.Id = @ID",
+                @"SELECT * FROM space WHERE space.id = @Id",
                 new { Id = id }
             ));
 
@@ -50,7 +50,7 @@ namespace Updog.Persistance {
 
         public async Task<SpaceReadView?> FindByName(string name) {
             var space = (await Connection.QueryFirstOrDefaultAsync<SpaceRecord>(
-                @"SELECT * FROM Space WHERE LOWER(Space.Name) = LOWER(@Name)",
+                @"SELECT * FROM space WHERE LOWER(space.name) = LOWER(@Name)",
                 new { Name = name }
             ));
 
@@ -68,7 +68,7 @@ namespace Updog.Persistance {
 
         public async Task<IEnumerable<SpaceReadView>> FindDefault() {
             var defaults = await Connection.QueryAsync<SpaceRecord>(
-                @"SELECT * FROM Space WHERE IsDefault = TRUE"
+                @"SELECT * FROM space WHERE is_default = TRUE"
             );
 
             var views = defaults.Select(s => Map(s)).ToArray();
@@ -83,7 +83,10 @@ namespace Updog.Persistance {
 
         public async Task<IEnumerable<SpaceReadView>> FindSubscribed(User user) {
             var subscribes = await Connection.QueryAsync<SpaceRecord>(
-                @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id LEFT JOIN Subscription ON Space.Id = Subscription.SpaceId WHERE Subscription.UserId = @Id",
+                @"SELECT * FROM space 
+                    LEFT JOIN ""user"" ON space.user_id = ""user"".id 
+                    LEFT JOIN subscription ON space.id = subscription.space_id 
+                    WHERE subscription.user_id = @Id",
                 user
             );
 
@@ -99,10 +102,10 @@ namespace Updog.Persistance {
 
         public async Task<IEnumerable<SpaceReadView>> FindSpacesUserModerates(string username) {
             var spaces = await Connection.QueryAsync<SpaceRecord>(
-                @"SELECT Space.* FROM Space
-                JOIN Role ON Role.Domain = Space.Name
-                JOIN ""User"" U ON Role.UserId = U.Id 
-                WHERE U.Username = @Username",
+                @"SELECT space.* FROM space
+                JOIN role ON role.domain = space.name
+                JOIN ""user"" U ON role.user_id = U.id 
+                WHERE U.username = @Username",
                 new { Username = username }
             );
 

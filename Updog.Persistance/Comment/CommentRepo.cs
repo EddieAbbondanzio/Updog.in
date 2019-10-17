@@ -32,13 +32,13 @@ namespace Updog.Persistance {
         public override async Task<Comment?> FindById(int commentId) {
             var comments = (await Connection.QueryAsync<CommentRecord>(
                 @"WITH RECURSIVE commenttree AS (
-                    SELECT r.* FROM Comment r WHERE Id = @Id AND WasDeleted = FALSE
+                    SELECT r.* FROM comment r WHERE id = @Id AND was_deleted = FALSE
                     UNION ALL
-                    SELECT c.* FROM Comment c
-                    INNER JOIN commenttree ct ON ct.Id = c.ParentId
-                    WHERE c.WasDeleted = FALSE
+                    SELECT c.* FROM comment c
+                    INNER JOIN commenttree ct ON ct.id = c.parent_id
+                    WHERE c.was_deleted = FALSE
                     ) SELECT * FROM commenttree
-                    LEFT JOIN ""User"" ON UserId = ""User"".Id ORDER BY ParentId, CreationDate ASC;",
+                    LEFT JOIN ""user"" ON user_id = ""user"".id ORDER BY parent_id, creation_date ASC;",
                 new { Id = commentId }
             )).Select(Map);
 
@@ -50,7 +50,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="entity">The comment to add.</param>
         public override async Task Add(Comment entity) => entity.Id = await Connection.QueryFirstOrDefaultAsync<int>(
-                @"INSERT INTO Comment (UserId, PostId, ParentId, Body, CreationDate, WasUpdated, WasDeleted, Upvotes, Downvotes) 
+                @"INSERT INTO comment (user_id, post_id, parent_id, body, creation_date, was_updated, was_deleted, upvotes, downvotes) 
                     VALUES (@UserId, @PostId, @ParentId, @Body, @CreationDate, @WasUpdated, @WasDeleted, @Upvotes, @Downvotes) RETURNING Id;",
                 Reverse(entity)
             );
@@ -61,16 +61,16 @@ namespace Updog.Persistance {
         /// <param name="entity">The comment to update.</param>
         public override async Task Update(Comment entity) => await Connection.ExecuteAsync(
                 @"UPDATE Comment SET 
-                    UserId = @UserId, 
-                    PostId = @PostId, 
-                    ParentId = @ParentId, 
-                    Body = @Body, 
-                    CreationDate = @CreationDate, 
-                    WasUpdated = @WasUpdated, 
-                    WasDeleted = @WasDeleted,
-                    Upvotes = @Upvotes,
-                    Downvotes = @Downvotes
-                    WHERE Id = @Id",
+                    user_id = @UserId, 
+                    post_id = @PostId, 
+                    parent_id = @ParentId, 
+                    body = @Body, 
+                    creation_date = @CreationDate, 
+                    was_updated = @WasUpdated, 
+                    was_deleted = @WasDeleted,
+                    upvotes = @Upvotes,
+                    downvotes = @Downvotes
+                    WHERE id = @Id",
                 Reverse(entity)
             );
 
@@ -78,7 +78,7 @@ namespace Updog.Persistance {
         /// Delete an existing comment.
         /// </summary>
         /// <param name="entity">The comment to delete.</param>
-        public override async Task Delete(Comment entity) => await Connection.ExecuteAsync(@"UPDATE Comment SET WasDeleted = TRUE Where Id = @Id", Reverse(entity));
+        public override async Task Delete(Comment entity) => await Connection.ExecuteAsync(@"UPDATE comment SET was_deleted = TRUE Where id = @Id", Reverse(entity));
 
         #endregion
 

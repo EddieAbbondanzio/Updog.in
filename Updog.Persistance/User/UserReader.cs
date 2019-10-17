@@ -16,7 +16,7 @@ namespace Updog.Persistance {
         #region Publics
         public async Task<UserReadView?> FindById(int id) {
             var user = await Connection.QuerySingleOrDefaultAsync<UserRecord>(
-                @"SELECT U.* FROM ""User"" U WHERE U.Id = @Id",
+                @"SELECT * FROM ""user"" WHERE U.id = @Id",
                 new { Id = id }
             );
 
@@ -25,9 +25,9 @@ namespace Updog.Persistance {
 
         public async Task<UserReadView?> FindByComment(int commentId) {
             var user = await Connection.QuerySingleOrDefaultAsync<UserRecord>(
-                @"SELECT U.* FROM ""User"" U
-                    LEFT JOIN Comment ON Comment.UserId = U.Id
-                    WHERE Comment.Id = @Id",
+                @"SELECT * FROM ""user""
+                    LEFT JOIN comment ON comment.user_id = U.id
+                    WHERE comment.id = @Id",
                 new { Id = commentId }
             );
 
@@ -36,9 +36,9 @@ namespace Updog.Persistance {
 
         public async Task<UserReadView?> FindByPost(int postId) {
             var user = await Connection.QuerySingleOrDefaultAsync<UserRecord>(
-                @"SELECT U.* FROM ""User"" U
-                    LEFT JOIN Post ON Post.UserId = U.Id
-                    WHERE Post.Id = @Id",
+                @"SELECT * FROM ""user""
+                    LEFT JOIN post ON post.user_id = U.id
+                    WHERE post.id = @Id",
                 new { Id = postId }
             );
 
@@ -47,8 +47,8 @@ namespace Updog.Persistance {
 
         public async Task<UserReadView?> FindByUsername(string username) {
             var user = await Connection.QuerySingleOrDefaultAsync<UserRecord>(
-                @"SELECT U.* FROM ""User"" U 
-                    WHERE Username = @Username",
+                @"SELECT * FROM ""user"" 
+                    WHERE username = @Username",
                 new { Username = username }
             );
 
@@ -57,8 +57,8 @@ namespace Updog.Persistance {
 
         public async Task<IEnumerable<UserReadView>> FindAdmins() {
             var admins = await Connection.QueryAsync<UserRecord>(
-                @"SELECT U.* FROM ""User"" U
-                JOIN Role ON Role.UserId = U.Id WHERE RoleType = @RoleType",
+                @"SELECT * FROM ""user""
+                JOIN role ON role.user_id = U.id WHERE role_type = @RoleType",
                 new { RoleType = RoleType.Admin }
             );
 
@@ -67,8 +67,8 @@ namespace Updog.Persistance {
 
         public async Task<IEnumerable<UserReadView>> FindModerators(string space) {
             var admins = await Connection.QueryAsync<UserRecord>(
-                @"SELECT U.* FROM ""User"" U
-                JOIN Role ON Role.UserId = U.Id WHERE RoleType = @RoleType",
+                @"SELECT * FROM ""user""
+                JOIN role ON role.user_id = U.id WHERE role_type = @RoleType",
                 new { RoleType = RoleType.Moderator }
             );
 

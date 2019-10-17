@@ -15,13 +15,13 @@ namespace Updog.Persistance {
         public async Task<CommentReadView?> FindById(int id, User? user = null) {
             var comments = await Connection.QueryAsync<CommentRecord>(
                 @"WITH RECURSIVE commenttree AS (
-                    SELECT r.* FROM Comment r WHERE Id = @Id AND WasDeleted = FALSE
+                    SELECT r.* FROM comment r WHERE id = @Id AND was_deleted = FALSE
                     UNION ALL
-                    SELECT c.* FROM Comment c
-                    INNER JOIN commenttree ct ON ct.Id = c.ParentId
-                    WHERE c.WasDeleted = FALSE
+                    SELECT c.* FROM comment c
+                    INNER JOIN commenttree ct ON ct.id = c.parent_id
+                    WHERE c.was_deleted = FALSE
                     ) SELECT * FROM commenttree
-                    ORDER BY ParentId, CreationDate ASC;",
+                    ORDER BY parent_id, creation_date ASC;",
                 new { Id = id }
             );
 
@@ -48,13 +48,13 @@ namespace Updog.Persistance {
         public async Task<IEnumerable<CommentReadView>> FindByPost(int postId, User? user = null) {
             var comments = (await Connection.QueryAsync<CommentRecord>(
                 @"WITH RECURSIVE commenttree AS (
-                    SELECT r.* FROM Comment r WHERE PostId = @PostId AND ParentId = 0 AND WasDeleted = FALSE 
+                    SELECT r.* FROM comment r WHERE post_id = @PostId AND parent_id = 0 AND was_deleted = FALSE 
                     UNION ALL
-                    SELECT c.* FROM Comment c
-                    INNER JOIN commenttree ct ON ct.Id = c.ParentId
-                    WHERE c.WasDeleted = FALSE
+                    SELECT c.* FROM comment c
+                    INNER JOIN commenttree ct ON ct.id = c.parent_id
+                    WHERE c.was_deleted = FALSE
                     ) SELECT * FROM commenttree
-                    ORDER BY ParentId, CreationDate DESC;",
+                    ORDER BY parent_id, creation_date DESC;",
                 new { PostId = postId }
             ));
 
@@ -79,10 +79,10 @@ namespace Updog.Persistance {
 
         public async Task<PagedResultSet<CommentReadView>> FindByUser(string username, PaginationInfo paging, User? user = null) {
             var comments = await Connection.QueryAsync<CommentRecord>(
-                @"SELECT Comment.* FROM Comment 
-                    LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id 
-                    WHERE ""User"".Username = @Username AND WasDeleted = FALSE 
-                    ORDER BY CreationDate DESC 
+                @"SELECT comment.* FROM comment 
+                    LEFT JOIN ""user"" ON comment.user_id = ""user"".id 
+                    WHERE ""user"".username = @Username AND was_deleted = FALSE 
+                    ORDER BY creation_date DESC 
                     LIMIT @Limit 
                     OFFSET @Offset ",
                 new {
@@ -94,9 +94,9 @@ namespace Updog.Persistance {
 
             //Get total count
             int totalCount = await Connection.ExecuteScalarAsync<int>(
-                @"SELECT COUNT(*) FROM Comment 
-                    LEFT JOIN ""User"" ON Comment.UserId = ""User"".Id 
-                    WHERE ""User"".Username = @Username AND WasDeleted = FALSE",
+                @"SELECT COUNT(*) FROM comment 
+                    LEFT JOIN ""user"" ON comment.user_id = ""user"".id 
+                    WHERE ""user"".username = @Username AND was_deleted = FALSE",
                 new { Username = username }
             );
 

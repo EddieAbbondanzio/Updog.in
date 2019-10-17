@@ -11,9 +11,9 @@ namespace Updog.Persistance {
         #region Publics
         public async Task<VoteReadView?> FindByCommentAndUser(int commentId, int userId) {
             var vote = await Connection.QuerySingleOrDefaultAsync<VoteRecord>(
-                @"SELECT * FROM Vote 
-                    JOIN ""User"" u ON u.Id = Vote.UserId 
-                    WHERE u.Id = @UserId AND Vote.ResourceType = @ResourceType AND Vote.ResourceId = @CommentId",
+                @"SELECT * FROM vote 
+                    JOIN ""user"" u ON u.id = vote.user_id 
+                    WHERE u.id = @UserId AND vote.resource_type = @ResourceType AND vote.resource_id = @CommentId",
                 new {
                     CommentId = commentId,
                     UserId = userId,
@@ -26,9 +26,9 @@ namespace Updog.Persistance {
 
         public async Task<VoteReadView?> FindByPostAndUser(int postId, int userId) {
             var vote = await Connection.QuerySingleOrDefaultAsync<VoteRecord>(
-                @"SELECT * FROM Vote 
-                    JOIN ""User"" u ON u.Id = Vote.UserId 
-                    WHERE u.Id = @UserId AND Vote.ResourceType = @ResourceType AND Vote.ResourceId = @CommentId",
+                @"SELECT * FROM vote 
+                    JOIN ""user"" u ON u.id = vote.user_id 
+                    WHERE u.id = @UserId AND vote.resource_type = @ResourceType AND vote.resource_id = @CommentId",
                 new {
                     PostId = postId,
                     UserId = userId,

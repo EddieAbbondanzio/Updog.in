@@ -25,18 +25,20 @@ namespace Updog.Persistance {
 
         #region Publics
         public override async Task<Space?> FindById(int id) => (await Connection.QueryAsync<SpaceRecord>(
-            @"SELECT * FROM Space WHERE Space.Id = @Id",
+            @"SELECT * FROM space WHERE space.id = @Id",
             new { Id = id }
         )).Select(s => Map(s)).FirstOrDefault();
 
         public async Task<Space?> FindByName(string name) => (await Connection.QueryAsync<SpaceRecord>(
-            @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id WHERE LOWER(Space.Name) = LOWER(@Name)",
+            @"SELECT * FROM space 
+                LEFT JOIN ""user"" ON space.user_id = ""user"".id 
+                WHERE LOWER(space.name) = LOWER(@Name)",
             new { Name = name }
         )).Select(s => Map(s)).FirstOrDefault();
 
         public async Task<PagedResultSet<Space>> Find(PaginationInfo paging) {
             var spaces = await Connection.QueryAsync<SpaceRecord>(
-                @"SELECT * FROM Space LIMIT @Limit OFFSET @Offset",
+                @"SELECT * FROM space LIMIT @Limit OFFSET @Offset",
                 new {
                     Limit = paging.PageSize,
                     Offset = paging.Offset
@@ -44,29 +46,32 @@ namespace Updog.Persistance {
             );
 
             int totalCount = await Connection.ExecuteScalarAsync<int>(
-                "SELECT COUNT(*) FROM Space"
+                "SELECT COUNT(*) FROM space"
             );
 
             return new PagedResultSet<Space>(spaces.Select(s => Map(s)), new PaginationInfo(paging.PageNumber, Math.Min(spaces.Count(), paging.PageSize), totalCount));
         }
 
         public async Task<IEnumerable<Space>> FindDefault() => (await Connection.QueryAsync<SpaceRecord>(
-            @"SELECT * FROM Space WHERE IsDefault = TRUE"
+            @"SELECT * FROM space WHERE is_default = TRUE"
         )).Select(s => Map(s));
 
         public async Task<IEnumerable<Space>> FindSubscribed(User user) => (await Connection.QueryAsync<SpaceRecord>(
-                @"SELECT * FROM Space LEFT JOIN ""User"" ON Space.UserId = ""User"".Id LEFT JOIN Subscription ON Space.Id = Subscription.SpaceId WHERE Subscription.UserId = @Id",
+                @"SELECT * FROM space 
+                    LEFT JOIN ""user"" ON space.user_id = ""user"".id 
+                    LEFT JOIN subscription ON space.id = subscription.space_id 
+                    WHERE subscription.user_id = @Id",
                 user
             )).Select(s => Map(s));
 
         public override async Task Add(Space entity) => entity.Id = await Connection.QueryFirstOrDefaultAsync<int>(
-                @"INSERT INTO Space(
-                        Name,
-                        Description,
-                        CreationDate,
-                        SubscriptionCount,
-                        UserId,
-                        IsDefault
+                @"INSERT INTO space(
+                        name,
+                        description,
+                        creation_date,
+                        subscription_count,
+                        user_id,
+                        is_default
                         ) VALUES (
                         @Name,
                         @Description,
@@ -74,22 +79,22 @@ namespace Updog.Persistance {
                         @SubscriptionCount,
                         @UserId,
                         @IsDefault
-                        ) RETURNING Id;", Reverse(entity)
+                        ) RETURNING id;", Reverse(entity)
             );
 
         public override async Task Update(Space entity) => await Connection.ExecuteAsync(
                 @"UPDATE Space SET 
-                        Name = @Name,
-                        Description = @Description,
-                        CreationDate = @CreationDate,
-                        SubscriptionCount = @SubscriptionCount,
-                        UserId = @UserId
-                    WHERE Id = @Id",
+                        name = @Name,
+                        description = @Description,
+                        creation_date = @CreationDate,
+                        subscription_count = @SubscriptionCount,
+                        user_id = @UserId
+                    WHERE id = @Id",
                 Reverse(entity)
             );
 
         public override async Task Delete(Space entity) => await Connection.ExecuteAsync(
-                @"DELETE FROM Space WHERE Id = @Id",
+                @"DELETE FROM space WHERE id = @Id",
                 Reverse(entity)
             );
         #endregion

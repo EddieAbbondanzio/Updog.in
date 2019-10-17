@@ -27,9 +27,9 @@ namespace Updog.Persistance {
         /// <param name="id">The ID to look for.</param>
         /// <returns>The matching vote found.</returns>
         public override async Task<Vote?> FindById(int id) => (await Connection.QueryAsync<VoteRecord>(
-            @"SELECT * FROM Vote 
-                JOIN ""User"" u ON u.Id = Vote.UserId 
-                WHERE Vote.Id = @Id",
+            @"SELECT * FROM vote 
+                JOIN ""user"" u ON u.id = vote.user_id 
+                WHERE vote.id = @Id",
             new { Id = id }
             )).Select(v => Map(v)).FirstOrDefault();
 
@@ -40,9 +40,9 @@ namespace Updog.Persistance {
         /// <param name="commentId">The ID of the comment.</param>
         /// <returns>The vote found (if any).</returns>
         public async Task<Vote?> FindByUserAndComment(string username, int commentId) => (await Connection.QueryAsync<VoteRecord>(
-                @"SELECT * FROM Vote 
-                    JOIN ""User"" u ON u.Id = Vote.UserId 
-                    WHERE u.Username = @Username AND Vote.ResourceType = @ResourceType AND Vote.ResourceId = @CommentId",
+                @"SELECT * FROM vote 
+                    JOIN ""user"" u ON u.id = vote.user_id 
+                    WHERE u.username = @Username AND vote.resource_type = @ResourceType AND vote.resource_id = @CommentId",
                 new { Username = username, CommentId = commentId, ResourceType = VotableEntityType.Comment }
             )).Select(v => Map(v)).FirstOrDefault();
 
@@ -53,9 +53,9 @@ namespace Updog.Persistance {
         /// <param name="postId">The post ID></param>
         /// <returns>The vote found (if any).</returns>
         public async Task<Vote?> FindByUserAndPost(string username, int postId) => (await Connection.QueryAsync<VoteRecord>(
-                @"SELECT * FROM Vote 
-                    JOIN ""User"" U ON U.Id = Vote.UserId 
-                    WHERE u.Username = @Username AND Vote.ResourceType = @ResourceType AND Vote.ResourceId = @PostId",
+                @"SELECT * FROM vote 
+                    JOIN ""user"" U ON U.id = vote.user_id 
+                    WHERE u.username = @Username AND vote.resource_type = @ResourceType AND vote.resource_id = @PostId",
                 new { Username = username, PostId = postId, ResourceType = VotableEntityType.Post }
             )).Select(v => Map(v)).FirstOrDefault();
 
@@ -64,8 +64,8 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="vote">The vote to add.</param>
         public override async Task Add(Vote vote) => vote.Id = await Connection.QueryFirstOrDefaultAsync<int>(
-                @"INSERT INTO Vote 
-                    (UserId, ResourceId, ResourceType, Direction) 
+                @"INSERT INTO vote 
+                    (user_id, resource_id, resource_type, direction) 
                     VALUES (@UserId, @ResourceId, @ResourceType, @Direction) RETURNING Id;",
                     Reverse(vote));
 
@@ -74,12 +74,12 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="vote">The vote to update.</param>
         public override async Task Update(Vote vote) => await Connection.ExecuteAsync(
-                @"UPDATE Vote SET 
-                    UserId = @UserId, 
-                    ResourceId = @ResourceId, 
-                    ResourceType = @ResourceType, 
-                    Direction = @Direction
-                    WHERE Vote.Id = @Id",
+                @"UPDATE vote SET 
+                    user_id = @UserId, 
+                    resource_id = @ResourceId, 
+                    resource_type = @ResourceType, 
+                    direction = @Direction
+                    WHERE vote.id = @Id",
                     Reverse(vote)
             );
 
@@ -88,7 +88,7 @@ namespace Updog.Persistance {
         /// </summary>
         /// <param name="vote">The vote to delete.</param>
         public override async Task Delete(Vote vote) => await Connection.ExecuteAsync(
-                @"DELETE FROM Vote WHERE Vote.ID = @Id",
+                @"DELETE FROM vote WHERE vote.id = @Id",
                 Reverse(vote)
             );
         #endregion

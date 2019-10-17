@@ -14,9 +14,9 @@ namespace Updog.Persistance {
         #region Publics
         public async Task<PostReadView?> FindById(int id, User? user = null) {
             var post = await Connection.QueryFirstOrDefaultAsync<PostRecord>(
-                @"SELECT * FROM Post
-                WHERE WasDeleted = FALSE
-                ORDER BY Post.CreationDate DESC
+                @"SELECT * FROM post
+                WHERE was_deleted = FALSE
+                ORDER BY post.creation_date DESC
                 LIMIT @Limit
                 OFFSET @Offset",
                 new {
@@ -26,7 +26,7 @@ namespace Updog.Persistance {
 
             //Get total count
             int totalCount = await Connection.ExecuteScalarAsync<int>(
-                "SELECT COUNT(*) FROM Post;"
+                "SELECT COUNT(*) FROM post;"
             );
 
             IUserReader userReader = GetReader<IUserReader>();
@@ -42,9 +42,9 @@ namespace Updog.Persistance {
 
         public async Task<PagedResultSet<PostReadView>> FindByNew(PaginationInfo paging, User? user = null) {
             var posts = await Connection.QueryAsync<PostRecord>(
-                @"SELECT * FROM Post
-                WHERE WasDeleted = FALSE
-                ORDER BY Post.CreationDate DESC
+                @"SELECT * FROM post
+                WHERE was_deleted = FALSE
+                ORDER BY post.creation_date DESC
                 LIMIT @Limit
                 OFFSET @Offset",
                 new {
@@ -55,7 +55,7 @@ namespace Updog.Persistance {
 
             //Get total count
             int totalCount = await Connection.ExecuteScalarAsync<int>(
-                "SELECT COUNT(*) FROM Post;"
+                "SELECT COUNT(*) FROM post;"
             );
 
             IUserReader userReader = GetReader<IUserReader>();
@@ -77,10 +77,10 @@ namespace Updog.Persistance {
 
         public async Task<PagedResultSet<PostReadView>> FindBySpace(string space, PaginationInfo paging, User? user = null) {
             var posts = await Connection.QueryAsync<PostRecord>(
-                @"SELECT Post.* FROM Post
-                    LEFT JOIN Space ON Space.Id = Post.SpaceId
-                    WHERE LOWER(Space.Name) = LOWER(@Name) AND Post.WasDeleted = FALSE
-                    ORDER BY Post.CreationDate DESC
+                @"SELECT post.* FROM post
+                    LEFT JOIN space ON space.id = post.space_id
+                    WHERE LOWER(space.name) = LOWER(@Name) AND post.was_deleted = FALSE
+                    ORDER BY post.creation_date DESC
                     LIMIT @Limit
                     OFFSET @Offset",
                     new {
@@ -92,7 +92,9 @@ namespace Updog.Persistance {
 
             //Get total count
             int totalCount = await Connection.ExecuteScalarAsync<int>(
-                "SELECT COUNT(*) FROM Post LEFT JOIN Space ON Post.SpaceId = Space.Id WHERE LOWER(Space.Name) = LOWER(@Name) AND Post.WasDeleted = FALSE;", new { Name = space }
+                @"SELECT COUNT(*) FROM post 
+                    LEFT JOIN space ON post.space_id = space.id 
+                    WHERE LOWER(space.name) = LOWER(@Name) AND post.was_deleted = FALSE;", new { Name = space }
             );
 
             IUserReader userReader = GetReader<IUserReader>();
@@ -115,10 +117,10 @@ namespace Updog.Persistance {
 
         public async Task<PagedResultSet<PostReadView>> FindByUser(string username, PaginationInfo paging, User? user = null) {
             var posts = await Connection.QueryAsync<PostRecord>(
-                @"SELECT Post.* FROM Post
-                    LEFT JOIN ""User"" u1 ON u1.Id = Post.UserId
-                    WHERE u1.Username = @Username AND Post.WasDeleted = FALSE
-                    ORDER BY Post.CreationDate DESC
+                @"SELECT post.* FROM post
+                    LEFT JOIN ""user"" u1 ON u1.id = post.user_id
+                    WHERE u1.username = @Username AND post.was_deleted = FALSE
+                    ORDER BY post.creation_date DESC
                     LIMIT @Limit
                     OFFSET @Offset",
                     new {
@@ -130,7 +132,9 @@ namespace Updog.Persistance {
 
             //Get total count
             int totalCount = await Connection.ExecuteScalarAsync<int>(
-                @"SELECT COUNT(*) FROM Post LEFT JOIN ""User"" ON Post.UserId = ""User"".Id WHERE ""User"".Username = @Username AND Post.WasDeleted = FALSE",
+                @"SELECT COUNT(*) FROM post 
+                    LEFT JOIN ""user"" ON post.user_id = ""user"".id 
+                    WHERE ""user"".username = @Username AND post.was_deleted = FALSE",
                 new { Username = username }
             );
 

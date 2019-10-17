@@ -24,6 +24,7 @@ namespace Updog.Api {
         public Startup(IConfiguration configuration) {
             Configuration = configuration;
             SqlMapper.AddTypeHandler(new DateTimeHandler());
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
         }
 
         public IConfiguration Configuration { get; }
@@ -70,7 +71,7 @@ namespace Updog.Api {
 
             services.AddSingleton<IDatabase, PostgresDatabase>();
             services.AddDatabaseMigrations(dbConfig.GetConnectionString());
-            services.AddSingleton<IMediator, Mediator>();
+            services.AddScoped<IMediator, Mediator>();
             services.AddScoped<IEventBus, EventBus>();
             services.AddSingleton<IAuthenticationTokenHandler, JsonWebTokenHandler>();
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
@@ -79,26 +80,26 @@ namespace Updog.Api {
             services.AddTransient<IUserReader, UserReader>();
             services.AddTransient<IUserService, UserService>();
             services.AddSingleton<IUserFactory, UserFactory>();
-            services.AddTransient<QueryHandler<FindUserByUsernameQuery, UserReadView?>, FindUserByUsernameQueryHandler>();
-            services.AddTransient<QueryHandler<IsUsernameAvailableQuery, bool>, IsUsernameAvailableQueryHandler>();
-            services.AddTransient<CommandHandler<RegisterUserCommand>, RegisterUserCommandHandler>();
-            services.AddTransient<CommandHandler<LoginUserCommand>, LoginUserCommandHandler>();
-            services.AddTransient<CommandHandler<UserUpdateCommand>, UserUpdateCommandHandler>();
-            services.AddTransient<CommandHandler<UserUpdatePasswordCommand>, UserUpdatePasswordCommandHandler>();
-            services.AddTransient<CommandHandler<AdminRegisterOrUpdateCommand>, AdminRegisterOrUpdateCommandHandler>();
+            services.AddScoped<QueryHandler<FindUserByUsernameQuery, UserReadView?>, FindUserByUsernameQueryHandler>();
+            services.AddScoped<QueryHandler<IsUsernameAvailableQuery, bool>, IsUsernameAvailableQueryHandler>();
+            services.AddScoped<CommandHandler<RegisterUserCommand>, RegisterUserCommandHandler>();
+            services.AddScoped<CommandHandler<LoginUserCommand>, LoginUserCommandHandler>();
+            services.AddScoped<CommandHandler<UserUpdateCommand>, UserUpdateCommandHandler>();
+            services.AddScoped<CommandHandler<UserUpdatePasswordCommand>, UserUpdatePasswordCommandHandler>();
+            services.AddScoped<CommandHandler<AdminRegisterOrUpdateCommand>, AdminRegisterOrUpdateCommandHandler>();
 
             services.AddTransient<IPostRepo, PostRepo>();
             services.AddTransient<IPostReader, PostReader>();
             services.AddTransient<IPostService, PostService>();
             services.AddSingleton<IPostFactory, PostFactory>();
             services.AddTransient<IDomainEventHandler<VoteOnPostEvent>, VoteOnPostEventHandler>();
-            services.AddTransient<QueryHandler<PostFindByIdQuery, PostReadView?>, PostFindByIdQueryHandler>();
-            services.AddTransient<QueryHandler<PostFindBySpaceQuery, PagedResultSet<PostReadView>>, PostFindBySpaceQueryHandler>();
-            services.AddTransient<QueryHandler<PostFindByUserQuery, PagedResultSet<PostReadView>>, PostFindByUserQueryHandler>();
-            services.AddTransient<QueryHandler<PostFindByNewQuery, PagedResultSet<PostReadView>>, PostFindByNewQueryHandler>();
-            services.AddTransient<CommandHandler<PostCreateCommand>, PostCreateCommandHandler>();
-            services.AddTransient<CommandHandler<PostUpdateCommand>, PostUpdateCommandHandler>();
-            services.AddTransient<CommandHandler<PostDeleteCommand>, PostDeleteCommandHandler>();
+            services.AddScoped<QueryHandler<PostFindByIdQuery, PostReadView?>, PostFindByIdQueryHandler>();
+            services.AddScoped<QueryHandler<PostFindBySpaceQuery, PagedResultSet<PostReadView>>, PostFindBySpaceQueryHandler>();
+            services.AddScoped<QueryHandler<PostFindByUserQuery, PagedResultSet<PostReadView>>, PostFindByUserQueryHandler>();
+            services.AddScoped<QueryHandler<PostFindByNewQuery, PagedResultSet<PostReadView>>, PostFindByNewQueryHandler>();
+            services.AddScoped<CommandHandler<PostCreateCommand>, PostCreateCommandHandler>();
+            services.AddScoped<CommandHandler<PostUpdateCommand>, PostUpdateCommandHandler>();
+            services.AddScoped<CommandHandler<PostDeleteCommand>, PostDeleteCommandHandler>();
 
 
             services.AddTransient<ICommentRepo, CommentRepo>();
@@ -106,12 +107,12 @@ namespace Updog.Api {
             services.AddTransient<ICommentService, CommentService>();
             services.AddSingleton<ICommentFactory, CommentFactory>();
             services.AddTransient<IDomainEventHandler<VoteOnCommentEvent>, VoteOnCommentEventHandler>();
-            services.AddTransient<QueryHandler<CommentFindByIdQuery, CommentReadView?>, CommentFindByIdQueryHandler>();
-            services.AddTransient<QueryHandler<CommentFindByPostQuery, IEnumerable<CommentReadView>>, CommentFindByPostQueryHandler>();
-            services.AddTransient<QueryHandler<CommentFindByUserQuery, PagedResultSet<CommentReadView>>, CommentFindByUserQueryHandler>();
-            services.AddTransient<CommandHandler<CommentCreateCommand>, CommentCreateCommandHandler>();
-            services.AddTransient<CommandHandler<CommentUpdateCommand>, CommentUpdateCommandHandler>();
-            services.AddTransient<CommandHandler<CommentDeleteCommand>, CommentDeleteCommandHandler>();
+            services.AddScoped<QueryHandler<CommentFindByIdQuery, CommentReadView?>, CommentFindByIdQueryHandler>();
+            services.AddScoped<QueryHandler<CommentFindByPostQuery, IEnumerable<CommentReadView>>, CommentFindByPostQueryHandler>();
+            services.AddScoped<QueryHandler<CommentFindByUserQuery, PagedResultSet<CommentReadView>>, CommentFindByUserQueryHandler>();
+            services.AddScoped<CommandHandler<CommentCreateCommand>, CommentCreateCommandHandler>();
+            services.AddScoped<CommandHandler<CommentUpdateCommand>, CommentUpdateCommandHandler>();
+            services.AddScoped<CommandHandler<CommentDeleteCommand>, CommentDeleteCommandHandler>();
 
             services.AddTransient<ISpaceRepo, SpaceRepo>();
             services.AddTransient<ISpaceReader, SpaceReader>();
@@ -119,36 +120,36 @@ namespace Updog.Api {
             services.AddSingleton<ISpaceFactory, SpaceFactory>();
             services.AddTransient<IDomainEventHandler<SubscriptionCreateEvent>, SubscriptionCreateEventHandler>();
             services.AddTransient<IDomainEventHandler<SubscriptionDeleteEvent>, SubscriptionDeleteEventHandler>();
-            services.AddTransient<QueryHandler<DefaultSpaceQuery, IEnumerable<SpaceReadView>>, DefaultSpaceQueryHandler>();
-            services.AddTransient<QueryHandler<SubscribedSpaceQuery, IEnumerable<SpaceReadView>>, SubscribedSpaceQueryHandler>();
-            services.AddTransient<QueryHandler<SpaceFindByNameQuery, SpaceReadView?>, SpaceFindByNameQueryHandler>();
-            services.AddTransient<QueryHandler<SpaceFindQuery, PagedResultSet<SpaceReadView>>, SpaceFindQueryHandler>();
-            services.AddTransient<CommandHandler<SpaceCreateCommand>, SpaceCreateCommandHandler>();
-            services.AddTransient<CommandHandler<SpaceUpdateCommand>, SpaceUpdateCommandHandler>();
+            services.AddScoped<QueryHandler<DefaultSpaceQuery, IEnumerable<SpaceReadView>>, DefaultSpaceQueryHandler>();
+            services.AddScoped<QueryHandler<SubscribedSpaceQuery, IEnumerable<SpaceReadView>>, SubscribedSpaceQueryHandler>();
+            services.AddScoped<QueryHandler<SpaceFindByNameQuery, SpaceReadView?>, SpaceFindByNameQueryHandler>();
+            services.AddScoped<QueryHandler<SpaceFindQuery, PagedResultSet<SpaceReadView>>, SpaceFindQueryHandler>();
+            services.AddScoped<CommandHandler<SpaceCreateCommand>, SpaceCreateCommandHandler>();
+            services.AddScoped<CommandHandler<SpaceUpdateCommand>, SpaceUpdateCommandHandler>();
 
             services.AddTransient<ISubscriptionRepo, SubscriptionRepo>();
             services.AddTransient<ISubscriptionService, SubscriptionService>();
             services.AddSingleton<ISubscriptionFactory, SubscriptionFactory>();
-            services.AddTransient<CommandHandler<SubscriptionCreateCommand>, SubscriptionCreateCommandHandler>();
-            services.AddTransient<CommandHandler<SubscriptionDeleteCommand>, SubscriptionDeleteCommandHandler>();
+            services.AddScoped<CommandHandler<SubscriptionCreateCommand>, SubscriptionCreateCommandHandler>();
+            services.AddScoped<CommandHandler<SubscriptionDeleteCommand>, SubscriptionDeleteCommandHandler>();
 
             services.AddTransient<IVoteRepo, VoteRepo>();
             services.AddTransient<IVoteReader, VoteReader>();
             services.AddTransient<IVoteService, VoteService>();
             services.AddSingleton<IVoteFactory, VoteFactory>();
-            services.AddTransient<CommandHandler<VoteOnPostCommand>, VoteOnPostCommandHandler>();
-            services.AddTransient<CommandHandler<VoteOnCommentCommand>, VoteOnCommentCommandHandler>();
+            services.AddScoped<CommandHandler<VoteOnPostCommand>, VoteOnPostCommandHandler>();
+            services.AddScoped<CommandHandler<VoteOnCommentCommand>, VoteOnCommentCommandHandler>();
 
             services.AddTransient<IRoleRepo, RoleRepo>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddSingleton<IRoleFactory, RoleFactory>();
-            services.AddTransient<CommandHandler<AddAdminCommand>, AddAdminCommandHandler>();
-            services.AddTransient<CommandHandler<AddModeratorToSpaceCommand>, AddModeratorToSpaceCommandHandler>();
-            services.AddTransient<CommandHandler<RemoveAdminCommand>, RemoveAdminCommandHandler>();
-            services.AddTransient<CommandHandler<RemoveModeratorFromSpaceCommand>, RemoveModeratorFromSpaceCommandHandler>();
-            services.AddTransient<QueryHandler<FindAdminsQuery, IEnumerable<UserReadView>>, FindAdminsQueryHandler>();
-            services.AddTransient<QueryHandler<FindModeratorsBySpaceQuery, IEnumerable<UserReadView>>, FindModeratorsBySpaceQueryHandler>();
-            services.AddTransient<QueryHandler<FindSpacesUserModeratesQuery, IEnumerable<SpaceReadView>>, FindSpacesUserModeratesQueryHandler>();
+            services.AddScoped<CommandHandler<AddAdminCommand>, AddAdminCommandHandler>();
+            services.AddScoped<CommandHandler<AddModeratorToSpaceCommand>, AddModeratorToSpaceCommandHandler>();
+            services.AddScoped<CommandHandler<RemoveAdminCommand>, RemoveAdminCommandHandler>();
+            services.AddScoped<CommandHandler<RemoveModeratorFromSpaceCommand>, RemoveModeratorFromSpaceCommandHandler>();
+            services.AddScoped<QueryHandler<FindAdminsQuery, IEnumerable<UserReadView>>, FindAdminsQueryHandler>();
+            services.AddScoped<QueryHandler<FindModeratorsBySpaceQuery, IEnumerable<UserReadView>>, FindModeratorsBySpaceQueryHandler>();
+            services.AddScoped<QueryHandler<FindSpacesUserModeratesQuery, IEnumerable<SpaceReadView>>, FindSpacesUserModeratesQueryHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

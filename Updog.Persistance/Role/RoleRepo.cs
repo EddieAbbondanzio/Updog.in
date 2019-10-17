@@ -16,18 +16,18 @@ namespace Updog.Persistance {
 
         #region Publics
         public async Task<Role?> FindAdminRole(User user) {
-            var adminRole = await Connection.QueryFirstOrDefaultAsync<RoleRecord>(@"SELECT * FROM Role WHERE RoleType = @RoleType", new { RoleType = RoleType.Admin });
+            var adminRole = await Connection.QueryFirstOrDefaultAsync<RoleRecord>(@"SELECT * FROM role WHERE role_type = @RoleType", new { RoleType = RoleType.Admin });
             return Map(adminRole);
         }
 
         public async override Task<Role?> FindById(int id) {
-            var role = await Connection.QueryFirstOrDefaultAsync<RoleRecord>(@"SELECT * FROM Role WHERE Id = @Id", new { Id = id });
+            var role = await Connection.QueryFirstOrDefaultAsync<RoleRecord>(@"SELECT * FROM role WHERE id = @Id", new { Id = id });
             return Map(role);
         }
 
         public async Task<Role?> FindModeratorRole(User user, string space) {
             var adminRole = await Connection.QueryFirstOrDefaultAsync<RoleRecord>(
-                @"SELECT * FROM Role WHERE RoleType = @RoleType AND Domain = @Domain",
+                @"SELECT * FROM role WHERE role_type = @RoleType AND domain = @Domain",
                 new {
                     RoleType = RoleType.Admin,
                     Domain = space
@@ -38,10 +38,10 @@ namespace Updog.Persistance {
         }
 
         public async override Task Add(Role entity) => await Connection.ExecuteAsync(
-            @"INSERT INTO Role(
-                UserId,
-                RoleType,
-                Domain
+            @"INSERT INTO role(
+                user_id,
+                role_type,
+                domain
                 ) VALUES (
                 @UserId,
                 @RoleType,
@@ -50,9 +50,9 @@ namespace Updog.Persistance {
                 Reverse(entity)
             );
 
-        public async override Task Update(Role entity) => await Connection.ExecuteAsync("Update Role SET UserId = @UserId, RoleType = @RoleType, Domain = @Domain", Reverse(entity));
+        public async override Task Update(Role entity) => await Connection.ExecuteAsync("Update role SET user_id = @UserId, role_type = @RoleType, domain = @Domain", Reverse(entity));
 
-        public async override Task Delete(Role entity) => await Connection.ExecuteAsync("DELETE FROM Role WHERE Id = @Id", entity);
+        public async override Task Delete(Role entity) => await Connection.ExecuteAsync("DELETE FROM role WHERE id = @Id", entity);
         #endregion
 
         #region Privates
