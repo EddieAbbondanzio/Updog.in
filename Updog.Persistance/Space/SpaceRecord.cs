@@ -5,7 +5,7 @@ namespace Updog.Persistance {
     /// <summary>
     /// A database entity for the post table.
     /// </summary>
-    public sealed class SpaceRecord {
+    internal sealed class SpaceRecord {
         #region Properties
         /// <summary>
         /// Primary key of the space.

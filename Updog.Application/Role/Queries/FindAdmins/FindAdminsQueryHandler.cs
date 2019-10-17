@@ -5,17 +5,17 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class FindAdminsQueryHandler : QueryHandler<FindAdminsQuery, IEnumerable<UserReadView>> {
         #region Fields
-        private IRoleReader roleReader;
+        private IUserReader userReader;
         #endregion
 
         #region Constructor(s)
-        public FindAdminsQueryHandler(IRoleReader roleReader) {
-            this.roleReader = roleReader;
+        public FindAdminsQueryHandler(IUserReader userReader) {
+            this.userReader = userReader;
         }
         #endregion
 
         #region Privates
-        protected async override Task<IEnumerable<UserReadView>> ExecuteQuery(FindAdminsQuery query) => await roleReader.FindAdmins();
+        protected async override Task<IEnumerable<UserReadView>> ExecuteQuery(FindAdminsQuery query) => await userReader.FindAdmins();
         #endregion
     }
 }

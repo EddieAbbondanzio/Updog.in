@@ -8,14 +8,8 @@ using Updog.Domain.Paging;
 
 namespace Updog.Persistance {
     public sealed class SpaceReader : DatabaseReader<SpaceReadView>, ISpaceReader {
-        #region Fields
-        private ISpaceReadViewMapper mapper;
-        #endregion
-
         #region Constructor(s)
-        public SpaceReader(IDatabase database, ISpaceReadViewMapper mapper) : base(database) {
-            this.mapper = mapper;
-        }
+        public SpaceReader(IDatabase database) : base(database) { }
         #endregion
 
         #region Publics
@@ -32,7 +26,7 @@ namespace Updog.Persistance {
                 "SELECT COUNT(*) FROM Space"
             );
 
-            return new PagedResultSet<SpaceReadView>(spaces.Select(s => mapper.Map(s)), new PaginationInfo(paging.PageNumber, Math.Min(spaces.Count(), paging.PageSize), totalCount));
+            return new PagedResultSet<SpaceReadView>(spaces.Select(s => Map(s)), new PaginationInfo(paging.PageNumber, Math.Min(spaces.Count(), paging.PageSize), totalCount));
         }
 
 
@@ -46,7 +40,7 @@ namespace Updog.Persistance {
                 return null;
             }
 
-            SpaceReadView view = mapper.Map(space);
+            SpaceReadView view = Map(space);
 
             IUserReader userReader = GetReader<IUserReader>();
             view.User = (await userReader.FindById(space.UserId))!;
@@ -64,7 +58,7 @@ namespace Updog.Persistance {
                 return null;
             }
 
-            SpaceReadView view = mapper.Map(space);
+            SpaceReadView view = Map(space);
 
             IUserReader userReader = GetReader<IUserReader>();
             view.User = (await userReader.FindById(space.UserId))!;
@@ -77,7 +71,7 @@ namespace Updog.Persistance {
                 @"SELECT * FROM Space WHERE IsDefault = TRUE"
             );
 
-            var views = defaults.Select(s => mapper.Map(s)).ToArray();
+            var views = defaults.Select(s => Map(s)).ToArray();
             IUserReader userReader = GetReader<IUserReader>();
 
             for (int i = 0; i < views.Length; i++) {
@@ -93,7 +87,7 @@ namespace Updog.Persistance {
                 user
             );
 
-            var views = subscribes.Select(s => mapper.Map(s)).ToArray();
+            var views = subscribes.Select(s => Map(s)).ToArray();
             IUserReader userReader = GetReader<IUserReader>();
 
             for (int i = 0; i < views.Length; i++) {
@@ -102,6 +96,29 @@ namespace Updog.Persistance {
 
             return views;
         }
+
+        public async Task<IEnumerable<SpaceReadView>> FindSpacesUserModerates(string username) {
+            var spaces = await Connection.QueryAsync<SpaceRecord>(
+                @"SELECT Space.* FROM Space
+                JOIN Role ON Role.Domain = Space.Name
+                JOIN ""User"" U ON Role.UserId = U.Id 
+                WHERE U.Username = @Username",
+                new { Username = username }
+            );
+
+            return spaces.Select(s => Map(s));
+        }
+        #endregion
+
+        #region Privates
+        private SpaceReadView Map(SpaceRecord source) => new SpaceReadView() {
+            Id = source.Id,
+            Name = source.Name,
+            Description = source.Description,
+            CreationDate = source.CreationDate,
+            SubscriberCount = source.SubscriptionCount,
+            IsDefault = source.IsDefault
+        };
         #endregion
     }
 }

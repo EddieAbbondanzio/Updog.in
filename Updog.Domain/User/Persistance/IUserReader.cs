@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Updog.Domain {
@@ -7,6 +8,8 @@ namespace Updog.Domain {
         Task<UserReadView?> FindByUsername(string username);
         Task<UserReadView?> FindByPost(int postId);
         Task<UserReadView?> FindByComment(int commentId);
+        Task<IEnumerable<UserReadView>> FindAdmins();
+        Task<IEnumerable<UserReadView>> FindModerators(string space);
         #endregion
     }
 }

@@ -4,14 +4,8 @@ using Updog.Domain;
 
 namespace Updog.Persistance {
     public sealed class VoteReader : DatabaseReader<VoteReadView>, IVoteReader {
-        #region Fields
-        private IVoteReadViewMapper mapper;
-        #endregion
-
         #region Constructor(s)
-        public VoteReader(IDatabase database, IVoteReadViewMapper mapper) : base(database) {
-            this.mapper = mapper;
-        }
+        public VoteReader(IDatabase database) : base(database) { }
         #endregion
 
         #region Publics
@@ -27,7 +21,7 @@ namespace Updog.Persistance {
                 }
             );
 
-            return vote != null ? mapper.Map(vote) : null;
+            return vote != null ? Map(vote) : null;
         }
 
         public async Task<VoteReadView?> FindByPostAndUser(int postId, int userId) {
@@ -42,8 +36,12 @@ namespace Updog.Persistance {
                 }
             );
 
-            return vote != null ? mapper.Map(vote) : null;
+            return vote != null ? Map(vote) : null;
         }
+        #endregion
+
+        #region Privates
+        private VoteReadView Map(VoteRecord source) => new VoteReadView() { Direction = source.Direction };
         #endregion
     }
 }

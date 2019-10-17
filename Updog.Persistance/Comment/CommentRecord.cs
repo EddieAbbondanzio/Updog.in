@@ -4,7 +4,7 @@ namespace Updog.Persistance {
     /// <summary>
     /// Data transfer object for a comment entity.
     /// </summary>
-    public sealed class CommentRecord {
+    internal sealed class CommentRecord {
         #region Properties
         /// <summary>
         /// The primary key of the comment.

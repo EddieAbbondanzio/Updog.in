@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Updog.Domain;
@@ -7,14 +9,8 @@ namespace Updog.Persistance {
     /// Reader to retrieve UserReadViews from the database.
     /// </summary>
     public sealed class UserReader : DatabaseReader<UserReadView>, IUserReader {
-        #region Fields
-        private IUserReadViewMapper mapper;
-        #endregion
-
         #region Constructor(s)
-        public UserReader(IDatabase database, IUserReadViewMapper mapper) : base(database) {
-            this.mapper = mapper;
-        }
+        public UserReader(IDatabase database) : base(database) { }
         #endregion
 
         #region Publics
@@ -24,7 +20,7 @@ namespace Updog.Persistance {
                 new { Id = id }
             );
 
-            return user != null ? mapper.Map(user) : null;
+            return user != null ? Map(user) : null;
         }
 
         public async Task<UserReadView?> FindByComment(int commentId) {
@@ -35,7 +31,7 @@ namespace Updog.Persistance {
                 new { Id = commentId }
             );
 
-            return user != null ? mapper.Map(user) : null;
+            return user != null ? Map(user) : null;
         }
 
         public async Task<UserReadView?> FindByPost(int postId) {
@@ -46,7 +42,7 @@ namespace Updog.Persistance {
                 new { Id = postId }
             );
 
-            return user != null ? mapper.Map(user) : null;
+            return user != null ? Map(user) : null;
         }
 
         public async Task<UserReadView?> FindByUsername(string username) {
@@ -56,8 +52,38 @@ namespace Updog.Persistance {
                 new { Username = username }
             );
 
-            return user != null ? mapper.Map(user) : null;
+            return user != null ? Map(user) : null;
         }
+
+        public async Task<IEnumerable<UserReadView>> FindAdmins() {
+            var admins = await Connection.QueryAsync<UserRecord>(
+                @"SELECT U.* FROM ""User"" U
+                JOIN Role ON Role.UserId = U.Id WHERE RoleType = @RoleType",
+                new { RoleType = RoleType.Admin }
+            );
+
+            return admins.Select(a => Map(a));
+        }
+
+        public async Task<IEnumerable<UserReadView>> FindModerators(string space) {
+            var admins = await Connection.QueryAsync<UserRecord>(
+                @"SELECT U.* FROM ""User"" U
+                JOIN Role ON Role.UserId = U.Id WHERE RoleType = @RoleType",
+                new { RoleType = RoleType.Moderator }
+            );
+
+            return admins.Select(a => Map(a));
+        }
+        #endregion
+
+        #region Privates
+        private UserReadView Map(UserRecord source) => new UserReadView() {
+            Id = source.Id,
+            Username = source.Username,
+            JoinedDate = source.JoinedDate,
+            PostKarma = source.PostKarma,
+            CommentKarma = source.CommentKarma
+        };
         #endregion
     }
 }

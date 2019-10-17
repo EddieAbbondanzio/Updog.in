@@ -3,14 +3,14 @@ using System.Threading.Tasks;
 using Updog.Domain;
 
 namespace Updog.Application {
-    public sealed class FindSpacesUserModeratesQueryHandler : QueryHandler<FindSpacesUserModeratesQuery, IEnumerable<UserReadView>> {
+    public sealed class FindSpacesUserModeratesQueryHandler : QueryHandler<FindSpacesUserModeratesQuery, IEnumerable<SpaceReadView>> {
         #region Fields
-        private IRoleReader roleReader;
+        private ISpaceReader roleReader;
         #endregion
 
         #region Constructor(s)
-        public FindSpacesUserModeratesQueryHandler(IRoleReader roleReader) {
-            this.roleReader = roleReader;
+        public FindSpacesUserModeratesQueryHandler(ISpaceReader spaceReader) {
+            this.roleReader = spaceReader;
         }
         #endregion
 

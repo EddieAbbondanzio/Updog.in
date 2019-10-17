@@ -5,7 +5,7 @@ namespace Updog.Persistance {
     /// <summary>
     /// Data transfer object for a post.
     /// </summary>
-    public sealed class PostRecord {
+    internal sealed class PostRecord {
         #region Properties
         /// <summary>
         /// Primary key of the post record.

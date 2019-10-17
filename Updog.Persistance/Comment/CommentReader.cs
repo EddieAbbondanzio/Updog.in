@@ -7,14 +7,8 @@ using Updog.Domain.Paging;
 
 namespace Updog.Persistance {
     public sealed class CommentReader : DatabaseReader<CommentReadView>, ICommentReader {
-        #region Fields
-        private ICommentReadViewMapper mapper;
-        #endregion
-
         #region Constructor(s)
-        public CommentReader(IDatabase database, ICommentReadViewMapper mapper) : base(database) {
-            this.mapper = mapper;
-        }
+        public CommentReader(IDatabase database) : base(database) { }
         #endregion
 
         #region Publics
@@ -37,7 +31,7 @@ namespace Updog.Persistance {
             List<CommentReadView> views = new List<CommentReadView>();
 
             foreach (CommentRecord comment in comments) {
-                CommentReadView view = mapper.Map(comment);
+                CommentReadView view = Map(comment);
                 view.User = (await userReader.FindById(comment.UserId))!;
 
                 if (user != null) {
@@ -70,7 +64,7 @@ namespace Updog.Persistance {
             List<CommentReadView> views = new List<CommentReadView>();
 
             foreach (CommentRecord comment in comments) {
-                CommentReadView view = mapper.Map(comment);
+                CommentReadView view = Map(comment);
                 view.User = (await userReader.FindById(comment.UserId))!;
 
                 if (user != null) {
@@ -112,7 +106,7 @@ namespace Updog.Persistance {
             List<CommentReadView> views = new List<CommentReadView>();
 
             foreach (CommentRecord comment in comments) {
-                CommentReadView view = mapper.Map(comment);
+                CommentReadView view = Map(comment);
                 view.User = (await userReader.FindById(comment.UserId))!;
 
                 if (user != null) {
@@ -128,6 +122,17 @@ namespace Updog.Persistance {
 
 
         #region Helpers
+        private CommentReadView Map(CommentRecord source) => new CommentReadView() {
+            Id = source.Id,
+            PostId = source.PostId,
+            Body = source.Body,
+            CreationDate = source.CreationDate,
+            WasUpdated = source.WasUpdated,
+            WasDeleted = source.WasDeleted,
+            Upvotes = source.Upvotes,
+            Downvotes = source.Downvotes
+        };
+
         /// <summary>
         /// Build the comment hierarchy tree from the flat list.
         /// </summary>

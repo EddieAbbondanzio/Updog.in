@@ -4,7 +4,7 @@ namespace Updog.Persistance {
     /// <summary>
     /// Record in the vote table.
     /// </summary>
-    public sealed class VoteRecord {
+    internal sealed class VoteRecord {
         #region Properties
         /// <summary>
         /// Unique ID of the vote.

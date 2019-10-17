@@ -79,7 +79,6 @@ namespace Updog.Api {
             services.AddTransient<IUserRepo, UserRepo>();
             services.AddTransient<IUserReader, UserReader>();
             services.AddTransient<IUserService, UserService>();
-            services.AddSingleton<IUserReadViewMapper, UserReadViewMapper>();
             services.AddSingleton<IUserFactory, UserFactory>();
             services.AddTransient<QueryHandler<FindUserByUsernameQuery, UserReadView?>, FindUserByUsernameQueryHandler>();
             services.AddTransient<QueryHandler<IsUsernameAvailableQuery, bool>, IsUsernameAvailableQueryHandler>();
@@ -92,7 +91,6 @@ namespace Updog.Api {
             services.AddTransient<IPostRepo, PostRepo>();
             services.AddTransient<IPostReader, PostReader>();
             services.AddTransient<IPostService, PostService>();
-            services.AddSingleton<IPostReadViewMapper, PostReadViewMapper>();
             services.AddSingleton<IPostFactory, PostFactory>();
             services.AddTransient<IDomainEventHandler<VoteOnPostEvent>, VoteOnPostEventHandler>();
             services.AddTransient<QueryHandler<PostFindByIdQuery, PostReadView?>, PostFindByIdQueryHandler>();
@@ -107,7 +105,6 @@ namespace Updog.Api {
             services.AddTransient<ICommentRepo, CommentRepo>();
             services.AddTransient<ICommentReader, CommentReader>();
             services.AddTransient<ICommentService, CommentService>();
-            services.AddSingleton<ICommentReadViewMapper, CommentReadViewMapper>();
             services.AddSingleton<ICommentFactory, CommentFactory>();
             services.AddTransient<IDomainEventHandler<VoteOnCommentEvent>, VoteOnCommentEventHandler>();
             services.AddTransient<QueryHandler<CommentFindByIdQuery, CommentReadView?>, CommentFindByIdQueryHandler>();
@@ -120,7 +117,6 @@ namespace Updog.Api {
             services.AddTransient<ISpaceRepo, SpaceRepo>();
             services.AddTransient<ISpaceReader, SpaceReader>();
             services.AddTransient<ISpaceService, SpaceService>();
-            services.AddSingleton<ISpaceReadViewMapper, SpaceReadViewMapper>();
             services.AddSingleton<ISpaceFactory, SpaceFactory>();
             services.AddTransient<IDomainEventHandler<SubscriptionCreateEvent>, SubscriptionCreateEventHandler>();
             services.AddTransient<IDomainEventHandler<SubscriptionDeleteEvent>, SubscriptionDeleteEventHandler>();
@@ -140,10 +136,20 @@ namespace Updog.Api {
             services.AddTransient<IVoteRepo, VoteRepo>();
             services.AddTransient<IVoteReader, VoteReader>();
             services.AddTransient<IVoteService, VoteService>();
-            services.AddSingleton<IVoteReadViewMapper, VoteReadViewMapper>();
             services.AddSingleton<IVoteFactory, VoteFactory>();
             services.AddTransient<CommandHandler<VoteOnPostCommand>, VoteOnPostCommandHandler>();
             services.AddTransient<CommandHandler<VoteOnCommentCommand>, VoteOnCommentCommandHandler>();
+
+            services.AddTransient<IRoleRepo, RoleRepo>();
+            services.AddTransient<IRoleService, RoleService>();
+            services.AddSingleton<IRoleFactory, RoleFactory>();
+            services.AddTransient<CommandHandler<AddAdminCommand>, AddAdminCommandHandler>();
+            services.AddTransient<CommandHandler<AddModeratorToSpaceCommand>, AddModeratorToSpaceCommandHandler>();
+            services.AddTransient<CommandHandler<RemoveAdminCommand>, RemoveAdminCommandHandler>();
+            services.AddTransient<CommandHandler<RemoveModeratorFromSpaceCommand>, RemoveModeratorFromSpaceCommandHandler>();
+            services.AddTransient<QueryHandler<FindAdminsQuery, IEnumerable<UserReadView>>, FindAdminsQueryHandler>();
+            services.AddTransient<QueryHandler<FindModeratorsBySpaceQuery, IEnumerable<UserReadView>>, FindModeratorsBySpaceQueryHandler>();
+            services.AddTransient<QueryHandler<FindSpacesUserModeratesQuery, IEnumerable<SpaceReadView>>, FindSpacesUserModeratesQueryHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

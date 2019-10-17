@@ -64,9 +64,9 @@ namespace Updog.Persistance {
         #endregion
 
         #region Privates
-        public Post Map(PostRecord rec) => factory.Create(rec.Id, rec.UserId, rec.SpaceId, rec.Type, rec.Title, rec.Body, rec.CreationDate, rec.CommentCount, rec.Upvotes, rec.Downvotes, rec.WasUpdated, rec.WasDeleted);
+        private Post Map(PostRecord rec) => factory.Create(rec.Id, rec.UserId, rec.SpaceId, rec.Type, rec.Title, rec.Body, rec.CreationDate, rec.CommentCount, rec.Upvotes, rec.Downvotes, rec.WasUpdated, rec.WasDeleted);
 
-        public PostRecord Reverse(Post post) => new PostRecord() {
+        private PostRecord Reverse(Post post) => new PostRecord() {
             Id = post.Id,
             UserId = post.UserId,
             SpaceId = post.SpaceId,

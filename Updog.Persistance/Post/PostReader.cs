@@ -7,14 +7,8 @@ using Updog.Domain.Paging;
 
 namespace Updog.Persistance {
     public sealed class PostReader : DatabaseReader<PostReadView>, IPostReader {
-        #region Fields
-        private IPostReadViewMapper mapper;
-        #endregion
-
         #region Constructor(s)
-        public PostReader(IDatabase database, IPostReadViewMapper mapper) : base(database) {
-            this.mapper = mapper;
-        }
+        public PostReader(IDatabase database) : base(database) { }
         #endregion
 
         #region Publics
@@ -38,7 +32,7 @@ namespace Updog.Persistance {
             IUserReader userReader = GetReader<IUserReader>();
             ISpaceReader spaceReader = GetReader<ISpaceReader>();
 
-            PostReadView view = mapper.Map(post);
+            PostReadView view = Map(post);
 
             view.User = (await userReader.FindById(post.UserId))!;
             view.Space = (await spaceReader.FindById(post.SpaceId))!;
@@ -70,7 +64,7 @@ namespace Updog.Persistance {
 
             List<PostReadView> views = new List<PostReadView>();
             foreach (PostRecord post in posts) {
-                PostReadView view = mapper.Map(post);
+                PostReadView view = Map(post);
 
                 view.User = (await userReader.FindById(post.UserId))!;
                 view.Space = (await spaceReader.FindById(post.SpaceId))!;
@@ -107,7 +101,7 @@ namespace Updog.Persistance {
 
             List<PostReadView> views = new List<PostReadView>();
             foreach (PostRecord post in posts) {
-                PostReadView view = mapper.Map(post);
+                PostReadView view = Map(post);
 
                 view.User = (await userReader.FindById(post.UserId))!;
                 view.Space = (await spaceReader.FindById(post.SpaceId))!;
@@ -146,7 +140,7 @@ namespace Updog.Persistance {
 
             List<PostReadView> views = new List<PostReadView>();
             foreach (PostRecord post in posts) {
-                PostReadView view = mapper.Map(post);
+                PostReadView view = Map(post);
 
                 view.User = (await userReader.FindById(post.UserId))!;
                 view.Space = (await spaceReader.FindById(post.SpaceId))!;
@@ -157,6 +151,20 @@ namespace Updog.Persistance {
             return new PagedResultSet<PostReadView>(views, new PaginationInfo(paging.PageNumber, paging.PageSize, totalCount));
 
         }
+        #endregion
+
+        #region Privates
+        private PostReadView Map(PostRecord source) => new PostReadView() {
+            Id = source.Id,
+            Type = source.Type,
+            Title = source.Title,
+            Body = source.Body,
+            CreationDate = source.CreationDate,
+            WasUpdated = source.WasUpdated,
+            WasDeleted = source.WasUpdated,
+            Upvotes = source.Upvotes,
+            Downvotes = source.Downvotes
+        };
         #endregion
     }
 }

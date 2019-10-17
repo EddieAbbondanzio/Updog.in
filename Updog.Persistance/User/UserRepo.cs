@@ -89,7 +89,7 @@ namespace Updog.Persistance {
         #region Privates
         private User Map(UserRecord rec) => factory.Create(rec.Id, rec.Username, rec.Email, rec.PasswordHash, rec.JoinedDate, rec.PostKarma, rec.CommentKarma);
 
-        public UserRecord Reverse(User user) => new UserRecord() {
+        private UserRecord Reverse(User user) => new UserRecord() {
             Id = user.Id,
             Username = user.Username,
             Email = user.Email,

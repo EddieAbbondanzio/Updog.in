@@ -2,7 +2,7 @@ namespace Updog.Persistance {
     /// <summary>
     /// Data transfer object for subscriptions.
     /// </summary>
-    public sealed class SubscriptionRecord {
+    internal sealed class SubscriptionRecord {
         #region Properties
         /// <summary>
         /// Primary key of the subscription.

@@ -12,6 +12,7 @@ namespace Updog.Domain {
         Task<IEnumerable<SpaceReadView>> FindDefault();
 
         Task<IEnumerable<SpaceReadView>> FindSubscribed(User user);
+        Task<IEnumerable<SpaceReadView>> FindSpacesUserModerates(string username);
         #endregion
     }
 }

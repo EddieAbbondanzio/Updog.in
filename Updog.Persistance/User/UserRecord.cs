@@ -4,7 +4,7 @@ namespace Updog.Persistance {
     /// <summary>
     /// User data transfer object.
     /// </summary>
-    public sealed class UserRecord {
+    internal sealed class UserRecord {
         #region Properties
         /// <summary>
         /// Primary key of the user.
