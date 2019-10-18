@@ -2,7 +2,7 @@ using FluentValidation;
 using Updog.Application;
 
 namespace Updog.Application {
-    internal sealed class LoginUserCommandValidator : FluentValidatorAdapter<LoginUserCommand> {
+    public sealed class LoginUserCommandValidator : FluentValidatorAdapter<LoginUserCommand> {
         public LoginUserCommandValidator() {
             RuleFor(c => c.Credentials.Username).NotNull().WithMessage("Username is required.");
             RuleFor(c => c.Credentials.Username).NotEmpty().WithMessage("Username is required.");

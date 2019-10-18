@@ -6,7 +6,7 @@ namespace Updog.Application {
     /// <summary>
     /// Validator to validate new comments being created.
     /// </summary>
-    internal sealed class CommentCreateCommandValidator : FluentValidatorAdapter<CommentCreateCommand> {
+    public sealed class CommentCreateCommandValidator : FluentValidatorAdapter<CommentCreateCommand> {
         #region Constructor(s)
         public CommentCreateCommandValidator() {
             RuleFor(c => c.Data.PostId).GreaterThan(0).WithMessage("Post Id is required.");

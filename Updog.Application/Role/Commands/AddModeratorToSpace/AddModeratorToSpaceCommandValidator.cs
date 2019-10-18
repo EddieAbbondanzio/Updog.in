@@ -1,7 +1,7 @@
 using FluentValidation;
 
 namespace Updog.Application {
-    internal sealed class AddModeratorToSpaceCommandValidator : FluentValidatorAdapter<AddModeratorToSpaceCommand> {
+    public sealed class AddModeratorToSpaceCommandValidator : FluentValidatorAdapter<AddModeratorToSpaceCommand> {
         public AddModeratorToSpaceCommandValidator() {
             RuleFor(c => c.Username).NotNull().WithMessage("Username is required.");
             RuleFor(c => c.Username).NotEmpty().WithMessage("Username is required.");

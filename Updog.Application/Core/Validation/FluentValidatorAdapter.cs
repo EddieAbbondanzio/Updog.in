@@ -8,7 +8,7 @@ namespace Updog.Application {
     /// <summary>
     /// Base class for validators to implement.
     /// </summary>
-    internal abstract class FluentValidatorAdapter<TResource> : AbstractValidator<TResource>, Application.IValidator<TResource> {
+    public abstract class FluentValidatorAdapter<TResource> : AbstractValidator<TResource>, Application.IValidator<TResource> {
         #region Publics
         public new async Task<ValidationResult> ValidateAsync(TResource resource, CancellationToken token = default(CancellationToken)) {
             var result = await base.ValidateAsync(resource);

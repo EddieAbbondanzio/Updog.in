@@ -6,7 +6,7 @@ namespace Updog.Application {
     /// <summary>
     /// Validator to validate that the update parameters of a post update are okay.
     /// </summary>
-    internal sealed class CommentUpdateCommandValidator : FluentValidatorAdapter<CommentUpdateCommand> {
+    public sealed class CommentUpdateCommandValidator : FluentValidatorAdapter<CommentUpdateCommand> {
         public CommentUpdateCommandValidator() {
             RuleFor(c => c.User).NotNull().WithMessage("User performing the action is null.");
 

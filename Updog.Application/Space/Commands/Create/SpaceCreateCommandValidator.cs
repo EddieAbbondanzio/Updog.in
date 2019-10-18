@@ -8,7 +8,7 @@ namespace Updog.Application {
     /// <summary>
     /// Validator to validate new posts being created.
     /// </summary>
-    internal sealed class SpaceCreateCommandValidator : FluentValidatorAdapter<SpaceCreateCommand> {
+    public sealed class SpaceCreateCommandValidator : FluentValidatorAdapter<SpaceCreateCommand> {
         #region Constructor(s)
         public SpaceCreateCommandValidator() {
             RuleFor(s => s.User).NotNull().WithMessage("User performing the action is null.");

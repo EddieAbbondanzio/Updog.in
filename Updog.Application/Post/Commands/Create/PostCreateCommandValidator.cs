@@ -6,7 +6,7 @@ namespace Updog.Application {
     /// <summary>
     /// Validator to validate new posts being created.
     /// </summary>
-    internal sealed class PostCreateCommandValidator : FluentValidatorAdapter<PostCreateCommand> {
+    public sealed class PostCreateCommandValidator : FluentValidatorAdapter<PostCreateCommand> {
         #region Constructor(s)
         public PostCreateCommandValidator() {
             RuleFor(p => p.Data.Type).IsInEnum().WithMessage("Type must be link, or text.");

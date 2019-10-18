@@ -9,7 +9,7 @@ namespace Updog.Application {
     /// <summary>
     /// Validator to validate user registrations.
     /// </summary>
-    internal sealed class RegisterUserCommandValidator : FluentValidatorAdapter<RegisterUserCommand> {
+    public sealed class RegisterUserCommandValidator : FluentValidatorAdapter<RegisterUserCommand> {
 
         #region Constructor(s)
         public RegisterUserCommandValidator() {

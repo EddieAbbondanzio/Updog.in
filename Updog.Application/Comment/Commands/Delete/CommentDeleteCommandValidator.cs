@@ -5,7 +5,7 @@ namespace Updog.Application {
     /// <summary>
     /// Validator to check that a comment can be deleted.
     /// </summary>
-    internal sealed class CommentDeleteCommandValidator : FluentValidatorAdapter<CommentDeleteCommand> {
+    public sealed class CommentDeleteCommandValidator : FluentValidatorAdapter<CommentDeleteCommand> {
         #region Constructor(s)
         public CommentDeleteCommandValidator() {
             RuleFor(c => c.User).NotNull().WithMessage("User performing the action is null.");

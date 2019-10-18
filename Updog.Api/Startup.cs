@@ -87,6 +87,10 @@ namespace Updog.Api {
             services.AddScoped<CommandHandler<UserUpdateCommand>, UserUpdateCommandHandler>();
             services.AddScoped<CommandHandler<UserUpdatePasswordCommand>, UserUpdatePasswordCommandHandler>();
             services.AddScoped<CommandHandler<AdminRegisterOrUpdateCommand>, AdminRegisterOrUpdateCommandHandler>();
+            services.AddTransient<IValidator<RegisterUserCommand>, RegisterUserCommandValidator>();
+            services.AddTransient<IValidator<LoginUserCommand>, LoginUserCommandValidator>();
+            services.AddTransient<IValidator<UserUpdateCommand>, UserUpdateCommandValidator>();
+            services.AddTransient<IValidator<UserUpdatePasswordCommand>, UserUpdatePasswordCommandValidator>();
 
             services.AddTransient<IPostRepo, PostRepo>();
             services.AddTransient<IPostReader, PostReader>();
@@ -101,6 +105,9 @@ namespace Updog.Api {
             services.AddScoped<CommandHandler<PostUpdateCommand>, PostUpdateCommandHandler>();
             services.AddScoped<CommandHandler<PostDeleteCommand>, PostDeleteCommandHandler>();
             services.AddTransient<IPolicy<PostAlterCommand>, PostAlterCommandPolicy>();
+            services.AddTransient<IValidator<PostCreateCommand>, PostCreateCommandValidator>();
+            services.AddTransient<IValidator<PostUpdateCommand>, PostUpdateCommandValidator>();
+            services.AddTransient<IValidator<PostDeleteCommand>, PostDeleteCommandValidator>();
 
             services.AddTransient<ICommentRepo, CommentRepo>();
             services.AddTransient<ICommentReader, CommentReader>();
@@ -114,6 +121,9 @@ namespace Updog.Api {
             services.AddScoped<CommandHandler<CommentUpdateCommand>, CommentUpdateCommandHandler>();
             services.AddScoped<CommandHandler<CommentDeleteCommand>, CommentDeleteCommandHandler>();
             services.AddTransient<IPolicy<CommentAlterCommand>, CommentAlterCommandPolicy>();
+            services.AddTransient<IValidator<CommentCreateCommand>, CommentCreateCommandValidator>();
+            services.AddTransient<IValidator<CommentUpdateCommand>, CommentUpdateCommandValidator>();
+            services.AddTransient<IValidator<CommentDeleteCommand>, CommentDeleteCommandValidator>();
 
             services.AddTransient<ISpaceRepo, SpaceRepo>();
             services.AddTransient<ISpaceReader, SpaceReader>();
@@ -128,12 +138,16 @@ namespace Updog.Api {
             services.AddScoped<CommandHandler<SpaceCreateCommand>, SpaceCreateCommandHandler>();
             services.AddScoped<CommandHandler<SpaceUpdateCommand>, SpaceUpdateCommandHandler>();
             services.AddTransient<IPolicy<SpaceAlterCommand>, SpaceAlterCommandPolicy>();
+            services.AddTransient<IValidator<SpaceCreateCommand>, SpaceCreateCommandValidator>();
+            services.AddTransient<IValidator<SpaceUpdateCommand>, SpaceUpdateCommandValidator>();
 
             services.AddTransient<ISubscriptionRepo, SubscriptionRepo>();
             services.AddTransient<ISubscriptionService, SubscriptionService>();
             services.AddSingleton<ISubscriptionFactory, SubscriptionFactory>();
             services.AddScoped<CommandHandler<SubscriptionCreateCommand>, SubscriptionCreateCommandHandler>();
             services.AddScoped<CommandHandler<SubscriptionDeleteCommand>, SubscriptionDeleteCommandHandler>();
+            services.AddTransient<IValidator<SubscriptionCreateCommand>, SubscriptionCreateCommandValidator>();
+            services.AddTransient<IValidator<SubscriptionDeleteCommand>, SubscriptionDeleteCommandValidator>();
 
             services.AddTransient<IVoteRepo, VoteRepo>();
             services.AddTransient<IVoteReader, VoteReader>();
@@ -141,6 +155,8 @@ namespace Updog.Api {
             services.AddSingleton<IVoteFactory, VoteFactory>();
             services.AddScoped<CommandHandler<VoteOnPostCommand>, VoteOnPostCommandHandler>();
             services.AddScoped<CommandHandler<VoteOnCommentCommand>, VoteOnCommentCommandHandler>();
+            services.AddTransient<IValidator<VoteOnCommentCommand>, VoteOnCommentCommandValidator>();
+            services.AddTransient<IValidator<VoteOnPostCommand>, VoteOnPostCommandValidator>();
 
             services.AddTransient<IRoleRepo, RoleRepo>();
             services.AddTransient<IRoleService, RoleService>();
@@ -156,6 +172,10 @@ namespace Updog.Api {
             services.AddTransient<IPolicy<RemoveAdminCommand>, RemoveAdminCommandPolicy>();
             services.AddTransient<IPolicy<AddModeratorToSpaceCommand>, AddModeratorToSpaceCommandPolicy>();
             services.AddTransient<IPolicy<RemoveModeratorFromSpaceCommand>, RemoveModeratorFromSpaceCommandPolicy>();
+            services.AddTransient<IValidator<AddAdminCommand>, AddAdminCommandValidator>();
+            services.AddTransient<IValidator<RemoveAdminCommand>, RemoveAdminCommandValidator>();
+            services.AddTransient<IValidator<AddModeratorToSpaceCommand>, AddModeratorToSpaceCommandValidator>();
+            services.AddTransient<IValidator<RemoveModeratorFromSpaceCommand>, RemoveModeratorFromSpaceCommandValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

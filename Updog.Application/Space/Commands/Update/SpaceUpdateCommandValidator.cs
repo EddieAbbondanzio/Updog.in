@@ -6,7 +6,7 @@ namespace Updog.Application {
     /// <summary>
     /// Validator to validate that the update parameters of a space update are okay.
     /// </summary>
-    internal sealed class SpaceUpdateCommandValidator : FluentValidatorAdapter<SpaceUpdateCommand> {
+    public sealed class SpaceUpdateCommandValidator : FluentValidatorAdapter<SpaceUpdateCommand> {
         public SpaceUpdateCommandValidator() {
             RuleFor(s => s.User).NotNull().WithMessage("User performing the action is null.");
 

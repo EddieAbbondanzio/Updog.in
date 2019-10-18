@@ -3,7 +3,7 @@ using Updog.Application;
 using Updog.Domain;
 
 namespace Updog.Application {
-    internal sealed class VoteOnCommentCommandValidator : FluentValidatorAdapter<VoteOnCommentCommand> {
+    public sealed class VoteOnCommentCommandValidator : FluentValidatorAdapter<VoteOnCommentCommand> {
         #region Constructor(s)
         public VoteOnCommentCommandValidator() {
             RuleFor(p => p.Data.CommentId).GreaterThan(0).WithMessage("Comment Id is required.");

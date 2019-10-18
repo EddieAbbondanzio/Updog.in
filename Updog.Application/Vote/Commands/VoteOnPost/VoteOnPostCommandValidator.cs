@@ -3,7 +3,7 @@ using Updog.Application;
 using Updog.Domain;
 
 namespace Updog.Application {
-    internal sealed class VoteOnPostCommandValidator : FluentValidatorAdapter<VoteOnPostCommand> {
+    public sealed class VoteOnPostCommandValidator : FluentValidatorAdapter<VoteOnPostCommand> {
         #region Constructor(s)
         public VoteOnPostCommandValidator() {
             RuleFor(p => p.Data.PostId).GreaterThan(0).WithMessage("Post Id is required.");
