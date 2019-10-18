@@ -5,7 +5,7 @@ namespace Updog.Domain {
         Task<User> AdminRegisterOrUpdate(IAdminConfig config);
         Task<UserLogin> Login(UserCredentials credentials);
         Task<UserLogin> Register(UserRegistration registration);
-        Task<User> Update(UserUpdate data, User user);
-        Task<User> UpdatePassword(UserUpdatePassword data, User user);
+        Task<User> Update(string username, UserUpdate data);
+        Task<User> UpdatePassword(string username, UserUpdatePassword data);
     }
 }

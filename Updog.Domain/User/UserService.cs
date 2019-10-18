@@ -77,7 +77,13 @@ namespace Updog.Domain {
             return login;
         }
 
-        public async Task<User> Update(UserUpdate update, User user) {
+        public async Task<User> Update(string username, UserUpdate update) {
+            User? user = await repo.FindByUsername(username);
+
+            if (user == null) {
+                throw new NotFoundException($"User {username} not found.");
+            }
+
             User? existing = await repo.FindByEmail(update.Email);
 
             if (!existing?.Equals(user) ?? false) {
@@ -93,7 +99,13 @@ namespace Updog.Domain {
             return user;
         }
 
-        public async Task<User> UpdatePassword(UserUpdatePassword data, User user) {
+        public async Task<User> UpdatePassword(string username, UserUpdatePassword data) {
+            User? user = await repo.FindByUsername(username);
+
+            if (user == null) {
+                throw new NotFoundException($"User {username} not found.");
+            }
+
             user.SetPassword(data.CurrentPassword, data.NewPassword);
             await repo.Update(user);
             return user;

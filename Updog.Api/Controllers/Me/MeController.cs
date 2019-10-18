@@ -38,7 +38,7 @@ namespace Updog.Api {
         /// <param name="updateRequest">The new user info.</param>
         [HttpPut]
         public async Task<ActionResult> Update([FromBody] MeUpdateRequest updateRequest) {
-            await mediator.Command(new UserUpdateCommand(new UserUpdate(updateRequest.Email), User!));
+            await mediator.Command(new UserUpdateCommand(User!.Username, new UserUpdate(updateRequest.Email), User!));
             return Ok();
         }
 
@@ -48,7 +48,7 @@ namespace Updog.Api {
         /// <param name="updatePasswordRequest">The new password.</param>
         [HttpPut("password")]
         public async Task<ActionResult> UpdatePassword([FromBody] MeUpdatePasswordRequest updatePasswordRequest) {
-            await mediator.Command(new UserUpdatePasswordCommand(new UserUpdatePassword(updatePasswordRequest.CurrentPassword, updatePasswordRequest.NewPassword), User!));
+            await mediator.Command(new UserUpdatePasswordCommand(User!.Username, new UserUpdatePassword(updatePasswordRequest.CurrentPassword, updatePasswordRequest.NewPassword), User!));
             return Ok();
         }
         #endregion
