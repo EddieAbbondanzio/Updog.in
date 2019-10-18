@@ -6,6 +6,21 @@ namespace Updog.Domain {
     /// </summary>
     public interface IRoleService : IService<Role> {
         /// <summary>
+        /// Is the user an admin?
+        /// </summary>
+        /// <param name="username">The username of the user.</param>
+        /// <returns>True if the user is an admin.</returns>
+        Task<bool> IsUserAdmin(string username);
+
+        /// <summary>
+        /// Is the user a moderator of the specific space?
+        /// </summary>
+        /// <param name="username">The username of the user.</param>
+        /// <param name="space">The space to check.</param>
+        /// <returns>True if the user is a moderator of the space.</returns>
+        Task<bool> IsUserModerator(string username, string space);
+
+        /// <summary>
         /// Add a new admin to the site.
         /// </summary>
         /// <param name="username">The username of the new admin.</param>

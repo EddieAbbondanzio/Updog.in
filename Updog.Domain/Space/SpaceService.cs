@@ -18,6 +18,11 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
+
+        public async Task<Space?> FindByComment(int commentId) => await repo.FindByComment(commentId);
+
+        public async Task<Space?> FindByPost(int postId) => await repo.FindByPost(postId);
+
         public async Task<Space> Create(SpaceCreate data, User user) {
             // Check if name is available.
             Space? existing = await repo.FindByName(data.Name);

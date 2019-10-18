@@ -64,6 +64,21 @@ namespace Updog.Persistance {
                 user
             )).Select(s => Map(s));
 
+        public async Task<Space?> FindByComment(int commentId) => (await Connection.QueryAsync<SpaceRecord>(
+            @"SELECT s.* FROM space
+                JOIN post p ON p.space_id = s.id
+                JOIN comment c ON s.post_id = p.id
+                WHERE c.id = @Id",
+                new { Id = commentId }
+        )).Select(s => Map(s)).FirstOrDefault();
+
+        public async Task<Space?> FindByPost(int postId) => (await Connection.QueryAsync<SpaceRecord>(
+            @"SELECT s.* FROM space
+                JOIN post p ON s.id = p.space_id
+                WHERE p.id = @Id",
+                new { Id = postId }
+        )).Select(s => Map(s)).FirstOrDefault();
+
         public override async Task Add(Space entity) => entity.Id = await Connection.QueryFirstOrDefaultAsync<int>(
                 @"INSERT INTO space(
                         name,

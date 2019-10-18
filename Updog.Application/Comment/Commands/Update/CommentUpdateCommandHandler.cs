@@ -16,6 +16,7 @@ namespace Updog.Application {
 
         #region Publics
         [Validate(typeof(CommentUpdateCommandValidator))]
+        [Policy(typeof(CommentAlterCommandPolicy))]
         protected async override Task<CommandResult> ExecuteCommand(CommentUpdateCommand command) {
             try {
                 Comment c = await service.Update(command.CommentId, command.Update, command.User);

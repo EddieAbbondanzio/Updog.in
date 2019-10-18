@@ -23,6 +23,9 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
+        public async Task<bool> IsUserAdmin(string username) => await roleRepo.IsUserAdmin(username);
+        public async Task<bool> IsUserModerator(string username, string space) => await roleRepo.IsUserModerator(username, space);
+
         public async Task AddAdmin(string username, User user) {
             User newAdmin = await GetUserOrThrow(username);
 

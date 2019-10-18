@@ -100,7 +100,7 @@ namespace Updog.Api {
             services.AddScoped<CommandHandler<PostCreateCommand>, PostCreateCommandHandler>();
             services.AddScoped<CommandHandler<PostUpdateCommand>, PostUpdateCommandHandler>();
             services.AddScoped<CommandHandler<PostDeleteCommand>, PostDeleteCommandHandler>();
-
+            services.AddTransient<IPolicy<PostAlterCommand>, PostAlterCommandPolicy>();
 
             services.AddTransient<ICommentRepo, CommentRepo>();
             services.AddTransient<ICommentReader, CommentReader>();
@@ -113,6 +113,7 @@ namespace Updog.Api {
             services.AddScoped<CommandHandler<CommentCreateCommand>, CommentCreateCommandHandler>();
             services.AddScoped<CommandHandler<CommentUpdateCommand>, CommentUpdateCommandHandler>();
             services.AddScoped<CommandHandler<CommentDeleteCommand>, CommentDeleteCommandHandler>();
+            services.AddTransient<IPolicy<CommentAlterCommand>, CommentAlterCommandPolicy>();
 
             services.AddTransient<ISpaceRepo, SpaceRepo>();
             services.AddTransient<ISpaceReader, SpaceReader>();
@@ -126,6 +127,7 @@ namespace Updog.Api {
             services.AddScoped<QueryHandler<SpaceFindQuery, PagedResultSet<SpaceReadView>>, SpaceFindQueryHandler>();
             services.AddScoped<CommandHandler<SpaceCreateCommand>, SpaceCreateCommandHandler>();
             services.AddScoped<CommandHandler<SpaceUpdateCommand>, SpaceUpdateCommandHandler>();
+            services.AddTransient<IPolicy<SpaceAlterCommand>, SpaceAlterCommandPolicy>();
 
             services.AddTransient<ISubscriptionRepo, SubscriptionRepo>();
             services.AddTransient<ISubscriptionService, SubscriptionService>();
@@ -150,6 +152,10 @@ namespace Updog.Api {
             services.AddScoped<QueryHandler<FindAdminsQuery, IEnumerable<UserReadView>>, FindAdminsQueryHandler>();
             services.AddScoped<QueryHandler<FindModeratorsBySpaceQuery, IEnumerable<UserReadView>>, FindModeratorsBySpaceQueryHandler>();
             services.AddScoped<QueryHandler<FindSpacesUserModeratesQuery, IEnumerable<SpaceReadView>>, FindSpacesUserModeratesQueryHandler>();
+            services.AddTransient<IPolicy<AddAdminCommand>, AddAdminCommandPolicy>();
+            services.AddTransient<IPolicy<RemoveAdminCommand>, RemoveAdminCommandPolicy>();
+            services.AddTransient<IPolicy<AddModeratorToSpaceCommand>, AddModeratorToSpaceCommandPolicy>();
+            services.AddTransient<IPolicy<RemoveModeratorFromSpaceCommand>, RemoveModeratorFromSpaceCommandPolicy>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -173,8 +179,6 @@ namespace Updog.Api {
                 app.UseDeveloperExceptionPage();
             } else {
                 app.UseMiddleware<ExceptionHandler>();
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                // app.UseHsts();
             }
 
             app.UseEndpoints(endpoints => {

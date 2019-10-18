@@ -19,6 +19,8 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
+        public async Task<Comment?> FindById(int commentId) => await repo.FindById(commentId);
+
         public async Task<Comment> Create(CommentCreate create, User user) {
             Comment c = factory.Create(create, user);
             await repo.Add(c);
@@ -57,6 +59,8 @@ namespace Updog.Domain {
 
             return c;
         }
+
+        public async Task<bool> IsOwner(int commentId, string username) => await repo.IsOwner(commentId, username);
         #endregion
     }
 }

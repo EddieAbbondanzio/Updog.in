@@ -18,6 +18,8 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
+        public async Task<bool> IsOwner(int postId, string username) => await repo.IsOwner(postId, username);
+
         public async Task<Post> Create(PostCreate createData, Space space, User user) {
             Post p = factory.Create(createData, space, user);
             await repo.Add(p);

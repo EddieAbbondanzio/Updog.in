@@ -16,6 +16,7 @@ namespace Updog.Application {
 
         #region Publics
         [Validate(typeof(CommentDeleteCommandValidator))]
+        [Policy(typeof(CommentAlterCommandPolicy))]
         protected async override Task<CommandResult> ExecuteCommand(CommentDeleteCommand command) {
             // (Hopefully) it would be impossible for post to be null if a comment exists...
             try {

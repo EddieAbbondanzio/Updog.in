@@ -15,6 +15,7 @@ namespace Updog.Application {
 
         #region Privates
         [Validate(typeof(AddAdminCommandValidator))]
+        [Policy(typeof(AddAdminCommandPolicy))]
         protected async override Task<CommandResult> ExecuteCommand(AddAdminCommand command) {
             await roleService.AddAdmin(command.Username, command.User);
             return Success();

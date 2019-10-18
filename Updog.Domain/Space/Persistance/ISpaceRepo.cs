@@ -34,6 +34,10 @@ namespace Updog.Domain {
         /// </summary>
         /// <returns>The list of spaces subscribed by the user.</returns>
         Task<IEnumerable<Space>> FindSubscribed(User user);
+
+        Task<Space?> FindByComment(int commentId);
+
+        Task<Space?> FindByPost(int postId);
         #endregion
     }
 }

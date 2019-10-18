@@ -15,6 +15,7 @@ namespace Updog.Application {
 
         #region Publics
         [Validate(typeof(SpaceUpdateCommandValidator))]
+        [Policy(typeof(SpaceAlterCommandPolicy))]
         protected async override Task<CommandResult> ExecuteCommand(SpaceUpdateCommand command) {
             try {
                 Space s = await service.Update(command.Space, command.Update, command.User);

@@ -15,6 +15,7 @@ namespace Updog.Application {
         #endregion
 
         [Validate(typeof(UserUpdateCommandValidator))]
+        [Policy(typeof(UserAlterCommandPolicy))]
         protected async override Task<CommandResult> ExecuteCommand(UserUpdateCommand command) {
             try {
                 User user = await service.Update(command.Username, command.Update);
