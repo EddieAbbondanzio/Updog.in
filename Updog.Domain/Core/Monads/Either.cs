@@ -66,11 +66,9 @@ public class Either<TL, TR> {
     /// <param name="rightFunc">Handler for the right.</param>
     /// <typeparam name="T">Return value type.</typeparam>
     public async Task<T> MatchAsync<T>(Func<TL, Task<T>> leftFunc, Func<TR, Task<T>> rightFunc) => this.isLeft ? await leftFunc(this.left) : await rightFunc(this.right);
-    #endregion
 
-    #region Statics
-    public static Either<TL, TR> Left(TL left) => new Either<TL, TR>(left);
-    public static Either<TL, TR> Right(TR right) => new Either<TL, TR>(right);
+    public TL Left() => isLeft ? left : throw new InvalidOperationException();
+    public TR Right() => !isLeft ? right : throw new InvalidOperationException();
     #endregion
 
     public static implicit operator Either<TL, TR>(TL left) => new Either<TL, TR>(left);

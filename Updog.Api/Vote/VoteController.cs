@@ -32,10 +32,12 @@ namespace Updog.Api {
         /// <param name="postId">The ID of the post to vote on.</param>
         /// <param name="vote">The vote type.</param>
         [HttpPost("post/{postId}/{vote}")]
-        public async Task<IActionResult> VoteOnPost(int postId, VoteDirection vote) {
-            var result = await mediator.Command(new VoteOnPostCommand(new VoteOnPost(postId, vote), User!));
-            return result.IsSuccess ? Ok() : BadRequest() as IActionResult;
-        }
+        public async Task<IActionResult> VoteOnPost(int postId, VoteDirection vote) =>
+            (await mediator.Command(new VoteOnPostCommand(new VoteOnPost(postId, vote), User!)))
+            .Match(
+                r => Ok(r) as IActionResult,
+                e => BadRequest(e.Message) as IActionResult
+            );
 
         /// <summary>
         /// Vote on a comment.
@@ -43,9 +45,10 @@ namespace Updog.Api {
         /// <param name="commentId">The Id of the comment to vote on.</param>
         /// <param name="vote">The vote type.</param>
         [HttpPost("comment/{commentId}/{vote}")]
-        public async Task<IActionResult> VoteOnComment(int commentId, VoteDirection vote) {
-            var result = await mediator.Command(new VoteOnCommentCommand(new VoteOnComment(commentId, vote), User!));
-            return result.IsSuccess ? Ok() : BadRequest() as IActionResult;
-        }
+        public async Task<IActionResult> VoteOnComment(int commentId, VoteDirection vote) =>
+            (await mediator.Command(new VoteOnCommentCommand(new VoteOnComment(commentId, vote), User!))).Match(
+                r => Ok() as IActionResult,
+                e => BadRequest(e.Message) as IActionResult
+            );
     }
 }

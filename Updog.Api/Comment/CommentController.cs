@@ -36,9 +36,8 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{commentId}")]
         public async Task<IActionResult> GetComment(int commentId) =>
-            (await mediator.Query<CommentFindByIdQuery, CommentReadView>(
-                new CommentFindByIdQuery(commentId, User!)
-            )).Match(
+            (await mediator.Query<CommentFindByIdQuery, CommentReadView>(new CommentFindByIdQuery(commentId, User!)))
+            .Match(
                 (comment) => Ok(comment) as IActionResult,
                 (error) => BadRequest(error.Message) as IActionResult
             );
@@ -58,28 +57,34 @@ namespace Updog.Api {
         /// Create a new comment on a post.
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> CreateComment([FromBody]CommentCreateRequest body) {
-            var result = await mediator.Command(new CommentCreateCommand(new CommentCreate(body.PostId, body.Body, body.ParentId), User!));
-            return result.IsSuccess ? Ok(result) : BadRequest(result.Error) as IActionResult;
-        }
+        public async Task<IActionResult> CreateComment([FromBody]CommentCreateRequest body) =>
+            (await mediator.Command(new CommentCreateCommand(new CommentCreate(body.PostId, body.Body, body.ParentId), User!)))
+            .Match(
+                (result) => Ok(new { Id = result.InsertId }) as IActionResult,
+                (error) => BadRequest(error) as IActionResult
+            );
 
         /// <summary>
         /// Edit a comment.
         /// </summary>
         [HttpPatch("{commentId}")]
-        public async Task<IActionResult> Update(int commentId, [FromBody]CommentUpdateRequest request) {
-            var result = await mediator.Command(new CommentUpdateCommand(commentId, new CommentUpdate(request.Body), User!));
-            return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
-        }
+        public async Task<IActionResult> Update(int commentId, [FromBody]CommentUpdateRequest request) =>
+            (await mediator.Command(new CommentUpdateCommand(commentId, new CommentUpdate(request.Body), User!)))
+            .Match(
+                (result) => Ok() as IActionResult,
+                (error) => BadRequest(error.Message) as IActionResult
+            );
 
         /// <summary>
         /// Delete a comment.
         /// </summary>
         [HttpDelete("{commentId}")]
-        public async Task<IActionResult> DeleteComment(int commentId) {
-            var result = await mediator.Command(new CommentDeleteCommand(commentId, User!));
-            return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
-        }
+        public async Task<IActionResult> DeleteComment(int commentId) =>
+            (await mediator.Command(new CommentDeleteCommand(commentId, User!)))
+            .Match(
+                (result) => Ok() as IActionResult,
+                (error) => BadRequest(error.Message)
+            );
         #endregion
     }
 }

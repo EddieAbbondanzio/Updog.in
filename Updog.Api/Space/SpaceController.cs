@@ -31,30 +31,33 @@ namespace Updog.Api {
         /// </summary>
         [HttpGet("default")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetDefaultSpaces() {
-            var spaces = await mediator.Query<DefaultSpaceQuery, IEnumerable<SpaceReadView>>(new DefaultSpaceQuery(User));
-            return Ok(spaces);
-        }
+        public async Task<IActionResult> GetDefaultSpaces() =>
+            (await mediator.Query<DefaultSpaceQuery, IEnumerable<SpaceReadView>>(new DefaultSpaceQuery(User)))
+            .Match(
+                spaces => Ok(spaces) as IActionResult,
+                error => BadRequest(error.Message)
+            );
 
         /// <summary>
         /// Get the subscribed spaces of the user.
         /// </summary>
         [HttpGet("subscribed")]
-        public async Task<IActionResult> GetSubscribedSpaces() {
-            var spaces = await mediator.Query<SubscribedSpaceQuery, IEnumerable<SpaceReadView>>(new SubscribedSpaceQuery(User!));
-
-            return Ok(spaces);
-        }
+        public async Task<IActionResult> GetSubscribedSpaces() =>
+            (await mediator.Query<SubscribedSpaceQuery, IEnumerable<SpaceReadView>>(new SubscribedSpaceQuery(User!)))
+            .Match(
+                spaces => Ok(spaces) as IActionResult,
+                error => BadRequest(error.Message)
+            );
 
         [HttpGet]
         [ContentRangeHeader]
         [AllowAnonymous]
-        public async Task<IActionResult> Find([FromQuery]int pageNumber, [FromQuery] int pageSize = Space.PageSize) {
-            var spaces = await this.mediator.Query<SpaceFindQuery, PagedResultSet<SpaceReadView>>(new SpaceFindQuery(new PaginationInfo(pageNumber, pageSize), User));
-
-            return Ok(spaces);
-        }
-
+        public async Task<IActionResult> Find([FromQuery]int pageNumber, [FromQuery] int pageSize = Space.PageSize) =>
+        (await this.mediator.Query<SpaceFindQuery, PagedResultSet<SpaceReadView>>(new SpaceFindQuery(new PaginationInfo(pageNumber, pageSize), User)))
+        .Match(
+            spaces => Ok(spaces) as IActionResult,
+            e => BadRequest(e.Message) as IActionResult
+        );
 
         /// <summary>
         /// Get a space via it's name.
@@ -63,30 +66,35 @@ namespace Updog.Api {
         [HttpHead("{name}")]
         [HttpGet("{name}")]
         [AllowAnonymous]
-        public async Task<IActionResult> FindByName(string name) {
-            var space = await mediator.Query<SpaceFindByNameQuery, SpaceReadView>(new SpaceFindByNameQuery(name, User));
-
-            return space != null ? Ok(space) : NotFound() as IActionResult;
-        }
+        public async Task<IActionResult> FindByName(string name) =>
+            (await mediator.Query<SpaceFindByNameQuery, SpaceReadView?>(new SpaceFindByNameQuery(name, User)))
+            .Match(
+                s => s != null ? Ok(s) : NotFound() as IActionResult,
+                e => BadRequest(e.Message) as IActionResult
+            );
 
         /// <summary>
         /// Create a new sub space.
         /// </summary>
         /// <param name="request">The incoming reuqest</param>
         [HttpPost]
-        public async Task<IActionResult> CreateSpace(SpaceCreateRequest request) {
-            var result = await mediator.Command(new SpaceCreateCommand(new SpaceCreate(request.Name, request.Description), User!));
-            return result.IsSuccess ? Ok(result.InsertId) : BadRequest(result.Error) as IActionResult;
-        }
+        public async Task<IActionResult> CreateSpace(SpaceCreateRequest request) =>
+            (await mediator.Command(new SpaceCreateCommand(new SpaceCreate(request.Name, request.Description), User!)))
+            .Match(
+                r => Ok(new { Id = r.InsertId }) as IActionResult,
+                e => BadRequest(e.Message) as IActionResult
+            );
 
         /// <summary>
         /// Edit an existing sub space.
         /// </summary>
         [HttpPatch("{name}")]
-        public async Task<IActionResult> UpdateSpace(string name, SpaceUpdateRequest request) {
-            var result = await mediator.Command(new SpaceUpdateCommand(name, new SpaceUpdate(request.Description), User!));
-            return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
-        }
+        public async Task<IActionResult> UpdateSpace(string name, SpaceUpdateRequest request) =>
+            (await mediator.Command(new SpaceUpdateCommand(name, new SpaceUpdate(request.Description), User!)))
+            .Match(
+                r => Ok() as IActionResult,
+                e => BadRequest(e.Message) as IActionResult
+            );
 
         /// <summary>
         /// Find the posts for a specific space.
@@ -98,29 +106,37 @@ namespace Updog.Api {
         [AllowAnonymous]
         [ContentRangeHeader]
         [HttpGet("{name}/post/new")]
-        public async Task<IActionResult> FindPosts(string name, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) {
-            var posts = await this.mediator.Query<PostFindBySpaceQuery, PagedResultSet<PostReadView>>(new PostFindBySpaceQuery(name, new PaginationInfo(pageNumber, pageSize), User));
-            return Ok(posts);
-        }
+        public async Task<IActionResult> FindPosts(string name, [FromQuery]int pageNumber, [FromQuery] int pageSize = Post.PageSize) =>
+            (await this.mediator.Query<PostFindBySpaceQuery, PagedResultSet<PostReadView>>(new PostFindBySpaceQuery(name, new PaginationInfo(pageNumber, pageSize), User)))
+            .Match(
+                posts => Ok(posts) as IActionResult,
+                error => BadRequest(error.Message) as IActionResult
+            );
 
         [AllowAnonymous]
         [HttpGet("moderator")]
-        public async Task<IActionResult> GetModerators(string space) {
-            var mods = await mediator.Query<FindModeratorsBySpaceQuery, IEnumerable<UserReadView>>(new FindModeratorsBySpaceQuery(space, User));
-            return Ok(mods);
-        }
+        public async Task<IActionResult> GetModerators(string space) =>
+            (await mediator.Query<FindModeratorsBySpaceQuery, IEnumerable<UserReadView>>(new FindModeratorsBySpaceQuery(space, User)))
+            .Match(
+                mods => Ok(mods) as IActionResult,
+                error => BadRequest(error.Message)
+            );
 
         [HttpPost("moderator")]
-        public async Task<IActionResult> AddModerator(string space, string username) {
-            var result = await mediator.Command<AddModeratorToSpaceCommand>(new AddModeratorToSpaceCommand(space, username, User!));
-            return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
-        }
+        public async Task<IActionResult> AddModerator(string space, string username) =>
+            (await mediator.Command<AddModeratorToSpaceCommand>(new AddModeratorToSpaceCommand(space, username, User!)))
+            .Match(
+                r => Ok() as IActionResult,
+                e => BadRequest(e.Message) as IActionResult
+            );
 
         [HttpPost("moderator")]
-        public async Task<IActionResult> RemoveModerator(string space, string username) {
-            var result = await mediator.Command(new RemoveModeratorFromSpaceCommand(space, username, User!));
-            return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
-        }
+        public async Task<IActionResult> RemoveModerator(string space, string username) =>
+            (await mediator.Command(new RemoveModeratorFromSpaceCommand(space, username, User!)))
+            .Match(
+                r => Ok() as IActionResult,
+                e => BadRequest(e.Message) as IActionResult
+            );
         #endregion
     }
 }

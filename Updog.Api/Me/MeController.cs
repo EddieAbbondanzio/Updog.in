@@ -37,20 +37,27 @@ namespace Updog.Api {
         /// </summary>
         /// <param name="updateRequest">The new user info.</param>
         [HttpPut]
-        public async Task<ActionResult> Update([FromBody] MeUpdateRequest updateRequest) {
-            await mediator.Command(new UserUpdateCommand(User!.Username, new UserUpdate(updateRequest.Email), User!));
-            return Ok();
-        }
+        public async Task<IActionResult> Update([FromBody] MeUpdateRequest updateRequest) =>
+            (await mediator.Command(new UserUpdateCommand(User!.Username, new UserUpdate(updateRequest.Email), User!)))
+            .Match(
+                (result) => Ok() as IActionResult,
+                (error) => BadRequest(error.Message)
+            );
 
         /// <summary>
         /// Update the password of the logged in user.
         /// </summary>
         /// <param name="updatePasswordRequest">The new password.</param>
         [HttpPut("password")]
-        public async Task<ActionResult> UpdatePassword([FromBody] MeUpdatePasswordRequest updatePasswordRequest) {
-            await mediator.Command(new UserUpdatePasswordCommand(User!.Username, new UserUpdatePassword(updatePasswordRequest.CurrentPassword, updatePasswordRequest.NewPassword), User!));
-            return Ok();
-        }
+        public async Task<IActionResult> UpdatePassword([FromBody] MeUpdatePasswordRequest updatePasswordRequest) =>
+            (await mediator.Command(new UserUpdatePasswordCommand(
+                User!.Username,
+                new UserUpdatePassword(updatePasswordRequest.CurrentPassword, updatePasswordRequest.NewPassword),
+                User!))
+            ).Match(
+                (result) => Ok() as IActionResult,
+                (error) => BadRequest(error.Message)
+            );
         #endregion
     }
 }

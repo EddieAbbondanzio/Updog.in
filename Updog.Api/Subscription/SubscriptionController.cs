@@ -28,20 +28,24 @@ namespace Updog.Api {
         /// </summary>
         /// <param name="spaceName">The name of the space.</param>
         [HttpPost("{spaceName}")]
-        public async Task<IActionResult> SubscribeToSpace(string spaceName) {
-            var result = await mediator.Command(new SubscriptionCreateCommand(new Domain.SubscriptionCreate(spaceName), User!));
-            return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
-        }
+        public async Task<IActionResult> SubscribeToSpace(string spaceName) =>
+            (await mediator.Command(new SubscriptionCreateCommand(new Domain.SubscriptionCreate(spaceName), User!)))
+            .Match(
+                r => Ok() as IActionResult,
+                e => BadRequest(e.Message)
+            );
 
         /// <summary>
         /// Cancel a subscription to a space.
         /// </summary>
         /// <param name="spaceName">The name of the space to cancel.</param>
         [HttpDelete("{spaceName}")]
-        public async Task<IActionResult> DesubscribeFromSpace(string spaceName) {
-            var result = await mediator.Command(new SubscriptionDeleteCommand(spaceName, User!));
-            return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
-        }
+        public async Task<IActionResult> DesubscribeFromSpace(string spaceName) =>
+            (await mediator.Command(new SubscriptionDeleteCommand(spaceName, User!)))
+            .Match(
+                r => Ok() as IActionResult,
+                e => BadRequest(e.Message)
+            );
         #endregion
     }
 }

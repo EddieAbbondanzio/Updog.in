@@ -29,17 +29,20 @@ namespace Updog.Api {
 
         [HttpPost("admin")]
         [Authorize]
-        public async Task<IActionResult> AddAdmin(AdminCreateRequest body) {
-            var result = await mediator.Command(new AddAdminCommand(body.Username, User!));
-            return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
-        }
+        public async Task<IActionResult> AddAdmin(AdminCreateRequest body) =>
+            (await mediator.Command(new AddAdminCommand(body.Username, User!)))
+            .Match(
+                r => Ok() as IActionResult,
+                e => BadRequest(e.Message) as IActionResult
+            );
 
         [HttpDelete("admin/{username}")]
         [Authorize]
-        public async Task<IActionResult> RemoveAdmin(string username) {
-            var result = await mediator.Command(new RemoveAdminCommand(username, User!));
-            return result.IsSuccess ? Ok() : BadRequest(result.Error) as IActionResult;
-        }
+        public async Task<IActionResult> RemoveAdmin(string username) =>
+            (await mediator.Command(new RemoveAdminCommand(username, User!))).Match(
+                r => Ok() as IActionResult,
+                e => BadRequest(e.Message) as IActionResult
+            );
         #endregion
     }
 }

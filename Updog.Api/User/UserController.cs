@@ -31,26 +31,31 @@ namespace Updog.Api {
 
         #region Publics
         [HttpHead("{username}")]
-        public async Task<IActionResult> IsUsernameAvailable(string username) {
-            var isFree = await mediator.Query<IsUsernameAvailableQuery, bool>(new IsUsernameAvailableQuery(username, User));
-            return isFree ? NotFound() : Ok() as IActionResult;
-        }
+        public async Task<IActionResult> IsUsernameAvailable(string username) =>
+            (await mediator.Query<IsUsernameAvailableQuery, bool>(new IsUsernameAvailableQuery(username, User))).Match(
+                isFree => isFree ? NotFound() : Ok() as IActionResult,
+                error => BadRequest(error.Message) as IActionResult
+            );
 
         /// <summary>
         /// Retrieve a user from the backend via their username.
         /// </summary>
         /// <param name="username">The username of the user to look for.</param>
         [HttpGet("{username}")]
-        public async Task<IActionResult> FindByUsername(string username) {
-            var user = await mediator.Query<FindUserByUsernameQuery, UserReadView>(new FindUserByUsernameQuery(username, User));
-            return user != null ? Ok(user) : NotFound() as IActionResult;
-        }
+        public async Task<IActionResult> FindByUsername(string username) =>
+            (await mediator.Query<FindUserByUsernameQuery, UserReadView?>(new FindUserByUsernameQuery(username, User)))
+            .Match(
+                user => user != null ? Ok(user) : NotFound() as IActionResult,
+                error => BadRequest(error.Message) as IActionResult
+            );
 
         [HttpGet("{username}/moderator")]
-        public async Task<IActionResult> GetModeratorSpaces(string username) {
-            var spaces = await mediator.Query<FindSpacesUserModeratesQuery, IEnumerable<SpaceReadView>>(new FindSpacesUserModeratesQuery(username, User));
-            return Ok(spaces);
-        }
+        public async Task<IActionResult> GetModeratorSpaces(string username) =>
+            (await mediator.Query<FindSpacesUserModeratesQuery, IEnumerable<SpaceReadView>>(new FindSpacesUserModeratesQuery(username, User)))
+            .Match(
+                spaces => Ok(spaces) as IActionResult,
+                error => BadRequest(error.Message) as IActionResult
+            );
 
         /// <summary>
         /// Register a new user with the website.
@@ -69,7 +74,11 @@ namespace Updog.Api {
                 Registration = new UserRegistration(req.Username, req.Password, req.Email)
             });
 
-            return login != null ? Ok(login) : BadRequest(result.Error) as IActionResult;
+            if (login != null) {
+                return Ok(login);
+            } else {
+                return BadRequest(result.Right().Message);
+            }
         }
         #endregion
     }
