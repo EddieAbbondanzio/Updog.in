@@ -16,7 +16,7 @@ namespace Updog.Application {
         #region Privates
         [Validate(typeof(AddModeratorToSpaceCommandValidator))]
         [Policy(typeof(RemoveModeratorFromSpaceCommandPolicy))]
-        protected async override Task<CommandResult> ExecuteCommand(RemoveModeratorFromSpaceCommand command) {
+        protected async override Task<Either<CommandResult, Error>> ExecuteCommand(RemoveModeratorFromSpaceCommand command) {
             await roleService.RemoveModeratorFromSpace(command.Username, command.Space, command.User);
             return Success();
         }

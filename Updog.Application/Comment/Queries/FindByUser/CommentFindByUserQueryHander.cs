@@ -17,7 +17,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        protected async override Task<PagedResultSet<CommentReadView>> ExecuteQuery(CommentFindByUserQuery query) => await commentReader.FindByUser(query.Username, query.Paging, query.User);
+        protected async override Task<Either<PagedResultSet<CommentReadView>, Error>> ExecuteQuery(CommentFindByUserQuery query) => await commentReader.FindByUser(query.Username, query.Paging, query.User);
         #endregion
     }
 }

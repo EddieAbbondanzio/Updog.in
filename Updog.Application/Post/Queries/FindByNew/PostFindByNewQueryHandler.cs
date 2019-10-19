@@ -17,7 +17,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        protected async override Task<PagedResultSet<PostReadView>> ExecuteQuery(PostFindByNewQuery query) => await postReader.FindByNew(query.Paging, query.User);
+        protected async override Task<Either<PagedResultSet<PostReadView>, Error>> ExecuteQuery(PostFindByNewQuery query) => await postReader.FindByNew(query.Paging, query.User);
         #endregion
     }
 }

@@ -15,7 +15,7 @@ namespace Updog.Application {
         #endregion
 
         [Validate(typeof(LoginUserCommandValidator))]
-        protected async override Task<CommandResult> ExecuteCommand(LoginUserCommand command) {
+        protected async override Task<Either<CommandResult, Error>> ExecuteCommand(LoginUserCommand command) {
             try {
                 UserLogin login = await service.Login(command.Credentials);
                 return Success();

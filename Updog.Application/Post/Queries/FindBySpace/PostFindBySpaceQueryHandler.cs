@@ -17,7 +17,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        protected async override Task<PagedResultSet<PostReadView>> ExecuteQuery(PostFindBySpaceQuery query) => await postReader.FindBySpace(query.Space, query.Paging, query.User);
+        protected async override Task<Either<PagedResultSet<PostReadView>, Error>> ExecuteQuery(PostFindBySpaceQuery query) => await postReader.FindBySpace(query.Space, query.Paging, query.User);
         #endregion
     }
 }

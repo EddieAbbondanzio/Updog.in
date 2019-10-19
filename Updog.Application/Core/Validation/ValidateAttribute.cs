@@ -5,7 +5,7 @@ namespace Updog.Application {
     /// Attribute to auto validate an interactor via a validator.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, Inherited = true)]
-    public sealed class Validate : System.Attribute {
+    public sealed class ValidateAttribute : System.Attribute {
         #region Properties
         /// <summary>
         /// The type of validator that should be used.
@@ -15,7 +15,7 @@ namespace Updog.Application {
         #endregion
 
         #region Constructor(s)
-        public Validate(Type validatorType) {
+        public ValidateAttribute(Type validatorType) {
             Validator = validatorType;
 
             if (!typeof(IValidator).IsAssignableFrom(validatorType)) {

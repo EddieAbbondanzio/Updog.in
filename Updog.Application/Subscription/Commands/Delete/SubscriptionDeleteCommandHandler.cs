@@ -15,7 +15,7 @@ namespace Updog.Application {
 
         #region Publics
         [Validate(typeof(SubscriptionDeleteCommandValidator))]
-        protected async override Task<CommandResult> ExecuteCommand(SubscriptionDeleteCommand command) {
+        protected async override Task<Either<CommandResult, Error>> ExecuteCommand(SubscriptionDeleteCommand command) {
             try {
                 Subscription s = await service.DeleteSubscription(command.Space, command.User);
                 return Success();

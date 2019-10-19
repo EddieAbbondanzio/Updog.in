@@ -16,7 +16,7 @@ namespace Updog.Application {
 
         [Validate(typeof(UserUpdatePasswordCommandValidator))]
         [Policy(typeof(UserAlterCommandPolicy))]
-        protected async override Task<CommandResult> ExecuteCommand(UserUpdatePasswordCommand command) {
+        protected async override Task<Either<CommandResult, Error>> ExecuteCommand(UserUpdatePasswordCommand command) {
             try {
                 User u = await service.UpdatePassword(command.Username, command.UpdatePassword);
                 return Success();

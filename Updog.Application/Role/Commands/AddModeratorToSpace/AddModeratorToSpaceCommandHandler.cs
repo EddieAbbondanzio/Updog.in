@@ -16,7 +16,7 @@ namespace Updog.Application {
         #region Privates
         [Validate(typeof(AddModeratorToSpaceCommandValidator))]
         [Policy(typeof(AddModeratorToSpaceCommandPolicy))]
-        protected async override Task<CommandResult> ExecuteCommand(AddModeratorToSpaceCommand command) {
+        protected async override Task<Either<CommandResult, Error>> ExecuteCommand(AddModeratorToSpaceCommand command) {
             await roleService.AddModeratorToSpace(command.Username, command.Space, command.User);
             return Success();
         }

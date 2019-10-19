@@ -16,5 +16,7 @@ namespace Updog.Application {
         ValidationResult Validate(TResource resource);
 
         Task<ValidationResult> ValidateAsync(TResource resource, CancellationToken token = default(CancellationToken));
+
+        bool CanValidate(object obj);
     }
 }

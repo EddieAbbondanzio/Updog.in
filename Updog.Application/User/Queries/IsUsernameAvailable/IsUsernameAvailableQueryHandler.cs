@@ -15,7 +15,7 @@ namespace Updog.Application {
 
         #region Publics
         [Validate(typeof(IsUsernameAvailableQueryValidator))]
-        protected async override Task<bool> ExecuteQuery(IsUsernameAvailableQuery command) => (await userReader.FindByUsername(command.Username)) == null;
+        protected async override Task<Either<bool, Error>> ExecuteQuery(IsUsernameAvailableQuery command) => (await userReader.FindByUsername(command.Username)) == null;
         #endregion
     }
 }

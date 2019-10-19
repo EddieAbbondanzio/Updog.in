@@ -17,7 +17,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        protected async override Task<CommentReadView?> ExecuteQuery(CommentFindByIdQuery query) => await commentReader.FindById(query.CommentId, query.User);
+        protected async override Task<Either<CommentReadView?, Error>> ExecuteQuery(CommentFindByIdQuery query) => await commentReader.FindById(query.CommentId, query.User);
         #endregion
     }
 }

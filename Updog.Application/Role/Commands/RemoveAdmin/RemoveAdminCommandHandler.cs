@@ -16,7 +16,7 @@ namespace Updog.Application {
         #region Privates
         [Validate(typeof(RemoveAdminCommandValidator))]
         [Policy(typeof(RemoveAdminCommandPolicy))]
-        protected async override Task<CommandResult> ExecuteCommand(RemoveAdminCommand command) {
+        protected async override Task<Either<CommandResult, Error>> ExecuteCommand(RemoveAdminCommand command) {
             await roleService.RemoveAdmin(command.Username, command.User);
             return Success();
         }

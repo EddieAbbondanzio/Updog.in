@@ -1,11 +1,12 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Updog.Domain;
 
 namespace Updog.Application {
     public interface IMediator {
-        Task<CommandResult> Command<TCommand>(TCommand command) where TCommand : class, ICommand;
-        Task<TResult> Query<TQuery, TResult>(TQuery query) where TQuery : class, IQuery;
+        Task<Either<CommandResult, Error>> Command<TCommand>(TCommand command) where TCommand : class, ICommand;
+        Task<Either<TResult, Error>> Query<TQuery, TResult>(TQuery query) where TQuery : class, IQuery;
     }
 
     /// <summary>
@@ -22,13 +23,17 @@ namespace Updog.Application {
         }
         #endregion
 
-        public async Task<CommandResult> Command<TCommand>(TCommand command) where TCommand : class, ICommand {
+        public async Task<Either<CommandResult, Error>> Command<TCommand>(TCommand command) where TCommand : class, ICommand {
             CommandHandler<TCommand> handler = serviceProvider.GetRequiredService<CommandHandler<TCommand>>();
+            handler.Init(serviceProvider);
+
             return await handler.Execute(command);
         }
 
-        public async Task<TResult> Query<TQuery, TResult>(TQuery query) where TQuery : class, IQuery {
+        public async Task<Either<TResult, Error>> Query<TQuery, TResult>(TQuery query) where TQuery : class, IQuery {
             QueryHandler<TQuery, TResult> handler = serviceProvider.GetRequiredService<QueryHandler<TQuery, TResult>>();
+            handler.Init(serviceProvider);
+
             return await handler.Execute(query);
         }
     }

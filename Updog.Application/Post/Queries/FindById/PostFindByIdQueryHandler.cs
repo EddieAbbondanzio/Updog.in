@@ -17,7 +17,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        protected async override Task<PostReadView?> ExecuteQuery(PostFindByIdQuery query) => await postReader.FindById(query.PostId);
+        protected async override Task<Either<PostReadView?, Error>> ExecuteQuery(PostFindByIdQuery query) => await postReader.FindById(query.PostId);
         #endregion
     }
 }

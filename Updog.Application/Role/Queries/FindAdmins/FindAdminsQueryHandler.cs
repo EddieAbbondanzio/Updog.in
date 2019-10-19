@@ -15,7 +15,10 @@ namespace Updog.Application {
         #endregion
 
         #region Privates
-        protected async override Task<IEnumerable<UserReadView>> ExecuteQuery(FindAdminsQuery query) => await userReader.FindAdmins();
+        protected async override Task<Either<IEnumerable<UserReadView>, Error>> ExecuteQuery(FindAdminsQuery query) =>
+        new Either<IEnumerable<UserReadView>, Error>(
+            await userReader.FindAdmins()
+        );
         #endregion
     }
 }

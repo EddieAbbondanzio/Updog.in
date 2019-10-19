@@ -15,7 +15,10 @@ namespace Updog.Application {
         #endregion
 
         #region Privates
-        protected async override Task<IEnumerable<SpaceReadView>> ExecuteQuery(FindSpacesUserModeratesQuery query) => await roleReader.FindSpacesUserModerates(query.Username);
+        protected async override Task<Either<IEnumerable<SpaceReadView>, Error>> ExecuteQuery(FindSpacesUserModeratesQuery query) =>
+        new Either<IEnumerable<SpaceReadView>, Error>(
+            await roleReader.FindSpacesUserModerates(query.Username)
+        );
         #endregion
     }
 }

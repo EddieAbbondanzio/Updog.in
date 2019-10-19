@@ -17,7 +17,7 @@ namespace Updog.Application {
         #region Publics
         [Validate(typeof(PostUpdateCommandValidator))]
         [Policy(typeof(PostAlterCommandPolicy))]
-        protected async override Task<CommandResult> ExecuteCommand(PostUpdateCommand command) {
+        protected async override Task<Either<CommandResult, Error>> ExecuteCommand(PostUpdateCommand command) {
             try {
                 Post p = await service.Update(command.PostId, command.Update, command.User);
                 return Success();

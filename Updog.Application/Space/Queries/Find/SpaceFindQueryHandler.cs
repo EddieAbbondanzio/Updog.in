@@ -17,7 +17,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        protected async override Task<PagedResultSet<SpaceReadView>> ExecuteQuery(SpaceFindQuery command) => await spaceReader.Find(command.Paging);
+        protected async override Task<Either<PagedResultSet<SpaceReadView>, Error>> ExecuteQuery(SpaceFindQuery command) => await spaceReader.Find(command.Paging);
         #endregion
     }
 }

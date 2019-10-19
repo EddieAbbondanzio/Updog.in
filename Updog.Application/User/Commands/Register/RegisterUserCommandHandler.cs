@@ -17,7 +17,7 @@ namespace Updog.Application {
         #endregion
 
         [Validate(typeof(RegisterUserCommandValidator))]
-        protected async override Task<CommandResult> ExecuteCommand(RegisterUserCommand command) {
+        protected async override Task<Either<CommandResult, Error>> ExecuteCommand(RegisterUserCommand command) {
             try {
                 UserLogin login = await service.Register(command.Registration);
                 return Success();

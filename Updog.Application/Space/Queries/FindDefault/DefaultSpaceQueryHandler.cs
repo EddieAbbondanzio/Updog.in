@@ -16,7 +16,7 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        protected async override Task<IEnumerable<SpaceReadView>> ExecuteQuery(DefaultSpaceQuery command) => await spaceReader.FindDefault();
+        protected async override Task<Either<IEnumerable<SpaceReadView>, Error>> ExecuteQuery(DefaultSpaceQuery command) => new Either<IEnumerable<SpaceReadView>, Error>(await spaceReader.FindDefault());
         #endregion
     }
 }

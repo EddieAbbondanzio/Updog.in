@@ -13,10 +13,10 @@ namespace Updog.Application {
         }
         #endregion
 
-        #region Privates
+        #region Task<Either<CommandResult, Error>>
         [Validate(typeof(AddAdminCommandValidator))]
         [Policy(typeof(AddAdminCommandPolicy))]
-        protected async override Task<CommandResult> ExecuteCommand(AddAdminCommand command) {
+        protected async override Task<Either<CommandResult, Error>> ExecuteCommand(AddAdminCommand command) {
             await roleService.AddAdmin(command.Username, command.User);
             return Success();
         }

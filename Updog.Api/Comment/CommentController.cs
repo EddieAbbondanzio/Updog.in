@@ -35,21 +35,24 @@ namespace Updog.Api {
         /// <param name="commentId"></param>
         [AllowAnonymous]
         [HttpGet("{commentId}")]
-        public async Task<IActionResult> GetComment(int commentId) {
-            CommentReadView? comment = await mediator.Query<CommentFindByIdQuery, CommentReadView>(new CommentFindByIdQuery(commentId, User!));
-            return comment != null ? Ok(comment) : NotFound() as IActionResult;
-        }
+        public async Task<IActionResult> GetComment(int commentId) =>
+            (await mediator.Query<CommentFindByIdQuery, CommentReadView>(
+                new CommentFindByIdQuery(commentId, User!)
+            )).Match(
+                (comment) => Ok(comment) as IActionResult,
+                (error) => BadRequest(error.Message) as IActionResult
+            );
 
         [AllowAnonymous]
         [ContentRangeHeader]
         [HttpGet("user/{username}")]
-        public async Task<IActionResult> GetCommentsByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery]int pageSize = Comment.PageSize) {
-            PagedResultSet<CommentReadView> comments = await mediator.Query<CommentFindByUserQuery, PagedResultSet<CommentReadView>>(
+        public async Task<IActionResult> GetCommentsByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery]int pageSize = Comment.PageSize) =>
+            (await mediator.Query<CommentFindByUserQuery, PagedResultSet<CommentReadView>>(
                 new CommentFindByUserQuery(username, new PaginationInfo(pageNumber, pageSize), User)
+            )).Match(
+                (comments) => Ok(comments) as IActionResult,
+                (error) => BadRequest(error.Message) as IActionResult
             );
-
-            return Ok(comments);
-        }
 
         /// <summary>
         /// Create a new comment on a post.

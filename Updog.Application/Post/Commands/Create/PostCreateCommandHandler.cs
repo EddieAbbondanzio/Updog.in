@@ -18,7 +18,7 @@ namespace Updog.Application {
 
         #region Publics
         [Validate(typeof(PostCreateCommandValidator))]
-        protected async override Task<CommandResult> ExecuteCommand(PostCreateCommand command) {
+        protected async override Task<Either<CommandResult, Error>> ExecuteCommand(PostCreateCommand command) {
             Space? s = await repo.FindByName(command.Space);
 
             if (s == null) {

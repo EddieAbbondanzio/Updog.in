@@ -15,9 +15,9 @@ namespace Updog.Application {
 
         #region Private
         [Validate(typeof(VoteOnCommentCommandValidator))]
-        protected async override Task<CommandResult> ExecuteCommand(VoteOnCommentCommand command) {
+        protected async override Task<Either<CommandResult, Error>> ExecuteCommand(VoteOnCommentCommand command) {
             Vote v = await service.VoteOnComment(command.Data, command.User);
-            return Success(v.Id);
+            return Insert(v.Id);
         }
         #endregion
     }

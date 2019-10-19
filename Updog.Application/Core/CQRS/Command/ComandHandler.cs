@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Updog.Domain;
 
 namespace Updog.Application {
     /// <summary>
@@ -10,32 +12,40 @@ namespace Updog.Application {
     /// </summary>
     public abstract class CommandHandler<TCommand> : IActionHandler<TCommand, CommandResult> where TCommand : class, ICommand {
         #region Fields
-        /// <summary>
-        /// The validator to use on the input before handling it.
-        /// </summary>
         private IValidator? validator;
-        #endregion
-
-        #region Constructor(s)
-        public CommandHandler() {
-            Validate? attribute = GetValidateAttribute();
-            if (attribute != null) {
-                validator = GetValidatorInstance(attribute.Validator);
-            }
-        }
+        private IPolicy? policy;
         #endregion
 
         #region Publics
-        public async Task<CommandResult> Execute(TCommand command) {
+        public void Init(IServiceProvider provider) {
+            ValidateAttribute? validateAttribute = AttributeUtils.GetMethodAttribute<ValidateAttribute>(GetType(), "ExecuteCommand");
+
+            if (validateAttribute != null) {
+                validator = provider.GetRequiredService(validateAttribute.Validator) as IValidator;
+            }
+
+            PolicyAttribute? policyAttribute = AttributeUtils.GetMethodAttribute<PolicyAttribute>(GetType(), "ExecuteCommand");
+
+            if (policyAttribute != null) {
+                policy = provider.GetRequiredService(policyAttribute.Policy) as IPolicy;
+            }
+        }
+
+        public async Task<Either<CommandResult, Error>> Execute(TCommand command) {
             // If the command handler has a validator, check to see if input is valid first.
             if (validator != null) {
                 var result = await validator.ValidateAsync(command);
 
                 if (!result.IsValid) {
-                    /*
-                    * No sense in returning back all the errors.
-                    */
-                    return CommandResult.Failure(result.Failures.First().ErrorMessage);
+                    return new ValidationError(result);
+                }
+            }
+
+            if (policy != null) {
+                var result = await policy.Authorize(command);
+
+                if (!result.IsAuthorized) {
+                    return new AuthorizationError(result);
                 }
             }
 
@@ -45,25 +55,10 @@ namespace Updog.Application {
         #endregion
 
         #region Privates
-        protected abstract Task<CommandResult> ExecuteCommand(TCommand command);
+        protected abstract Task<Either<CommandResult, Error>> ExecuteCommand(TCommand command);
 
-        protected CommandResult Success(int insertId = 0) => CommandResult.Success(insertId);
-
-        protected CommandResult Failure(string? error = null) => CommandResult.Failure(error);
-
-        /// <summary>
-        /// Get the custom validate attrbitute from the handle method
-        /// if it exists.
-        /// </summary>
-        /// <returns>The custom attribute.</returns>
-        private Validate? GetValidateAttribute() => GetType().GetMethod("ExecuteCommand", BindingFlags.Instance | BindingFlags.NonPublic)?.GetCustomAttribute<Validate>();
-
-        /// <summary>
-        /// Generate a new instance of a validator from it's type.
-        /// </summary>
-        /// <param name="validator">The validator type to instantiate.</param>
-        /// <returns>The newly created validator.</returns>
-        private IValidator GetValidatorInstance(Type validator) => (IValidator)Activator.CreateInstance(validator)!;
+        protected CommandResult Success() => CommandResult.Success();
+        protected CommandResult Insert(int id) => CommandResult.Insert(id);
         #endregion
     }
 }

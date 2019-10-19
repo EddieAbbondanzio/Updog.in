@@ -23,6 +23,8 @@ namespace Updog.Application {
         public async Task<ValidationResult> ValidateAsync(object resource, CancellationToken token = default(CancellationToken)) => await ValidateAsync((TResource)resource, token);
 
         public ValidationResult Validate(object resource) => Validate((TResource)resource);
+
+        public bool CanValidate(object obj) => obj.GetType() == typeof(TResource);
         #endregion
 
         #region Helpers
