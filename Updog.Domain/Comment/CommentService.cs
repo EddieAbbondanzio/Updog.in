@@ -30,7 +30,7 @@ namespace Updog.Domain {
             return c;
         }
 
-        public async Task<Comment> Update(int commentId, CommentUpdate update, User user) {
+        public async Task Update(int commentId, CommentUpdate update, User user) {
             Comment? c = await repo.FindById(commentId);
 
             if (c == null) {
@@ -41,11 +41,9 @@ namespace Updog.Domain {
             await repo.Update(c);
 
             await bus.Dispatch(new CommentUpdateEvent(c));
-
-            return c;
         }
 
-        public async Task<Comment> Delete(int commentId, User user) {
+        public async Task Delete(int commentId, User user) {
             Comment? c = await repo.FindById(commentId);
 
             if (c == null) {
@@ -56,11 +54,11 @@ namespace Updog.Domain {
             await repo.Update(c);
 
             await bus.Dispatch(new CommentDeleteEvent(c));
-
-            return c;
         }
 
         public async Task<bool> IsOwner(int commentId, string username) => await repo.IsOwner(commentId, username);
+
+        public async Task<bool> DoesCommentExist(int id) => await repo.Exists(id);
         #endregion
     }
 }

@@ -23,6 +23,8 @@ namespace Updog.Domain {
 
         public async Task<Space?> FindByPost(int postId) => await repo.FindByPost(postId);
 
+        public async Task<Space?> FindByName(string name) => await repo.FindByName(name);
+
         public async Task<Space> Create(SpaceCreate data, User user) {
             // Check if name is available.
             Space? existing = await repo.FindByName(data.Name);
@@ -38,7 +40,7 @@ namespace Updog.Domain {
             return s;
         }
 
-        public async Task<Space> Update(string space, SpaceUpdate update, User user) {
+        public async Task Update(string space, SpaceUpdate update, User user) {
             Space? s = await repo.FindByName(space);
 
             if (s == null) {
@@ -49,9 +51,11 @@ namespace Updog.Domain {
             await repo.Update(s);
 
             await bus.Dispatch(new SpaceUpdateEvent(s));
-
-            return s;
         }
+
+
+
+        public async Task<bool> DoesSpaceExist(string space) => await repo.Exists(space);
         #endregion
     }
 }

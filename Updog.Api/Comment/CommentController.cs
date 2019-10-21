@@ -36,9 +36,9 @@ namespace Updog.Api {
         [AllowAnonymous]
         [HttpGet("{commentId}")]
         public async Task<IActionResult> GetComment(int commentId) =>
-            (await mediator.Query<CommentFindByIdQuery, CommentReadView>(new CommentFindByIdQuery(commentId, User!)))
+            (await mediator.Query<CommentFindByIdQuery, CommentReadView?>(new CommentFindByIdQuery(commentId, User!)))
             .Match(
-                (comment) => Ok(comment) as IActionResult,
+                (comment) => comment != null ? Ok(comment) : NotFound() as IActionResult,
                 (error) => BadRequest(error.Message) as IActionResult
             );
 

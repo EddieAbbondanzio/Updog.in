@@ -112,6 +112,12 @@ namespace Updog.Persistance {
                 @"DELETE FROM space WHERE id = @Id",
                 Reverse(entity)
             );
+
+
+        public async Task<bool> Exists(string name) => await Connection.ExecuteScalarAsync<bool>(
+            @"SELECT COUNT(*) FROM space WHERE name = @Name",
+            new { Name = name }
+        );
         #endregion
 
         #region Privates

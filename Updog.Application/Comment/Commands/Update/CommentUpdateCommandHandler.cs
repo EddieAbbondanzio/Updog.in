@@ -18,12 +18,12 @@ namespace Updog.Application {
         [Validate(typeof(CommentUpdateCommandValidator))]
         [Policy(typeof(CommentAlterCommandPolicy))]
         protected async override Task<Either<CommandResult, Error>> ExecuteCommand(CommentUpdateCommand command) {
-            try {
-                Comment c = await service.Update(command.CommentId, command.Update, command.User);
-                return Success();
-            } catch (NotFoundException e) {
-                return Failure(e.Message);
+            if (!(await service.DoesCommentExist(command.CommentId))) {
+                return new NotFoundError($"Comment {command.CommentId} does not exist.");
             }
+
+            await service.Update(command.CommentId, command.Update, command.User);
+            return Success();
         }
         #endregion
     }

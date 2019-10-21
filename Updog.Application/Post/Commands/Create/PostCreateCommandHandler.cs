@@ -5,28 +5,28 @@ using Updog.Domain;
 namespace Updog.Application {
     public sealed class PostCreateCommandHandler : CommandHandler<PostCreateCommand> {
         #region Fields
-        private ISpaceRepo repo;
-        private IPostService service;
+        private ISpaceService spaceService;
+        private IPostService postService;
         #endregion
 
         #region Constructor(s)
-        public PostCreateCommandHandler(ISpaceRepo repo, IPostService service) {
-            this.repo = repo;
-            this.service = service;
+        public PostCreateCommandHandler(ISpaceService spaceService, IPostService postService) {
+            this.spaceService = spaceService;
+            this.postService = postService;
         }
         #endregion
 
         #region Publics
         [Validate(typeof(PostCreateCommandValidator))]
         protected async override Task<Either<CommandResult, Error>> ExecuteCommand(PostCreateCommand command) {
-            Space? s = await repo.FindByName(command.Space);
+            Space? space = await spaceService.FindByName(command.Space);
 
-            if (s == null) {
-                throw new NotFoundException($"Space with name: {command.Space} was not found.");
+            if (space == null) {
+                return new NotFoundError($"Space {command.Space} does not exist.");
             }
 
-            Post p = await service.Create(command.Data, s, command.User);
-            return Success(p.Id);
+            Post p = await postService.Create(command.Data, space, command.User);
+            return Insert(p.Id);
         }
         #endregion
     }

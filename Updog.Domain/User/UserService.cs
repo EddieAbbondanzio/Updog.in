@@ -20,7 +20,7 @@ namespace Updog.Domain {
         #endregion
 
         #region Publics
-        public async Task<User> AdminRegisterOrUpdate(IAdminConfig config) {
+        public async Task AdminRegisterOrUpdate(IAdminConfig config) {
             User? existingAdmin = await repo.FindByUsername(config.Username);
 
             if (existingAdmin != null) {
@@ -29,22 +29,19 @@ namespace Updog.Domain {
                     existingAdmin.ResetPassword(config.Password);
                     await repo.Update(existingAdmin);
                 }
-
-                return existingAdmin;
+            } else {
+                User user = factory.CreateFromAdminConfig(config);
+                await repo.Add(user);
             }
 
-            User user = factory.CreateFromAdminConfig(config);
-            await repo.Add(user);
-
-            return user;
         }
 
-        public async Task<UserLogin> Login(UserCredentials credentials) {
+        public async Task<UserLogin?> Login(UserCredentials credentials) {
             User? user = await repo.FindByUsername(credentials.Username);
 
             //If no use was found, or the password doesn't match the one on file, fail.
             if (user == null || !user.Authenticate(credentials.Password)) {
-                throw new UnauthorizedAccessException();
+                return null;
             }
 
             UserLogin login = new UserLogin(user.Id, tokenHandler.IssueToken(user));
@@ -77,7 +74,7 @@ namespace Updog.Domain {
             return login;
         }
 
-        public async Task<User> Update(string username, UserUpdate update) {
+        public async Task Update(string username, UserUpdate update) {
             User? user = await repo.FindByUsername(username);
 
             if (user == null) {
@@ -95,11 +92,9 @@ namespace Updog.Domain {
             await repo.Update(user);
 
             await bus.Dispatch(new UserUpdateEvent(user));
-
-            return user;
         }
 
-        public async Task<User> UpdatePassword(string username, UserUpdatePassword data) {
+        public async Task UpdatePassword(string username, UserUpdatePassword data) {
             User? user = await repo.FindByUsername(username);
 
             if (user == null) {
@@ -108,8 +103,14 @@ namespace Updog.Domain {
 
             user.SetPassword(data.CurrentPassword, data.NewPassword);
             await repo.Update(user);
-            return user;
         }
+
+        public async Task<bool> DoesUserExist(string username) => (await repo.FindByUsername(username)) != null;
+
+        public async Task<bool> IsEmailAlreadyInUse(string email) => (await repo.FindByEmail(email)) == null;
+
+        public async Task<bool> IsUsernameAvailable(string username) => (await repo.FindByUsername(username)) == null;
+
         #endregion
     }
 }

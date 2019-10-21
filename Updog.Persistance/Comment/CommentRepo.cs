@@ -89,6 +89,11 @@ namespace Updog.Persistance {
                 new { Id = commentId });
             return owner == username;
         }
+
+        public async Task<bool> Exists(int commentId) => await Connection.ExecuteScalarAsync<bool>(
+            @"SELECT COUNT(*) FROM comment WHERE id = @Id",
+            new { Id = commentId }
+        );
         #endregion
 
         #region Privates

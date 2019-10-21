@@ -15,16 +15,15 @@ namespace Updog.Application {
         #endregion
 
         #region Publics
-        [Validate(typeof(CommentDeleteCommandValidator))]
         [Policy(typeof(CommentAlterCommandPolicy))]
+        [Validate(typeof(CommentDeleteCommandValidator))]
         protected async override Task<Either<CommandResult, Error>> ExecuteCommand(CommentDeleteCommand command) {
-            // (Hopefully) it would be impossible for post to be null if a comment exists...
-            try {
-                Comment c = await service.Delete(command.CommentId, command.User);
-                return Success();
-            } catch (NotFoundException e) {
-                return Failure(e.Message);
+            if (!(await service.DoesCommentExist(command.CommentId))) {
+                return new NotFoundError($"Comment {command.CommentId} does not exist.");
             }
+
+            await service.Delete(command.CommentId, command.User);
+            return Success();
         }
         #endregion
     }

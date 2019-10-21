@@ -1,4 +1,4 @@
-namespace Updog.Domain {
+namespace Updog.Application {
     public class Error {
         #region Properties
         public string Message { get; }

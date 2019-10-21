@@ -70,6 +70,11 @@ namespace Updog.Persistance {
                 new { Id = postId });
             return owner == username;
         }
+
+        public async Task<bool> Exists(int postId) => await Connection.ExecuteScalarAsync<bool>(
+            @"SELECT COUNT(*) FROM post WHERE id = @Id",
+            new { Id = postId }
+        );
         #endregion
 
         #region Privates

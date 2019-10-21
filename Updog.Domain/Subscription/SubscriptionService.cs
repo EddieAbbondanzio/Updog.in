@@ -34,7 +34,7 @@ namespace Updog.Domain {
             return s;
         }
 
-        public async Task<Subscription> DeleteSubscription(string space, User user) {
+        public async Task DeleteSubscription(string space, User user) {
             Subscription? s = await repo.FindByUserAndSpace(user.Username, space);
 
             if (s == null) {
@@ -43,7 +43,6 @@ namespace Updog.Domain {
 
             await repo.Delete(s);
             await bus.Dispatch(new SubscriptionDeleteEvent(s));
-            return s;
         }
         #endregion
     }

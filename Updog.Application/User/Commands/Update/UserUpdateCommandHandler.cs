@@ -17,12 +17,12 @@ namespace Updog.Application {
         [Validate(typeof(UserUpdateCommandValidator))]
         [Policy(typeof(UserAlterCommandPolicy))]
         protected async override Task<Either<CommandResult, Error>> ExecuteCommand(UserUpdateCommand command) {
-            try {
-                User user = await service.Update(command.Username, command.Update);
-                return Success();
-            } catch (NotFoundException) {
-                return Failure("No user with matching Id found.");
+            if (!await service.DoesUserExist(command.Username)) {
+                return new NotFoundError($"User {command.Username} not found.");
             }
+
+            await service.Update(command.Username, command.Update);
+            return Success();
         }
     }
 }

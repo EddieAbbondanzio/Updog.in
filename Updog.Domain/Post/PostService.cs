@@ -29,7 +29,7 @@ namespace Updog.Domain {
             return p;
         }
 
-        public async Task<Post> Update(int postId, PostUpdate update, User user) {
+        public async Task Update(int postId, PostUpdate update, User user) {
             Post? p = await repo.FindById(postId);
 
             if (p == null) {
@@ -40,10 +40,9 @@ namespace Updog.Domain {
             await repo.Update(p);
 
             await bus.Dispatch(new PostUpdateEvent(p));
-            return p;
         }
 
-        public async Task<Post> Delete(int postId, User user) {
+        public async Task Delete(int postId, User user) {
             Post? p = await repo.FindById(postId);
 
             if (p == null) {
@@ -53,9 +52,9 @@ namespace Updog.Domain {
             p.Delete();
             await repo.Update(p);
             await bus.Dispatch(new PostDeleteEvent(p));
-
-            return p;
         }
+
+        public async Task<bool> DoesPostExist(int postId) => await repo.Exists(postId);
         #endregion
     }
 }

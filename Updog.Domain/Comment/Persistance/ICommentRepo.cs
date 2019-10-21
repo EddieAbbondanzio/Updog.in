@@ -9,5 +9,7 @@ namespace Updog.Domain {
     /// </summary>
     public interface ICommentRepo : IRepo<Comment> {
         Task<bool> IsOwner(int commentId, string username);
+
+        Task<bool> Exists(int commentId);
     }
 }

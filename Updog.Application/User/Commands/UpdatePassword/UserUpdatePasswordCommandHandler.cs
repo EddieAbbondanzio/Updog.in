@@ -17,12 +17,12 @@ namespace Updog.Application {
         [Validate(typeof(UserUpdatePasswordCommandValidator))]
         [Policy(typeof(UserAlterCommandPolicy))]
         protected async override Task<Either<CommandResult, Error>> ExecuteCommand(UserUpdatePasswordCommand command) {
-            try {
-                User u = await service.UpdatePassword(command.Username, command.UpdatePassword);
-                return Success();
-            } catch (UnauthorizedAccessException) {
-                return Failure("Password does not match the one on file.");
+            if (!await service.DoesUserExist(command.Username)) {
+                return new NotFoundError($"User {command.Username} not found.");
             }
+
+            await service.UpdatePassword(command.Username, command.UpdatePassword);
+            return Success();
         }
     }
 }

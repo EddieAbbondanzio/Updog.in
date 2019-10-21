@@ -47,10 +47,10 @@ namespace Updog.Api {
         [HttpGet("{id}")]
         [HttpHead("{id}")]
         public async Task<IActionResult> FindById(int id) =>
-            (await mediator.Query<PostFindByIdQuery, PagedResultSet<PostReadView>>(
+            (await mediator.Query<PostFindByIdQuery, PostReadView?>(
                 new PostFindByIdQuery(id, User)
             )).Match(
-                post => Ok(post) as IActionResult,
+                post => post != null ? Ok(post) : NotFound() as IActionResult,
                 error => BadRequest(error.Message)
             );
 

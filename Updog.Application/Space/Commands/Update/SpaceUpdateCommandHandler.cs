@@ -17,12 +17,12 @@ namespace Updog.Application {
         [Validate(typeof(SpaceUpdateCommandValidator))]
         [Policy(typeof(SpaceAlterCommandPolicy))]
         protected async override Task<Either<CommandResult, Error>> ExecuteCommand(SpaceUpdateCommand command) {
-            try {
-                Space s = await service.Update(command.Space, command.Update, command.User);
-                return Success();
-            } catch (NotFoundException e) {
-                return Failure(e.Message);
+            if (!(await service.DoesSpaceExist(command.Space))) {
+                return new NotFoundError();
             }
+
+            await service.Update(command.Space, command.Update, command.User);
+            return Success();
         }
         #endregion
     }

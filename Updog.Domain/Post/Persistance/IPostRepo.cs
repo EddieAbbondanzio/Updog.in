@@ -9,5 +9,6 @@ namespace Updog.Domain {
     /// </summary>
     public interface IPostRepo : IRepo<Post> {
         Task<bool> IsOwner(int postId, string username);
+        Task<bool> Exists(int postId);
     }
 }

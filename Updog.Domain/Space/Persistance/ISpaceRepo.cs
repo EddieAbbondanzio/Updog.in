@@ -38,6 +38,8 @@ namespace Updog.Domain {
         Task<Space?> FindByComment(int commentId);
 
         Task<Space?> FindByPost(int postId);
+
+        Task<bool> Exists(string name);
         #endregion
     }
 }

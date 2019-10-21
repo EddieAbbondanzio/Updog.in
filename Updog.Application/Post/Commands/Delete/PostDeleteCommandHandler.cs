@@ -18,12 +18,12 @@ namespace Updog.Application {
         [Validate(typeof(PostDeleteCommandValidator))]
         [Policy(typeof(PostAlterCommandPolicy))]
         protected async override Task<Either<CommandResult, Error>> ExecuteCommand(PostDeleteCommand command) {
-            try {
-                Post p = await service.Delete(command.PostId, command.User);
-                return Success();
-            } catch (NotFoundException e) {
-                return Failure(e.Message);
+            if (!(await service.DoesPostExist(command.PostId))) {
+                return new NotFoundError($"Post {command.PostId} does not exist.");
             }
+
+            await service.Delete(command.PostId, command.User);
+            return Success();
         }
         #endregion
     }
