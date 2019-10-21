@@ -39,8 +39,8 @@ namespace Updog.Api {
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] MeUpdateRequest updateRequest) =>
             (await mediator.Command(new UserUpdateCommand(User!.Username, new UserUpdate(updateRequest.Email), User!)))
-            .Match(
-                (result) => Ok() as IActionResult,
+            .Match<IActionResult>(
+                (result) => Ok(),
                 (error) => BadRequest(error.Message)
             );
 
@@ -54,8 +54,8 @@ namespace Updog.Api {
                 User!.Username,
                 new UserUpdatePassword(updatePasswordRequest.CurrentPassword, updatePasswordRequest.NewPassword),
                 User!))
-            ).Match(
-                (result) => Ok() as IActionResult,
+            ).Match<IActionResult>(
+                (result) => Ok(),
                 (error) => BadRequest(error.Message)
             );
         #endregion

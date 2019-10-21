@@ -37,9 +37,9 @@ namespace Updog.Api {
         [HttpGet("{commentId}")]
         public async Task<IActionResult> GetComment(int commentId) =>
             (await mediator.Query<CommentFindByIdQuery, CommentReadView?>(new CommentFindByIdQuery(commentId, User!)))
-            .Match(
+            .Match<IActionResult>(
                 (comment) => comment != null ? Ok(comment) : NotFound() as IActionResult,
-                (error) => BadRequest(error.Message) as IActionResult
+                (error) => BadRequest(error.Message)
             );
 
         [AllowAnonymous]
@@ -48,9 +48,9 @@ namespace Updog.Api {
         public async Task<IActionResult> GetCommentsByUser([FromRoute]string username, [FromQuery]int pageNumber, [FromQuery]int pageSize = Comment.PageSize) =>
             (await mediator.Query<CommentFindByUserQuery, PagedResultSet<CommentReadView>>(
                 new CommentFindByUserQuery(username, new PaginationInfo(pageNumber, pageSize), User)
-            )).Match(
-                (comments) => Ok(comments) as IActionResult,
-                (error) => BadRequest(error.Message) as IActionResult
+            )).Match<IActionResult>(
+                (comments) => Ok(comments),
+                (error) => BadRequest(error.Message)
             );
 
         /// <summary>
@@ -59,9 +59,9 @@ namespace Updog.Api {
         [HttpPost]
         public async Task<IActionResult> CreateComment([FromBody]CommentCreateRequest body) =>
             (await mediator.Command(new CommentCreateCommand(new CommentCreate(body.PostId, body.Body, body.ParentId), User!)))
-            .Match(
-                (result) => Ok(new { Id = result.InsertId }) as IActionResult,
-                (error) => BadRequest(error) as IActionResult
+            .Match<IActionResult>(
+                (result) => Ok(new { Id = result.InsertId }),
+                (error) => BadRequest(error)
             );
 
         /// <summary>
@@ -70,9 +70,9 @@ namespace Updog.Api {
         [HttpPatch("{commentId}")]
         public async Task<IActionResult> Update(int commentId, [FromBody]CommentUpdateRequest request) =>
             (await mediator.Command(new CommentUpdateCommand(commentId, new CommentUpdate(request.Body), User!)))
-            .Match(
-                (result) => Ok() as IActionResult,
-                (error) => BadRequest(error.Message) as IActionResult
+            .Match<IActionResult>(
+                (result) => Ok(),
+                (error) => BadRequest(error.Message)
             );
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Updog.Api {
         [HttpDelete("{commentId}")]
         public async Task<IActionResult> DeleteComment(int commentId) =>
             (await mediator.Command(new CommentDeleteCommand(commentId, User!)))
-            .Match(
+            .Match<IActionResult>(
                 (result) => Ok() as IActionResult,
                 (error) => BadRequest(error.Message)
             );

@@ -11,7 +11,7 @@ namespace Updog.Api {
     /// <summary>
     /// Authentication token handler that uses json web tokens.
     /// </summary>
-    public sealed class JsonWebTokenHandler : IAuthenticationTokenHandler {
+    public sealed class JsonWebTokenHandler {
         #region Fields
         /// <summary>
         /// How many seconds the token is valid for.
@@ -44,12 +44,13 @@ namespace Updog.Api {
         /// <summary>
         /// Issue a JWT for a user.
         /// </summary>
-        /// <param name="user">The user to isssue it to.</param>
+        /// <param name="login">The user to isssue it to.</param>
         /// <returns>The generated JWT.</returns>
-        public string IssueToken(User user) {
+        public string IssueToken(UserLogin login) {
             // Less is more, we only really need user Id since we'll have to hit the DB anyways.
             Claim[] claims = new[] {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, login.Id.ToString()),
+                new Claim(ClaimTypes.Sid, login.Id.ToString())
             };
 
             JwtSecurityToken token = new JwtSecurityToken(

@@ -73,13 +73,15 @@ namespace Updog.Api {
             services.AddDatabaseMigrations(dbConfig.GetConnectionString());
             services.AddScoped<IMediator, Mediator>();
             services.AddScoped<IEventBus, EventBus>();
-            services.AddSingleton<IAuthenticationTokenHandler, JsonWebTokenHandler>();
+            services.AddSingleton<JsonWebTokenHandler>();
             services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
 
             services.AddTransient<IUserRepo, UserRepo>();
+            services.AddTransient<IUserLoginRepo, UserLoginRepo>();
             services.AddTransient<IUserReader, UserReader>();
             services.AddTransient<IUserService, UserService>();
             services.AddSingleton<IUserFactory, UserFactory>();
+            services.AddSingleton<IUserLoginFactory, UserLoginFactory>();
             services.AddScoped<QueryHandler<FindUserByUsernameQuery, UserReadView?>, FindUserByUsernameQueryHandler>();
             services.AddScoped<QueryHandler<IsUsernameAvailableQuery, bool>, IsUsernameAvailableQueryHandler>();
             services.AddScoped<CommandHandler<RegisterUserCommand>, RegisterUserCommandHandler>();

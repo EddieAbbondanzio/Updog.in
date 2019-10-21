@@ -27,7 +27,7 @@ namespace Updog.Application {
             }
 
             UserLogin login = await service.Register(command.Registration);
-            return Success();
+            return Insert(login.Id);
         }
     }
 }

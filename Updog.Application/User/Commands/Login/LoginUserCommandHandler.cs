@@ -19,7 +19,7 @@ namespace Updog.Application {
             UserLogin? login = await service.Login(command.Credentials);
 
             if (login != null) {
-                return Success();
+                return Insert(login.Id);
             } else {
                 return new AuthenticationError();
             }

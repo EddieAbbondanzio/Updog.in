@@ -30,8 +30,8 @@ namespace Updog.Api {
         [HttpPost("{spaceName}")]
         public async Task<IActionResult> SubscribeToSpace(string spaceName) =>
             (await mediator.Command(new SubscriptionCreateCommand(new Domain.SubscriptionCreate(spaceName), User!)))
-            .Match(
-                r => Ok() as IActionResult,
+            .Match<IActionResult>(
+                r => Ok(),
                 e => BadRequest(e.Message)
             );
 
@@ -42,8 +42,8 @@ namespace Updog.Api {
         [HttpDelete("{spaceName}")]
         public async Task<IActionResult> DesubscribeFromSpace(string spaceName) =>
             (await mediator.Command(new SubscriptionDeleteCommand(spaceName, User!)))
-            .Match(
-                r => Ok() as IActionResult,
+            .Match<IActionResult>(
+                r => Ok(),
                 e => BadRequest(e.Message)
             );
         #endregion

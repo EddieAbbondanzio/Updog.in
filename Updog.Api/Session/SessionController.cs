@@ -15,12 +15,15 @@ namespace Updog.Api {
         #region Fields
         private IMediator mediator;
         private IEventBus bus;
+
+        private IUserLoginFactory loginFactory;
         #endregion
 
         #region Constructor(s)
-        public SessionController(IMediator mediator, IEventBus bus) {
+        public SessionController(IMediator mediator, IEventBus bus, IUserLoginFactory loginFactory) {
             this.mediator = mediator;
             this.bus = bus;
+            this.loginFactory = loginFactory;
         }
         #endregion
 
@@ -50,12 +53,12 @@ namespace Updog.Api {
         /// </summary>
         [HttpPatch]
         [Authorize]
-        public ActionResult ReLogin([FromHeader] string authorization) {
+        public ActionResult ReLogin() {
             /*
             * Dirty work is done by the auth filter.
             * Down the road this can be tweaked to support rolling tokens...
             */
-            return Ok(new UserLogin(User!.Id, authorization.Split(" ")[1]));
+            return Ok(loginFactory.Create(User!));
         }
         #endregion
     }

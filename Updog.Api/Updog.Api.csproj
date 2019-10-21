@@ -5,6 +5,7 @@
     <LangVersion>8.0</LangVersion>
     <NullableContextOptions>enable</NullableContextOptions>
     <Nullable>enable</Nullable>
+    
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +17,9 @@
     <ProjectReference Include="..\Updog.Application\Updog.Application.csproj" />
     <ProjectReference Include="..\Updog.Persistance\Updog.Persistance.csproj" />
     <ProjectReference Include="..\Updog.Infrastructure\Updog.Infrastructure.csproj" />
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+    <_Parameter1>$(AssemblyName).Tests</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 
   <ItemGroup>
