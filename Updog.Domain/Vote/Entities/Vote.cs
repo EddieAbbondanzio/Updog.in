@@ -1,3 +1,5 @@
+using System;
+
 namespace Updog.Domain {
     /// <summary>
     /// A vote entity on a post, or comment.

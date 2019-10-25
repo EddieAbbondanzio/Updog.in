@@ -84,6 +84,10 @@ namespace Updog.Domain {
         }
 
         public void Delete() {
+            if (WasDeleted) {
+                throw new InvalidOperationException();
+            }
+
             Body = "[deleted]";
             WasDeleted = true;
         }

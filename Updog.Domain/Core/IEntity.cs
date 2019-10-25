@@ -11,10 +11,6 @@ namespace Updog.Domain {
         /// </summary>
         int Id { get; set; }
         #endregion
-
-        #region Publics
-        public void Test() { }
-        #endregion
     }
 
     public abstract class Entity<TEntity> : IEntity where TEntity : class, IEntity {

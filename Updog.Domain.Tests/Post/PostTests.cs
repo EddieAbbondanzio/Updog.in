@@ -7,8 +7,38 @@ namespace Updog.Domain.Tests {
     [TestClass]
     public class PostTests {
         [TestMethod]
-        public void EqualsTrueIfIdMatch() {
-            // Assert.IsTrue(new Post() { Id = 1 }.Equals(new Post() { Id = 1 }));
+        public void LinkPostsHaveHttpAppendedIfNeeded() {
+
+        }
+
+        [TestMethod]
+        public void TextPostBodyIsNotAltered() {
+
+        }
+
+        [TestMethod]
+        public void UpdateThrowsExceptionIfDeleted() {
+
+        }
+
+        [TestMethod]
+        public void UpdateUpdatesBody() {
+
+        }
+
+        [TestMethod]
+        public void UpdateFlagsAsUpdated() {
+
+        }
+
+        [TestMethod]
+        public void DeleteThrowsIfAlreadyDeleted() {
+
+        }
+
+        [TestMethod]
+        public void DeleteFlagsAsDeleted() {
+
         }
     }
 }
